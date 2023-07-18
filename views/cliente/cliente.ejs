@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%-include('../partials/header.ejs')%>
+</head>
+<body>
+    <div class="container" >
+        <%-include('../partials/navbar.ejs')%>
+        <h3>Clientes Cadastrados</h3>
+        <a class="btn btn-primary" href="/cliente/novo">Novo Cliente</a><br><br>
+        <table class="table table-striped" >
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>CPF</th>
+                    <th>Telefone</th>
+                    <th>Logradouro</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% clientes.forEach(function(cliente){%>
+                    <tr>
+                        <td><%=cliente.id%></td>
+                        <td><%=cliente.nome%></td>
+                        <td><%=cliente.cpf%></td>
+                        <td><%=cliente.telefone%></td>
+                        <td><%=cliente.logradouro%></td>
+                        <td><a href="/cliente/editar/<%=cliente.id%>" class="fas fa-edit" style="color: black;" 
+                            ata-toggle="tooltip" title="Editar cliente" ></a></td>
+                        <td><a href="/cliente/excluir/<%=cliente.id%>" class="fas fa-trash" style="color: black;"
+                            ata-toggle="tooltip" title="Excluir cliente"
+                            onclick="return confirm('Confirma a exclusão?')" ></a></td>
+                    </tr>
+                <%})%>
+            </tbody>
+
+        </table>
+        <% if(mensagem){ %>
+            <div class="alert alert-danger">
+                <strong>Exclusão de registro!</strong> <%= mensagem %>
+            </div>
+        <% } %>
+
+    </div>
+    <%-include('../partials/footer'); %>
+
+</body>
+</html>

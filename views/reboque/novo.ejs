@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%-include('../partials/header.ejs')%>
+</head>
+
+<body>
+    <div class="container">
+        <%-include('../partials/navbarReboque.ejs')%>
+            <div class="card">
+                <div class="card-body">
+                    <h3>Cadastro de Reboques</h3>
+                    <form action="/reboque/salvar" method="POST">
+                        <div class="form-group">
+                            <label for="placa">Placa</label>
+                            <input class="form-control" id="placa" type="text" name="placa"
+                            placeholder="Informe o placa do reboque." required>
+                        </div>
+                        <div class="form-group">
+                            <label for="modelo">Modelo</label>
+                            <input class="form-control" id="modelo" type="text" name="modelo"
+                            placeholder="Informe o modelo do reboque." required>
+                        </div>
+                        <div class="form-group">
+                            <label for="valorDiaria">Diaria R$</label>
+                            <input class="form-control" id="valorDiaria" type="number" name="valorDiaria"
+                            placeholder="Informe o valor da diária do reboque." required>
+                        </div>
+                        <input class="btn btn-primary" type="submit" value="Salvar">
+                        <a href="/reboque/lista" class="btn btn-warning">Lista de reboques</a>
+                    </form>
+                </div>
+
+            </div>
+            <% if(mensagem){%>
+                <div class="alert alert-info" >
+                    <strong>Novo Registro!</strong> <%= mensagem %>
+                </div>
+            <% }%>
+    </div>
+    <%-include('../partials/footer.ejs')%>
+</body>
+
+</html>

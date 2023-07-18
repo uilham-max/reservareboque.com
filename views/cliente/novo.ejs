@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%-include('../partials/header.ejs')%>
+</head>
+
+<body>
+    <div class="container">
+        <%-include('../partials/navbar.ejs')%>
+            <div class="card">
+                <div class="card-body">
+                    <h3>Cadastro de Clientes</h3>
+                    <form action="/cliente/salvar" method="POST">
+                        <div class="form-group">
+                            <label for="nome">Nome</label>
+                            <input class="form-control" id="nome" type="text" name="nome"
+                            placeholder="Informe o nome do cliente." required>
+                        </div>
+                        <div class="form-group">
+                            <label for="cpf">CPF</label>
+                            <input class="form-control" id="cpf" type="text" name="cpf"
+                            placeholder="Informe o CPF do cliente." required>
+                        </div>
+                        <div class="form-group">
+                            <label for="telefone">Telefone</label>
+                            <input class="form-control" id="telefone" type="text" name="telefone"
+                            placeholder="Informe o telefone do cliente." required>
+                        </div>
+                        <div class="form-group">
+                            <label for="logradouro">Logradouro</label>
+                            <input class="form-control" id="logradouro" type="text" name="logradouro"
+                            placeholder="Informe o logradouro do cliente." required>
+                        </div>
+                        <input class="btn btn-primary" type="submit" value="Salvar">
+                        <a href="/cliente/lista" class="btn btn-warning">Lista de clientes</a>
+                    </form>
+                </div>
+
+            </div>
+            <% if(mensagem){%>
+                <div class="alert alert-info" >
+                    <strong>Novo Registro!</strong> <%= mensagem %>
+                </div>
+            <% }%>
+    </div>
+    <%-include('../partials/footer.ejs')%>
+</body>
+
+</html>

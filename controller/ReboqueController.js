@@ -9,8 +9,8 @@ routerReboque.get('/reboque/novo', (req, res) => {
 })
 
 routerReboque.post('/reboque/salvar/:mensagem?', (req, res) => {
-    let {modelo, placa, valorDiaria} = req.body
-    DAOReboque.insert(modelo, placa, valorDiaria).then(inserido => {
+    let {modelo, placa, valorDiaria, cor} = req.body
+    DAOReboque.insert(modelo, placa, valorDiaria, cor).then(inserido => {
         if(inserido){
             res.render('reboque/novo', {mensagem: "Reboque incluído!"})
         } else {
@@ -42,8 +42,8 @@ routerReboque.get('/reboque/editar/:id', (req,res) => {
 })
 
 routerReboque.post('/reboque/atualizar', (req,res) => {
-    let {id, modelo, placa, valorDiaria} = req.body
-    DAOReboque.update(id, modelo, placa, valorDiaria).then(atualizado => {
+    let {id, modelo, placa, valorDiaria, cor} = req.body
+    DAOReboque.update(id, modelo, placa, valorDiaria, cor).then(atualizado => {
         if(atualizado){
             res.redirect('/reboque/lista')
         } else {

@@ -10,9 +10,10 @@ const Reserva = conexao.define('reserva', {
         primaryKey: true,
         autoIncrement: true
     },
-    dataSaida: Sequelize.DATE,
-    dataChegada: Sequelize.DATE,
+    dataSaida: Sequelize.DATEONLY,
+    dataChegada: Sequelize.DATEONLY,
     valorDiaria: Sequelize.INTEGER,
+    diarias: Sequelize.INTEGER,
     valorTotal: Sequelize.INTEGER
 })
 
@@ -32,7 +33,8 @@ Reboque.hasMany(Reserva, {
 // uma locação pertence a apenas um reboque
 Reserva.belongsTo(Reboque)
 
-// Reserva.sync(({force: false}))
+// Reserva.sync(({force: true}))
+
 
 module.exports = Reserva
 

@@ -11,9 +11,10 @@ const Reboque = conexao.define('reboque', {
     },
     placa: Sequelize.STRING,
     modelo: Sequelize.STRING,
+    cor: Sequelize.STRING,
     valorDiaria: Sequelize.INTEGER
 })
 
-// Reboque.sync(({force: false}))
+// Reboque.sync(({force: true}))
 
 module.exports = Reboque

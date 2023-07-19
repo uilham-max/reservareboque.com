@@ -14,7 +14,8 @@
                     <th>ID</th>
                     <th>Placa</th>
                     <th>Modelo</th>
-                    <th>Diária R$</th>
+                    <th>Cor</th>
+                    <th>Diária</th>
                 </tr>
             </thead>
             <tbody>
@@ -23,7 +24,8 @@
                         <td><%=reboque.id%></td>
                         <td><%=reboque.placa%></td>
                         <td><%=reboque.modelo%></td>
-                        <td><%=reboque.valorDiaria%></td>
+                        <td><%=reboque.cor%></td>
+                        <td>R$ <%=reboque.valorDiaria%>,00</td>
                         <td><a href="/reboque/editar/<%=reboque.id%>" class="fas fa-edit" style="color: black;" 
                             ata-toggle="tooltip" title="Editar reboque" ></a></td>
                         <td><a href="/reboque/excluir/<%=reboque.id%>" class="fas fa-trash" style="color: black;"

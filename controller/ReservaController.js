@@ -3,6 +3,7 @@ const routerReserva = express.Router()
 const DAOReserva = require('../database/DAOReserva')
 const DAOCliente = require('../database/DAOCliente')
 const DAOReboque = require('../database/DAOReboque')
+const Diaria = require('../bill_modules/Diaria')
 
 
 // LISTAR
@@ -36,13 +37,10 @@ routerReserva.get('/reserva/novo/:mensagem?', (req, res) => {
 // SALVAR
 routerReserva.post('/reserva/salvar', (req, res) => {
     let { dataSaida, dataChegada, valorDiaria, valorTotal, cliente, reboque } = req.body
-    console.log("\n"+req.body.dataSaida)
-    console.log("\n"+req.body.dataChegada)
-    console.log("\n"+req.body.valorDiaria)
-    console.log("\n"+req.body.valorTotal)
-    console.log("\n"+req.body.cliente)
-    console.log("\n"+req.body.reboque)
-    DAOReserva.insert(dataSaida, dataChegada, valorDiaria, valorTotal, cliente, reboque).then(inserido => {
+    let diarias = Diaria.calcularDiarias(dataSaida, dataChegada)
+    // console.log(valorDiaria+"<<<<<<<<<<<<<<<<<<<<<<<")
+
+    DAOReserva.insert(dataSaida, dataChegada, valorDiaria, diarias, valorTotal, cliente, reboque).then(inserido => {
         DAOReboque.getAll().then(reboques => {
             DAOCliente.getAll().then(clientes => {
                 if (inserido) {

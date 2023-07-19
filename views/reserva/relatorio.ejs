@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%-include('../partials/header.ejs')%>
+</head>
+<body>
+    <div class="container" >
+        <%-include('../partials/navbarReserva.ejs')%>
+        <h3>Hitórico de Reservas</h3>
+        <a class="btn btn-primary" href="/reserva/novo">Novo Reserva</a><br><br>
+        <table class="table table-striped" >
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Cliente</th>
+                    <th>Reboque</th>
+                    <th>Diária</th>
+                    <th>Data saída</th>
+                    <th>Data entrega</th>
+                    <th>Tempo</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% reservas.forEach(function(reserva){%>
+                    <tr>
+                        <td><%=reserva.id%></td>
+                        <td><%=reserva.cliente.nome%></td>
+                        <td><%=reserva.reboque.placa%></td>
+                        <td>R$ <%=reserva.valorDiaria%>,00</td>
+                        <td><%=reserva.dataSaida.toString().slice(8,10)+'/'+reserva.dataSaida.toString().slice(5,7)+'/'+reserva.dataSaida.toString().slice(0,4)%></td>
+                        <td><%=reserva.dataChegada.toString().slice(8,10)+'/'+reserva.dataChegada.toString().slice(5,7)+'/'+reserva.dataChegada.toString().slice(0,4)%></td>
+                        <td><%=reserva.diarias%> dias</td>
+                        <td>R$ <%=reserva.diarias*reserva.valorDiaria%>,00</td>
+                        <td><a href="/reserva/editar/<%=reserva.id%>" class="fas fa-edit" style="color: black;" 
+                            ata-toggle="tooltip" title="Editar reserva" ></a></td>
+                        <td><a href="/reserva/excluir/<%=reserva.id%>" class="fas fa-trash" style="color: black;"
+                            ata-toggle="tooltip" title="Excluir reserva"
+                            onclick="return confirm('Confirma a exclusão?')" ></a></td>
+                    </tr>
+                <%})%>
+            </tbody>
+
+        </table>
+        <% if(mensagem){ %>
+            <div class="alert alert-danger">
+                <strong>Exclusão de registro!</strong> <%= mensagem %>
+            </div>
+        <% } %>
+
+    </div>
+    <%-include('../partials/footer'); %>
+
+</body>
+</html>

@@ -10,3 +10,7 @@ FALTA RESOLVER
 4. Criar as telas de relatórios de reboques e reservas
 
 5. A pagina de reservas já está trazendo apenas reservas atuais e futuras
+
+## 6. Estou enfrentando problemas para aparecer diaria do reboque selecionado  na reserva
+
+## Verificar integridade referencial com o professsor

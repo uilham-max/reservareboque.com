@@ -17,6 +17,17 @@ routerReserva.get('/reserva/lista/:mensagem?', (req, res) => {
     })
 })
 
+// RELATORIO HISTORICO
+routerReserva.get('/reserva/relatorio/:mensagem?', (req, res) => {
+    DAOReserva.getRelatorioHistorico().then(reservas => {
+        if (reservas) {
+            res.render('reserva/relatorio', { reservas: reservas, mensagem: req.params.mensagem ? "Erro! Item já referenciado" : "" })
+        } else {
+            res.render('erro', { mensagem: "Erro na listagem de reservas." })
+        }
+    })
+})
+
 // CRIAR
 routerReserva.get('/reserva/novo/:mensagem?', (req, res) => {
     DAOReboque.getAll().then(reboques => {

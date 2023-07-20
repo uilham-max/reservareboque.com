@@ -15,7 +15,10 @@ const Reserva = conexao.define('reserva', {
     valorDiaria: Sequelize.INTEGER,
     diarias: Sequelize.INTEGER,
     valorTotal: Sequelize.INTEGER
-})
+},{
+    timestamps: false,
+}
+)
 
 // um cliente tem muitas reservas
 Cliente.hasMany(Reserva, {

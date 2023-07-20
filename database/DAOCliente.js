@@ -1,4 +1,3 @@
-// const Sequelize = require('sequelize')
 const Cliente = require('../model/Cliente.js')
 
 

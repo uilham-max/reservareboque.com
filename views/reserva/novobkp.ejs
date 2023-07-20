@@ -7,7 +7,7 @@
 
 <body>
     <div class="container">
-        <%-include('../partials/navbar.ejs')%>
+        <%-include('../partials/navbarReserva.ejs')%>
             <div class="card">
                 <div class="card-body">
                     <h3>Criar Reserva</h3>
@@ -15,9 +15,10 @@
 
                         <div class="form-group">
                             <label for="reboque">Reboque</label>
-                            <select id="reboque"  name="reboque" class="form-control">
+                            <select id="reboque"  name="reboque" class="form-control" onchange="atualizaDiaria(this)">
+                                <option value="" data-default disabled selected >Selecionar</option>
                                 <% reboques.forEach( function(reboque){%>
-                                    <option value="<%=reboque.id%>"><%=reboque.placa%></option>
+                                    <option value="<%=reboque.valorDiaria%>"><%=reboque.placa%></option>
                                 <%})%>
                             </select>
                         </div>
@@ -44,7 +45,7 @@
                         <div class="form-group">
                             <label for="valorDiaria">Diaria R$</label>
                             <input class="form-control" id="valorDiaria" type="number" name="valorDiaria"
-                                placeholder="Informe o valor da diária do reboque."  required>
+                                placeholder="Informe o valor da diária do reboque." value="getSelected()"  required>
                         </div>
 
                         <input class="btn btn-primary" type="submit" value="Salvar">
@@ -61,6 +62,13 @@
                 <% }%>
     </div>
     <%-include('../partials/footer.ejs')%>
+
+    <script>
+        function atualizaDiaria(e){
+            document.getElementById("valorDiaria").value = parseInt(e.value).toFixed(2)
+        }
+    </script>
+
 </body>
 
 </html>

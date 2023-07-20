@@ -5,9 +5,9 @@
 </head>
 <body>
     <div class="container" >
-        <%-include('../partials/navbarReserva.ejs')%>
+        <%-include('../partials/navbar.ejs')%>
         <h3>Hitórico de Reservas</h3>
-        <a class="btn btn-primary" href="/reserva/novo">Novo Reserva</a><br><br>
+        <a class="btn btn-warning" href="/reserva/lista">Voltar</a><br><br>
         <table class="table table-striped" >
             <thead>
                 <tr>
@@ -31,7 +31,8 @@
                         <td><%=reserva.dataSaida.toString().slice(8,10)+'/'+reserva.dataSaida.toString().slice(5,7)+'/'+reserva.dataSaida.toString().slice(0,4)%></td>
                         <td><%=reserva.dataChegada.toString().slice(8,10)+'/'+reserva.dataChegada.toString().slice(5,7)+'/'+reserva.dataChegada.toString().slice(0,4)%></td>
                         <td><%=reserva.diarias%> dias</td>
-                        <td>R$ <%=reserva.diarias*reserva.valorDiaria%>,00</td>
+                        <td>R$ <%=reserva.valorTotal%>,00</td>
+                        <!-- <td>R$ <%=reserva.diarias*reserva.valorDiaria%>,00</td> -->
                         <td><a href="/reserva/editar/<%=reserva.id%>" class="fas fa-edit" style="color: black;" 
                             ata-toggle="tooltip" title="Editar reserva" ></a></td>
                         <td><a href="/reserva/excluir/<%=reserva.id%>" class="fas fa-trash" style="color: black;"

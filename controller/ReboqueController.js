@@ -2,6 +2,7 @@ const { Router } = require('express')
 const express = require('express')
 const routerReboque = express.Router()
 const DAOReboque = require('../database/DAOReboque')
+const DAOReserva = require('../database/DAOReserva')
 
 
 routerReboque.get('/reboque/novo', (req, res) => {
@@ -29,6 +30,20 @@ routerReboque.get('/reboque/lista/:mensagem?', (req, res) => {
         }
     })
 })
+
+// RELATORIO AGRUPANDO POR REBOQUES COM SOMA
+routerReboque.get('/reboque/relatorio/:mensagem?', (req, res) => {
+    DAOReserva.getRelatorioReservasPorRoboque().then(reboques => {
+        console.log(reboques+"<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
+        if(reboques){
+            res.render('reboque/relatorio', {reboques: reboques, mensagem: req.params.mensagem ? 
+                "Não é possível excluir um reboque já referencia por uma locação.":""})
+        } else {
+            res.render('erro', {mensagem: "Erro ao listar reboques."})
+        }
+    })
+})
+
 
 routerReboque.get('/reboque/editar/:id', (req,res) => {
     let id = req.params.id

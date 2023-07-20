@@ -1,8 +1,7 @@
-const Sequelize = require('sequelize')
 const Reserva = require('../model/Reserva.js')
 const Reboque = require('../model/Reboque.js')
 const Cliente = require('../model/Cliente.js')
-const { Op } = require('sequelize')
+const { Op, Sequelize } = require('sequelize')
 
 
 class DAOReserva {
@@ -34,7 +33,6 @@ class DAOReserva {
                 order: ['id'],
                 include: [{ model: Reboque }, { model: Cliente }]
             })
-            // let reservas = await Reserva.findAll({where:{dataSaida: {[Op.gte]: currentDate}},    order: ['id'], include: [{ model: Reboque }, {model: Cliente}]})
             // let reservas = await Reserva.findAll({order: ['id'], include: [{ model: Reboque }, {model: Cliente}]})
             return reservas
         }
@@ -44,7 +42,7 @@ class DAOReserva {
         }
     }
 
-    // READ RELATORIO HISTORICO
+    // RELATORIO HISTORICO
     static async getRelatorioHistorico() {
 
         try {
@@ -55,7 +53,7 @@ class DAOReserva {
                 order: ['id'], 
                 include: [{ model: Reboque }, {model: Cliente}]
             })
-
+            console.log(reservas) //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
             return reservas
         }
         catch (error) {
@@ -63,6 +61,45 @@ class DAOReserva {
             return undefined
         }
     }
+
+    // RELATORIO REBOQUES SOMA 
+    // static async getRelatorioReservasPorRoboque(){
+    //     try{
+    //         let reboques = await Reserva.findAll({
+    //             attributes: ['reboqueId', [Sequelize.fn('SUM', Sequelize.col('valorTotal')), 'valorTotal']],
+    //             where: {dataSaida: {[Op.between]: ['2023-07-01', '2023-07-30']}},
+    //             group: ['reboque.id', 'reserva.reboqueId'],
+    //             // include: [{model: Reboque}]
+    //             include: [{model: Reboque, attributes: ['id', 'placa']}]
+    //         })
+    //         console.log(reboques) //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+    //         return reboques
+    //     }
+    //     catch(error){
+    //         console.log(error.toString())
+    //         return undefined
+    //     }
+    // }
+
+    // TESTE RELATORIO
+    static async getRelatorioReservasPorRoboque(){
+        try{
+            let reboques = await Reserva.findAll({
+                attributes: ['reboque.placa',[Sequelize.fn('SUM', Sequelize.col('valorTotal')), 'valorTotal']],
+                where: {dataSaida: {[Op.between]: ['2023-07-01', '2023-07-30']}},
+                group: ['reboque.id', 'reboque.placa'],
+                // include: [{model: Reboque}]
+                include: [{model: Reboque, attributes: ['id', 'placa']}]
+            })
+            console.log(reboques) //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+            return reboques
+        }
+        catch(error){
+            console.log(error.toString())
+            return undefined
+        }
+    }
+
 
     // GETONE
     static async getOne(id) {

@@ -11,8 +11,11 @@ const Cliente = conexao.define('cliente', {
     cpf: Sequelize.STRING,
     logradouro: Sequelize.STRING,
     telefone: Sequelize.STRING
+},
+{
+    timestamps: false,
 })
 
-// Cliente.sync(({force: false}))
+// Cliente.sync(({force: true}))
 
 module.exports = Cliente

@@ -14,3 +14,5 @@ FALTA RESOLVER
 ## 6. Estou enfrentando problemas para aparecer diaria do reboque selecionado  na reserva
 
 ## Verificar integridade referencial com o professsor
+
+## Ponto de parada: resolvendo relatorio dos reboques por agrupamento

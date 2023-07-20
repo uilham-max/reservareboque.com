@@ -47,10 +47,9 @@ routerReserva.get('/reserva/novo/:mensagem?', (req, res) => {
 
 // SALVAR
 routerReserva.post('/reserva/salvar', (req, res) => {
-    let { dataSaida, dataChegada, valorDiaria, valorTotal, cliente, reboque } = req.body
+    let { dataSaida, dataChegada, valorDiaria, cliente, reboque } = req.body
     let diarias = Diaria.calcularDiarias(dataSaida, dataChegada)
-    // console.log(valorDiaria+"<<<<<<<<<<<<<<<<<<<<<<<")
-
+    valorTotal = diarias*valorDiaria
     DAOReserva.insert(dataSaida, dataChegada, valorDiaria, diarias, valorTotal, cliente, reboque).then(inserido => {
         DAOReboque.getAll().then(reboques => {
             DAOCliente.getAll().then(clientes => {

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%-include('../partials/header.ejs')%>
+</head>
+<body>
+    <div class="container" >
+        <%-include('../partials/navbar.ejs')%>
+        <h3>Relatório dos Reboques</h3>
+        <a class="btn btn-warning" href="/reboque/lista">Voltar</a><br><br>
+        <table class="table table-striped" >
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Placa</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% reboques.forEach(function(reboque){%>
+                    <tr>
+                        <td><%=reboque.id%></td>
+                        <td><%=reboque.placa%></td>
+                        <td>R$ <%=reboque.valorTotal%>,00</td>
+                    </tr>
+                <%})%>
+            </tbody>
+
+        </table>
+    </div>
+    <%-include('../partials/footer'); %>
+
+</body>
+</html>

@@ -53,7 +53,6 @@ class DAOReserva {
                 order: ['id'], 
                 include: [{ model: Reboque }, {model: Cliente}]
             })
-            console.log(reservas) //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
             return reservas
         }
         catch (error) {
@@ -62,36 +61,16 @@ class DAOReserva {
         }
     }
 
-    // RELATORIO REBOQUES SOMA 
-    // static async getRelatorioReservasPorRoboque(){
-    //     try{
-    //         let reboques = await Reserva.findAll({
-    //             attributes: ['reboqueId', [Sequelize.fn('SUM', Sequelize.col('valorTotal')), 'valorTotal']],
-    //             where: {dataSaida: {[Op.between]: ['2023-07-01', '2023-07-30']}},
-    //             group: ['reboque.id', 'reserva.reboqueId'],
-    //             // include: [{model: Reboque}]
-    //             include: [{model: Reboque, attributes: ['id', 'placa']}]
-    //         })
-    //         console.log(reboques) //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-    //         return reboques
-    //     }
-    //     catch(error){
-    //         console.log(error.toString())
-    //         return undefined
-    //     }
-    // }
 
-    // TESTE RELATORIO
-    static async getRelatorioReservasPorRoboque(){
+    // RELATORIO FILTRO 
+    static async getRelatorioReservasPorRoboqueFiltro(dataInicio, dataFim){
         try{
             let reboques = await Reserva.findAll({
-                attributes: ['reboque.placa',[Sequelize.fn('SUM', Sequelize.col('valorTotal')), 'valorTotal']],
-                where: {dataSaida: {[Op.between]: ['2023-07-01', '2023-07-30']}},
-                group: ['reboque.id', 'reboque.placa'],
-                // include: [{model: Reboque}]
-                include: [{model: Reboque, attributes: ['id', 'placa']}]
+                attributes: ['reboqueId', [Sequelize.fn('SUM', Sequelize.col('valorTotal')), 'valorTotal']],
+                where: {dataSaida: {[Op.between]: [dataInicio, dataFim]}},
+                group: ['reboque.id', 'reserva.reboqueId'],
+                include: [{model: Reboque}]
             })
-            console.log(reboques) //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
             return reboques
         }
         catch(error){
@@ -99,7 +78,6 @@ class DAOReserva {
             return undefined
         }
     }
-
 
     // GETONE
     static async getOne(id) {

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%-include('../partials/header.ejs')%>
+</head>
+<body>
+    <div class="container" >
+        <%-include('../partials/navbar.ejs')%>
+        <h3>Relatório dos Reboques</h3>
+        
+        <a class="btn btn-warning" href="/reserva/lista">Voltar</a><br><br>
+        
+        <form action="/reserva/filtrar" method="POST">
+            <div class="input-group mb-3">
+                <input class="btn btn-primary" type="submit" value="Filtrar">
+                
+                <span class="input-group-text" >data de início</span>
+                <input class="form-control" id="dataInicio" type="date" name="dataInicio" required>
+                
+                <span class="input-group-text" >Data de fim</span>
+                <input class="form-control" id="dataFim" type="date" name="dataFim" required>
+            </div>
+        </form>
+
+        
+            
+        
+        <table class="table table-striped" >
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Placa</th>
+                    <th>Modelo</th>
+                    <th>Cor</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% reservas.forEach(function(reserva){%>
+                    <tr>
+                        <td><%=reserva.reboque.id%></td>
+                        <td><%=reserva.reboque.placa%></td>
+                        <td><%=reserva.reboque.modelo%></td>
+                        <td><%=reserva.reboque.cor%></td>
+                        <td>R$ <%=reserva.valorTotal%>,00</td>
+                    </tr>
+                <%})%>
+            </tbody>
+
+        </table>
+    </div>
+    <%-include('../partials/footer'); %>
+
+    <script>
+        const inputDateInicio = document.getElementById('dataInicio');
+        const inputDateFim = document.getElementById('dataFim');
+        const dataAtual = new Date();
+        const primeiroDiaMes = new Date(dataAtual.getFullYear(), dataAtual.getMonth(), 1);
+        const ultimoDiaMes = new Date(dataAtual.getFullYear(), dataAtual.getMonth() + 1, 0);
+        const dataFormatadaInicio = primeiroDiaMes.toISOString().slice(0, 10);
+        const dataFormatadaFim = ultimoDiaMes.toISOString().slice(0, 10);
+        inputDateInicio.value = dataFormatadaInicio;
+        inputDateFim.value = dataFormatadaFim;
+    </script>
+
+</body>
+</html>

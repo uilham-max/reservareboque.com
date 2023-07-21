@@ -8,7 +8,7 @@ const Reboque = conexao.define('reboque', {
         primaryKey: true,
         autoIncrement: true
     },
-    placa: Sequelize.STRING,
+    placa: {type: Sequelize.STRING, unique: true},
     modelo: Sequelize.STRING,
     cor: Sequelize.STRING,
     valorDiaria: Sequelize.INTEGER

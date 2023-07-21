@@ -18,12 +18,37 @@ routerReserva.get('/reserva/lista/:mensagem?', (req, res) => {
 })
 
 // RELATORIO HISTORICO
-routerReserva.get('/reserva/relatorio/:mensagem?', (req, res) => {
+routerReserva.get('/reserva/historico/:mensagem?', (req, res) => {
     DAOReserva.getRelatorioHistorico().then(reservas => {
         if (reservas) {
-            res.render('reserva/relatorio', { reservas: reservas, mensagem: req.params.mensagem ? "Erro! Item já referenciado" : "" })
+            res.render('reserva/historico', { reservas: reservas, mensagem: req.params.mensagem ? "Erro! Item já referenciado" : "" })
+
         } else {
             res.render('erro', { mensagem: "Erro na listagem de reservas." })
+        }
+    })
+})
+
+// RELATORIO SOMA COM FILTRO GET
+routerReserva.get('/reserva/lucro/:mensagem?', (req, res) => {
+    DAOReserva.getRelatorioReservasPorRoboqueFiltro().then(reservas => {
+        if(reservas){
+            res.render('reserva/lucro', {reservas: reservas, mensagem: req.params.mensagem ? 
+                "Não é possível excluir um reboque já referencia por uma locação.":""})
+        } else {
+            res.render('erro', {mensagem: "Erro ao listar reboques."})
+        }
+    })
+})
+
+// RELATORIO SOMA COM FILTRO POST
+routerReserva.post('/reserva/filtrar', (req, res) => {
+    let {dataInicio, dataFim} = req.body
+    DAOReserva.getRelatorioReservasPorRoboqueFiltro(dataInicio, dataFim).then(reservas => {
+        if(reservas){
+            res.render('reserva/lucro', {reservas: reservas})
+        } else {
+            res.render('erro', {mensagem: "Erro ao listar reboques."})
         }
     })
 })

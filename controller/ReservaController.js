@@ -4,10 +4,12 @@ const DAOReserva = require('../database/DAOReserva')
 const DAOCliente = require('../database/DAOCliente')
 const DAOReboque = require('../database/DAOReboque')
 const Diaria = require('../bill_modules/Diaria')
+const autorizacao = require('../autorizacao/autorizacao')
+
 
 
 // LISTAR
-routerReserva.get('/reserva/lista/:mensagem?', (req, res) => {
+routerReserva.get('/reserva/lista/:mensagem?', autorizacao, (req, res) => {
     DAOReserva.getAll().then(reservas => {
         if (reservas) {
             res.render('reserva/reserva', { reservas: reservas, mensagem: req.params.mensagem ? "Erro! Item já referenciado" : "" })
@@ -18,7 +20,7 @@ routerReserva.get('/reserva/lista/:mensagem?', (req, res) => {
 })
 
 // RELATORIO HISTORICO
-routerReserva.get('/reserva/historico/:mensagem?', (req, res) => {
+routerReserva.get('/reserva/historico/:mensagem?', autorizacao, (req, res) => {
     DAOReserva.getRelatorioHistorico().then(reservas => {
         if (reservas) {
             res.render('reserva/historico', { reservas: reservas, mensagem: req.params.mensagem ? "Erro! Item já referenciado" : "" })
@@ -30,7 +32,7 @@ routerReserva.get('/reserva/historico/:mensagem?', (req, res) => {
 })
 
 // RELATORIO SOMA COM FILTRO GET
-routerReserva.get('/reserva/lucro/:mensagem?', (req, res) => {
+routerReserva.get('/reserva/lucro/:mensagem?', autorizacao, (req, res) => {
     DAOReserva.getRelatorioReservasPorRoboqueFiltro().then(reservas => {
         if(reservas){
             res.render('reserva/lucro', {reservas: reservas, mensagem: req.params.mensagem ? 
@@ -42,7 +44,7 @@ routerReserva.get('/reserva/lucro/:mensagem?', (req, res) => {
 })
 
 // RELATORIO SOMA COM FILTRO POST
-routerReserva.post('/reserva/filtrar', (req, res) => {
+routerReserva.post('/reserva/filtrar', autorizacao,(req, res) => {
     let {dataInicio, dataFim} = req.body
     DAOReserva.getRelatorioReservasPorRoboqueFiltro(dataInicio, dataFim).then(reservas => {
         if(reservas){
@@ -54,7 +56,7 @@ routerReserva.post('/reserva/filtrar', (req, res) => {
 })
 
 // CRIAR
-routerReserva.get('/reserva/novo/:mensagem?', (req, res) => {
+routerReserva.get('/reserva/novo/:mensagem?', autorizacao, (req, res) => {
     DAOReboque.getAll().then(reboques => {
         DAOCliente.getAll().then(clientes => {
             if(req.params.mensagem){ 
@@ -71,7 +73,7 @@ routerReserva.get('/reserva/novo/:mensagem?', (req, res) => {
 })
 
 // SALVAR
-routerReserva.post('/reserva/salvar', (req, res) => {
+routerReserva.post('/reserva/salvar', autorizacao, (req, res) => {
     let { dataSaida, dataChegada, valorDiaria, cliente, reboque } = req.body
     let diarias = Diaria.calcularDiarias(dataSaida, dataChegada)
     valorTotal = diarias*valorDiaria
@@ -98,6 +100,32 @@ routerReserva.get('/reserva/excluir/:id', (req, res) => {
         } else {
             res.render('erro', {mensagem: "Erro ao excluir"})
         }
+    })
+})
+
+routerReserva.get('/reserva/editar/:id', autorizacao, (req, res) => {
+    let id = req.params.id
+    DAOReserva.getOne(id).then(reserva => {
+        DAOReboque.getAll().then(reboques => {
+            DAOCliente.getAll().then(clientes => {
+                if(reserva){
+                    res.render('reserva/editar', {reserva: reserva, reboques: reboques, clientes: clientes, mensagem: ""})
+                } else {
+                    res.render('erro', {mensagem: "Erro ao editar reserva."})
+                }
+            })
+        })
+    })
+})
+
+routerReserva.post('/reserva/atualizar', (req, res) => {
+    let {id, dataSaida, dataChegada, valorDiaria, cliente, reboque} = req.body
+    // console.log(id+"="+dataSaida+"="+dataChegada+"="+valorDiaria+"="+cliente+"="+reboque);
+    DAOReserva.update(id, dataSaida, dataChegada, valorDiaria, cliente, reboque).then(inserido => {
+        if(inserido){
+            res.redirect('/reserva/lista')
+        }
+        
     })
 })
 

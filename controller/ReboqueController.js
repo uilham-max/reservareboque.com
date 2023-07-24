@@ -3,13 +3,15 @@ const express = require('express')
 const routerReboque = express.Router()
 const DAOReboque = require('../database/DAOReboque')
 const DAOReserva = require('../database/DAOReserva')
+const autorizacao = require('../autorizacao/autorizacao')
 
 
-routerReboque.get('/reboque/novo', (req, res) => {
+
+routerReboque.get('/reboque/novo', autorizacao, (req, res) => {
     res.render('reboque/novo', {mensagem: ""})
 })
 
-routerReboque.post('/reboque/salvar/:mensagem?', (req, res) => {
+routerReboque.post('/reboque/salvar/:mensagem?', autorizacao, (req, res) => {
     let {modelo, placa, valorDiaria, cor} = req.body
     DAOReboque.insert(modelo, placa, valorDiaria, cor).then(inserido => {
         if(inserido){
@@ -20,7 +22,7 @@ routerReboque.post('/reboque/salvar/:mensagem?', (req, res) => {
     })
 })  
 
-routerReboque.get('/reboque/lista/:mensagem?', (req, res) => {
+routerReboque.get('/reboque/lista/:mensagem?', autorizacao, (req, res) => {
     DAOReboque.getAll().then(reboques => {
         if(reboques){
             res.render('reboque/reboque', {reboques: reboques, mensagem: req.params.mensagem ? 
@@ -31,7 +33,7 @@ routerReboque.get('/reboque/lista/:mensagem?', (req, res) => {
     })
 })
 
-routerReboque.get('/reboque/editar/:id', (req,res) => {
+routerReboque.get('/reboque/editar/:id', autorizacao, (req,res) => {
     let id = req.params.id
     DAOReboque.getOne(id).then(reboque => {
         if(reboque){
@@ -42,7 +44,7 @@ routerReboque.get('/reboque/editar/:id', (req,res) => {
     })
 })
 
-routerReboque.post('/reboque/atualizar', (req,res) => {
+routerReboque.post('/reboque/atualizar', autorizacao, (req,res) => {
     let {id, modelo, placa, valorDiaria, cor} = req.body
     DAOReboque.update(id, modelo, placa, valorDiaria, cor).then(atualizado => {
         if(atualizado){
@@ -53,7 +55,7 @@ routerReboque.post('/reboque/atualizar', (req,res) => {
     })
 })
 
-routerReboque.get('/reboque/excluir/:id', (req, res) => {
+routerReboque.get('/reboque/excluir/:id', autorizacao, (req, res) => {
     let id = req.params.id
     DAOReboque.delete(id).then(excluido =>{
         if(excluido){

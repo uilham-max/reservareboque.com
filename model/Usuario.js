@@ -10,8 +10,8 @@ const Usuario = conexao.define('usuario', {
     nome: Sequelize.STRING,
     email: Sequelize.STRING,
     senha: Sequelize.STRING
-})
+},{timestamps: false})
 
-// Usuario.sync(({force: false}))
+// Usuario.sync(({force: true}))
 
 module.exports = Usuario

@@ -1,13 +1,14 @@
 const express = require('express')
 const routerCliente = express.Router()
 const DAOCliente =  require('../database/DAOCliente')
+const autorizacao = require('../autorizacao/autorizacao')
 
 
-routerCliente.get('/cliente/novo', (req, res) => {
+routerCliente.get('/cliente/novo', autorizacao, (req, res) => {
     res.render('cliente/novo', {mensagem: ""})
 })
 
-routerCliente.post('/cliente/salvar', (req, res) => {
+routerCliente.post('/cliente/salvar', autorizacao, (req, res) => {
     let {nome, cpf, telefone, logradouro} = req.body
     DAOCliente.insert(nome, cpf, telefone, logradouro).then(inserido => {
         if(inserido){
@@ -22,7 +23,7 @@ routerCliente.post('/cliente/salvar', (req, res) => {
 // ????????????????????????????????????????????????????????????????????????
 // Não entendi como que está funcionando a integridade referencial neste caso,
 // se funciona da mesma forma que categorias e contatos
-routerCliente.get('/cliente/lista/:mensagem?', (req, res) => {
+routerCliente.get('/cliente/lista/:mensagem?', autorizacao, (req, res) => {
     DAOCliente.getAll().then(clientes => {
         // console.log(clientes)
         if(clientes){
@@ -34,7 +35,7 @@ routerCliente.get('/cliente/lista/:mensagem?', (req, res) => {
     })
 })
 
-routerCliente.get('/cliente/editar/:id', (req, res) => {
+routerCliente.get('/cliente/editar/:id', autorizacao, (req, res) => {
     let id = req.params.id
     DAOCliente.getOne(id).then(cliente => {
         if(cliente){
@@ -46,7 +47,7 @@ routerCliente.get('/cliente/editar/:id', (req, res) => {
 })
 
 
-routerCliente.post('/cliente/atualizar', (req,res) => {
+routerCliente.post('/cliente/atualizar', autorizacao, (req,res) => {
     let {id, nome, cpf, telefone, logradouro} = req.body
     DAOCliente.update(id, nome, cpf, telefone, logradouro).then(cliente => {
         if(cliente){
@@ -58,7 +59,7 @@ routerCliente.post('/cliente/atualizar', (req,res) => {
 })
 
 
-routerCliente.get('/cliente/excluir/:id', (req,res) => {
+routerCliente.get('/cliente/excluir/:id', autorizacao, (req,res) => {
     let id = req.params.id
     DAOCliente.delete(id).then(excluido => {
         if(excluido){

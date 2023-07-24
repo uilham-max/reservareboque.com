@@ -82,7 +82,7 @@ class DAOReserva {
     // GETONE
     static async getOne(id) {
         try {
-            let reserva = await findByPk(id)
+            let reserva = await Reserva.findByPk(id)
             return reserva
         }
         catch (error) {
@@ -99,6 +99,17 @@ class DAOReserva {
         }
         catch (error) {
             console.log(error.toString())
+            return false
+        }
+    }
+
+    static async update(id, placa, dataSaida, dataChegada, valorDiaria, cliente, reboque){
+        try{
+            await Reserva.update({id: id, placa: placa, dataSaida: dataSaida, dataChegada: dataChegada, valorDiaria: valorDiaria, clienteId: cliente, reboqueId: reboque}, {where: {id: id}})
+            return true
+        }
+        catch(error){
+            console.log(error.toString());
             return false
         }
     }

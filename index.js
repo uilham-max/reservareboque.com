@@ -1,8 +1,8 @@
 const conexao = require('./database/conexao.js')
 const express = require('express')
+const session = require('express-session')
 
 const port = 3000
-const Sequelize = require('sequelize')
 
 const ClienteController = require('./controller/ClienteController')
 const ReboqueController = require('./controller/ReboqueController')
@@ -13,6 +13,7 @@ const app = express()
 app.use(express.static('public'));
 app.use(express.urlencoded({ extended: false }));
 app.set('view engine', 'ejs');
+app.use(session({secret: 'udjs93ka0', resave: true, saveUninitialized: true}));
 
 app.use(ClienteController)
 app.use(ReboqueController)

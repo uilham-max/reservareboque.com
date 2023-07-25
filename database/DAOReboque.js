@@ -1,6 +1,4 @@
 const Reboque = require('../model/Reboque.js')
-const Sequelize = require('sequelize')
-
 
 class DAOReboque {
 

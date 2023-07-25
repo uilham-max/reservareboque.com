@@ -121,8 +121,9 @@ routerReserva.post('/reserva/filtrarHistorico', autorizacao,(req, res) => {
 // RELATORIO LUCRO GET
 routerReserva.get('/reserva/lucro/:mensagem?', autorizacao, (req, res) => {
     DAOReserva.getRelatorioLucro().then(reservas => {
+        let somaTotal = ""
         if(reservas){
-            res.render('reserva/lucro', {reservas: reservas, mensagem: req.params.mensagem ? 
+            res.render('reserva/lucro', {somaTotal: somaTotal, reservas: reservas, mensagem: req.params.mensagem ? 
                 "Não é possível excluir um reboque já referencia por uma locação.":""})
         } else {
             res.render('erro', {mensagem: "Erro ao listar lucros."})
@@ -135,7 +136,12 @@ routerReserva.post('/reserva/filtrar', autorizacao,(req, res) => {
     let {dataInicio, dataFim} = req.body
     DAOReserva.getRelatorioLucro(dataInicio, dataFim).then(reservas => {
         if(reservas){
-            res.render('reserva/lucro', {reservas: reservas})
+            let somaTotal = 0;
+            reservas.forEach((reserva) => {
+                const valorTotalReserva = parseInt(reserva.dataValues.valorTotal, 10);
+                somaTotal += valorTotalReserva;
+            });
+            res.render('reserva/lucro', {somaTotal: somaTotal, reservas: reservas})
         } else {
             res.render('erro', {mensagem: "Erro ao filtrar lucros."})
         }

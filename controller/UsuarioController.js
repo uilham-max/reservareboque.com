@@ -17,7 +17,6 @@ routerUsuario.post('/login', (req, res) => {
     DAOUsuario.login(email, senha).then(usuario => {
         if(usuario != undefined){
             if(bcrypt.compareSync(req.body.senha, usuario.senha)){
-                // console.log(usuario);
                 req.session.usuario = {id: usuario.id, nome: usuario.nome, email: usuario.email}
                 res.redirect('/index')
             } else {

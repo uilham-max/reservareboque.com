@@ -1,8 +1,6 @@
-const { Router } = require('express')
 const express = require('express')
 const routerReboque = express.Router()
 const DAOReboque = require('../database/DAOReboque')
-const DAOReserva = require('../database/DAOReserva')
 const autorizacao = require('../autorizacao/autorizacao')
 
 

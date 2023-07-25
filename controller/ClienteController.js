@@ -19,13 +19,8 @@ routerCliente.post('/cliente/salvar', autorizacao, (req, res) => {
     })
 })
 
-// Trata a requisição para a renderização da página de listagem de clientes
-// ????????????????????????????????????????????????????????????????????????
-// Não entendi como que está funcionando a integridade referencial neste caso,
-// se funciona da mesma forma que categorias e contatos
 routerCliente.get('/cliente/lista/:mensagem?', autorizacao, (req, res) => {
     DAOCliente.getAll().then(clientes => {
-        // console.log(clientes)
         if(clientes){
             res.render('cliente/cliente', {clientes: clientes, mensagem: req.params.mensagem? 
                 "Não é possivel excluir um cliente já refereciado por uma locação":""})

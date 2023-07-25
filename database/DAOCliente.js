@@ -4,7 +4,6 @@ const Cliente = require('../model/Cliente.js')
 class DAOCliente{
 
     static async insert(nome, cpf, telefone, logradouro){
-        // console.log(nome)
         try{
             await Cliente.create({nome, cpf, telefone, logradouro})
             return true

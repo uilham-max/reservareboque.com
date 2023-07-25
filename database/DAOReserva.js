@@ -33,47 +33,9 @@ class DAOReserva {
                 order: ['id'],
                 include: [{ model: Reboque }, { model: Cliente }]
             })
-            // let reservas = await Reserva.findAll({order: ['id'], include: [{ model: Reboque }, {model: Cliente}]})
             return reservas
         }
         catch (error) {
-            console.log(error.toString())
-            return undefined
-        }
-    }
-
-    // RELATORIO HISTORICO
-    static async getRelatorioHistorico() {
-
-        try {
-            const currentDate = new Date()
-            let reservas = await Reserva.findAll({
-                where:{
-                    dataChegada: {[Op.lt]: currentDate}},    
-                order: ['id'], 
-                include: [{ model: Reboque }, {model: Cliente}]
-            })
-            return reservas
-        }
-        catch (error) {
-            console.log(error.toString())
-            return undefined
-        }
-    }
-
-
-    // RELATORIO FILTRO 
-    static async getRelatorioReservasPorRoboqueFiltro(dataInicio, dataFim){
-        try{
-            let reboques = await Reserva.findAll({
-                attributes: ['reboqueId', [Sequelize.fn('SUM', Sequelize.col('valorTotal')), 'valorTotal']],
-                where: {dataSaida: {[Op.between]: [dataInicio, dataFim]}},
-                group: ['reboque.id', 'reserva.reboqueId'],
-                include: [{model: Reboque}]
-            })
-            return reboques
-        }
-        catch(error){
             console.log(error.toString())
             return undefined
         }
@@ -103,14 +65,52 @@ class DAOReserva {
         }
     }
 
-    static async update(id, placa, dataSaida, dataChegada, valorDiaria, cliente, reboque){
+    // UPDATE
+    static async update(id, dataSaida, dataChegada, valorDiaria, cliente, reboque){
         try{
-            await Reserva.update({id: id, placa: placa, dataSaida: dataSaida, dataChegada: dataChegada, valorDiaria: valorDiaria, clienteId: cliente, reboqueId: reboque}, {where: {id: id}})
+            await Reserva.update({dataSaida: dataSaida, dataChegada: dataChegada, valorDiaria: valorDiaria, clienteId: cliente, reboqueId: reboque}, {where: {id: id}})
             return true
         }
         catch(error){
             console.log(error.toString());
             return false
+        }
+    }
+
+    /**METODOS ENCARREGADOS PELA PARTE DOS RELATORIOS */
+
+    // RELATORIO HISTORICO
+    static async getRelatorioHistorico(dataInicio, dataFim) {
+        try {
+            let reservas = await Reserva.findAll({
+                where:{
+                    dataSaida: {[Op.between]: [dataInicio, dataFim]}},    
+                order: ['id'], 
+                include: [{ model: Reboque }, {model: Cliente}]
+            })
+            return reservas
+        }
+        catch (error) {
+            console.log(error.toString())
+            return undefined
+        }
+    }
+
+
+    // RELATORIO LUCRO
+    static async getRelatorioLucro(dataInicio, dataFim){
+        try{
+            let reboques = await Reserva.findAll({
+                attributes: ['reboqueId', [Sequelize.fn('SUM', Sequelize.col('valorTotal')), 'valorTotal']],
+                where: {dataSaida: {[Op.between]: [dataInicio, dataFim]}},
+                group: ['reboque.id', 'reserva.reboqueId'],
+                include: [{model: Reboque}]
+            })
+            return reboques
+        }
+        catch(error){
+            console.log(error.toString())
+            return undefined
         }
     }
 

@@ -6,13 +6,13 @@
 <body>
     <div class="container" >
         <%-include('../partials/navbar.ejs')%>
-        <h3>Relatório dos Reboques</h3>
+        <h3>Relatório lucros</h3>
         
         <a class="btn btn-warning" href="/reserva/lista">Voltar</a><br><br>
         
         <form action="/reserva/filtrar" method="POST">
-            <div class="input-group mb-3">
-                <input class="btn btn-primary" type="submit" value="Filtrar">
+        <h5>Informar período</h5>
+        <div class="input-group mb-3">
                 
                 <span class="input-group-text" >data de início</span>
                 <input class="form-control" id="dataInicio" type="date" name="dataInicio" required>
@@ -20,7 +20,9 @@
                 <span class="input-group-text" >Data de fim</span>
                 <input class="form-control" id="dataFim" type="date" name="dataFim" required>
             </div>
-        </form>
+            <input class="btn btn-primary" type="submit" value="Filtrar">
+
+        </form><br>
 
         
             

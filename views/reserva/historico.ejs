@@ -6,8 +6,28 @@
 <body>
     <div class="container" >
         <%-include('../partials/navbar.ejs')%>
-        <h3>Hitórico de Reservas</h3>
+        <h3>Relatório Histórico</h3>
+        
         <a class="btn btn-warning" href="/reserva/lista">Voltar</a><br><br>
+        
+        <form action="/reserva/filtrarHistorico" method="POST">
+            <h5>Informar período</h5>
+            <div class="input-group mb-3">
+                
+                
+                <span class="input-group-text" >data de início</span>
+                <input class="form-control" id="dataInicio" type="date" name="dataInicio" required>
+                
+                <span class="input-group-text" >Data de fim</span>
+                <input class="form-control" id="dataFim" type="date" name="dataFim" required>
+            </div>
+            <input class="btn btn-primary" type="submit" value="Filtrar">
+
+        </form><br>
+
+        
+            
+        
         <table class="table table-striped" >
             <thead>
                 <tr>
@@ -15,8 +35,8 @@
                     <th>Cliente</th>
                     <th>Reboque</th>
                     <th>Diária</th>
-                    <th>Data saída</th>
-                    <th>Data entrega</th>
+                    <th>Data Saída</th>
+                    <th>Data Chegada</th>
                     <th>Tempo</th>
                     <th>Total</th>
                 </tr>
@@ -27,28 +47,30 @@
                         <td><%=reserva.id%></td>
                         <td><%=reserva.cliente.nome%></td>
                         <td><%=reserva.reboque.placa%></td>
-                        <td>R$ <%=reserva.valorDiaria%>,00</td>
-                        <td><%=reserva.dataSaida.toString().slice(8,10)+'/'+reserva.dataSaida.toString().slice(5,7)+'/'+reserva.dataSaida.toString().slice(0,4)%></td>
-                        <td><%=reserva.dataChegada.toString().slice(8,10)+'/'+reserva.dataChegada.toString().slice(5,7)+'/'+reserva.dataChegada.toString().slice(0,4)%></td>
-                        <td><%=reserva.diarias%> dias</td>
+                        <td><%=reserva.reboque.valorDiaria%></td>
+                        <td><%=reserva.dataSaida%></td>
+                        <td><%=reserva.dataChegada%></td>
+                        <td><%=reserva.diarias%></td>
                         <td>R$ <%=reserva.valorTotal%>,00</td>
-                        <!-- <td>R$ <%=reserva.diarias*reserva.valorDiaria%>,00</td> -->
-                        <td><a href="/reserva/editar/<%=reserva.id%>" class="fas fa-edit" style="color: black;" 
-                            ata-toggle="tooltip" title="Editar reserva" ></a></td>
-                        
                     </tr>
                 <%})%>
             </tbody>
 
         </table>
-        <% if(mensagem){ %>
-            <div class="alert alert-danger">
-                <strong>Exclusão de registro!</strong> <%= mensagem %>
-            </div>
-        <% } %>
-
     </div>
     <%-include('../partials/footer'); %>
+
+    <script>
+        const inputDateInicio = document.getElementById('dataInicio');
+        const inputDateFim = document.getElementById('dataFim');
+        const dataAtual = new Date();
+        const primeiroDiaMes = new Date(dataAtual.getFullYear(), dataAtual.getMonth(), 1);
+        const ultimoDiaMes = new Date(dataAtual.getFullYear(), dataAtual.getMonth() + 1, 0);
+        const dataFormatadaInicio = primeiroDiaMes.toISOString().slice(0, 10);
+        const dataFormatadaFim = ultimoDiaMes.toISOString().slice(0, 10);
+        inputDateInicio.value = dataFormatadaInicio;
+        inputDateFim.value = dataFormatadaFim;
+    </script>
 
 </body>
 </html>

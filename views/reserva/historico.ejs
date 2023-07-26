@@ -47,11 +47,14 @@
                         <td><%=reserva.id%></td>
                         <td><%=reserva.cliente.nome%></td>
                         <td><%=reserva.reboque.placa%></td>
-                        <td><%=reserva.reboque.valorDiaria%></td>
-                        <td><%=reserva.dataSaida%></td>
-                        <td><%=reserva.dataChegada%></td>
-                        <td><%=reserva.diarias%></td>
+                        <td>R$ <%=reserva.valorDiaria%>,00</td>
+                        <td><%=reserva.dataSaida.toString().slice(8,10)+'/'+reserva.dataSaida.toString().slice(5,7)+'/'+reserva.dataSaida.toString().slice(0,4)%></td>
+                        <td><%=reserva.dataChegada.toString().slice(8,10)+'/'+reserva.dataChegada.toString().slice(5,7)+'/'+reserva.dataChegada.toString().slice(0,4)%></td>
+                        <td><%=reserva.diarias%> dias</td>
                         <td>R$ <%=reserva.valorTotal%>,00</td>
+                        <td><a href="/reserva/excluir/<%=reserva.id%>" class="fas fa-trash" style="color: black;"
+                            ata-toggle="tooltip" title="Excluir reserva"
+                            onclick="return confirm('Confirma a exclusão?')" ></a></td>
                     </tr>
                 <%})%>
             </tbody>

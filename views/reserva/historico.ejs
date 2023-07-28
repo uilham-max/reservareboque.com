@@ -7,27 +7,17 @@
     <div class="container" >
         <%-include('../partials/navbar.ejs')%>
         <h3>Relatório Histórico</h3>
-        
         <a class="btn btn-warning" href="/reserva/lista">Voltar</a><br><br>
-        
         <form action="/reserva/filtrarHistorico" method="POST">
             <h5>Informar período</h5>
             <div class="input-group mb-3">
-                
-                
                 <span class="input-group-text" >data de início</span>
                 <input class="form-control" id="dataInicio" type="date" name="dataInicio" required>
-                
                 <span class="input-group-text" >Data de fim</span>
                 <input class="form-control" id="dataFim" type="date" name="dataFim" required>
             </div>
             <input class="btn btn-primary" type="submit" value="Filtrar">
-
         </form><br>
-
-        
-            
-        
         <table class="table table-striped" >
             <thead>
                 <tr>
@@ -62,7 +52,6 @@
         </table>
     </div>
     <%-include('../partials/footer'); %>
-
     <script>
         const inputDateInicio = document.getElementById('dataInicio');
         const inputDateFim = document.getElementById('dataFim');
@@ -74,6 +63,5 @@
         inputDateInicio.value = dataFormatadaInicio;
         inputDateFim.value = dataFormatadaFim;
     </script>
-
 </body>
 </html>

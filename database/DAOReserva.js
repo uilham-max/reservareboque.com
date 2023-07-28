@@ -8,6 +8,29 @@ class DAOReserva {
 
     // INSERT
     static async insert(dataSaida, dataChegada, valorDiaria, diarias, valorTotal, cliente, reboque) {
+
+        var reboqueIndisponivel = false
+        await DAOReserva.getAtivas().then(reservas => {
+
+            if(reservas){
+                reservas.forEach((reserva) => {
+
+                    if(dataSaida >= reserva.dataValues.dataSaida && dataSaida <= reserva.dataValues.dataChegada || 
+                        dataChegada >= reserva.dataValues.dataSaida && dataChegada <= reserva.dataValues.dataChegada ||
+                        reserva.dataValues.dataSaida >= dataSaida && reserva.dataValues.dataChegada <= dataChegada){
+                       
+                        if(reserva.dataValues.reboqueId == reboque){
+                            reboqueIndisponivel = true
+                        }
+
+                    }
+                    
+                });
+            }
+        })
+
+        if(reboqueIndisponivel == true){return false}
+
         try {
             await Reserva.create({ dataSaida: dataSaida, dataChegada: dataChegada, valorDiaria: valorDiaria, diarias: diarias, valorTotal: valorTotal, clienteId: cliente, reboqueId: reboque })
             return true
@@ -15,29 +38,6 @@ class DAOReserva {
         catch (error) {
             console.log(error.toString())
             return false
-        }
-    }
-
-    // READ
-    static async getAll() {
-
-        try {
-            const currentDate = new Date()
-            const reservas = await Reserva.findAll({
-                where: {
-                    [Op.or]: [
-                        { dataSaida: { [Op.gte]: currentDate } },
-                        { dataChegada: { [Op.gte]: currentDate } }
-                    ],
-                },
-                order: ['id'],
-                include: [{ model: Reboque }, { model: Cliente }]
-            })
-            return reservas
-        }
-        catch (error) {
-            console.log(error.toString())
-            return undefined
         }
     }
 
@@ -79,12 +79,40 @@ class DAOReserva {
 
     /**METODOS ENCARREGADOS PELA PARTE DOS RELATORIOS */
 
+
+    // RELATORIO ATIVAS
+    static async getAtivas() {
+        try {
+            const currentDate = new Date()
+            const reservas = await Reserva.findAll({
+                where: {
+                    [Op.or]: [
+                        { dataSaida: { [Op.gte]: currentDate } },
+                        { dataChegada: { [Op.gte]: currentDate } }
+                    ],
+                },
+                order: ['id'],
+                include: [{ model: Reboque }, { model: Cliente }]
+            })
+            return reservas
+        }
+        catch (error) {
+            console.log(error.toString())
+            return undefined
+        }
+    }
+
     // RELATORIO HISTORICO
     static async getRelatorioHistorico(dataInicio, dataFim) {
         try {
             let reservas = await Reserva.findAll({
+                
                 where:{
-                    dataSaida: {[Op.between]: [dataInicio, dataFim]}},    
+                    [Op.or]: [
+                        {dataSaida: {[Op.between]: [dataInicio, dataFim]}},
+                        {dataChegada: {[Op.between]: [dataInicio, dataFim]}},
+                    ],
+                },    
                 order: ['id'], 
                 include: [{ model: Reboque }, {model: Cliente}]
             })
@@ -95,7 +123,6 @@ class DAOReserva {
             return undefined
         }
     }
-
 
     // RELATORIO LUCRO
     static async getRelatorioLucro(dataInicio, dataFim){

@@ -6,6 +6,8 @@ const DAOReboque = require('../database/DAOReboque')
 const Diaria = require('../bill_modules/Diaria')
 const autorizacao = require('../autorizacao/autorizacao')
 
+
+
 // CRIAR GET
 routerReserva.get('/reserva/novo/:mensagem?', autorizacao, (req, res) => {
     DAOReboque.getAll().then(reboques => {
@@ -27,6 +29,7 @@ routerReserva.get('/reserva/novo/:mensagem?', autorizacao, (req, res) => {
 routerReserva.post('/reserva/salvar', autorizacao, (req, res) => {
     let { dataSaida, dataChegada, valorDiaria, cliente, reboque } = req.body
     let diarias = Diaria.calcularDiarias(dataSaida, dataChegada)
+    
     valorTotal = diarias*valorDiaria
     DAOReserva.insert(dataSaida, dataChegada, valorDiaria, diarias, valorTotal, cliente, reboque).then(inserido => {
         DAOReboque.getAll().then(reboques => {
@@ -42,19 +45,9 @@ routerReserva.post('/reserva/salvar', autorizacao, (req, res) => {
     })
 })
 
-// LISTAR GET
-routerReserva.get('/reserva/lista/:mensagem?', autorizacao, (req, res) => {
-    DAOReserva.getAll().then(reservas => {
-        if (reservas) {
-            res.render('reserva/reserva', { reservas: reservas, mensagem: req.params.mensagem ? "Erro! Item já referenciado" : "" })
-        } else {
-            res.render('erro', { mensagem: "Erro na listagem de reservas." })
-        }
-    })
-})
 
 // DELETAR 
-routerReserva.get('/reserva/excluir/:id', (req, res) => {
+routerReserva.get('/reserva/excluir/:id', autorizacao, (req, res) => {
     let id = req.params.id
     DAOReserva.delete(id).then(excluido =>{
         if(excluido){
@@ -82,7 +75,7 @@ routerReserva.get('/reserva/editar/:id', autorizacao, (req, res) => {
 })
 
 // ATUALIZAR POST
-routerReserva.post('/reserva/atualizar', (req, res) => {
+routerReserva.post('/reserva/atualizar', autorizacao, (req, res) => {
     let {id, dataSaida, dataChegada, valorDiaria, cliente, reboque} = req.body
     DAOReserva.update(id, dataSaida, dataChegada, valorDiaria, cliente, reboque).then(inserido => {
         if(inserido){
@@ -95,11 +88,24 @@ routerReserva.post('/reserva/atualizar', (req, res) => {
 
 /** CONTROLADORES ENCARREGADOS DA PARTE DOS RELATÓRIOS */
 
+// LISTAR GET
+routerReserva.get('/reserva/lista/:mensagem?', autorizacao, (req, res) => {
+    DAOReserva.getAtivas().then(reservas => {
+        if (reservas) {
+            res.render('reserva/reserva', { reservas: reservas, mensagem: req.params.mensagem ? "Erro! Item já referenciado" : "" })
+        } else {
+            res.render('erro', { mensagem: "Erro na listagem de reservas." })
+        }
+    })
+})
+
+
 // RELATORIO HISTORICO GET
 routerReserva.get('/reserva/historico/:mensagem?', autorizacao, (req, res) => {
     DAOReserva.getRelatorioHistorico().then(reservas => {
         if (reservas) {
-            res.render('reserva/historico', { reservas: reservas, mensagem: req.params.mensagem ? "Erro! Item já referenciado" : "" })
+            res.render('reserva/historico', { reservas: reservas, 
+                mensagem: req.params.mensagem ? "Erro! Item já referenciado" : "" })
         } else {
             res.render('erro', { mensagem: "Erro na listagem do historico." })
         }
@@ -107,7 +113,7 @@ routerReserva.get('/reserva/historico/:mensagem?', autorizacao, (req, res) => {
 })
 
 // RELATORIO HISTORICO POST
-routerReserva.post('/reserva/filtrarHistorico', autorizacao,(req, res) => {
+routerReserva.post('/reserva/filtrarHistorico', autorizacao, (req, res) => {
     let {dataInicio, dataFim} = req.body
     DAOReserva.getRelatorioHistorico(dataInicio, dataFim).then(reservas => {
         if(reservas){
@@ -124,7 +130,7 @@ routerReserva.get('/reserva/lucro/:mensagem?', autorizacao, (req, res) => {
         let somaTotal = ""
         if(reservas){
             res.render('reserva/lucro', {somaTotal: somaTotal, reservas: reservas, mensagem: req.params.mensagem ? 
-                "Não é possível excluir um reboque já referencia por uma locação.":""})
+                "Não é possível excluir um reboque já referenciado por uma locação.":""})
         } else {
             res.render('erro', {mensagem: "Erro ao listar lucros."})
         }

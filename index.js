@@ -20,7 +20,10 @@ app.use(ReboqueController)
 app.use(ReservaController)
 app.use(UsuarioController)
 
-conexao.authenticate()
-app.listen(port,()=>{
-    console.log(`Servidor rodando http://localhost:${port}`)
+conexao.authenticate().then(()=>{
+    app.listen(port,()=>{
+        console.log(`Servidor rodando http://localhost:${port}`)
+    })
+}).catch(() => {
+    console.error("Erro. Banco de dados não iniciado.")
 })

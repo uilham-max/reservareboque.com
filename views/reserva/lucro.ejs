@@ -7,31 +7,20 @@
     <div class="container" >
         <%-include('../partials/navbar.ejs')%>
         <h3>Relatório lucros</h3>
-       
         <a class="btn btn-warning" href="/reserva/lista">Voltar</a>
-        
-
         <br><br>
         <form action="/reserva/filtrar" method="POST">
-        <h5>Informar período</h5>
-        <div class="input-group mb-3">
-                
-                <span class="input-group-text" >data de início</span>
-                <input class="form-control" id="dataInicio" type="date" name="dataInicio" required>
-                
-                <span class="input-group-text" >Data de fim</span>
-                <input class="form-control" id="dataFim" type="date" name="dataFim" required>
-
-                <span class="input-group-text" >Lucro do período</span>
-                <input class="form-control" id="total" type="numeric" name="total" value="R$ <%=somaTotal%>,00" required>
-            </div>
+            <h5>Informar período</h5>
+                <div class="input-group mb-3">
+                    <span class="input-group-text" >data de início</span>
+                    <input class="form-control" id="dataInicio" type="date" name="dataInicio" required>
+                    <span class="input-group-text" >Data de fim</span>
+                    <input class="form-control" id="dataFim" type="date" name="dataFim" required>
+                    <span class="input-group-text" >Lucro do período</span>
+                    <input class="form-control" id="total" type="numeric" name="total" value="R$ <%=somaTotal%>,00" required>
+                </div>
             <input class="btn btn-primary" type="submit" value="Filtrar">
-
         </form><br>
-
-        
-            
-        
         <table class="table table-striped" >
             <thead>
                 <tr>

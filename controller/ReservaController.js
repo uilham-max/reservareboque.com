@@ -27,9 +27,8 @@ routerReserva.get('/reserva/novo/:mensagem?', autorizacao, (req, res) => {
 
 // CRIAR POST
 routerReserva.post('/reserva/salvar', autorizacao, (req, res) => {
-    let { dataSaida, dataChegada, valorDiaria, cliente, reboque } = req.body
+    let {dataSaida, dataChegada, valorDiaria, cliente, reboque } = req.body
     let diarias = Diaria.calcularDiarias(dataSaida, dataChegada)
-    
     valorTotal = diarias*valorDiaria
     DAOReserva.insert(dataSaida, dataChegada, valorDiaria, diarias, valorTotal, cliente, reboque).then(inserido => {
         DAOReboque.getAll().then(reboques => {
@@ -101,7 +100,7 @@ routerReserva.get('/reserva/lista/:mensagem?', autorizacao, (req, res) => {
 
 
 // RELATORIO HISTORICO GET
-routerReserva.get('/reserva/historico/:mensagem?', autorizacao, (req, res) => {
+routerReserva.get('/reserva/historico/:mensagem?',autorizacao,  (req, res) => {
     DAOReserva.getRelatorioHistorico().then(reservas => {
         if (reservas) {
             res.render('reserva/historico', { reservas: reservas, 
@@ -138,7 +137,7 @@ routerReserva.get('/reserva/lucro/:mensagem?', autorizacao, (req, res) => {
 })
 
 // RELATORIO LUCRO POST
-routerReserva.post('/reserva/filtrar', autorizacao,(req, res) => {
+routerReserva.post('/reserva/filtrar', autorizacao, (req, res) => {
     let {dataInicio, dataFim} = req.body
     DAOReserva.getRelatorioLucro(dataInicio, dataFim).then(reservas => {
         if(reservas){

@@ -19,4 +19,17 @@ function preencheDataFimVazia(dataFim){
     
 }
 
-module.exports = {preencheDataInicioVazia, preencheDataFimVazia}
+function preencheDatasVazias(datas){
+   
+    const primeiroDiaMes = new Date(dataAtual.getFullYear(), dataAtual.getMonth(), 1);
+    const dataFormatadaInicio = primeiroDiaMes.toISOString().slice(0, 10);
+    datas.inicioDoPeriodo = dataFormatadaInicio;
+
+    const ultimoDiaMes = new Date(dataAtual.getFullYear(), dataAtual.getMonth() + 1, 0);
+    const dataFormatadaFim = ultimoDiaMes.toISOString().slice(0, 10);
+    datas.fimDoPeriodo = dataFormatadaFim;
+    return datas
+    
+}
+
+module.exports = {preencheDataInicioVazia, preencheDataFimVazia, preencheDatasVazias}

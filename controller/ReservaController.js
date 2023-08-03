@@ -121,38 +121,28 @@ routerReserva.post('/reserva/filtrarHistorico', autorizacao, (req, res) => {
 })
 
 // RELATORIO LUCRO GET
-routerReserva.get('/reserva/lucro/:mensagem?', autorizacao, (req, res) => {
-    DAOReserva.getRelatorioLucro().then(reservas => {
-        if(reservas){
-            let somaTotal = 0;
-            reservas.forEach((reserva) => {
-                const valorTotalReserva = parseInt(reserva.dataValues.valorTotal, 10);
-                somaTotal += valorTotalReserva;
-            });
-            res.render('reserva/lucro', {somaTotal: somaTotal, reservas: reservas, mensagem: req.params.mensagem ? 
-                "Não é possível excluir um reboque já referenciado por uma locação.":""})
-        } else {
-            res.render('erro', {mensagem: "Erro ao listar lucros."})
-        }
-    })
+routerReserva.get('/reserva/lucro/:mensagem?', autorizacao, async (req, res) => {
+    let reservas = await DAOReserva.getRelatorioLucro()
+    if(reservas){
+        let lucroTotal = await DAOReserva.getLucroTotal()
+        res.render('reserva/lucro', {lucroTotal: lucroTotal, reservas: reservas, mensagem: req.params.mensagem ? 
+            "Não é possível excluir um reboque já referenciado por uma locação.":""})
+    } else {
+        res.render('erro', {mensagem: "Erro ao listar lucros."})
+    }
 })
 
-// RELATORIO LUCRO POST
-routerReserva.post('/reserva/filtrar', autorizacao, (req, res) => {
+
+routerReserva.post('/reserva/filtrar', autorizacao, async (req, res) => {
     let {dataInicio, dataFim} = req.body
-    DAOReserva.getRelatorioLucro(dataInicio, dataFim).then(reservas => {
-        console.log("Reservas relatorio lucro: ", reservas.map(reserva => reserva.toJSON()));
-        if(reservas){
-            let somaTotal = 0;
-            reservas.forEach((reserva) => {
-                const valorTotalReserva = parseInt(reserva.dataValues.valorTotal, 10);
-                somaTotal += valorTotalReserva;
-            });
-            res.render('reserva/lucro', {somaTotal: somaTotal, reservas: reservas})
-        } else {
-            res.render('erro', {mensagem: "Erro ao filtrar lucros."})
-        }
-    })
+    let reservas = await DAOReserva.getRelatorioLucro(dataInicio, dataFim)
+    // console.log("Reservas relatorio lucro: ", reservas.map(reserva => reserva.toJSON()));
+    if(reservas){
+        let lucroTotal = await DAOReserva.getLucroTotal(dataInicio, dataFim)
+        res.render('reserva/lucro', {lucroTotal: lucroTotal, reservas: reservas})
+    } else {
+        res.render('erro', {mensagem: "Erro ao filtrar lucros."})
+    }
 })
 
 module.exports = routerReserva

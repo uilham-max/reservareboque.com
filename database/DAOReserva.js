@@ -133,6 +133,7 @@ class DAOReserva {
            dataInicio = utilitario.preencheDataInicioVazia(dataInicio)
            dataFim = utilitario.preencheDataFimVazia(dataFim)
         }
+
         
         try {
             let reservas = await Reserva.findAll({
@@ -166,6 +167,28 @@ class DAOReserva {
         }
     }
 
+    static async getLucroTotal(inicioDoPeriodo, fimDoPeriodo) {
+        if(!inicioDoPeriodo){
+            let datas = utilitario.preencheDatasVazias({datas: {inicioDoPeriodo, fimDoPeriodo}})
+            inicioDoPeriodo = datas.inicioDoPeriodo
+            fimDoPeriodo = datas.fimDoPeriodo
+        }
+        try {
+            let resultado = await Reserva.sum('valorTotal', {
+              where: {
+                dataSaida: {
+                  [Op.between]: [inicioDoPeriodo, fimDoPeriodo],
+                },
+              },
+            });
+            return resultado;
+        } 
+        catch (error) {
+            console.log(error.toString());
+            return null;
+        }
+       
+    }
 
     // RELATORIO LUCRO
     static async getRelatorioLucro(dataInicio, dataFim) {

@@ -3,7 +3,6 @@ const routerReserva = express.Router()
 const DAOReserva = require('../database/DAOReserva')
 const DAOCliente = require('../database/DAOCliente')
 const DAOReboque = require('../database/DAOReboque')
-const Diaria = require('../bill_modules/Diaria')
 const autorizacao = require('../autorizacao/autorizacao')
 
 
@@ -15,10 +14,10 @@ routerReserva.get('/reserva/novo/:mensagem?', autorizacao, (req, res) => {
             if(req.params.mensagem){ 
                 res.render('reserva/novo', {mensagem: "Reserva incluída.", reboques: reboques, clientes: clientes})
             } else {
-                if(reboques && clientes){
+                if(reboques.length != 0 && clientes.length != 0){
                     res.render('reserva/novo', {mensagem: "", reboques: reboques, clientes: clientes})
                 } else {
-                    res.redirect('reserva/lista/reboques_ou_clientes_vazio')
+                    res.render('erro', {mensagem: "Lista de reboques ou clientes vazia."})
                 }
             } 
         })
@@ -28,9 +27,7 @@ routerReserva.get('/reserva/novo/:mensagem?', autorizacao, (req, res) => {
 // CRIAR POST
 routerReserva.post('/reserva/salvar', autorizacao, (req, res) => {
     let {dataSaida, dataChegada, valorDiaria, cliente, reboque } = req.body
-    let diarias = Diaria.calcularDiarias(dataSaida, dataChegada)
-    valorTotal = diarias*valorDiaria
-    DAOReserva.insert(dataSaida, dataChegada, valorDiaria, diarias, valorTotal, cliente, reboque).then(inserido => {
+    DAOReserva.insert(dataSaida, dataChegada, valorDiaria, cliente, reboque).then(inserido => {
         DAOReboque.getAll().then(reboques => {
             DAOCliente.getAll().then(clientes => {
                 if (inserido) {
@@ -126,8 +123,12 @@ routerReserva.post('/reserva/filtrarHistorico', autorizacao, (req, res) => {
 // RELATORIO LUCRO GET
 routerReserva.get('/reserva/lucro/:mensagem?', autorizacao, (req, res) => {
     DAOReserva.getRelatorioLucro().then(reservas => {
-        let somaTotal = ""
         if(reservas){
+            let somaTotal = 0;
+            reservas.forEach((reserva) => {
+                const valorTotalReserva = parseInt(reserva.dataValues.valorTotal, 10);
+                somaTotal += valorTotalReserva;
+            });
             res.render('reserva/lucro', {somaTotal: somaTotal, reservas: reservas, mensagem: req.params.mensagem ? 
                 "Não é possível excluir um reboque já referenciado por uma locação.":""})
         } else {
@@ -140,6 +141,7 @@ routerReserva.get('/reserva/lucro/:mensagem?', autorizacao, (req, res) => {
 routerReserva.post('/reserva/filtrar', autorizacao, (req, res) => {
     let {dataInicio, dataFim} = req.body
     DAOReserva.getRelatorioLucro(dataInicio, dataFim).then(reservas => {
+        console.log("Reservas relatorio lucro: ", reservas.map(reserva => reserva.toJSON()));
         if(reservas){
             let somaTotal = 0;
             reservas.forEach((reserva) => {

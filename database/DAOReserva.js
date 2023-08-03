@@ -1,19 +1,23 @@
 const Reserva = require('../model/Reserva.js')
 const Reboque = require('../model/Reboque.js')
 const Cliente = require('../model/Cliente.js')
-const { Op, Sequelize, QueryTypes } = require('sequelize')
-const conexao = require('./conexao.js')
+const { Op, Sequelize } = require('sequelize')
+const utilitario = require('./utilitario')
+const Diaria = require('../bill_modules/Diaria')
+
 
 
 class DAOReserva {
 
     // INSERT
-    static async insert(dataSaida, dataChegada, valorDiaria, diarias, valorTotal, cliente, reboque) {
+    static async insert(dataSaida, dataChegada, valorDiaria, /*diarias, valorTotal,*/ cliente, reboque) {
         try {
             let reservas = await DAOReserva.getVerificaDisponibilidade(reboque, dataSaida, dataChegada)
             if (reservas.length !== 0) {
                 return false
             } else {
+                let diarias = Diaria.calcularDiarias(dataSaida, dataChegada)
+                let valorTotal = diarias*valorDiaria
                 await Reserva.create({ dataSaida: dataSaida, dataChegada: dataChegada, valorDiaria: valorDiaria, diarias: diarias, valorTotal: valorTotal, clienteId: cliente, reboqueId: reboque })
                 return true
             }
@@ -123,39 +127,13 @@ class DAOReserva {
     }
 
     // RELATORIO HISTORICO
-    // static async getRelatorioHistorico(dataInicio, dataFim) {
-    //     console.log(dataInicio+dataFim);
-    //     try {
-    //         let reservas = await Reserva.findAll({
-    //             attributes: ['id', 'dataSaida', 'dataChegada'],
-    //             where:{
-    //                 [Op.or]: [
-    //                     // {[dataInicio]: {[Op.between]: [dataInicio, dataFim]}},
-    //                     // {[dataInicio]: {[Op.between]: [dataSaida, dataChegada]}},
-    //                     // {[dataFim]: {[Op.between]: [dataSaida, dataChegada]}},
-    //                     {dataSaida: {[Op.between]: [dataInicio, dataFim]}},
-    //                     {dataChegada: {[Op.between]: [dataInicio, dataFim]}},
-    //                     // conexao.literal(`'${dataInicio}' between  'dataSaida'  and 'dataChegada' `),
-    //                     // conexao.literal(`'${dataFim}' between  'dataSaida'  and 'dataChegada' `),
-    //                     // { dataSaida: { [Op.between]: [dataInicio, dataFim] } },
-    //                     // { dataChegada: { [Op.between]: [dataInicio, dataFim] } },
-
-    //                 ],
-    //             },    
-    //             order: ['id'], 
-    //             include: [{ model: Reboque }, {model: Cliente}]
-    //         })
-    //         console.log(reservas);
-    //         return reservas
-    //     }
-    //     catch (error) {
-    //         console.log('reservas encontradas: ', )
-    //         return undefined
-    //     }
-    // }
-
-
     static async getRelatorioHistorico(dataInicio, dataFim) {
+
+        if(!(dataInicio || dataFim)){
+           dataInicio = utilitario.preencheDataInicioVazia(dataInicio)
+           dataFim = utilitario.preencheDataFimVazia(dataFim)
+        }
+        
         try {
             let reservas = await Reserva.findAll({
                 where: {
@@ -180,7 +158,7 @@ class DAOReserva {
                 include: [{ model: Reboque }, { model: Cliente }]
             });
 
-            console.log('Reservas encontradas:', reservas.map(reserva => reserva.toJSON()));
+            // console.log('Reservas encontradas:', reservas.map(reserva => reserva.toJSON()));
             return reservas
         } catch (error) {
             console.error('Erro ao obter relatório de histórico:', error);
@@ -191,10 +169,16 @@ class DAOReserva {
 
     // RELATORIO LUCRO
     static async getRelatorioLucro(dataInicio, dataFim) {
+
+        if(!(dataInicio || dataFim)){
+            dataInicio = utilitario.preencheDataInicioVazia(dataInicio)
+            dataFim = utilitario.preencheDataFimVazia(dataFim)
+        }
+
         try {
             let reboques = await Reserva.findAll({
                 attributes: ['reboqueId', [Sequelize.fn('SUM', Sequelize.col('valorTotal')), 'valorTotal']],
-                where: { dataSaida: { [Op.between]: [dataInicio, dataFim] } },
+                where:{ dataSaida: { [Op.between]: [dataInicio, dataFim] } },
                 group: ['reboque.id', 'reserva.reboqueId'],
                 include: [{ model: Reboque }]
             })

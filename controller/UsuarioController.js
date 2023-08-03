@@ -41,7 +41,7 @@ routerUsuario.post('/login', (req, res) => {
 })
 
 
-routerUsuario.get('/index', (req, res) => { // autorização
+routerUsuario.get('/index', autorizacao,(req, res) => { // 
     res.render("index", { usuario: req.session.usuario.nome })
 })
 

@@ -1,10 +1,12 @@
 const Reserva = require('../model/Reserva.js')
 const Reboque = require('../model/Reboque.js')
 const Cliente = require('../model/Cliente.js')
-const { Op, Sequelize } = require('sequelize')
+const { Op, Sequelize, QueryTypes } = require('sequelize')
 const utilitario = require('./utilitario')
 const Diaria = require('../bill_modules/Diaria')
-
+const conexao = require('./conexao')
+const sequelize = require('sequelize')
+const { DataRowMessage } = require('pg-protocol/dist/messages.js')
 
 
 class DAOReserva {
@@ -13,13 +15,13 @@ class DAOReserva {
     static async insert(dataSaida, dataChegada, valorDiaria, /*diarias, valorTotal,*/ cliente, reboque) {
         try {
             let reservas = await DAOReserva.getVerificaDisponibilidade(reboque, dataSaida, dataChegada)
-            if (reservas.length !== 0) {
-                return false
-            } else {
+            if (reservas.length === 0) {
                 let diarias = Diaria.calcularDiarias(dataSaida, dataChegada)
                 let valorTotal = diarias*valorDiaria
                 await Reserva.create({ dataSaida: dataSaida, dataChegada: dataChegada, valorDiaria: valorDiaria, diarias: diarias, valorTotal: valorTotal, clienteId: cliente, reboqueId: reboque })
                 return true
+            } else {
+                return false
             }
         }
         catch (error) {
@@ -66,37 +68,24 @@ class DAOReserva {
         }
     }
 
-    static async getVerificaDisponibilidade(reboque, dataInicio, dataFim) {
+    // DISPONIBILIDADE
+    static async getVerificaDisponibilidade(reboque, inicioDoPeriodo, fimDoPeriodo) {
         try {
             let reservas = await Reserva.findAll({
-                attributes: ['id', 'dataSaida', 'dataChegada'],
                 where: {
-                    [Op.and]: { reboqueId: { [Op.eq]: reboque } },
-                    [Op.or]: [
-                        {
-                            dataSaida: { [Op.between]: [dataInicio, dataFim] },
-                        },
-                        {
-                            dataChegada: { [Op.between]: [dataInicio, dataFim] },
-                        },
-                        {
-                            dataSaida: { [Op.lte]: dataInicio },
-                            dataChegada: { [Op.gte]: dataFim },
-                        },
-                        {
-                            dataSaida: { [Op.gte]: dataInicio },
-                            dataChegada: { [Op.lte]: dataFim },
-                        },
+                    [Op.and]: [
+                        sequelize.literal(`("dataSaida", "dataChegada") OVERLAPS (:inicioDoPeriodo, :fimDoPeriodo)`),
+                        {reboqueId: reboque},
                     ],
                 },
-                order: ['id'],
-                include: [{ model: Reboque }, { model: Cliente }]
-            });
+                replacements: {inicioDoPeriodo, fimDoPeriodo},
+                type: QueryTypes.SELECT,
+            })
 
             // console.log('Reservas encontradas:', reservas.map(reserva => reserva.toJSON()));
             return reservas
         } catch (error) {
-            console.error('Erro ao obter relatório de histórico:', error);
+            console.error('Erro ao verificar disponibilidade:', error);
             return undefined
         }
     }
@@ -127,40 +116,28 @@ class DAOReserva {
     }
 
     // RELATORIO HISTORICO
-    static async getRelatorioHistorico(dataInicio, dataFim) {
+    static async getRelatorioHistorico(inicioDoPeriodo, fimDoPeriodo) {
 
-        if(!(dataInicio || dataFim)){
-           dataInicio = utilitario.preencheDataInicioVazia(dataInicio)
-           dataFim = utilitario.preencheDataFimVazia(dataFim)
+        if(!inicioDoPeriodo){
+            let datas = utilitario.preencheDatasVazias({datas: {inicioDoPeriodo, fimDoPeriodo}})
+            inicioDoPeriodo = datas.inicioDoPeriodo
+            fimDoPeriodo = datas.fimDoPeriodo
         }
-
         
         try {
-            let reservas = await Reserva.findAll({
-                where: {
-                    [Op.or]: [
-                        {
-                            dataSaida: { [Op.between]: [dataInicio, dataFim] },
-                        },
-                        {
-                            dataChegada: { [Op.between]: [dataInicio, dataFim] },
-                        },
-                        {
-                            dataSaida: { [Op.lte]: dataInicio },
-                            dataChegada: { [Op.gte]: dataFim },
-                        },
-                        {
-                            dataSaida: { [Op.gte]: dataInicio },
-                            dataChegada: { [Op.lte]: dataFim },
-                        },
-                    ],
+            const reservas = await Reserva.findAll({
+                where: sequelize.literal(
+                    `("dataSaida", "dataChegada") OVERLAPS (:inicioDoPeriodo, :fimDoPeriodo)`
+                ),
+                order: [['id', 'ASC']],
+                include: [{ model: Reboque }, { model: Cliente }],
+                replacements: {
+                    inicioDoPeriodo,
+                    fimDoPeriodo,
                 },
-                order: ['id'],
-                include: [{ model: Reboque }, { model: Cliente }]
             });
-
-            // console.log('Reservas encontradas:', reservas.map(reserva => reserva.toJSON()));
-            return reservas
+    
+            return reservas;
         } catch (error) {
             console.error('Erro ao obter relatório de histórico:', error);
             return undefined
@@ -168,11 +145,13 @@ class DAOReserva {
     }
 
     static async getLucroTotal(inicioDoPeriodo, fimDoPeriodo) {
+        
         if(!inicioDoPeriodo){
             let datas = utilitario.preencheDatasVazias({datas: {inicioDoPeriodo, fimDoPeriodo}})
             inicioDoPeriodo = datas.inicioDoPeriodo
             fimDoPeriodo = datas.fimDoPeriodo
         }
+        
         try {
             let resultado = await Reserva.sum('valorTotal', {
               where: {
@@ -191,17 +170,18 @@ class DAOReserva {
     }
 
     // RELATORIO LUCRO
-    static async getRelatorioLucro(dataInicio, dataFim) {
+    static async getRelatorioLucro(inicioDoPeriodo, fimDoPeriodo) {
 
-        if(!(dataInicio || dataFim)){
-            dataInicio = utilitario.preencheDataInicioVazia(dataInicio)
-            dataFim = utilitario.preencheDataFimVazia(dataFim)
+        if(!inicioDoPeriodo){
+            let datas = utilitario.preencheDatasVazias({datas: {inicioDoPeriodo, fimDoPeriodo}})
+            inicioDoPeriodo = datas.inicioDoPeriodo
+            fimDoPeriodo = datas.fimDoPeriodo
         }
 
         try {
             let reboques = await Reserva.findAll({
                 attributes: ['reboqueId', [Sequelize.fn('SUM', Sequelize.col('valorTotal')), 'valorTotal']],
-                where:{ dataSaida: { [Op.between]: [dataInicio, dataFim] } },
+                where:{ dataSaida: { [Op.between]: [inicioDoPeriodo, fimDoPeriodo] } },
                 group: ['reboque.id', 'reserva.reboqueId'],
                 include: [{ model: Reboque }]
             })

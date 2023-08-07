@@ -7,8 +7,6 @@
     <div class="container" >
         <%-include('../partials/navbar.ejs')%>
         <h3>Relatório lucros</h3>
-        <a class="btn btn-warning" href="/reserva/lista">Voltar</a>
-        <br><br>
         <form action="/reserva/filtrar" method="POST">
             <h5>Informar período</h5>
                 <div class="input-group mb-3">
@@ -50,11 +48,15 @@
     <script>
         const inputDateInicio = document.getElementById('dataInicio');
         const inputDateFim = document.getElementById('dataFim');
+        
         const dataAtual = new Date();
+        
         const primeiroDiaMes = new Date(dataAtual.getFullYear(), dataAtual.getMonth(), 1);
-        const ultimoDiaMes = new Date(dataAtual.getFullYear(), dataAtual.getMonth() + 1, 0);
+        const ontem = new Date(dataAtual.getFullYear(), dataAtual.getMonth(), dataAtual.getDate() - 1);
+        
         const dataFormatadaInicio = primeiroDiaMes.toISOString().slice(0, 10);
-        const dataFormatadaFim = ultimoDiaMes.toISOString().slice(0, 10);
+        const dataFormatadaFim = ontem.toISOString().slice(0, 10);
+        
         inputDateInicio.value = dataFormatadaInicio;
         inputDateFim.value = dataFormatadaFim;
     </script>

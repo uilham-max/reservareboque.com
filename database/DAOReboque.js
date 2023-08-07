@@ -57,26 +57,6 @@ class DAOReboque {
         }
     }
 
-    // RELATORIO
-    // static async getRelatorio() {
-    //     try {
-    //         let reboques = await Reboque.findAll({
-    //             attributes: [
-    //                 'reboque',
-    //                 [Sequelize.fn('SUM', Sequelize.col('valorDiaria')), 'valorTotal']
-    //             ],
-    //             group: ['reboque']
-    //         });
-    
-    //         console.log(reboques);
-    //         return reboques;
-    //     } catch (error) {
-    //         console.log(error.toString());
-    //         return undefined;
-    //     }
-    // }
-    
-
 }
 
 module.exports = DAOReboque

@@ -6,23 +6,19 @@ const DAOReboque = require('../database/DAOReboque')
 const autorizacao = require('../autorizacao/autorizacao')
 
 
-
 // CRIAR GET
-routerReserva.get('/reserva/novo/:mensagem?', autorizacao, (req, res) => {
+routerReserva.get('/reserva/novo', autorizacao, (req, res) => {
     DAOReboque.getAll().then(reboques => {
         DAOCliente.getAll().then(clientes => {
-            if(req.params.mensagem){ 
-                res.render('reserva/novo', {mensagem: "Reserva incluída.", reboques: reboques, clientes: clientes})
+            if(reboques.length != 0 && clientes.length != 0){
+                res.render('reserva/novo', {mensagem: "", reboques: reboques, clientes: clientes})
             } else {
-                if(reboques.length != 0 && clientes.length != 0){
-                    res.render('reserva/novo', {mensagem: "", reboques: reboques, clientes: clientes})
-                } else {
-                    res.render('erro', {mensagem: "Lista de reboques ou clientes vazia."})
-                }
-            } 
+                res.render('erro', {mensagem: "Lista de reboques ou clientes vazia."})
+            }
         })
     })
 })
+
 
 // CRIAR POST
 routerReserva.post('/reserva/salvar', autorizacao, (req, res) => {
@@ -31,10 +27,10 @@ routerReserva.post('/reserva/salvar', autorizacao, (req, res) => {
         DAOReboque.getAll().then(reboques => {
             DAOCliente.getAll().then(clientes => {
                 if (inserido) {
-                    res.render('reserva/novo', { mensagem: "Reserva inserido", reboques: reboques, clientes: clientes })
+                    res.render('reserva/novo', { mensagem: "Reserva inserido", reboques: reboques, clientes: clientes, inserido: inserido })
                 }
                 else {
-                    res.render('erro', { mensagem: "Erro ao inserir a reserva." })
+                    res.render('reserva/novo', { mensagem: "Veículo indisponível para o período.", reboques: reboques, clientes: clientes, inserido: inserido })
                 }
             })
         })

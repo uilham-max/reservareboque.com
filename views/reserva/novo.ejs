@@ -53,12 +53,17 @@
                 </div>
 
             </div>
-            <% if(mensagem){%>
+            <% if(mensagem == "Reserva inserido"){%>
                 <div class="alert alert-info">
                     <strong>Novo Registro!</strong>
                     <%= mensagem %>
                 </div>
-                <% }%>
+            <% } else if (mensagem == "Veículo indisponível para o período.") { %>
+                <div class="alert alert-danger">
+                    <strong>Erro!</strong>
+                    <%= mensagem %>
+                </div>
+            <% } %>
     </div>
     <%-include('../partials/footer.ejs')%>
 </body>

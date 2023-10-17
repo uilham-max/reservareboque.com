@@ -1,0 +1,160 @@
+/* Estilo para o corpo da página */
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin: 0;
+}
+
+/* Estilo para o conteúdo principal */
+.conteudo {
+    flex: 1;
+    padding: 20px;
+    text-align: center;
+    margin-top: 60px;
+    /* Ajuste esta margem conforme necessário para evitar que o conteúdo seja ocultado sob a navbar */
+}
+
+/* Estilo para os links de navegação */
+.navbar a {
+    color: white;
+    text-decoration: none;
+    padding: 0px 18px;
+    /* font-size: 1.2em; */
+}
+
+.nav-item a:hover {
+    background-color: #3d3d3d;
+    font-weight: 500;
+    border-radius: 10px;
+}
+
+/* Estilo para os cards de reboque */
+.lista-reboques {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 2rem;
+}
+
+.card-index {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin: 0.5rem;
+    padding: 0px;
+    /* max-width: 300px; */
+    transition: transform 0.4s;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.card-index:hover {
+    transform: scale(1.05);
+    /* Aumente o tamanho ao passar o mouse */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    /* Aumente a sombra no hover */
+}
+
+.card-index h5 {
+    margin-top: 10px;
+    font-size: 1.2rem;
+    /* Ajuste o tamanho da fonte */
+    color: #333;
+    /* Cor do texto */
+}
+
+.card-index p {
+    margin: 2px 0;
+    color: #666;
+}
+
+.card-reserva {
+    /* border: 1px solid #ddd; */
+    border-radius: 5px;
+    margin-left: 1rem;
+    margin-top: 1rem;
+    /* padding: 10px; */
+    /* max-width: 300px; */
+    transition: transform 0.4s;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    /* text-align: left; */
+}
+
+.form-group {
+    margin-top: 0.5rem;
+    text-align: left;
+}
+
+/* Estilo para o link de login alinhado à direita */
+.direita {
+    float: right;
+    /* Alinha o link à direita */
+}
+
+/* a {
+    text-decoration: none;
+} */
+
+
+
+
+
+
+
+
+/* Estilo para o sticky footer */
+.sticky-footer {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+}
+
+
+@import url('https://fonts.googleapis.com/css?family=Rubik&display=swap');
+
+p {
+    font-size: calc(12px + (14 - 12) * ((100vw - 360px) / (1600 - 360))) !important;
+    display: fkex;
+}
+
+h3 {
+    font-size: calc(24px + (30 - 24) * ((100vw - 360px) / (1600 - 360))) !important;
+}
+
+.social {
+    font-size: 21px !important;
+}
+
+
+.color-text {
+    color: #757575 !important;
+}
+
+
+
+footer {
+    margin-top: 10rem;
+    color: #caced1 !important;
+}
+
+li {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.Careers {
+    cursor: pointer;
+    color: #1E88E5;
+}
+
+.row-1 {
+    background-color: #1E242A !important;
+}
+
+.row-2 {
+
+    background-color: #28323C !important;
+}
+
+
+

@@ -11,7 +11,11 @@ const Reboque = conexao.define('reboque', {
     placa: {type: Sequelize.STRING, unique: true},
     modelo: Sequelize.STRING,
     cor: Sequelize.STRING,
-    valorDiaria: Sequelize.INTEGER
+    valorDiaria: Sequelize.INTEGER,
+    foto: Sequelize.STRING,
+    pesoBruto: Sequelize.INTEGER,
+    dimensao: Sequelize.STRING,
+    numeroDeEixos: Sequelize.STRING
 },
 {
     timestamps: false,

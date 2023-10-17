@@ -115,6 +115,30 @@ class DAOReserva {
         }
     }
 
+        // RELATORIO ATIVAS POR ID
+        static async getAtivasPorID(id) {
+            try {
+                const currentDate = new Date()
+                const reservas = await Reserva.findAll({
+                    where: {
+                        [Op.or]: [
+                            { dataSaida: { [Op.gte]: currentDate } },
+                            { dataChegada: { [Op.gte]: currentDate } }
+                        ],
+                        reboqueId: id,
+                    },
+                    order: ['id'],
+                    include: [{ model: Reboque }, { model: Cliente }]
+                })
+                // console.log('Reservas encontradas:', reservas.map(reserva => reserva.toJSON()));
+                return reservas
+            }
+            catch (error) {
+                console.log(error.toString())
+                return undefined
+            }
+        }
+
     // RELATORIO HISTORICO
     static async getRelatorioHistorico(inicioDoPeriodo, fimDoPeriodo) {
 

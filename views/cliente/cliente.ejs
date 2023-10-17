@@ -4,8 +4,13 @@
     <%-include('../partials/header.ejs')%>
 </head>
 <body>
+
+    <%-include('../partials/navbar.ejs')%>
+
+    <div class="conteudo" >
+
     <div class="container" >
-        <%-include('../partials/navbar.ejs')%>
+        
         <h3>Clientes Cadastrados</h3>
         <a class="btn btn-primary" href="/cliente/novo">Novo Cliente</a><br><br>
         <table class="table table-striped" >
@@ -15,7 +20,7 @@
                     <th>Nome</th>
                     <th>CPF</th>
                     <th>Telefone</th>
-                    <th>Logradouro</th>
+                    <th>Endereço</th>
                 </tr>
             </thead>
             <tbody>
@@ -25,7 +30,7 @@
                         <td><%=cliente.nome%></td>
                         <td><%=cliente.cpf%></td>
                         <td><%=cliente.telefone%></td>
-                        <td><%=cliente.logradouro%></td>
+                        <td><%=cliente.endereco%></td>
                         <td><a href="/cliente/editar/<%=cliente.id%>" class="fas fa-edit" style="color: black;" 
                             ata-toggle="tooltip" title="Editar cliente" ></a></td>
                         <td><a href="/cliente/excluir/<%=cliente.id%>" class="fas fa-trash" style="color: black;"
@@ -43,6 +48,8 @@
         <% } %>
 
     </div>
+    </div>
+
     <%-include('../partials/footer'); %>
 
 </body>

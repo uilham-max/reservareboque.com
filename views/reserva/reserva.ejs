@@ -4,8 +4,11 @@
     <%-include('../partials/header.ejs')%>
 </head>
 <body>
+    <%-include('../partials/navbar.ejs')%>
+    <div class="conteudo" >
+
     <div class="container" >
-        <%-include('../partials/navbar.ejs')%>
+        
         <h3>Reservas ativas ou agendadas</h3>
         <a class="btn btn-primary" href="/reserva/novo">Nova Reserva</a>
         <a href="/reserva/lucro" class="btn btn-warning">Lucro</a>
@@ -52,6 +55,8 @@
         <% } %>
 
     </div>
+    </div>
+
     <%-include('../partials/footer'); %>
 
 </body>

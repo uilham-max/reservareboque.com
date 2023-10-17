@@ -8,6 +8,7 @@ const ClienteController = require('./controller/ClienteController')
 const ReboqueController = require('./controller/ReboqueController')
 const ReservaController = require('./controller/ReservaController')
 const UsuarioController = require('./controller/UsuarioController')
+const IndexController = require('./controller/IndexController');
 const app = express()
 
 app.use(express.static('public'));
@@ -19,6 +20,7 @@ app.use(ClienteController)
 app.use(ReboqueController)
 app.use(ReservaController)
 app.use(UsuarioController)
+app.use(IndexController)
 
 conexao.authenticate().then(()=>{
     app.listen(port,()=>{

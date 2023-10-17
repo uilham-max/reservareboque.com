@@ -2,9 +2,9 @@ const Reboque = require('../model/Reboque.js')
 
 class DAOReboque {
 
-    static async insert(modelo, placa, valorDiaria, cor){
+    static async insert(modelo, placa, valorDiaria, cor, foto){
         try{
-            await Reboque.create({modelo, placa, valorDiaria, cor})
+            await Reboque.create({modelo, placa, valorDiaria, cor, foto})
             return true
         }
         catch(error){
@@ -15,7 +15,7 @@ class DAOReboque {
 
     static async update(id, modelo, placa, valorDiaria, cor){
         try{
-            await Reboque.update({modelo: modelo, placa: placa, valorDiaria: valorDiaria, cor: cor}, {where: {id: id}})
+            await Reboque.update({modelo: modelo, placa: placa, valorDiaria: valorDiaria, cor: cor, foto: foto}, {where: {id: id}})
             return true
         }
         catch(error){

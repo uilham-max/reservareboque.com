@@ -9,8 +9,8 @@ routerCliente.get('/cliente/novo', autorizacao, (req, res) => {
 })
 
 routerCliente.post('/cliente/salvar', autorizacao, (req, res) => {
-    let {nome, cpf, telefone, logradouro} = req.body
-    DAOCliente.insert(nome, cpf, telefone, logradouro).then(inserido => {
+    let {nome, cpf, telefone, endereco} = req.body
+    DAOCliente.insert(nome, cpf, telefone, endereco).then(inserido => {
         if(inserido){
             res.render('cliente/novo', {mensagem: "Cliente incluído!"})
         } else {
@@ -43,8 +43,8 @@ routerCliente.get('/cliente/editar/:id', autorizacao, (req, res) => {
 
 
 routerCliente.post('/cliente/atualizar', autorizacao, (req,res) => {
-    let {id, nome, cpf, telefone, logradouro} = req.body
-    DAOCliente.update(id, nome, cpf, telefone, logradouro).then(cliente => {
+    let {id, nome, cpf, telefone, endereco} = req.body
+    DAOCliente.update(id, nome, cpf, telefone, endereco).then(cliente => {
         if(cliente){
             res.redirect('/cliente/lista')
         } else {

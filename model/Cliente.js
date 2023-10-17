@@ -8,8 +8,15 @@ const Cliente = conexao.define('cliente', {
         autoIncrement: true
     },
     nome: Sequelize.STRING,
+    email: Sequelize.STRING,
+    senha: Sequelize.STRING,
     cpf: Sequelize.STRING,
-    logradouro: Sequelize.STRING,
+    rua: Sequelize.STRING,
+    numero: Sequelize.INTEGER,
+    bairro: Sequelize.STRING,
+    cidade: Sequelize.STRING,
+    uf: Sequelize.STRING,
+    cep: Sequelize.STRING,
     telefone: Sequelize.STRING
 },
 {

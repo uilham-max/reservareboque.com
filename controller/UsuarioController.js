@@ -14,17 +14,19 @@ routerUsuario.post('/cadastro/salvar', (req, res) => {
         salt = bcrypt.genSaltSync(10)
     senha = bcrypt.hashSync(senha, salt)
     if(DAOUsuario.insert(nome, email, senha)){
-        res.render('login', {mensagem: "Usuário incluído."})
+        res.redirect('/')
+        // res.redirect('/', {mensagem: "Usuário incluído."})
     } else {
         res.render('erro', {mensagem: "Erro ao tentar incluir usuário."})
     }
 })
 
 //ROTAS DO LOGIN
-routerUsuario.get('/', (req, res) => {
-    res.render('login', { mensagem: "" })
-})
-routerUsuario.post('/login', (req, res) => {
+// routerUsuario.get('/login', (req, res) => {
+//     res.render('login')
+// })
+
+routerUsuario.post('/login/salvar', (req, res) => {
     let {email, senha} = req.body
     DAOUsuario.login(email, senha).then(usuario => {
         if(usuario){
@@ -41,9 +43,9 @@ routerUsuario.post('/login', (req, res) => {
 })
 
 
-routerUsuario.get('/index', autorizacao,(req, res) => { // 
-    res.render("index", { usuario: req.session.usuario.nome })
-})
+// routerUsuario.get('/index', autorizacao,(req, res) => { // 
+//     res.render("index", { usuario: req.session.usuario.nome })
+// })
 
 routerUsuario.get("/logout", function (req, res) {
     req.session.usuario = undefined

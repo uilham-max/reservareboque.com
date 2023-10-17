@@ -3,9 +3,9 @@ const Cliente = require('../model/Cliente.js')
 
 class DAOCliente{
 
-    static async insert(nome, cpf, telefone, logradouro){
+    static async insert(nome, cpf, telefone, endereco){
         try{
-            await Cliente.create({nome, cpf, telefone, logradouro})
+            await Cliente.create({nome, cpf, telefone, endereco})
             return true
         }
         catch(erro){
@@ -14,9 +14,9 @@ class DAOCliente{
         }
     }
 
-    static async update(id, nome, cpf, telefone, logradouro){
+    static async update(id, nome, cpf, telefone, endereco){
         try{
-            await Cliente.update({nome: nome, cpf: cpf, telefone: telefone, logradouro: logradouro},{where: {id: id}})
+            await Cliente.update({nome: nome, cpf: cpf, telefone: telefone, endereco: endereco},{where: {id: id}})
             return true
         }
         catch(error){

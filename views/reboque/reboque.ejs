@@ -4,8 +4,11 @@
     <%-include('../partials/header.ejs')%>
 </head>
 <body>
+    <%-include('../partials/navbar.ejs')%>
+    <div class="conteudo" >
+
     <div class="container" >
-        <%-include('../partials/navbar.ejs')%>
+        
         <h3>Reboques Cadastrados</h3>
         <a class="btn btn-primary" href="/reboque/novo">Novo Reboque</a><br><br>
 
@@ -44,6 +47,8 @@
         <% } %>
 
     </div>
+    </div>
+
     <%-include('../partials/footer'); %>
 
 </body>

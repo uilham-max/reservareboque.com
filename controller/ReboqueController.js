@@ -2,6 +2,8 @@ const express = require('express')
 const routerReboque = express.Router()
 const DAOReboque = require('../database/DAOReboque')
 const autorizacao = require('../autorizacao/autorizacao')
+const { upload } = require('../helpers/uploadFoto');
+
 
 
 
@@ -9,9 +11,11 @@ routerReboque.get('/reboque/novo', autorizacao, (req, res) => {
     res.render('reboque/novo', {mensagem: ""})
 })
 
-routerReboque.post('/reboque/salvar/:mensagem?', autorizacao, (req, res) => {
+routerReboque.post('/reboque/salvar/:mensagem?', upload.single("foto"), (req, res) => {
     let {modelo, placa, valorDiaria, cor} = req.body
-    DAOReboque.insert(modelo, placa, valorDiaria, cor).then(inserido => {
+    let foto = `img/${req.file.filename}` 
+    console.log(foto);
+    DAOReboque.insert(modelo, placa, valorDiaria, cor, foto).then(inserido => {
         if(inserido){
             res.render('reboque/novo', {mensagem: "Reboque incluído!"})
         } else {

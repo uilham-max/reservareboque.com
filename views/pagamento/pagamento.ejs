@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%-include('../partials/header.ejs')%>
+</head>
+<body  >
+    
+    <%-include('../partials/navbar.ejs')%>
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">Autenticação do usuário</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="/login" method="POST">
+                    <div class="form-group">
+                        <label for="login">Login</label>
+                        <input class="form-control" id="email" type="text" name="email" required>
+                        <small class="form-text text-muted">Nunca informe seu login e senha para estranhos.</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="senha">Senha</label>
+                        <input class="form-control" id="senha" type="password" name="senha" required>
+                    </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary direita" data-bs-toggle="modal" data-bs-target="#exampleModal2">
+                    Cadastrar-se
+                </button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                <input class="btn btn-primary" type="submit" value="Login">
+                </form>
+            </div>
+          </div>
+        </div>
+    </div>
+    <div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel2" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel2">Cadastro do Usuario</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="/cadastro/salvar" method="POST">
+                    <div class="form-group">
+                        <label for="nome">Nome</label>
+                        <input class="form-control" id="nome" type="text" name="nome" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="login">Login</label>
+                        <input class="form-control" id="email" type="text" name="email" required>
+                        <small class="form-text text-muted">Informe o seu e-mail como login.</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="senha">Senha</label>
+                        <input class="form-control" id="senha" type="password" name="senha" required>
+                    </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                <button class="btn btn-primary" type="submit">Salvar</button>
+            </div>
+            </form>
+
+          </div>
+        </div>
+    </div>
+
+
+    <div class="conteudo" >
+        <div class="container" >
+            <!-- <h3>Reboque escolhido</h3> -->
+            <form action="/pagamento/salvar" method="POST">
+                <div class="lista-reboques">
+                
+                    <div class="card card-reserva" style="width: 25rem;">
+                        <img src="../../<%=reboque.foto%>" class="card-img-top" alt="...">
+                        <div class="card-body">
+                        <h5 class="card-title">Modelo: <%=reboque.modelo%></h5>
+                        <p class="card-text">Diária: <%=reboque.valorDiaria%></p>
+                        <p class="card-text">Cor:<%=reboque.cor%></p>
+                        <h5 class="card-title">Periodo</h5>
+                        <p class="card-text">De   <%=reserva.dataInicio%>   à   <%=reserva.dataFim%></p>
+                        </div>
+                    </div>
+
+                    <div class="card card-reserva" style="width: 25rem;">
+                        <div class="card-body">
+                            <h3 class="card-title">Dados do Cliente</h3>
+                            
+                                <div class="form-group">
+                                    <label for="nome_input">Nome Completo</label>
+                                    <input class="form-control" id="nome_input" type="text" name="nome_input" value="<%=cliente.nome%>" disabled>
+                                </div>
+                                <div class="form-group">
+                                    <label for="cpf_input">CPF</label>
+                                    <input class="form-control" id="cpf_input" type="text" name="cpf_input"value="<%=cliente.cpf%>" disabled>
+                                </div>
+                                <div class="form-group">
+                                    <label for="telefone_input">Telefone</label>
+                                    <input class="form-control" id="telefone_input" type="text" name="telefone_input" value="<%=cliente.telefone%>" disabled>
+                                </div>
+                                <div class="form-group">
+                                    <label for="email_input">Email</label>
+                                    <input class="form-control" id="email_input" type="email" name="email_input"value="<%=cliente.email%>" disabled>
+                                </div>
+                                <div class="form-group">
+                                    <label for="cep_input">CEP</label>
+                                    <input class="form-control" id="cep_input" type="text" name="cep_input" value="<%=cliente.cep%>" disabled>
+                                </div>
+                                <div class="form-group">
+                                    <label for="numero_input">Número da casa</label>
+                                    <input class="form-control" id="numero_input" type="text" name="numero_input"value="<%=cliente.numeroCasa%>" disabled>
+                                </div>
+                                <input type="hidden" id="nome" name="nome" value="<%=cliente.nome%>">
+                                <input type="hidden" id="cpf" name="cpf" value="<%=cliente.cpf%>">
+                                <input type="hidden" id="telefone" name="telefone" value="<%=cliente.telefone%>">
+                                <input type="hidden" id="email" name="email" value="<%=cliente.email%>">
+                                <input type="hidden" id="cep" name="cep" value="<%=cliente.cep%>">
+                                <input type="hidden" id="numero" name="numero" value="<%=cliente.numero%>">
+                                <input type="hidden" id="idReboque" name="idReboque" value="<%=reserva.idReboque%>">
+                                <input type="hidden" id="dataInicio" name="dataInicio" value="<%=reserva.dataInicio%>">
+                                <input type="hidden" id="dataFim" name="dataFim" value="<%=reserva.dataFim%>">
+                                <input type="hidden" id="valorDiaria" name="valorDiaria" value="<%=reserva.valorDiaria%>">
+
+                                
+                            
+                        </div>
+                    </div>
+
+
+                    <div class="card card-reserva" style="width: 25rem;">
+                        <div class="card-body">
+                            <h3 class="card-title">Escaneie o QR Code para finalizar a reserva</h3>
+                            <img src="/img/<%=qrCode%>" class="card-img-top" alt="...">
+                        </div>
+                        <p style="margin: 0.5rem;" >
+                            <input class="btn btn-primary" type="submit" value="Escanear QR Code">
+                        </p>
+                    </div>
+
+                
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+
+    <%-include('../partials/footer.ejs')%>
+</body>
+</html>

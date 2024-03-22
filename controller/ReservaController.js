@@ -5,6 +5,19 @@ const DAOCliente = require('../database/DAOCliente')
 const DAOReboque = require('../database/DAOReboque')
 const autorizacao = require('../autorizacao/autorizacao')
 
+// TELA ONDE É ESCOLHIDO O PERÍODO DA RESERVA
+routerReserva.get('/reserva/periodo/:id?/:mensagem?', (req, res) => {
+    id = req.params.id
+    DAOReserva.getAtivasPorID(id).then(reservas => {
+        DAOReboque.getOne(id).then(reboque => {
+            if(reboque){
+                res.render('reserva/periodo', {mensagem: "", reboque: reboque, reservas: reservas})
+            } else {
+                res.render('erro', {mensagem: "Erro ao mostrar reboque."})
+            }
+        })
+    })
+})
 
 // CRIAR GET
 routerReserva.get('/reserva/novo', autorizacao, (req, res) => {

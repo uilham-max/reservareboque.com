@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <%-include('./partials/header.ejs')%>
+    <%-include('../partials/header.ejs')%>
 </head>
 <body  >
     
-    <%-include('./partials/navbar.ejs')%>
+    <%-include('../partials/navbar.ejs')%>
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
           <div class="modal-content">
@@ -72,65 +72,13 @@
 
     <div class="conteudo" >
         <div class="container" >
-            <!-- <h3>Reboque escolhido</h3> -->
-            <div class="lista-reboques">
-                <div class="card card-reserva" style="width: 25rem;">
-                    <img src="../<%=reboque.foto%>" class="card-img-top" alt="...">
-                    <div class="card-body">
-                      <h5 class="card-title">Modelo: <%=reboque.modelo%></h5>
-                      <p class="card-text">Diária: <%=reboque.valorDiaria%></p>
-                      <p class="card-text">Cor:<%=reboque.cor%></p>
-                      <h5 class="card-title">Periodo</h5>
-                      <p class="card-text">De   <%=dataInicio%>   à   <%=dataFim%></p>
-                    </div>
-                </div>
-
-                <div class="card card-reserva" style="width: 25rem;">
-                    <div class="card-body">
-                        <h3 class="card-title">Dados do Cliente</h3>
-                        <form action="/reserva/pagamento" method="POST">
-                            <div class="form-group">
-                                <label for="nome">Nome</label>
-                                <input class="form-control" id="nome" type="text" name="nome"  required>
-                            </div>
-                            <div class="form-group">
-                                <label for="sobrenome">Sobrenome</label>
-                                <input class="form-control" id="sobrenome" type="text" name="sobrenome" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="cpf">CPF</label>
-                                <input class="form-control" id="cpf" type="text" name="cpf" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="endereco">Endereço</label>
-                                <input class="form-control" id="endereco" type="text" name="endereco" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="celular">Celular</label>
-                                <input class="form-control" id="celular" type="text" name="celular" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="email">Email</label>
-                                <input class="form-control" id="email" type="email" name="email" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="cep">CEP</label>
-                                <input class="form-control" id="cep" type="text" name="cep" >
-                            </div>
-                            <p style="margin: 0.5rem;" >
-                                <input class="btn btn-primary" type="submit" value="Ir para pagamento">
-                            </p>
-                        </form>
-                    </div>
-                </div>
-
-
-            </div>
+            <h1>Reserva realizada com sucesso!</h1>
+           
         </div>
     </div>
 
 
 
-    <%-include('./partials/footer.ejs')%>
+    <%-include('../partials/footer.ejs')%>
 </body>
 </html>

@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <%-include('./partials/header.ejs')%>
+    <%-include('../partials/header.ejs')%>
 </head>
 <body  >
-    <%-include('./partials/navbar.ejs')%>
+    
+    <%-include('../partials/navbar.ejs')%>
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
           <div class="modal-content">
@@ -67,28 +68,70 @@
           </div>
         </div>
     </div>
-    <div class="conteudo">
-        <div class="container" >
-            <!-- <h3>Reboques Cadastrados</h3> -->
-            <div class="lista-reboques">
-                <% reboques.forEach(function(reboque){ %>
-                
-                    <div class="card card-index" style="width: 18rem;">
-                        <a href="/reserva/periodo/<%=reboque.id%>">
-                            <img class="card-img-top" src="<%=reboque.foto%>" alt="Reboque 1">
-                        </a>
-                        <div class="card-body">
-                          <h5 class="card-title">Modelo: <%=reboque.modelo%></h5>
-                          <p class="card-text">Diaria R$: <%=reboque.valorDiaria%></p>
-                          <p class="card-text">Cor:<%=reboque.cor%></p>
-                          <!-- <a href="#" class="btn btn-primary">Go somewhere</a> -->
-                        </div>
-                    </div>
 
-                <% }) %>
+
+    <div class="conteudo" >
+        <div class="container" >
+            <!-- <h3>Reboque escolhido</h3> -->
+            <div class="lista-reboques">
+                <div class="card card-reserva" style="width: 25rem;">
+                    <img src="../<%=reboque.foto%>" class="card-img-top" alt="...">
+                    <div class="card-body">
+                      <h5 class="card-title">Modelo: <%=reboque.modelo%></h5>
+                      <p class="card-text">Diária: <%=reboque.valorDiaria%></p>
+                      <p class="card-text">Cor:<%=reboque.cor%></p>
+                      <h5 class="card-title">Periodo</h5>
+                      <p class="card-text">De   <%=dataInicio%>   à   <%=dataFim%></p>
+                    </div>
+                </div>
+
+                <div class="card card-reserva" style="width: 25rem;">
+                    <div class="card-body">
+                        <h3 class="card-title">Dados do Cliente</h3>
+                        <form action="/pagamento/pagamento" method="POST">
+                            <div class="form-group">
+                                <label for="nome">Nome Completo</label>
+                                <input class="form-control" id="nome" type="text" name="nome">
+                            </div>
+                            <div class="form-group">
+                                <label for="cpf">CPF</label>
+                                <input class="form-control" id="cpf" type="text" name="cpf">
+                            </div>
+                            <div class="form-group">
+                                <label for="telefone">Telefone</label>
+                                <input class="form-control" id="telefone" type="text" name="telefone" >
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input class="form-control" id="email" type="email" name="email">
+                            </div>
+                            <div class="form-group">
+                                <label for="cep">CEP</label>
+                                <input class="form-control" id="cep" type="text" name="cep" >
+                            </div>
+                            <div class="form-group">
+                                <label for="numero">Número da casa</label>
+                                <input class="form-control" id="numero" type="text" name="numero">
+                            </div>
+                            <input type="hidden" id="idReboque" name="idReboque" value="<%=reboque.id%>">
+                            <input type="hidden" id="dataInicio" name="dataInicio" value="<%=dataInicio%>">
+                            <input type="hidden" id="dataFim" name="dataFim" value="<%=dataFim%>">
+                            <input type="hidden" id="valorDiaria" name="valorDiaria" value="<%=reboque.valorDiaria%>">
+
+                            <p style="margin: 0.5rem;" >
+                                <input class="btn btn-primary" type="submit" value="Ir para pagamento">
+                            </p>
+                        </form>
+                    </div>
+                </div>
+
+
             </div>
         </div>
     </div>
-    <%-include('./partials/footer.ejs')%>
+
+
+
+    <%-include('../partials/footer.ejs')%>
 </body>
 </html>

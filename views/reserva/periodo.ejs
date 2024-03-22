@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <%-include('./partials/header.ejs')%>
+    <%-include('../partials/header.ejs')%>
 </head>
 <body  >
-    <%-include('./partials/navbar.ejs')%>
+    
+    <%-include('../partials/navbar.ejs')%>
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
           <div class="modal-content">
@@ -67,28 +68,59 @@
           </div>
         </div>
     </div>
-    <div class="conteudo">
-        <div class="container" >
-            <!-- <h3>Reboques Cadastrados</h3> -->
-            <div class="lista-reboques">
-                <% reboques.forEach(function(reboque){ %>
-                
-                    <div class="card card-index" style="width: 18rem;">
-                        <a href="/reserva/periodo/<%=reboque.id%>">
-                            <img class="card-img-top" src="<%=reboque.foto%>" alt="Reboque 1">
-                        </a>
-                        <div class="card-body">
-                          <h5 class="card-title">Modelo: <%=reboque.modelo%></h5>
-                          <p class="card-text">Diaria R$: <%=reboque.valorDiaria%></p>
-                          <p class="card-text">Cor:<%=reboque.cor%></p>
-                          <!-- <a href="#" class="btn btn-primary">Go somewhere</a> -->
-                        </div>
-                    </div>
 
-                <% }) %>
+
+    <div class="conteudo" >
+        <div class="container" >
+            <!-- <h3>Reboque escolhido</h3> -->
+            <div class="lista-reboques">
+                <div class="card card-reserva" style="width: 25rem;">
+                    <img src="../../<%=reboque.foto%>" class="card-img-top" alt="...">
+                    <div class="card-body">
+                      <h5 class="card-title">Modelo: <%=reboque.modelo%></h5>
+                      <p class="card-text">Diária: <%=reboque.valorDiaria%></p>
+                      <p class="card-text">Cor:<%=reboque.cor%></p>
+                      <p class="card-text">Datas de indisponiblidade</p>
+                      <% reservas.forEach(function(reserva) { %>
+                        <p>
+                            de <%=reserva.dataSaida.toString().slice(8,10)+'/'+reserva.dataSaida.toString().slice(5,7)+'/'+reserva.dataSaida.toString().slice(0,4)%> 
+                            à  <%=reserva.dataChegada.toString().slice(8,10)+'/'+reserva.dataChegada.toString().slice(5,7)+'/'+reserva.dataChegada.toString().slice(0,4)%>
+                        </p>
+                        <%})%>
+                        <% if(mensagem){%>
+                            <div class="alert alert-danger">
+                                <strong>Erro!</strong>
+                                <%= mensagem %>
+                            </div>
+                        <% } %>
+                    </div>
+                </div>
+
+
+                <div class="card card-reserva" style="width: 25rem;">
+                    <div class="card-body">
+                      <form action="/cliente/dados_cliente" method="POST">
+                            <h5>Informe o periodo</h5>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" >Data de início</span>
+                                <input class="form-control" id="dataInicio" type="date" name="dataInicio" required>
+                            </div>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" >Data de fim</span>
+                                <input class="form-control" id="dataFim" type="date" name="dataFim" required>
+                            </div>
+                            <input type="hidden" name="id" value="<%=reboque.id%>" >
+                            <input class="btn btn-primary" type="submit" value="Próximo">
+                        </form><br>
+
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
-    <%-include('./partials/footer.ejs')%>
+
+
+    <%-include('../partials/footer.ejs')%>
 </body>
 </html>

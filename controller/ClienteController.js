@@ -1,7 +1,27 @@
 const express = require('express')
 const routerCliente = express.Router()
 const DAOCliente =  require('../database/DAOCliente')
+const DAOReboque = require('../database/DAOReboque')
 const autorizacao = require('../autorizacao/autorizacao')
+const DAOReserva = require('../database/DAOReserva')
+
+
+routerCliente.post('/cliente/dados_cliente', (req, res) => {
+    let {id, dataInicio, dataFim} =  req.body
+
+    DAOReserva.getVerificaDisponibilidade(id, dataInicio, dataFim).then( resposta => {
+        DAOReboque.getOne(id).then(reboque => {
+            if(reboque && resposta.length === 0){
+                res.render('cliente/dados_cliente', {reboque: reboque, dataInicio: dataInicio, dataFim: dataFim})
+            } else {
+                DAOReserva.getAtivas(id).then(reservas => {
+                    res.render('reserva/periodo', {reboque: reboque, reservas: reservas, mensagem: "Indisponivel para esta data."})
+                })
+                
+            }
+        })
+    } )
+})
 
 
 routerCliente.get('/cliente/novo', autorizacao, (req, res) => {
@@ -17,6 +37,20 @@ routerCliente.post('/cliente/salvar', autorizacao, (req, res) => {
             res.render('erro', {mensagem: "Não foi possível incluir o cliente!"})
         }
     })
+})
+
+routerCliente.post('/cliente/inserir', autorizacao, (req, res) => {
+    let {nome, cpf, telefone, email, cep, numeroDaCasa} = req.body
+    console.log(req.body.modelo)
+    console.log(req.body.dataInicio)
+    console.log(req.body.dataFim)
+    // DAOCliente.insertCliente(nome, cpf, telefone, email, cep, numeroDaCasa).then(inserido => {
+    //     if(inserido){
+    //         res.render('pagamento', {mensagem: ""})
+    //     } else {
+    //         res.render('erro', {mensagem: "Não foi possível incluir o cliente!"})
+    //     }
+    // })
 })
 
 routerCliente.get('/cliente/lista/:mensagem?', autorizacao, (req, res) => {

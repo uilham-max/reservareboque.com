@@ -3,6 +3,10 @@ const conexao = require('../database/conexao.js')
 
 const Cliente = require('./Cliente.js')
 const Reboque = require('./Reboque.js')
+const Pagamento = require('./Pagamento.js')
+
+
+
 
 const Reserva = conexao.define('reserva', {
     id: {
@@ -20,21 +24,31 @@ const Reserva = conexao.define('reserva', {
 }
 )
 
-// um cliente tem muitas reservas
+// um cliente tem muitas locações
 Cliente.hasMany(Reserva, {
     onDelete: 'RESTRICT',
     onUpdate: 'CASCADE'
 })
-// locação pertence a apenas um cliente
+// uma locação pertence a apenas um cliente
 Reserva.belongsTo(Cliente)
 
-// um reboque tem muitas reservas
+// um reboque tem muitas locações
 Reboque.hasMany(Reserva, {
     onDelete: 'RESTRICT',
     onUpdate: 'CASCADE'
 })
 // uma locação pertence a apenas um reboque
 Reserva.belongsTo(Reboque)
+
+
+Pagamento.hasMany(Reserva, {
+    onDelete: 'RESTRICT',
+    onUpdate: 'CASCADE'
+})
+
+Reserva.belongsTo(Pagamento)
+
+
 
 // Reserva.sync(({force: true}))
 

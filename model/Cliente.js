@@ -8,21 +8,25 @@ const Cliente = conexao.define('cliente', {
         autoIncrement: true
     },
     nome: Sequelize.STRING,
-    email: Sequelize.STRING,
+    sobrenome: Sequelize.STRING,
+    email: Sequelize.STRING, // tornar unique mais tarde
     senha: Sequelize.STRING,
-    cpf: Sequelize.STRING,
-    rua: Sequelize.STRING,
-    numero: Sequelize.INTEGER,
-    bairro: Sequelize.STRING,
-    cidade: Sequelize.STRING,
-    uf: Sequelize.STRING,
+    cpf: Sequelize.STRING, // tornar unique mais tarde
+    rg: Sequelize.STRING,
+    telefone: Sequelize.STRING, // tornar unique mais tarde
+    data_nascimento: Sequelize.DATE,
     cep: Sequelize.STRING,
-    telefone: Sequelize.STRING
+    logradouro: Sequelize.STRING,
+    complemento: Sequelize.STRING,
+    bairro: Sequelize.STRING,
+    localidade: Sequelize.STRING,
+    uf: Sequelize.STRING,
+    numero_da_casa: Sequelize.INTEGER,
+    ativo: Sequelize.BOOLEAN,
+    cadastrado: Sequelize.BOOLEAN
 },
 {
     timestamps: false,
 })
-
-// Cliente.sync(({force: true}))
 
 module.exports = Cliente

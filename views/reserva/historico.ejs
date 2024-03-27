@@ -4,51 +4,69 @@
     <%-include('../partials/header.ejs')%>
 </head>
 <body>
-    <div class="container" >
-        <%-include('../partials/navbar.ejs')%>
-        <h3>Relatório Histórico</h3>
-        <form action="/reserva/filtrarHistorico" method="POST">
-            <h5>Informar período</h5>
-            <div class="input-group mb-3">
-                <span class="input-group-text" >data de início</span>
-                <input class="form-control" id="dataInicio" type="date" name="dataInicio" required>
-                <span class="input-group-text" >Data de fim</span>
-                <input class="form-control" id="dataFim" type="date" name="dataFim" required>
+    <%-include('../partials/navbaradmin.ejs')%>
+    <div class="conteudo" >
+        
+        <div class="container" >
+            <br>
+            <div class="d-flex justify-content-start">
+                <h3 class="display-4">Relatório Histórico</h3>
             </div>
-            <input class="btn btn-primary" type="submit" value="Filtrar">
-        </form><br>
-        <table class="table table-striped" >
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Cliente</th>
-                    <th>Reboque</th>
-                    <th>Diária</th>
-                    <th>Data Saída</th>
-                    <th>Data Chegada</th>
-                    <th>Tempo</th>
-                    <th>Total</th>
-                </tr>
-            </thead>
-            <tbody>
-                <% reservas.forEach(function(reserva){%>
-                    <tr>
-                        <td><%=reserva.id%></td>
-                        <td><%=reserva.cliente.nome%></td>
-                        <td><%=reserva.reboque.placa%></td>
-                        <td>R$ <%=reserva.valorDiaria%>,00</td>
-                        <td><%=reserva.dataSaida.toString().slice(8,10)+'/'+reserva.dataSaida.toString().slice(5,7)+'/'+reserva.dataSaida.toString().slice(0,4)%></td>
-                        <td><%=reserva.dataChegada.toString().slice(8,10)+'/'+reserva.dataChegada.toString().slice(5,7)+'/'+reserva.dataChegada.toString().slice(0,4)%></td>
-                        <td><%=reserva.diarias%> dias</td>
-                        <td>R$ <%=reserva.valorTotal%>,00</td>
-                        <td><a href="/reserva/excluir/<%=reserva.id%>" class="fas fa-trash" style="color: black;"
-                            ata-toggle="tooltip" title="Excluir reserva"
-                            onclick="return confirm('Confirma a exclusão?')" ></a></td>
-                    </tr>
-                <%})%>
-            </tbody>
+            
+            <form action="/reserva/filtrarHistorico" method="POST">
 
-        </table>
+                <div class="row g-3">
+                        <input class="btn btn-primary d-flex" type="submit" value="Filtrar">
+                    <div class="col">
+                        <span class="input-group-text" >Data de início</span>
+                        <input class="form-control" id="dataInicio" type="date" name="dataInicio" required>
+                    </div>
+                    <div class="col">
+                        <span class="input-group-text" >Data de fim</span>
+                        <input class="form-control" id="dataFim" type="date" name="dataFim" required>
+                    </div>
+                    
+                </div>
+            
+            </form><br>
+        
+            <div class="table-responsive">
+                <table class="table table-striped" >
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Cliente</th>
+                            <th>Reboque</th>
+                            <th>Diária</th>
+                            <th>Data Saída</th>
+                            <th>Data Chegada</th>
+                            <th>Tempo</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% reservas.forEach(function(reserva){%>
+                            <tr>
+                                <td><%=reserva.id%></td>
+                                <td><%=reserva.cliente.nome%></td>
+                                <td><%=reserva.reboque.placa%></td>
+                                <td>R$ <%=reserva.valorDiaria%>,00</td>
+                                <td><%=reserva.dataSaida.toString().slice(8,10)+'/'+reserva.dataSaida.toString().slice(5,7)+'/'+reserva.dataSaida.toString().slice(0,4)%></td>
+                                <td><%=reserva.dataChegada.toString().slice(8,10)+'/'+reserva.dataChegada.toString().slice(5,7)+'/'+reserva.dataChegada.toString().slice(0,4)%></td>
+                                <td><%=reserva.diarias%> dias</td>
+                                <td>R$ <%=reserva.valorTotal%>,00</td>
+                                <td><a href="/reserva/excluir/<%=reserva.id%>" class="fas fa-trash" style="color: black;"
+                                    ata-toggle="tooltip" title="Excluir reserva"
+                                    onclick="return confirm('Confirma a exclusão?')" ></a></td>
+                            </tr>
+                        <%})%>
+                    </tbody>
+
+                </table>
+            </div>
+
+        </div>
+        
     </div>
     <%-include('../partials/footer'); %>
     <script>

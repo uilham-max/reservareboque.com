@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize')
 const conexao = require('../database/conexao.js')
 
-const Usuario = conexao.define('usuario', {
+const Admin = conexao.define('admin', {
     id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
@@ -12,6 +12,6 @@ const Usuario = conexao.define('usuario', {
     senha: Sequelize.STRING
 },{timestamps: false})
 
-// Usuario.sync(({force: true}))
+Admin.sync(({force: false}))
 
-module.exports = Usuario
+module.exports = Admin

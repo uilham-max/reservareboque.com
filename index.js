@@ -7,7 +7,7 @@ const port = 3000
 const ClienteController = require('./controller/ClienteController')
 const ReboqueController = require('./controller/ReboqueController')
 const ReservaController = require('./controller/ReservaController')
-const UsuarioController = require('./controller/UsuarioController')
+const AdminController = require('./controller/AdminController')
 const IndexController = require('./controller/IndexController');
 const pagamentoController = require('./controller/PagamentoController')
 const app = express()
@@ -20,7 +20,7 @@ app.use(session({secret: 'udjs93ka0', resave: true, saveUninitialized: true}));
 app.use(ClienteController)
 app.use(ReboqueController)
 app.use(ReservaController)
-app.use(UsuarioController)
+app.use(AdminController)
 app.use(IndexController)
 app.use(pagamentoController)
 

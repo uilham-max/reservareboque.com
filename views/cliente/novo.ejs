@@ -8,12 +8,11 @@
 <body>
     
    
-    <div class="container">
-         <%-include('../partials/navbar.ejs')%>
-            <div class="contudo" style="margin-top: 9rem;" >
+    <div class="container" style="margin-top: 6rem;">
+         <%-include('../partials/navbaradmin.ejs')%>
             <div class="card">
                 <div class="card-body">
-                    <h3>Cadastro de Clientes</h3>
+                    <h3 class="display-4" >Cadastro de Clientes</h3>
                     <form action="/cliente/salvar" method="POST">
                         <div class="form-group">
                             <label for="nome">Nome</label>
@@ -35,7 +34,7 @@
                             <input class="form-control" id="endereco" type="text" name="endereco"
                             placeholder="Informe o endereço do cliente." required>
                         </div>
-                        <input class="btn btn-primary" type="submit" value="Salvar">
+                        <br><input class="btn btn-primary" type="submit" value="Salvar">
                         <a href="/cliente/lista" class="btn btn-warning">Lista de clientes</a>
                     </form>
                 </div>
@@ -46,7 +45,6 @@
                     <strong>Novo Registro!</strong> <%= mensagem %>
                 </div>
             <% }%>
-    </div>
     </div>
 
     <%-include('../partials/footer.ejs')%>

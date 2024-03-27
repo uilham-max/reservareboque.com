@@ -12,13 +12,13 @@ const { DataRowMessage } = require('pg-protocol/dist/messages.js')
 class DAOReserva {
 
     // INSERT
-    static async insert(dataSaida, dataChegada, valorDiaria, /*diarias, valorTotal,*/ cliente, reboque) {
+    static async insert(dataSaida, dataChegada, valorDiaria, /*diarias, valorTotal,*/ cliente, reboque, idPagamento) {
         try {
             let reservas = await DAOReserva.getVerificaDisponibilidade(reboque, dataSaida, dataChegada)
             if (reservas.length === 0) {
                 let diarias = Diaria.calcularDiarias(dataSaida, dataChegada)
                 let valorTotal = diarias*valorDiaria
-                await Reserva.create({ dataSaida: dataSaida, dataChegada: dataChegada, valorDiaria: valorDiaria, diarias: diarias, valorTotal: valorTotal, clienteId: cliente, reboqueId: reboque })
+                await Reserva.create({ dataSaida: dataSaida, dataChegada: dataChegada, valorDiaria: valorDiaria, diarias: diarias, valorTotal: valorTotal, clienteId: cliente, reboqueId: reboque, pagamentoId: idPagamento })
                 return true
             } else {
                 return false
@@ -130,6 +130,7 @@ class DAOReserva {
                     order: ['id'],
                     include: [{ model: Reboque }, { model: Cliente }]
                 })
+                // testando saida
                 // console.log('Reservas encontradas:', reservas.map(reserva => reserva.toJSON()));
                 return reservas
             }

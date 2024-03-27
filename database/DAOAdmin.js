@@ -1,12 +1,12 @@
-const Usuario = require('../model/Usuario')
+const Admin = require('../model/Admin')
 const bcrypt = require('bcryptjs')
 
 
-class DAOUsuario {
+class DAOAdmin {
 
     static async insert(nome, email, senha){
         try{
-            await Usuario.create({nome: nome, email: email, senha: senha})
+            await Admin.create({nome: nome, email: email, senha: senha})
             return true
         }
         catch(error){
@@ -17,10 +17,10 @@ class DAOUsuario {
 
     static async login(email, senha){
         try{
-            let usuario = await Usuario.findOne({where: {email: email}})
-            if(usuario){
-                if(bcrypt.compareSync(senha, usuario.senha)){
-                    return usuario
+            let admin = await Admin.findOne({where: {email: email}})
+            if(admin){
+                if(bcrypt.compareSync(senha, admin.senha)){
+                    return admin
                 }
             } else {
                 return undefined
@@ -35,4 +35,4 @@ class DAOUsuario {
 
 }
 
-module.exports = DAOUsuario
+module.exports = DAOAdmin

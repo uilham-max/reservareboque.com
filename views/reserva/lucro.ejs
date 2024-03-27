@@ -4,45 +4,69 @@
     <%-include('../partials/header.ejs')%>
 </head>
 <body>
-    <div class="container" >
-        <%-include('../partials/navbar.ejs')%>
-        <h3>Relatório lucros</h3>
-        <form action="/reserva/filtrar" method="POST">
-            <h5>Informar período</h5>
-                <div class="input-group mb-3">
-                    <span class="input-group-text" >data de início</span>
-                    <input class="form-control" id="dataInicio" type="date" name="dataInicio" required>
-                    <span class="input-group-text" >Data de fim</span>
-                    <input class="form-control" id="dataFim" type="date" name="dataFim" required>
-                    <span class="input-group-text" >Lucro do período</span>
-                    <input class="form-control" id="total" type="numeric" name="total" value="R$ <%=lucroTotal%>,00" required>
-                </div>
-            <input class="btn btn-primary" type="submit" value="Filtrar">
-        </form><br>
-        <table class="table table-striped" >
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Placa</th>
-                    <th>Modelo</th>
-                    <th>Cor</th>
-                    <th>Total</th>
-                </tr>
-            </thead>
-            <tbody>
-                <% reservas.forEach(function(reserva){%>
-                    <tr>
-                        <td><%=reserva.reboque.id%></td>
-                        <td><%=reserva.reboque.placa%></td>
-                        <td><%=reserva.reboque.modelo%></td>
-                        <td><%=reserva.reboque.cor%></td>
-                        <td>R$ <%=reserva.valorTotal%>,00</td>
-                    </tr>
-                <%})%>
-            </tbody>
+    <%-include('../partials/navbaradmin.ejs')%>
+    <div class="conteudo">
+        
+        <div class="container">
+            <br>
+            <div class="d-flex justify-content-start">
+                <h3 class="display-4">Relatório Receita</h3>
+            </div>
+        
+            <form action="/reserva/filtrar" method="POST">
 
-        </table>
+                <div class="row g-3">
+
+                        <input class="btn btn-primary d-flex" type="submit" value="Filtrar">
+                    <div class="col">
+                        <span class="input-group-text" >Data de início</span>
+                        <input class="form-control" id="dataInicio" type="date" name="dataInicio" required>
+                    </div>
+                    <div class="col">
+                        <span class="input-group-text" >Data de fim</span>
+                        <input class="form-control" id="dataFim" type="date" name="dataFim" required>
+                    </div>
+                    <div class="col">
+                        <span class="input-group-text" >Receita</span>
+                        <input class="form-control" id="total" type="numeric" name="total" value="R$ <%=lucroTotal%>,00" required>
+                    </div>
+
+                </div>
+               
+            </form><br>
+        
+            <div class="table-responsive">
+                <table class="table table-striped" >
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Placa</th>
+                            <th>Modelo</th>
+                            <th>Cor</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% reservas.forEach(function(reserva){%>
+                            <tr>
+                                <td><%=reserva.reboque.id%></td>
+                                <td><%=reserva.reboque.placa%></td>
+                                <td><%=reserva.reboque.modelo%></td>
+                                <td><%=reserva.reboque.cor%></td>
+                                <td>R$ <%=reserva.valorTotal%>,00</td>
+                            </tr>
+                        <%})%>
+                    </tbody>
+
+                </table>
+            </div>
+
+        </div>
+
+        
     </div>
+        
+
     <%-include('../partials/footer'); %>
 
     <script>

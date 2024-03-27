@@ -7,12 +7,12 @@ const Pagamento = conexao.define('pagamento', {
         primaryKey: true,
         autoIncrement: true
     },
-    valor: Sequelize.DOUBLE
+    valor: Sequelize.DOUBLE,
+    codigoPagamento: Sequelize.INTEGER,
+    descricao: Sequelize.STRING
 },
 {
     timestamps: false,
 })
-
-// Pagamento.sync(({force: true}))
 
 module.exports = Pagamento

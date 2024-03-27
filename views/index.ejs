@@ -5,6 +5,8 @@
 </head>
 <body  >
     <%-include('./partials/navbar.ejs')%>
+    
+    <!-- Modal do login -->
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
           <div class="modal-content">
@@ -35,59 +37,38 @@
           </div>
         </div>
     </div>
-    <div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel2" aria-hidden="true">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h1 class="modal-title fs-5" id="exampleModalLabel2">Cadastro do Usuario</h1>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form action="/cadastro/salvar" method="POST">
-                    <div class="form-group">
-                        <label for="nome">Nome</label>
-                        <input class="form-control" id="nome" type="text" name="nome" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="login">Login</label>
-                        <input class="form-control" id="email" type="text" name="email" required>
-                        <small class="form-text text-muted">Informe o seu e-mail como login.</small>
-                    </div>
-                    <div class="form-group">
-                        <label for="senha">Senha</label>
-                        <input class="form-control" id="senha" type="password" name="senha" required>
-                    </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-                <button class="btn btn-primary" type="submit">Salvar</button>
-            </div>
-            </form>
 
-          </div>
-        </div>
-    </div>
     <div class="conteudo">
+        
+        <!-- Menssagem do topo da página -->
+        <div class="jumbotron jumbotron-fluid">
+            <h1 class="display-4" >Cadastre-se para receber descontos!</h1>
+            <p class="lead">Clientes cadastrados podem ver seu histórico de locações, gerenciar suas reservas e receber
+                descontos.</p>
+        </div>
+        
         <div class="container" >
-            <!-- <h3>Reboques Cadastrados</h3> -->
+
+            <!-- Conteúdo de cada card -->
             <div class="lista-reboques">
                 <% reboques.forEach(function(reboque){ %>
-                
                     <div class="card card-index" style="width: 18rem;">
                         <a href="/reserva/periodo/<%=reboque.id%>">
                             <img class="card-img-top" src="<%=reboque.foto%>" alt="Reboque 1">
                         </a>
                         <div class="card-body">
-                          <h5 class="card-title">Modelo: <%=reboque.modelo%></h5>
-                          <p class="card-text">Diaria R$: <%=reboque.valorDiaria%></p>
-                          <p class="card-text">Cor:<%=reboque.cor%></p>
+                          <h5 class="display-4"><%=reboque.modelo%></h5>
+                          <h5 class="display-4">Diaria R$: <%=reboque.valorDiaria%>,00</h5>
+                          <h5 class="display-4">Dimensões: <%=reboque.comprimento%> x <%=reboque.largura%> x <%=reboque.altura%></h5>
+                          <h5 class="display-4">PBT: <%=reboque.pesoBruto%> Kg</h5>
                           <!-- <a href="#" class="btn btn-primary">Go somewhere</a> -->
                         </div>
                     </div>
-
                 <% }) %>
             </div>
+
         </div>
+
     </div>
     <%-include('./partials/footer.ejs')%>
 </body>

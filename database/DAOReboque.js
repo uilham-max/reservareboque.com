@@ -2,9 +2,11 @@ const Reboque = require('../model/Reboque.js')
 
 class DAOReboque {
 
-    static async insert(modelo, placa, valorDiaria, cor, foto){
+    static async insert(modelo, placa, valorDiaria, cor, foto, pesoBruto, comprimento, largura, altura, quantidadeDeEixos, anoFabricacao, ativo, descricao){
+        console.log();
+        
         try{
-            await Reboque.create({modelo, placa, valorDiaria, cor, foto})
+            await Reboque.create({modelo, placa, valorDiaria, cor, foto, pesoBruto, comprimento, largura, altura, quantidadeDeEixos, anoFabricacao, ativo, descricao})
             return true
         }
         catch(error){

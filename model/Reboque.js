@@ -1,6 +1,7 @@
 
 const Sequelize = require('sequelize')
 const conexao = require('../database/conexao.js')
+const Cliente = require('./Cliente.js')
 
 const Reboque = conexao.define('reboque', {
     id: {
@@ -11,16 +12,19 @@ const Reboque = conexao.define('reboque', {
     placa: {type: Sequelize.STRING, unique: true},
     modelo: Sequelize.STRING,
     cor: Sequelize.STRING,
-    valorDiaria: Sequelize.INTEGER,
+    valorDiaria: Sequelize.FLOAT,
     foto: Sequelize.STRING,
     pesoBruto: Sequelize.INTEGER,
-    dimensao: Sequelize.STRING,
-    numeroDeEixos: Sequelize.STRING
+    comprimento: Sequelize.INTEGER,
+    largura: Sequelize.INTEGER,
+    altura: Sequelize.INTEGER,
+    quantidadeDeEixos: Sequelize.INTEGER,
+    anoFabricacao: Sequelize.BIGINT,
+    ativo: Sequelize.BOOLEAN,
+    descricao: Sequelize.STRING
 },
 {
     timestamps: false,
 })
-
-// Reboque.sync(({force: true}))
 
 module.exports = Reboque

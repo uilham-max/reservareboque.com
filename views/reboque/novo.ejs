@@ -6,40 +6,104 @@
 </head>
 
 <body>
-    <div class="container">
-        <%-include('../partials/navbar.ejs')%>
-        <div class="conteudo" style="margin-top: 9rem;" >
-
+        
+        <div class="container" style="margin-top: 6rem;">
+            <%-include('../partials/navbaradmin.ejs')%>
             <div class="card">
                 <div class="card-body">
-                    <h3>Cadastro de Reboques</h3>
+                    
+                    <br><h3 class="display-4">Cadastar Reboque</h3><br>
+
                     <form action="/reboque/salvar" method="POST" enctype="multipart/form-data">
+                        
                         <div class="form-group">
-                            <label for="placa">Placa</label>
+                            <label for="nome">Placa</label>
                             <input class="form-control" id="placa" type="text" name="placa"
-                            placeholder="Informe o placa do reboque." required>
+                            placeholder="Ex.: XXX-9999" required>
                         </div>
+                        
                         <div class="form-group">
-                            <label for="modelo">Modelo</label>
+                            <label for="nome">Modelo</label>
                             <input class="form-control" id="modelo" type="text" name="modelo"
-                            placeholder="Informe o modelo do reboque." required>
+                            placeholder="Ex.: Carga" required>
                         </div>
+
                         <div class="form-group">
-                            <label for="cor">Cor</label>
-                            <input class="form-control" id="cor" type="text" name="cor"
-                            placeholder="Informe a cor do reboque." required>
+                            <label for="nome">Ano de fabricação</label>
+                            <input class="form-control" id="anoFabricacao" type="text" name="anoFabricacao"
+                            placeholder="Ex.: 2000" required>
                         </div>
+
+                        <div class="form-group">
+                            <label for="nome">Cor predominante</label>
+                            <input class="form-control" id="cor" type="text" name="cor"
+                            placeholder="Ex.: Preto" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="nome">Valor da diária R$</label>
+                            <input class="form-control" id="valorDiaria" type="number" name="valorDiaria"
+                            placeholder="Ex.: 50" required>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label for="nome">Comprimento da carroceria (cm)</label>
+                            <input class="form-control" id="comprimento" type="number" name="comprimento"
+                            placeholder="Ex.: 2000" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="nome">Largura da carroceria (cm)</label>
+                            <input class="form-control" id="largura" type="number" name="largura"
+                            placeholder="Ex.: 1000" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="nome">Altura da carroceria (cm)</label>
+                            <input class="form-control" id="altura" type="number" name="altura"
+                            placeholder="Ex.: 50" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="nome">Peso Bruto (Kg)</label>
+                            <input class="form-control" id="pesoBruto" type="number" name="pesoBruto"
+                            placeholder="Ex.: 1000" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="nome">Quantidade de Eixos</label>
+                            <input class="form-control" id="quantidadeDeEixos" type="number" name="quantidadeDeEixos"
+                            placeholder="Ex.: 1" required>
+                        </div>
+
+                        
+
+                        <!-- <div class="form-group">
+                            <label for="nome">Descrição</label>
+                            <input class="form-control" id="descricao" type="text" name="descricao"
+                            placeholder="Ex.: 1" required>
+                        </div> -->
+
+                        
                         <div class="form-group">
                             <label for="foto">Foto</label>
-                            <input class="form-control" id="foto" type="file" name="foto"
-                            placeholder="Informe o foto do cliente." required>
+                            <input class="form-control" id="foto" type="file" name="foto" required>
                         </div>
-                        <div class="form-group">
-                            <label for="valorDiaria">Diaria R$</label>
-                            <input class="form-control" id="valorDiaria" type="number" name="valorDiaria"
-                            placeholder="Informe o valor da diária do reboque." required>
+                        
+                        <div class=" form-group form-check">
+                            <input class="form-check-input" type="checkbox" id="ativo" name="ativo">
+                            <label class="form-check-label" for="gridCheck">
+                            Ativo
+                            </label>
                         </div>
-                        <input class="btn btn-primary" type="submit" value="Salvar">
+
+                        <div class="form-floating">
+                            <textarea class="form-control" placeholder="Descrição" name="descricao" id="descricao"></textarea>
+                            <label for="floatingTextarea">Descrição</label>
+                        </div>
+                        
+                        <br><input class="btn btn-primary" type="submit" value="Salvar">
                         <a href="/reboque/lista" class="btn btn-warning">Lista de reboques</a>
                     </form>
                 </div>
@@ -50,7 +114,6 @@
                     <strong>Novo Registro!</strong> <%= mensagem %>
                 </div>
             <% }%>
-    </div>
 </div>
 
     <%-include('../partials/footer.ejs')%>

@@ -7,7 +7,8 @@
 
 <body>
     <div class="container">
-        <%-include('../partials/navbar.ejs')%>
+        <%-include('../partials/navbaradmin.ejs')%>
+        <div class="conteudo" style="margin-top: 9rem;" >
             <div class="card">
                 <div class="card-body">
                     <h3>Criar Reserva</h3>
@@ -65,6 +66,8 @@
                 </div>
 
             </div>
+        </div>
+            
             <% if(mensagem){%>
                 <div class="alert alert-info">
                     <strong>Novo Registro!</strong>

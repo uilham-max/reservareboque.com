@@ -4,49 +4,65 @@
     <%-include('../partials/header.ejs')%>
 </head>
 <body>
-    <%-include('../partials/navbar.ejs')%>
+    <%-include('../partials/navbaradmin.ejs')%>
     <div class="conteudo" >
 
-    <div class="container" >
-        
-        <h3>Reboques Cadastrados</h3>
-        <a class="btn btn-primary" href="/reboque/novo">Novo Reboque</a><br><br>
+        <div class="container" >
 
-        <table class="table table-striped" >
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Placa</th>
-                    <th>Modelo</th>
-                    <th>Cor</th>
-                    <th>Diária</th>
-                </tr>
-            </thead>
-            <tbody>
-                <% reboques.forEach(function(reboque){%>
-                    <tr>
-                        <td><%=reboque.id%></td>
-                        <td><%=reboque.placa%></td>
-                        <td><%=reboque.modelo%></td>
-                        <td><%=reboque.cor%></td>
-                        <td>R$ <%=reboque.valorDiaria%>,00</td>
-                        <td><a href="/reboque/editar/<%=reboque.id%>" class="fas fa-edit" style="color: black;" 
-                            ata-toggle="tooltip" title="Editar reboque" ></a></td>
-                        <td><a href="/reboque/excluir/<%=reboque.id%>" class="fas fa-trash" style="color: black;"
-                            ata-toggle="tooltip" title="Excluir reboque"
-                            onclick="return confirm('Confirma a exclusão?')" ></a></td>
-                    </tr>
-                <%})%>
-            </tbody>
-
-        </table>
-        <% if(mensagem){ %>
-            <div class="alert alert-danger">
-                <strong>Exclusão de registro!</strong> <%= mensagem %>
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                <a class="btn btn-primary me-md-2" href="/reboque/novo">Novo Reboque</a>
             </div>
-        <% } %>
+            <br>
 
-    </div>
+
+
+            <div class="d-flex justify-content-start">
+                <h3 class="display-4">Lista de Reboques</h3>
+            </div>
+            <br>
+            
+            <div class="table-responsive">
+                <table class="table table-striped" >
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Placa</th>
+                            <th>Modelo</th>
+                            <th>Cor</th>
+                            <th>Diária</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% reboques.forEach(function(reboque){%>
+                            <tr>
+                                <td><%=reboque.id%></td>
+                                <td><%=reboque.placa%></td>
+                                <td><%=reboque.modelo%></td>
+                                <td><%=reboque.cor%></td>
+                                <td>R$ <%=reboque.valorDiaria%>,00</td>
+                                <td><a href="/reboque/editar/<%=reboque.id%>" class="fas fa-edit" style="color: black;" 
+                                    ata-toggle="tooltip" title="Editar reboque" ></a></td>
+                                <td><a href="/reboque/excluir/<%=reboque.id%>" class="fas fa-trash" style="color: black;"
+                                    ata-toggle="tooltip" title="Excluir reboque"
+                                    onclick="return confirm('Confirma a exclusão?')" ></a></td>
+                            </tr>
+                        <%})%>
+                    </tbody>
+
+                </table>
+            </div>
+
+
+
+
+
+            <% if(mensagem){ %>
+                <div class="alert alert-danger">
+                    <strong>Exclusão de registro!</strong> <%= mensagem %>
+                </div>
+            <% } %>
+
+        </div>
     </div>
 
     <%-include('../partials/footer'); %>

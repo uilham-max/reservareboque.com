@@ -12,10 +12,9 @@ routerReboque.get('/reboque/novo', autorizacao, (req, res) => {
 })
 
 routerReboque.post('/reboque/salvar/:mensagem?', upload.single("foto"), (req, res) => {
-    let {modelo, placa, valorDiaria, cor} = req.body
+    let {modelo, placa, valorDiaria, cor, pesoBruto, comprimento, largura, altura, quantidadeDeEixos, anoFabricacao, ativo, descricao} = req.body
     let foto = `img/${req.file.filename}` 
-    console.log(foto);
-    DAOReboque.insert(modelo, placa, valorDiaria, cor, foto).then(inserido => {
+    DAOReboque.insert(modelo, placa, valorDiaria, cor, foto, pesoBruto, comprimento, largura, altura, quantidadeDeEixos, anoFabricacao, ativo, descricao).then(inserido => {
         if(inserido){
             res.render('reboque/novo', {mensagem: "Reboque incluído!"})
         } else {

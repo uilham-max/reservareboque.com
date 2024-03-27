@@ -6,26 +6,33 @@
 </head>
 
 <body>
-    <div class="container">
-        <div class="card">
-            <div class="card-body">
-                <h3 class="card-title">Cadastro de usuário</h3>
-                <form action="/cadastro/salvar" method="POST">
-                    <div class="form-group">
-                        <label for="nome">Nome</label>
-                        <input class="form-control" id="nome" type="text" name="nome" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="login">Login</label>
-                        <input class="form-control" id="email" type="text" name="email" required>
-                        <small class="form-text text-muted">Informe o seu e-mail como login.</small>
-                    </div>
-                    <div class="form-group">
-                        <label for="senha">Senha</label>
-                        <input class="form-control" id="senha" type="password" name="senha" required>
-                    </div>
-                    <input class="btn btn-primary" type="submit" value="Salvar">
-                </form>
+    <%-include('partials/navbar'); %>
+    <div class="conteudo">
+        <div class="container">
+            <div class="card">
+                <div class="card-body">
+                    
+                    <h3 class="card-title display-4">Cadastro de usuário</h3>
+                    <form action="/cadastro/salvar" method="POST">
+                        <div class="form-group">
+                            <label for="nome">Nome</label>
+                            <input class="form-control" id="nome" type="text" name="nome" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="login">Login</label>
+                            <input class="form-control" id="email" type="text" name="email" required>
+                            <small class="form-text text-muted">Informe o seu e-mail como login.</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="senha">Senha</label>
+                            <input class="form-control" id="senha" type="password" name="senha" required>
+                        </div>
+                        <br><div class="d-flex gap-2 d-md-flex">
+                            <input class="btn btn-primary" type="submit" value="Salvar">
+                        </div>
+                        
+                    </form>
+                </div>
             </div>
         </div>
     </div>

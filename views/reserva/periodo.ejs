@@ -77,9 +77,11 @@
                 <div class="card card-reserva" style="width: 25rem;">
                     <img src="../../<%=reboque.foto%>" class="card-img-top" alt="...">
                     <div class="card-body">
-                      <h5 class="card-title">Modelo: <%=reboque.modelo%></h5>
-                      <p class="card-text">Diária: <%=reboque.valorDiaria%></p>
-                      <p class="card-text">Cor:<%=reboque.cor%></p>
+                      <h5 class="card-title"> Tipo: <%=reboque.modelo%></h5>
+                      <h5 class="card-text">Diária R$: <%=reboque.valorDiaria%>,00</h5>
+                      <hr>
+                      <h5 class="card-text"><%=reboque.descricao%></h5>
+                      <hr>
                       <p class="card-text">Datas de indisponiblidade</p>
                       <% reservas.forEach(function(reserva) { %>
                         <p>
@@ -101,6 +103,7 @@
                     <div class="card-body">
                       <form action="/cliente/dados_cliente" method="POST">
                             <h5>Informe o periodo</h5>
+                            <hr>
                             <div class="input-group mb-3">
                                 <span class="input-group-text" >Data de início</span>
                                 <input class="form-control" id="dataInicio" type="date" name="dataInicio" required>

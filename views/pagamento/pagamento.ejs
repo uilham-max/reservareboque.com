@@ -79,52 +79,69 @@
                     <div class="card card-reserva" style="width: 25rem;">
                         <img src="../../<%=reboque.foto%>" class="card-img-top" alt="...">
                         <div class="card-body">
-                        <h5 class="card-title">Modelo: <%=reboque.modelo%></h5>
-                        <p class="card-text">Diária: <%=reboque.valorDiaria%></p>
-                        <p class="card-text">Cor:<%=reboque.cor%></p>
-                        <h5 class="card-title">Periodo</h5>
-                        <p class="card-text">De   <%=reserva.dataInicio%>   à   <%=reserva.dataFim%></p>
+                        <h5 class="card-title">Tipo: <%=reboque.modelo%></h5>
+                      <h5 class="card-text">Total R$: <%=valorTotalDaReserva%>,00</h5>
+                      <h5 class="card-text">PBT: <%=reboque.pesoBruto%> Kg</h5>
+                      <hr>
+                      
+                      <h5 class="card-text">Data Retirada: <%=reserva.dataInicio%></h5>
+                      <h5 class="card-text">Data Entrega: <%=reserva.dataFim%></h5>
                         </div>
                     </div>
 
                     <div class="card card-reserva" style="width: 25rem;">
                         <div class="card-body">
-                            <h3 class="card-title">Dados do Cliente</h3>
+                            <h3 class="card-title">Confira seus dados</h3>
+                            <hr>
+                            <div class="form-group">
+                                <label for="nome_input">Nome Completo</label>
+                                <input class="form-control" id="nome_input" type="text" name="nome_input" value="<%=cliente.nome%>" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label for="cpf_input">CPF</label>
+                                <input class="form-control" id="cpf_input" type="text" name="cpf_input"value="<%=cliente.cpf%>" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label for="telefone_input">Telefone</label>
+                                <input class="form-control" id="telefone_input" type="text" name="telefone_input" value="<%=cliente.telefone%>" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label for="email_input">Email</label>
+                                <input class="form-control" id="email_input" type="email" name="email_input"value="<%=cliente.email%>" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label for="cep_input">CEP</label>
+                                <input class="form-control" id="cep_input" type="text" name="cep_input" value="<%=cliente.cep%>" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label for="numeroDaCasa_input">Número da casa</label>
+                                <input class="form-control" id="numeroDaCasa_input" type="text" name="numeroDaCasa_input"value="<%=cliente.numeroDaCasa%>" disabled>
+                            </div>
                             
-                                <div class="form-group">
-                                    <label for="nome_input">Nome Completo</label>
-                                    <input class="form-control" id="nome_input" type="text" name="nome_input" value="<%=cliente.nome%>" disabled>
-                                </div>
-                                <div class="form-group">
-                                    <label for="cpf_input">CPF</label>
-                                    <input class="form-control" id="cpf_input" type="text" name="cpf_input"value="<%=cliente.cpf%>" disabled>
-                                </div>
-                                <div class="form-group">
-                                    <label for="telefone_input">Telefone</label>
-                                    <input class="form-control" id="telefone_input" type="text" name="telefone_input" value="<%=cliente.telefone%>" disabled>
-                                </div>
-                                <div class="form-group">
-                                    <label for="email_input">Email</label>
-                                    <input class="form-control" id="email_input" type="email" name="email_input"value="<%=cliente.email%>" disabled>
-                                </div>
-                                <div class="form-group">
-                                    <label for="cep_input">CEP</label>
-                                    <input class="form-control" id="cep_input" type="text" name="cep_input" value="<%=cliente.cep%>" disabled>
-                                </div>
-                                <div class="form-group">
-                                    <label for="numero_input">Número da casa</label>
-                                    <input class="form-control" id="numero_input" type="text" name="numero_input"value="<%=cliente.numeroCasa%>" disabled>
-                                </div>
-                                <input type="hidden" id="nome" name="nome" value="<%=cliente.nome%>">
-                                <input type="hidden" id="cpf" name="cpf" value="<%=cliente.cpf%>">
-                                <input type="hidden" id="telefone" name="telefone" value="<%=cliente.telefone%>">
-                                <input type="hidden" id="email" name="email" value="<%=cliente.email%>">
-                                <input type="hidden" id="cep" name="cep" value="<%=cliente.cep%>">
-                                <input type="hidden" id="numero" name="numero" value="<%=cliente.numero%>">
-                                <input type="hidden" id="idReboque" name="idReboque" value="<%=reserva.idReboque%>">
-                                <input type="hidden" id="dataInicio" name="dataInicio" value="<%=reserva.dataInicio%>">
-                                <input type="hidden" id="dataFim" name="dataFim" value="<%=reserva.dataFim%>">
-                                <input type="hidden" id="valorDiaria" name="valorDiaria" value="<%=reserva.valorDiaria%>">
+                            <!-- dados do cliente -->
+                            <input type="hidden" id="nome" name="nome" value="<%=cliente.nome%>">
+                            <input type="hidden" id="sobrenome" name="sobrenome" value="<%=cliente.sobrenome%>">
+                            <input type="hidden" id="email" name="email" value="<%=cliente.email%>">
+                            <input type="hidden" id="cpf" name="cpf" value="<%=cliente.cpf%>">
+                            <input type="hidden" id="rg" name="rg" value="<%=cliente.rg%>">
+                            <input type="hidden" id="telefone" name="telefone" value="<%=cliente.telefone%>">
+                            <input type="hidden" id="data_mascimento" name="data_nascimento" value="<%=cliente.data_nascimento%>">
+
+                            <!-- dados do endereço -->
+                            <input type="hidden" id="cep" name="cep" value="<%=cliente.cep%>">
+                            <input type="hidden" id="logradouro" name="logradouro" value="<%=cliente.logradouro%>">
+                            <input type="hidden" id="complemento" name="complemento" value="<%=cliente.complemento%>">
+                            <input type="hidden" id="bairro" name="bairro" value="<%=cliente.bairro%>">
+                            <input type="hidden" id="localidade" name="localidade" value="<%=cliente.localidade%>">
+                            <input type="hidden" id="uf" name="uf" value="<%=cliente.uf%>">
+                            <input type="hidden" id="numeroDaCasa" name="numeroDaCasa" value="<%=cliente.numeroDaCasa%>">
+                            
+                            <!-- dados da reserva -->
+                            <input type="hidden" id="idReboque" name="idReboque" value="<%=reserva.idReboque%>">
+                            <input type="hidden" id="dataInicio" name="dataInicio" value="<%=reserva.dataInicio%>">
+                            <input type="hidden" id="dataFim" name="dataFim" value="<%=reserva.dataFim%>">
+                            <input type="hidden" id="valorDiaria" name="valorDiaria" value="<%=reserva.valorDiaria%>">
+                            <input type="hidden" id="valorTotalDaReserva" name="valorTotalDaReserva" value="<%=valorTotalDaReserva%>">
 
                                 
                             

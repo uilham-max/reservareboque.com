@@ -49,8 +49,10 @@ Pagamento.hasMany(Reserva, {
 Reserva.belongsTo(Pagamento)
 
 
-
-// Reserva.sync(({force: true}))
+Cliente.sync(({force: false}))
+Reboque.sync(({force: false}))
+Pagamento.sync(({force: false}))
+Reserva.sync(({force: false}))
 
 
 module.exports = Reserva

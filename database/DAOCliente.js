@@ -34,9 +34,9 @@ class DAOCliente{
     }
     
 
-    static async insertCliente(nome, cpf, telefone, email, cep, numeroDaCasa){
+    static async insertCliente(nome, sobrenome, email, cpf, rg, telefone, data_nascimento, cep, logradouro, complemento, bairro, localidade, uf, numero_da_casa){
         try{
-            await Cliente.create({nome, cpf, telefone, email, cep, numeroDaCasa})
+            await Cliente.create({nome, sobrenome, email, cpf, rg, telefone, data_nascimento, cep, logradouro, complemento, bairro, localidade, uf, numero_da_casa, ativo: true, cadastrado: false})
             return true
         }
         catch(erro){

@@ -9,47 +9,33 @@ const Diaria = require('../bill_modules/Diaria')
 
 
 // ISSO DEVE OCORRE QUANDO O QR CODE FOR ESCENADO PELO CLIENTE
-routerPagamento.post('/pagamento/salvar', (req, res) => {
+routerPagamento.post('/pagamento/salvar', async (req, res) => {
 
-    let {nome, cpf, telefone, email, cep, numeroDaCasa, idReboque, dataInicio, dataFim, valorDiaria, valorTotalDaReserva} = req.body
+    let {nome, sobrenome, email, cpf, rg, telefone, dataNascimento, cep, logradouro, complemento, bairro, localidade, uf, numeroDaCasa, idReboque, dataInicio, dataFim, valorDiaria, valorTotalDaReserva} = req.body
     // console.log("log: "+req.body.valorTotalDaReserva);
 
     valorTotalDaReserva = Diaria.calcularValorTotalDaReserva(Diaria.calcularDiarias(dataInicio,dataFim), valorDiaria)
-    DAOPagamento.verificaPagamento().then(codigoPagamento => {
-        if(codigoPagamento){
-            DAOPagamento.insert(codigoPagamento, valorTotalDaReserva).then(pagamentoSuccess => {
-                if(pagamentoSuccess){
-                    DAOPagamento.getIdUltimoPagamentoInserido().then(idUltimoPagamento => {
-                        if(idUltimoPagamento){
-                            DAOCliente.insertCliente(nome, sobrenome, email, cpf, rg, telefone, dataNascimento, cep, logradouro, complemento, bairro, localidade, uf, numeroDaCasa).then(inserido => {
-                                if(inserido){
-                                    DAOCliente.getLastInsertedClientId().then(idUltimoCliente => {
-                                        if(idUltimoCliente){
-                                            DAOReserva.insert(dataInicio, dataFim, valorDiaria, idUltimoCliente, idReboque, idUltimoPagamento).then(inserido => {
-                                                if(inserido){
-                                                    res.render('pagamento/sucesso', {mensagem: ""})
-                                                } else {
-                                                    res.render('erro', {mensagem: 'erro ao realizar pagamento'})
-                                                }
-                                            })
-                                        } else {
-                                            res.render('erro', {mensagem: 'erro ao buscar ultimo id do cliente'})
-                                        }
-                                    })
-                                } else {
-                                    res.render('erro', {mensagem: 'erro ao inserir cliente no bd'})
-                                }
-                            })
-                        } else {
-                            res.render('erro', {mensagem: 'erro ao recuperar o id do último pagamento'})
-                        }
-                    })
-                } else {
-                    res.render('erro', {mensagem: "erro ao inserir pagamento no BD"})
-                }
-            })
+
+    const codigoPagamento = await DAOPagamento.verificaPagamento()
+    if(!codigoPagamento){
+        res.render('erro', {mensagem: 'Erro ao verificar pagamento.'})
+    }
+    
+    const idPagamento = await DAOPagamento.insert(codigoPagamento, valorTotalDaReserva)
+    if(!idPagamento){
+       res.render('erro', {mensagem: "Erro ao criar pagamento."})
+    }
+
+    const idCliente = await DAOCliente.insertCliente(nome, sobrenome, email, cpf, rg, telefone, dataNascimento, cep, logradouro, complemento, bairro, localidade, uf, numeroDaCasa)
+    if(!idCliente){
+        res.render('erro', {mensagem: 'Erro ao criar cliente.'})
+    }
+
+    DAOReserva.insert(dataInicio, dataFim, valorDiaria, idCliente, idReboque, idPagamento).then(inserido => {
+        if(inserido){
+            res.render('pagamento/sucesso', {mensagem: ""})
         } else {
-            res.render('erro', {mensagem: 'Pagamento não realizado'})
+            res.render('erro', {mensagem: 'Erro ao criar reserva.'})
         }
     })
 })

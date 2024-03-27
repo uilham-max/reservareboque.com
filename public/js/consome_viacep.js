@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (cep.length !== 8) {
             alert('CEP inválido. Informe um CEP válido com 8 dígitos.');
             return;
-        }
+        } 
 
         try {
             const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
@@ -18,6 +18,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 throw new Error('Erro ao consultar o CEP.');
             }
             const data = await response.json();
+            if(data.erro == true){
+                throw new Error('CEP inválido.');
+            }
+            // console.log("Erro na resposta: "+data.erro);
             inputCidade.value = data.localidade;
             inputUf.value = data.uf;
             inputLogradouro.value = data.logradouro;

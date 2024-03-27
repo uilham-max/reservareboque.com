@@ -14,34 +14,14 @@ class DAOCliente{
         }
     }
 
-    static async getLastInsertedClientId() {
-        try {
-            // Realiza a consulta usando o Sequelize para recuperar o último cliente inserido
-            const ultimoCliente = await Cliente.findOne({
-                order: [['id', 'DESC']], // Ordena pelo ID em ordem decrescente
-                attributes: ['id'] // Apenas recupera o ID do cliente
-            });
-    
-            if (ultimoCliente) {
-                return ultimoCliente.id; // Retorna o ID do último cliente inserido
-            } else {
-                throw new Error('Nenhum cliente encontrado.'); // Lança um erro se nenhum cliente for encontrado
-            }
-        } catch (error) {
-            console.error('Erro ao recuperar o ID do último cliente inserido:', error);
-            return null; // Ou você pode retornar undefined, dependendo do tratamento desejado para erros
-        }
-    }
-    
-
     static async insertCliente(nome, sobrenome, email, cpf, rg, telefone, data_nascimento, cep, logradouro, complemento, bairro, localidade, uf, numero_da_casa){
         try{
-            await Cliente.create({nome, sobrenome, email, cpf, rg, telefone, data_nascimento, cep, logradouro, complemento, bairro, localidade, uf, numero_da_casa, ativo: true, cadastrado: false})
-            return true
+            const cliente = await Cliente.create({nome, sobrenome, email, cpf, rg, telefone, data_nascimento, cep, logradouro, complemento, bairro, localidade, uf, numero_da_casa, ativo: true, cadastrado: false})
+            return cliente.id
         }
         catch(erro){
             console.log(erro.toString())
-            return false
+            return undefined
         }
     }
 

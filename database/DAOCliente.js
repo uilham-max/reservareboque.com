@@ -21,30 +21,51 @@ class DAOCliente{
     }
 
     // Data da criação 28/03/2024
-    static async insertClienteComReservaMasNaoEraCadastrado(nome, sobrenome, email, senha, cpf, rg, telefone, data_nascimento, cep, logradouro, complemento, bairro, localidade, uf, numero_da_casa){
-        console.log('teste de passagem 5'+nome);
-
-        try{
-            await Cliente.update({nome: nome, sobrenome: sobrenome, email: email, senha: senha, cpf: cpf, rg: rg, telefone: telefone, data_nascimento: data_nascimento, cep: cep, logradouro: logradouro, complemento: complemento, bairro: bairro, localidade: localidade, uf: uf, numero_da_casa: numero_da_casa, ativo: true, cadastrado: true},{where: {cpf: cpf}})
-            return true
-        }
-        catch(error){
-            console.log(error.toString())
-            return false
+    static async updateClienteComReservaMasNaoEraCadastrado(nome, sobrenome, email, senha, cpf, rg, telefone, data_nascimento, cep, logradouro, complemento, bairro, localidade, uf, numero_da_casa) {
+        try {
+            let [numLinhasAtualizadas, clientesAtualizados] = await Cliente.update({
+                nome: nome,
+                sobrenome: sobrenome,
+                email: email,
+                senha: senha,
+                cpf: cpf,
+                rg: rg,
+                telefone: telefone,
+                data_nascimento: data_nascimento,
+                cep: cep,
+                logradouro: logradouro,
+                complemento: complemento,
+                bairro: bairro,
+                localidade: localidade,
+                uf: uf,
+                numero_da_casa: numero_da_casa,
+                ativo: true,
+                cadastrado: true
+            }, {
+                where: { cpf: cpf },
+                returning: true // Essa opção é importante para retornar os objetos atualizados
+            });
+    
+            return clientesAtualizados[0]; // Retorna o primeiro cliente atualizado do array
+        } catch (error) {
+            console.log(error.toString());
+            return false;
         }
     }
+    
 
     // Data da criação 28/03/2024
-    static async buscarClientePorCPF(cpf){
+    static async verificaSeOClienteJaExiste(cpf){
         try{
-            console.log("DAOCliente: cpf: "+cpf);
             const cliente = await Cliente.findOne(
                 {
                     where:{cpf: cpf}
                 }
             )
-            console.log(cliente);
-            return cliente
+            if(cliente){
+                return cliente
+            }
+            return false
         } catch(error) {
             console.error('Erro ao buscar cliente por CPF', error);
             throw error
@@ -66,8 +87,8 @@ class DAOCliente{
 
     static async insert(nome, sobrenome, email, senha, cpf, rg, telefone, data_nascimento, cep, logradouro, complemento, bairro, localidade, uf, numero_da_casa){
         try{
-            await Cliente.create({nome, sobrenome, email, senha, cpf, rg, telefone, data_nascimento, cep, logradouro, complemento, bairro, localidade, uf, numero_da_casa, ativo: true, cadastrado: true})
-            return true
+            let cliente = await Cliente.create({nome, sobrenome, email, senha, cpf, rg, telefone, data_nascimento, cep, logradouro, complemento, bairro, localidade, uf, numero_da_casa, ativo: true, cadastrado: true})
+            return cliente
         }
         catch(erro){
             console.log(erro.toString())

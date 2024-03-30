@@ -5,42 +5,10 @@
 </head>
 <body  >
     <%-include('./partials/navbar.ejs')%>
-    
-    <!-- Modal do login -->
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h1 class="modal-title fs-5" id="exampleModalLabel">Autenticação do usuário</h1>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form action="/login" method="POST">
-                    <div class="form-group">
-                        <label for="login">Login</label>
-                        <input class="form-control" id="email" type="text" name="email" required>
-                        <small class="form-text text-muted">Nunca informe seu login e senha para estranhos.</small>
-                    </div>
-                    <div class="form-group">
-                        <label for="senha">Senha</label>
-                        <input class="form-control" id="senha" type="password" name="senha" required>
-                    </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary direita" data-bs-toggle="modal" data-bs-target="#exampleModal2">
-                    Cadastrar-se
-                </button>
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-                <input class="btn btn-primary" type="submit" value="Login">
-                </form>
-            </div>
-          </div>
-        </div>
-    </div>
 
     <div class="conteudo">
         
-        <!-- Menssagem do topo da página -->
+        <!-- Menssagem do topo da página em jumbotron -->
         <div class="jumbotron jumbotron-fluid">
             <h1 class="display-4" >Cadastre-se para receber descontos!</h1>
             <p class="lead">Clientes cadastrados podem ver seu histórico de locações, gerenciar suas reservas e receber
@@ -71,5 +39,6 @@
 
     </div>
     <%-include('./partials/footer.ejs')%>
+    
 </body>
 </html>

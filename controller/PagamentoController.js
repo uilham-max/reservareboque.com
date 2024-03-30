@@ -11,8 +11,8 @@ const Diaria = require('../bill_modules/Diaria')
 // ISSO DEVE OCORRE QUANDO O QR CODE FOR ESCENADO PELO CLIENTE
 routerPagamento.post('/pagamento/salvar', async (req, res) => {
 
-    let {nome, sobrenome, email, cpf, rg, telefone, dataNascimento, cep, logradouro, complemento, bairro, localidade, uf, numeroDaCasa, idReboque, dataInicio, dataFim, valorDiaria, valorTotalDaReserva} = req.body
-    // console.log("log: "+req.body.valorTotalDaReserva);
+    let {nome, sobrenome, email, senha, cpf, rg, telefone, dataNascimento, cep, logradouro, complemento, bairro, localidade, uf, numeroDaCasa, idReboque, dataInicio, dataFim, valorDiaria, valorTotalDaReserva} = req.body
+    // console.log("data de nascimento: "+dataNascimento);
 
     valorTotalDaReserva = Diaria.calcularValorTotalDaReserva(Diaria.calcularDiarias(dataInicio,dataFim), valorDiaria)
 
@@ -26,7 +26,7 @@ routerPagamento.post('/pagamento/salvar', async (req, res) => {
        res.render('erro', {mensagem: "Erro ao criar pagamento."})
     }
 
-    const idCliente = await DAOCliente.insertCliente(nome, sobrenome, email, cpf, rg, telefone, dataNascimento, cep, logradouro, complemento, bairro, localidade, uf, numeroDaCasa)
+    const idCliente = await DAOCliente.insertCliente(nome, sobrenome, email, senha, cpf, rg, telefone, dataNascimento, cep, logradouro, complemento, bairro, localidade, uf, numeroDaCasa)
     if(!idCliente){
         res.render('erro', {mensagem: 'Erro ao criar cliente.'})
     }
@@ -44,8 +44,9 @@ routerPagamento.post('/pagamento/salvar', async (req, res) => {
 // GERANDO QR CODE PARA O CLIENTE
 routerPagamento.post('/pagamento/pagamento', (req, res) => {
 
-    let {nome, sobrenome, email, cpf, rg, telefone, cep, dataNascimento, logradouro, complemento, bairro, 
-    localidade, numeroDaCasa, idReboque, dataInicio, dataFim, valorDiaria} = req.body
+    let {nome, sobrenome, email, senha, cpf, rg, telefone, cep, dataNascimento, logradouro, complemento, bairro, 
+    localidade, uf, numeroDaCasa, idReboque, dataInicio, dataFim, valorDiaria} = req.body
+    // console.log("dataNascimento: "+dataNascimento+ uf);
     
     valorTotalDaReserva = Diaria.calcularValorTotalDaReserva(Diaria.calcularDiarias(dataInicio,dataFim), valorDiaria)
 
@@ -62,6 +63,7 @@ routerPagamento.post('/pagamento/pagamento', (req, res) => {
         'nome': nome,
         'sobrenome': sobrenome,
         'email': email,
+        'senha': senha,
         'cpf': cpf,
         'rg': rg,
         'telefone': telefone,
@@ -71,6 +73,7 @@ routerPagamento.post('/pagamento/pagamento', (req, res) => {
         'complemento': complemento,
         'bairro': bairro,
         'localidade': localidade,
+        'uf': uf,
         'numeroDaCasa': numeroDaCasa
     }
 

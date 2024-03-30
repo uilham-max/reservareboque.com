@@ -9,13 +9,17 @@ const autorizacao = require('../autorizacao/autorizacao')
 
 // TELA ONDE É ESCOLHIDO O PERÍODO DA RESERVA
 routerReserva.get('/reserva/periodo/:id?/:mensagem?', (req, res) => {
+    let user = 'User'
+    if(req.session.cliente && req.session.cliente.nome){
+        user = req.session.cliente.nome
+    }
     id = req.params.id
     DAOReserva.getAtivasPorID(id).then(reservas => {
         console.log("ID da reserva: "+reservas);
 
         DAOReboque.getOne(id).then(reboque => {
             if(reboque){
-                res.render('reserva/periodo', {mensagem: "", reboque: reboque, reservas: reservas})
+                res.render('reserva/periodo', {user: user, mensagem: "", reboque: reboque, reservas: reservas})
             } else {
                 res.render('erro', {mensagem: "Erro ao mostrar reboque."})
             }

@@ -3,6 +3,7 @@
 <head>
     <%-include('../partials/header.ejs')%>
     <script src="/js/consome_viacep.js" ></script>
+    <script src="/js/preenche_pelo_cpf.js" ></script>
 </head>
 <body  >
     
@@ -18,7 +19,7 @@
                 <form action="/login" method="POST">
                     <div class="form-group">
                         <label for="login">Login</label>
-                        <input class="form-control" id="email" type="text" name="email" required>
+                        <input class="form-control" id="emailModal" type="text" name="emailModal" required>
                         <small class="form-text text-muted">Nunca informe seu login e senha para estranhos.</small>
                     </div>
                     <div class="form-group">
@@ -37,39 +38,6 @@
           </div>
         </div>
     </div>
-    <div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel2" aria-hidden="true">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h1 class="modal-title fs-5" id="exampleModalLabel2">Cadastro do Usuario</h1>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form action="/cadastro/salvar" method="POST">
-                    <div class="form-group">
-                        <label for="nome">Nome</label>
-                        <input class="form-control" id="nome" type="text" name="nome" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="login">Login</label>
-                        <input class="form-control" id="email" type="text" name="email" required>
-                        <small class="form-text text-muted">Informe o seu e-mail como login.</small>
-                    </div>
-                    <div class="form-group">
-                        <label for="senha">Senha</label>
-                        <input class="form-control" id="senha" type="password" name="senha" required>
-                    </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-                <button class="btn btn-primary" type="submit">Salvar</button>
-            </div>
-            </form>
-
-          </div>
-        </div>
-    </div>
-
 
     <div class="conteudo" >
         <div class="container" >
@@ -99,37 +67,36 @@
                                 <h3 class="card-title">Preencha com seus dados</h3>
                                 <hr>
                                 <div class="form-group">
+                                    <label for="cpf">CPF</label>
+                                    <input class="form-control" id="cpf" type="text" name="cpf" >
+                                </div>
+                                <div class="form-group">
                                     <label for="nome">Nome</label>
                                     <input class="form-control" id="nome" type="text" name="nome">
                                 </div>
                                 <div class="form-group">
-                                    <label for="cpf">Sobrenome</label>
+                                    <label for="sobrenome">Sobrenome</label>
                                     <input class="form-control" id="sobrenome" type="text" name="sobrenome">
                                 </div>
                                 <div class="form-group">
                                     <label for="email">Email</label>
-                                    <input class="form-control" id="email" type="text" name="email" >
+                                    <input class="form-control" id="email" type="email" name="email" >
                                 </div>
+                                                                                              
                                 <div class="form-group">
-                                    <label for="telefone">CPF</label>
-                                    <input class="form-control" id="cpf" type="text" name="cpf" >
-                                </div>
-                                <div class="form-group">
-                                    <label for="email">RG</label>
+                                    <label for="rg">RG</label>
                                     <input class="form-control" id="rg" type="text" name="rg">
                                 </div>
                                 
                                 <div class="form-group">
-                                    <label for="cep">Telefone</label>
+                                    <label for="telefone">Telefone</label>
                                     <input class="form-control" id="telefone" type="text" name="telefone" >
                                 </div> 
                                 <div class="form-group">
-                                    <label for="cep">Data de nascimento</label>
+                                    <label for="dataNascimento">Data de nascimento</label>
                                     <input class="form-control" id="dataNascimento" type="date" name="dataNascimento" >
                                 </div> 
-                                <p style="margin: 0.5rem;" >
-                                    <input class="btn btn-primary" type="submit" value="Pagar com PIX">
-                                </p>
+                                
                         </div>
                     </div>
 
@@ -170,6 +137,9 @@
                             </div>
                             
                         </div>
+                        <p style="margin: 0.5rem;" >
+                            <input class="btn btn-primary" type="submit" value="Pagar com PIX">
+                        </p>
                     </div>
 
 
@@ -177,8 +147,9 @@
                     <input type="hidden" id="dataInicio" name="dataInicio" value="<%=dataInicio%>">
                     <input type="hidden" id="dataFim" name="dataFim" value="<%=dataFim%>">
                     <input type="hidden" id="valorDiaria" name="valorDiaria" value="<%=reboque.valorDiaria%>">
+                    <input type="hidden" id="senha" name="senha" value="">
                 
-
+                    
 
                 </div>
             </form>

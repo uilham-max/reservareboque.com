@@ -1,42 +1,145 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
-    <%-include('partials/header'); %>
+    <%-include('./partials/header.ejs')%>
+    <script src="/js/preenche_pelo_cpf.js" ></script>
+    <script src="/js/consome_viacep.js" ></script>
+    <script src="/js/validar_senha.js" ></script>
 </head>
+<body  >
+    
+    <%-include('./partials/navbar.ejs')%>
+    
+    <div class="conteudo" >
+        <div class="jumbotron junbotron-fluid">
+            <h1 class="display-4" >Bem-Vindo à página de cadastro</h1>
+        </div>
+        <div class="container" >
+            <!-- <h3>Reboque escolhido</h3> -->
+            <!--  -->
+            <form action="/cadastro/create" method="POST">
+                <div class="lista-reboques">
 
-<body>
-    <%-include('partials/navbar'); %>
-    <div class="conteudo">
-        <div class="container">
-            <div class="card">
-                <div class="card-body">
+
+                    <!-- Dados pessoais -->
+                    <div class="card card-reserva" style="width: 25rem;">
+                        <div class="card-body">
+                            <h3 class="card-title">Informações Pessoais</h3>
+                            <hr>
+                                             
+                            <div class="form-group">
+                                <label for="cpf">CPF</label>
+                                <input class="form-control" id="cpf" type="text" name="cpf" >
+                            </div>
+                            <div class="form-group">
+                                <label for="nome">Nome</label>
+                                <input class="form-control" id="nome" type="text" name="nome">
+                            </div>
+                            <div class="form-group">
+                                <label for="cpf">Sobrenome</label>
+                                <input class="form-control" id="sobrenome" type="text" name="sobrenome">
+                            </div>
+                            <div class="form-group">
+                                <label for="email">RG</label>
+                                <input class="form-control" id="rg" type="text" name="rg">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="cep">Telefone</label>
+                                <input class="form-control" id="telefone" type="text" name="telefone" >
+                            </div> 
+                            <div class="form-group">
+                                <label for="cep">Data de nascimento</label>
+                                <input class="form-control" id="dataNascimento" type="date" name="dataNascimento" >
+                            </div> 
+                        </div>
+                    </div>
+
+
+                    <!-- Dados de endereço -->
+                    <div class="card card-reserva" style="width: 25rem;">
+                        <div class="card-body">
+                            <h3 class="card-title">Infomações de Endereço</h3>
+                            <hr>
+                            <div class="form-group">
+                                <label for="cep">CEP</label>
+                                <input class="form-control" id="cep" type="text" name="cep" placeholder="Ex.: 96408560">
+                            </div>
+                            <div class="form-group">
+                                <label for="logradouro">Logradouro</label>
+                                <input class="form-control" id="logradouro" type="text" name="logradouro">
+                            </div>
+                            <div class="form-group">
+                                <label for="complemento">Complemento</label>
+                                <input class="form-control" id="complemento" type="text" name="complemento">
+                            </div>
+                            <div class="form-group">
+                                <label for="bairro">Bairro</label>
+                                <input class="form-control" id="bairro" type="text" name="bairro" >
+                            </div>
+                            <div class="form-group">
+                                <label for="localidade">Cidade</label>
+                                <input class="form-control" id="localidade" type="text" name="localidade">
+                            </div>
+                            <div class="row">
+
+                                <div class="form-group col">
+                                    <label for="uf">Estado (UF)</label>
+                                    <input class="form-control" id="uf" type="text" name="uf">
+                                </div>
+                                
+                                <div class="form-group col">
+                                    <label for="numeroDaCasa">Número da Casa</label>
+                                    <input class="form-control" id="numeroDaCasa" type="text" name="numeroDaCasa" >
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+
+                    <!-- Dados do login -->
+                    <div class="card card-reserva" style="width: 25rem;">
+                        <div class="card-body">
+                            <h3 class="card-title">Informções de login</h3>
+                            <hr>
+                            <br>
+                            <div class="form-group">
+                                <label for="email">Login</label>
+                                <input class="form-control" id="email" type="email" name="email" >
+                                <small class="form-text text-muted">Informe o seu e-mail como login.</small>
+                            </div>
+                            <div class="form-group">
+                                <label for="senha">Senha</label>
+                                <input class="form-control" id="senha" type="password" name="senha" >
+                            </div>
+                            <div class="form-group">
+                                <label for="senhaRepita">Repita a Senha</label>
+                                <input class="form-control" id="senhaRepita" type="password" name="senhaRepita" >
+                            </div>
+                                            
+                            <p style="margin: 0.5rem;" >
+                                <input class="btn btn-primary" type="submit" value="Salvar">
+                            </p>
+                        </div>
+                    </div>
+
+                     
                     
-                    <h3 class="card-title display-4">Cadastro de usuário</h3>
-                    <form action="/cadastro/salvar" method="POST">
-                        <div class="form-group">
-                            <label for="nome">Nome</label>
-                            <input class="form-control" id="nome" type="text" name="nome" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="login">Login</label>
-                            <input class="form-control" id="email" type="text" name="email" required>
-                            <small class="form-text text-muted">Informe o seu e-mail como login.</small>
-                        </div>
-                        <div class="form-group">
-                            <label for="senha">Senha</label>
-                            <input class="form-control" id="senha" type="password" name="senha" required>
-                        </div>
-                        <br><div class="d-flex gap-2 d-md-flex">
-                            <input class="btn btn-primary" type="submit" value="Salvar">
-                        </div>
-                        
-                    </form>
+
                 </div>
-            </div>
+            </form>
+            <!--  -->
         </div>
     </div>
-    <%-include('partials/footer'); %>
-</body>
 
+
+
+    <%-include('./partials/footer.ejs')%>
+
+
+
+
+
+
+</body>
 </html>

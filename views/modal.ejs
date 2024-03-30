@@ -1,0 +1,38 @@
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">Autenticação do usuário</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <form action="/login/entrar" method="POST">
+                    <div class="form-group">
+                        <label for="login">Login</label>
+                        <input class="form-control" id="email" type="text" name="email" required>
+                        <small class="form-text text-muted">Nunca informe seu login e senha para estranhos.</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="senha">Senha</label>
+                        <input class="form-control" id="senha" type="password" name="senha" required>
+                    </div>
+                    <% if(mensagem){ %>
+                        <div class="alert alert-danger">
+                            <strong>Alerta!</strong> <%= mensagem %>
+                        </div>
+                    <% } %>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary direita" data-bs-toggle="modal" data-bs-target="#exampleModal2">
+                    Cadastrar-se
+                </button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                <input class="btn btn-primary" type="submit" value="Login">
+                </form>
+            </div>
+          </div>
+        </div>
+    </div>

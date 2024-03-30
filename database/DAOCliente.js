@@ -1,11 +1,72 @@
 const Cliente = require('../model/Cliente.js')
+const bcrypt = require('bcryptjs')
 
 
 class DAOCliente{
 
-    static async insert(nome, cpf, telefone, endereco){
+    // Criado em 29/03/2024
+    static async login(email, senha){
+        let cliente = await Cliente.findOne({where: {email: email}})
         try{
-            await Cliente.create({nome, cpf, telefone, endereco})
+            if(cliente){
+                    return cliente
+            } else {
+                return undefined
+            }
+        } catch(erro){
+            console.log(erro.toString);
+            return undefined
+        }
+        
+    }
+
+    // Data da criação 28/03/2024
+    static async insertClienteComReservaMasNaoEraCadastrado(nome, sobrenome, email, senha, cpf, rg, telefone, data_nascimento, cep, logradouro, complemento, bairro, localidade, uf, numero_da_casa){
+        console.log('teste de passagem 5'+nome);
+
+        try{
+            await Cliente.update({nome: nome, sobrenome: sobrenome, email: email, senha: senha, cpf: cpf, rg: rg, telefone: telefone, data_nascimento: data_nascimento, cep: cep, logradouro: logradouro, complemento: complemento, bairro: bairro, localidade: localidade, uf: uf, numero_da_casa: numero_da_casa, ativo: true, cadastrado: true},{where: {cpf: cpf}})
+            return true
+        }
+        catch(error){
+            console.log(error.toString())
+            return false
+        }
+    }
+
+    // Data da criação 28/03/2024
+    static async buscarClientePorCPF(cpf){
+        try{
+            console.log("DAOCliente: cpf: "+cpf);
+            const cliente = await Cliente.findOne(
+                {
+                    where:{cpf: cpf}
+                }
+            )
+            console.log(cliente);
+            return cliente
+        } catch(error) {
+            console.error('Erro ao buscar cliente por CPF', error);
+            throw error
+        }
+    }
+
+    // Criado em 20/03/2024
+    static async insertClienteQueNaoQuerSeCadastrar(nome, sobrenome, email, senha, cpf, rg, telefone, data_nascimento, cep, logradouro, complemento, bairro, localidade, uf, numero_da_casa){
+        try{
+            const cliente = await Cliente.create({nome, sobrenome, email, senha, cpf, rg, telefone, data_nascimento, cep, logradouro, complemento, bairro, localidade, uf, numero_da_casa, ativo: true, cadastrado: false})
+            return cliente.id
+        }
+        catch(erro){
+            console.log(erro.toString())
+            return undefined
+        }
+    }
+
+
+    static async insert(nome, sobrenome, email, senha, cpf, rg, telefone, data_nascimento, cep, logradouro, complemento, bairro, localidade, uf, numero_da_casa){
+        try{
+            await Cliente.create({nome, sobrenome, email, senha, cpf, rg, telefone, data_nascimento, cep, logradouro, complemento, bairro, localidade, uf, numero_da_casa, ativo: true, cadastrado: true})
             return true
         }
         catch(erro){
@@ -14,16 +75,7 @@ class DAOCliente{
         }
     }
 
-    static async insertCliente(nome, sobrenome, email, cpf, rg, telefone, data_nascimento, cep, logradouro, complemento, bairro, localidade, uf, numero_da_casa){
-        try{
-            const cliente = await Cliente.create({nome, sobrenome, email, cpf, rg, telefone, data_nascimento, cep, logradouro, complemento, bairro, localidade, uf, numero_da_casa, ativo: true, cadastrado: false})
-            return cliente.id
-        }
-        catch(erro){
-            console.log(erro.toString())
-            return undefined
-        }
-    }
+
 
     static async update(id, nome, cpf, telefone, endereco){
         try{
@@ -35,6 +87,8 @@ class DAOCliente{
             return false
         }
     }
+
+
 
     static async delete(id){
         try{

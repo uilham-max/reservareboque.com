@@ -5,12 +5,17 @@ const DAOReboque = require('../database/DAOReboque')
 const autorizacao = require('../autorizacao/autorizacao')
 const DAOReserva = require('../database/DAOReserva')
 const Diaria = require('../bill_modules/Diaria')
+const getSessionNome = require('../bill_modules/User')
 const bcrypt = require('bcryptjs')
+
+
 
 routerCliente.get('/cliente/logout', (req, res) => {
     req.session.cliente = undefined
     res.redirect('/')
 })
+
+
 
 // criado em 29/03/2024
 routerCliente.post('/login/entrar', (req, res) => {
@@ -32,6 +37,8 @@ routerCliente.post('/login/entrar', (req, res) => {
 
 })
 
+
+
 // Data da criação 28/03/2024
 routerCliente.get('/cliente/existe/:cpf?', (req, res) => {
     /**
@@ -47,17 +54,19 @@ routerCliente.get('/cliente/existe/:cpf?', (req, res) => {
     })
 } )
 
+
+
 routerCliente.post('/cadastro/create', async (req, res) => {
 
     let {nome, sobrenome, email, senha, senhaRepita, cpf, rg, telefone, dataNascimento, cep, 
         logradouro, complemento, bairro, localidade, uf, numeroDaCasa} = req.body
 
     if(senha.length < 8){
-        res.render('erro', {user: user,mensagem: "Erro. Senha com menos de 8 dígitos."})
+        res.render('erro', {mensagem: "Erro. Senha com menos de 8 dígitos."})
     }
     
     if(senha !== senhaRepita){
-        res.render('erro', {user: user,mensagem: 'Erro. Senhas diferentes.'})
+        res.render('erro', {mensagem: 'Erro. Senhas diferentes.'})
     }
     
     // Logica para criptografar a senha que será inserida no banco de dados
@@ -83,31 +92,28 @@ routerCliente.post('/cadastro/create', async (req, res) => {
     }
 
     if(cliente){
-        req.session.cliente = {id: cliente.id, nome: cliente.nome, email: cliente.email}
+        req.session.cliente = {id: cliente.id, nome: cliente.nome, sobrenome: cliente.sobrenome, email: cliente.email}
+        console.log(cliente.nome,"criado...");
         res.redirect('/')
     } else {
         res.render('erro', {mensagem: 'Erro ao inserir cliente'})
     }
 })
 
+
+
 // PUBLICO
 routerCliente.post('/cliente/dados_cliente', (req, res) => {
-    let user = 'User'
-    if(req.session.cliente && req.session.cliente.nome){
-        let a = req.session.cliente.nome
-        let b = req.session.cliente.sobrenome
-        user = a[0] + b[0]
-    }
     let {id, dataInicio, dataFim} =  req.body
 
     DAOReserva.getVerificaDisponibilidade(id, dataInicio, dataFim).then( resposta => {
         DAOReboque.getOne(id).then(reboque => {
             if(reboque && resposta.length === 0){
                 let valorTotalDaReserva = Diaria.calcularValorTotalDaReserva(Diaria.calcularDiarias(dataInicio, dataFim), reboque.valorDiaria)
-                res.render('cliente/dados_cliente', {user: user, reboque: reboque, dataInicio: dataInicio, dataFim: dataFim, valorTotalDaReserva: valorTotalDaReserva})
+                res.render('cliente/dados_cliente', {user: getSessionNome(req, res), reboque: reboque, dataInicio: dataInicio, dataFim: dataFim, valorTotalDaReserva: valorTotalDaReserva})
             } else {
                 DAOReserva.getAtivas(id).then(reservas => {
-                    res.render('reserva/periodo', {user: user, reboque: reboque, reservas: reservas, mensagem: "Indisponivel para esta data."})
+                    res.render('reserva/periodo', {user: getSessionNome(req, res), reboque: reboque, reservas: reservas, mensagem: "Indisponivel para esta data."})
                 })
                 
             }
@@ -115,17 +121,13 @@ routerCliente.post('/cliente/dados_cliente', (req, res) => {
     } )
 })
 
+
+
 // DEVO TESTAR ESSA MENSAGEM PASSADA POR PARAMENTRO, POIS AINDA NÃO SEI COMO ELA FUNCIONA
 routerCliente.get('/cliente/lista/:mensagem?', autorizacao, (req, res) => {
-    let user = 'User'
-    if(req.session.admin && req.session.admin.nome){
-        let a = req.session.cliente.nome
-        let b = req.session.cliente.sobrenome
-        user = a[0] + b[0]
-    }
     DAOCliente.getAll().then(clientes => {
         if(clientes){
-            res.render('cliente/cliente', {user: user, clientes: clientes, mensagem: req.params.mensagem? 
+            res.render('cliente/cliente', {user: getSessionNome(req, res), clientes: clientes, mensagem: req.params.mensagem? 
                 "Não é possivel excluir um cliente já refereciado por uma locação":""})
         } else {
             res.render('erro', {mensagem: "Erro na listagem de clientes."})
@@ -133,41 +135,35 @@ routerCliente.get('/cliente/lista/:mensagem?', autorizacao, (req, res) => {
     })
 })
 
+
+
 routerCliente.get('/cliente/excluir/:id', autorizacao, (req,res) => {
     let id = req.params.id
     DAOCliente.delete(id).then(excluido => {
         if(excluido){
             res.redirect('/cliente/lista')
         } else {
-            res.render('erro', {user: user, mensagem: "Erro ao excluir cliente."})
+            res.render('erro', { mensagem: "Erro ao excluir cliente."})
         }
     })
 })
 
+
+
 routerCliente.get('/cliente/editar/:id', autorizacao, (req, res) => {
-    let user = 'User'
-    if(req.session.admin && req.session.admin.nome){
-        let a = req.session.cliente.nome
-        let b = req.session.cliente.sobrenome
-        user = a[0] + b[0]
-    }
     let id = req.params.id
     DAOCliente.getOne(id).then(cliente => {
         if(cliente){
-            res.render('cliente/editar', {user: user, cliente: cliente} )
+            res.render('cliente/editar', {user: getSessionNome(req, res), cliente: cliente} )
         } else {
             res.render('erro', {mensagem: "Erro na tentativa de edição de cliente"})
         }
     })
 })
 
+
+
 routerCliente.post('/cliente/atualizar', autorizacao,  (req,res) => {
-    let user = 'User'
-    if(req.session.admin && req.session.admin.nome){
-        let a = req.session.cliente.nome
-        let b = req.session.cliente.sobrenome
-        user = a[0] + b[0]
-    }
     let {id, nome, cpf, telefone, endereco} = req.body
     DAOCliente.update(id, nome, cpf, telefone, endereco).then(cliente => {
         if(cliente){
@@ -177,5 +173,7 @@ routerCliente.post('/cliente/atualizar', autorizacao,  (req,res) => {
         }
     })
 })
+
+
 
 module.exports = routerCliente

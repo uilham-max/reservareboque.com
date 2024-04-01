@@ -4,6 +4,8 @@ const DAOAdmin = require('../database/DAOAdmin')
 const bcrypt = require('bcryptjs')
 const autorizacao = require('../autorizacao/autorizacao')
 const DAOReboque = require('../database/DAOReboque')
+const getSessionNome = require('../bill_modules/User')
+
 
 
 routerAdmin.get('/admin/painel', autorizacao, (req, res) => {
@@ -19,10 +21,14 @@ routerAdmin.get('/admin/painel', autorizacao, (req, res) => {
 })
 
 
+
 // ROTAS DO CADASTRO
 routerAdmin.get('/admin/cadastro', autorizacao, (req, res) => {
     res.render('admin/cadastro')
 })
+
+
+
 routerAdmin.post('/admin/cadastro/salvar', autorizacao, (req, res) => {
     let {nome, email, senha} = req.body,
         salt = bcrypt.genSaltSync(10)
@@ -34,10 +40,16 @@ routerAdmin.post('/admin/cadastro/salvar', autorizacao, (req, res) => {
     }
 })
 
+
+
+
 //ROTAS DO LOGIN
 routerAdmin.get('/admin/login', (req, res) => {
     res.render('admin/login', {mensagem: ""})
 })
+
+
+
 
 routerAdmin.post('/admin/login/salvar', (req, res) => {
     let {email, senha} = req.body
@@ -54,6 +66,9 @@ routerAdmin.post('/admin/login/salvar', (req, res) => {
         }
     })
 })
+
+
+
 
 routerAdmin.get("/logout", function (req, res) {
     req.session.admin = undefined

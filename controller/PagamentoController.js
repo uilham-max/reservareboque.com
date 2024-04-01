@@ -5,17 +5,12 @@ const DAOPagamento = require('../database/DAOPagamento')
 const DAOCliente = require('../database/DAOCliente')
 const DAOReserva = require('../database/DAOReserva')
 const Diaria = require('../bill_modules/Diaria')
+const getSessionNome = require('../bill_modules/User')
 
 
 
 // ISSO DEVE OCORRE QUANDO O QR CODE FOR ESCENADO PELO CLIENTE
 routerPagamento.post('/pagamento/salvar', async (req, res) => {
-    let user = 'User'
-    if(req.session.cliente && req.session.cliente.nome){
-        let a = req.session.cliente.nome
-        let b = req.session.cliente.sobrenome
-        user = a[0] + b[0]
-    }
 
     let {nome, sobrenome, email, senha, cpf, rg, telefone, dataNascimento, cep, logradouro, complemento, bairro, localidade, uf, numeroDaCasa, idReboque, dataInicio, dataFim, valorDiaria, valorTotalDaReserva} = req.body
     // console.log("data de nascimento: "+dataNascimento);
@@ -24,25 +19,25 @@ routerPagamento.post('/pagamento/salvar', async (req, res) => {
 
     const codigoPagamento = await DAOPagamento.verificaPagamento()
     if(!codigoPagamento){
-        res.render('erro', {user: user, mensagem: 'Erro ao verificar pagamento.'})
+        res.render('erro', { mensagem: 'Erro ao verificar pagamento.'})
     }
     
     const idPagamento = await DAOPagamento.insert(codigoPagamento, valorTotalDaReserva)
     if(!idPagamento){
-       res.render('erro', {user: user, mensagem: "Erro ao criar pagamento."})
+       res.render('erro', { mensagem: "Erro ao criar pagamento."})
     }
 
     const idCliente = await DAOCliente.insertClienteQueNaoQuerSeCadastrar(nome, sobrenome, email, senha, cpf, rg, telefone, dataNascimento, cep, logradouro, complemento, bairro, localidade, uf, numeroDaCasa)
     if(!idCliente){
-        res.render('erro', {user: user, mensagem: 'Erro ao criar cliente.'})
+        res.render('erro', {mensagem: 'Erro ao criar cliente.'})
     }
 
     DAOReserva.insert(dataInicio, dataFim, valorDiaria, idCliente, idReboque, idPagamento).then(inserido => {
         if(inserido){
             console.log("Nova reserva criada...");
-            res.render('pagamento/sucesso', {user: user, mensagem: ""})
+            res.render('pagamento/sucesso', {user: getSessionNome(req, res), mensagem: ""})
         } else {
-            res.render('erro', {user: user, mensagem: 'Erro ao criar reserva.'})
+            res.render('erro', {mensagem: 'Erro ao criar reserva.'})
         }
     })
 })
@@ -50,12 +45,6 @@ routerPagamento.post('/pagamento/salvar', async (req, res) => {
 
 // GERANDO QR CODE PARA O CLIENTE
 routerPagamento.post('/pagamento/pagamento', (req, res) => {
-    let user = 'User'
-    if(req.session.cliente && req.session.cliente.nome){
-        let a = req.session.cliente.nome
-        let b = req.session.cliente.sobrenome
-        user = a[0] + b[0]
-    }
 
     let {nome, sobrenome, email, senha, cpf, rg, telefone, cep, dataNascimento, logradouro, complemento, bairro, 
     localidade, uf, numeroDaCasa, idReboque, dataInicio, dataFim, valorDiaria} = req.body
@@ -95,9 +84,9 @@ routerPagamento.post('/pagamento/pagamento', (req, res) => {
         if(qrCode){
             DAOReboque.getOne(idReboque).then(reboque => {
                 if(reboque){
-                    res.render('pagamento/pagamento', {user: user, mensagem: "", cliente: cliente, reboque: reboque, reserva: reserva, qrCode: qrCode, valorTotalDaReserva: valorTotalDaReserva})
+                    res.render('pagamento/pagamento', {user: getSessionNome(req, res), mensagem: "", cliente: cliente, reboque: reboque, reserva: reserva, qrCode: qrCode, valorTotalDaReserva: valorTotalDaReserva})
                 } else {
-                    res.render('erro', {user: user, mensagem: "erro => PagamentoController.js"})
+                    res.render('erro', { mensagem: "erro => PagamentoController.js"})
                 }
             })
 

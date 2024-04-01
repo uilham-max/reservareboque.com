@@ -10,7 +10,9 @@ routerIndex.get('/login', (req, res) => {
 routerIndex.get('/cadastro', (req, res) => {
     let user = 'User'
     if(req.session.cliente && req.session.cliente.nome){
-        user = req.session.cliente.nome
+        let a = req.session.cliente.nome
+        let b = req.session.cliente.sobrenome
+        user = a[0] + b[0]
     }
     res.render('cadastro', {user: user, mensagem: ''})
 })
@@ -32,7 +34,9 @@ routerIndex.post('/cadastro/create', (req, res) => {
 routerIndex.get('/', (req, res) => {
     let user = 'User'
     if(req.session.cliente && req.session.cliente.nome){
-        user = req.session.cliente.nome
+        let a = req.session.cliente.nome
+        let b = req.session.cliente.sobrenome
+        user = a[0] + b[0]
     }
     DAOReboque.getAll().then(reboques => {
 

@@ -1,10 +1,9 @@
-function clienteAutorizacao(req, res, next){
-    // next()
-    // if(req.session.cliente != undefined) {
-    //     next()
-    // } else {
-    //     res.redirect('/')
-    // }
+function autorizacao(req, res, next){
+    if(req.session.admin != undefined) {
+        next()
+    } else {
+        res.redirect('/')
+    }
 }
 
-module.exports = clienteAutorizacao
+module.exports = autorizacao

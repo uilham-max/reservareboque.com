@@ -14,7 +14,7 @@ const Cliente = conexao.define('cliente', {
     cpf: Sequelize.STRING, // tornar unique mais tarde
     rg: Sequelize.STRING,
     telefone: Sequelize.STRING, // tornar unique mais tarde
-    data_nascimento: Sequelize.DATE,
+    data_nascimento: Sequelize.DATEONLY,
     cep: Sequelize.STRING,
     logradouro: Sequelize.STRING,
     complemento: Sequelize.STRING,

@@ -9,7 +9,7 @@
     <div class="conteudo">
 
         <div class="container">
-            <div class="card card-reserva" tyle="width: 25rem;">
+            <div class="card">
                 <div class="card-body">
                     <h3 class="card-title">Autenticação do usuário</h3>
                     <form action="/login/entrar" method="POST">
@@ -23,8 +23,10 @@
                             <input class="form-control" id="senha" type="password" name="senha" required>
                         </div>
                         <br>
-                        <input class="btn btn-primary" type="submit" value="Login">
+                        <a href="/" class="btn btn-primary">Voltar</a>
+                        <input class="btn btn-success" type="submit" value="Login"><br>
                         <a href="/cadastro/novo" class="btn-link">Quero me cadastrar.</a>
+                        <a href="/admin/login" class="btn-link">Sou admin.</a>
                     </form>
                 </div>
             </div>

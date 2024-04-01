@@ -40,11 +40,13 @@
           
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle " href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              User
+              <%if(user) {%>
+                <%=user%>
+              <%}%>
             </a>
             <ul class="dropdown-menu">
-              <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#exampleModal" href="#">Entrar</a></li>
-              <li><a class="dropdown-item" href="#">Cadastrar-se</a></li>
+              <li><a class="dropdown-item" href="/admin/login">Entrar</a></li>
+              <li><a class="dropdown-item" href="/admin/cadastro">Cadastrar-se</a></li>
               <li><hr class="dropdown-divider"></li>
               <li><a class="dropdown-item" href="/logout">Sair</a></li>
             </ul>

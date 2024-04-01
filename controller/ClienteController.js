@@ -7,14 +7,10 @@ const DAOReserva = require('../database/DAOReserva')
 const Diaria = require('../bill_modules/Diaria')
 const bcrypt = require('bcryptjs')
 
-
-
 routerCliente.get('/cliente/logout', (req, res) => {
     req.session.cliente = undefined
     res.redirect('/')
 })
-
-
 
 // criado em 29/03/2024
 routerCliente.post('/login/entrar', (req, res) => {
@@ -22,8 +18,8 @@ routerCliente.post('/login/entrar', (req, res) => {
     DAOCliente.login(email, senha).then( cliente => {
         if(cliente){
             if(bcrypt.compareSync(senha, cliente.senha)){
-                req.session.cliente = {id: cliente.id, nome: cliente.nome, email: cliente.email}
-                // console.log(req.session.cliente.email);
+                req.session.cliente = {id: cliente.id, nome: cliente.nome, sobrenome: cliente.sobrenome, email: cliente.email}
+                console.log(req.session.cliente.nome, "fez login...");
                 res.redirect('/')
             } else {
                 
@@ -35,8 +31,6 @@ routerCliente.post('/login/entrar', (req, res) => {
     })
 
 })
-
-
 
 // Data da criação 28/03/2024
 routerCliente.get('/cliente/existe/:cpf?', (req, res) => {
@@ -52,8 +46,6 @@ routerCliente.get('/cliente/existe/:cpf?', (req, res) => {
         
     })
 } )
-
-
 
 routerCliente.post('/cadastro/create', async (req, res) => {
 
@@ -98,13 +90,13 @@ routerCliente.post('/cadastro/create', async (req, res) => {
     }
 })
 
-
-
-
+// PUBLICO
 routerCliente.post('/cliente/dados_cliente', (req, res) => {
     let user = 'User'
     if(req.session.cliente && req.session.cliente.nome){
-        user = req.session.cliente.nome
+        let a = req.session.cliente.nome
+        let b = req.session.cliente.sobrenome
+        user = a[0] + b[0]
     }
     let {id, dataInicio, dataFim} =  req.body
 
@@ -123,65 +115,23 @@ routerCliente.post('/cliente/dados_cliente', (req, res) => {
     } )
 })
 
-
-
-routerCliente.get('/cliente/novo', autorizacao, (req, res) => {
-    res.render('cliente/novo', {user: user, mensagem: ""})
-})
-
-
-
-routerCliente.post('/cliente/salvar', autorizacao, (req, res) => {
-    let {nome, cpf, telefone, endereco} = req.body
-    DAOCliente.insert(nome, cpf, telefone, endereco).then(inserido => {
-        if(inserido){
-            res.render('cliente/novo', {user: user, mensagem: "Cliente incluído!"})
-        } else {
-            res.render('erro', {user: user, mensagem: "Não foi possível incluir o cliente!"})
-        }
-    })
-})
-
-
-
+// DEVO TESTAR ESSA MENSAGEM PASSADA POR PARAMENTRO, POIS AINDA NÃO SEI COMO ELA FUNCIONA
 routerCliente.get('/cliente/lista/:mensagem?', autorizacao, (req, res) => {
+    let user = 'User'
+    if(req.session.admin && req.session.admin.nome){
+        let a = req.session.cliente.nome
+        let b = req.session.cliente.sobrenome
+        user = a[0] + b[0]
+    }
     DAOCliente.getAll().then(clientes => {
         if(clientes){
             res.render('cliente/cliente', {user: user, clientes: clientes, mensagem: req.params.mensagem? 
                 "Não é possivel excluir um cliente já refereciado por uma locação":""})
         } else {
-            res.render('erro', {user: user, mensagem: "Erro na listagem de clientes."})
+            res.render('erro', {mensagem: "Erro na listagem de clientes."})
         }
     })
 })
-
-
-
-routerCliente.get('/cliente/editar/:id', autorizacao, (req, res) => {
-    let id = req.params.id
-    DAOCliente.getOne(id).then(cliente => {
-        if(cliente){
-            res.render('cliente/editar', {user: user, cliente: cliente} )
-        } else {
-            res.render('erro', {user: user, mensagem: "Erro na tentativa de edição de cliente"})
-        }
-    })
-})
-
-
-
-routerCliente.post('/cliente/atualizar', autorizacao, (req,res) => {
-    let {id, nome, cpf, telefone, endereco} = req.body
-    DAOCliente.update(id, nome, cpf, telefone, endereco).then(cliente => {
-        if(cliente){
-            res.redirect('/cliente/lista')
-        } else {
-            res.render('erro', {user: user, mensagem: "Não foi possível atualizar o cliente."})
-        }
-    })
-})
-
-
 
 routerCliente.get('/cliente/excluir/:id', autorizacao, (req,res) => {
     let id = req.params.id
@@ -194,6 +144,38 @@ routerCliente.get('/cliente/excluir/:id', autorizacao, (req,res) => {
     })
 })
 
+routerCliente.get('/cliente/editar/:id', autorizacao, (req, res) => {
+    let user = 'User'
+    if(req.session.admin && req.session.admin.nome){
+        let a = req.session.cliente.nome
+        let b = req.session.cliente.sobrenome
+        user = a[0] + b[0]
+    }
+    let id = req.params.id
+    DAOCliente.getOne(id).then(cliente => {
+        if(cliente){
+            res.render('cliente/editar', {user: user, cliente: cliente} )
+        } else {
+            res.render('erro', {mensagem: "Erro na tentativa de edição de cliente"})
+        }
+    })
+})
 
+routerCliente.post('/cliente/atualizar', autorizacao,  (req,res) => {
+    let user = 'User'
+    if(req.session.admin && req.session.admin.nome){
+        let a = req.session.cliente.nome
+        let b = req.session.cliente.sobrenome
+        user = a[0] + b[0]
+    }
+    let {id, nome, cpf, telefone, endereco} = req.body
+    DAOCliente.update(id, nome, cpf, telefone, endereco).then(cliente => {
+        if(cliente){
+            res.redirect('/cliente/lista')
+        } else {
+            res.render('erro', { mensagem: "Não foi possível atualizar o cliente."})
+        }
+    })
+})
 
 module.exports = routerCliente

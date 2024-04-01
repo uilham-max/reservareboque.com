@@ -6,59 +6,54 @@ const autorizacao = require('../autorizacao/autorizacao')
 const DAOReboque = require('../database/DAOReboque')
 
 
-routerAdmin.get('/admin/painel/:mensagem?', (req, res) => {
-    DAOReboque.getAll().then(reboques => {
-        if(reboques){
-            res.render('admin/painel', {reboques: reboques, mensagem: req.params.mensagem ? "Não é possível excluir um reboque já referenciado por uma reserva" : ""})
-        } else {
-            res.render('erro', {mensagem: "erro ao listar reboques"})
-        }
-    })
+routerAdmin.get('/admin/painel', autorizacao, (req, res) => {
+    let user = 'User'
+    if(req.session.admin && req.session.admin.nome){
+        console.log(req.session.admin.nome);
+        user = req.session.admin.nome
+        res.render('admin/painel', {user: user, mensagem: ''})
+    } else {
+        res.redirect('/')
+    }
     
 })
 
 
 // ROTAS DO CADASTRO
-routerAdmin.get('/cadastro/novo', (req, res) => {
-    res.render('cadastro')
+routerAdmin.get('/admin/cadastro', autorizacao, (req, res) => {
+    res.render('admin/cadastro')
 })
-routerAdmin.post('/cadastro/salvar', (req, res) => {
+routerAdmin.post('/admin/cadastro/salvar', autorizacao, (req, res) => {
     let {nome, email, senha} = req.body,
         salt = bcrypt.genSaltSync(10)
     senha = bcrypt.hashSync(senha, salt)
     if(DAOAdmin.insert(nome, email, senha)){
-        res.redirect('/')
-        // res.redirect('/', {mensagem: "Usuário incluído."})
+        res.redirect('/admin/painel')
     } else {
         res.render('erro', {mensagem: "Erro ao tentar incluir usuário."})
     }
 })
 
 //ROTAS DO LOGIN
-// routerAdmin.get('/login', (req, res) => {
-//     res.render('login')
-// })
+routerAdmin.get('/admin/login', (req, res) => {
+    res.render('admin/login', {mensagem: ""})
+})
 
-routerAdmin.post('/login/salvar', (req, res) => {
+routerAdmin.post('/admin/login/salvar', (req, res) => {
     let {email, senha} = req.body
     DAOAdmin.login(email, senha).then(admin => {
         if(admin){
             if(bcrypt.compareSync(req.body.senha, admin.senha)){
                 req.session.admin = {id: admin.id, nome: admin.nome, email: admin.email}
-                res.redirect('/index')
+                res.redirect('/admin/painel')
             } else {
-                res.render('login', {mensagem: "Usuário ou senha inválidos."})
+                res.render('admin/login', {mensagem: "Usuário ou senha inválidos."})
             }
         } else {
-            res.render('login', {mensagem: "Usuário ou senha inválidos."})
+            res.render('admin/login', {mensagem: "Usuário ou senha inválidos."})
         }
     })
 })
-
-
-// routerAdmin.get('/index', autorizacao,(req, res) => { // 
-//     res.render("index", { admin: req.session.admin.nome })
-// })
 
 routerAdmin.get("/logout", function (req, res) {
     req.session.admin = undefined

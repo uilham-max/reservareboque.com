@@ -12,7 +12,9 @@ const Diaria = require('../bill_modules/Diaria')
 routerPagamento.post('/pagamento/salvar', async (req, res) => {
     let user = 'User'
     if(req.session.cliente && req.session.cliente.nome){
-        user = req.session.cliente.nome
+        let a = req.session.cliente.nome
+        let b = req.session.cliente.sobrenome
+        user = a[0] + b[0]
     }
 
     let {nome, sobrenome, email, senha, cpf, rg, telefone, dataNascimento, cep, logradouro, complemento, bairro, localidade, uf, numeroDaCasa, idReboque, dataInicio, dataFim, valorDiaria, valorTotalDaReserva} = req.body
@@ -37,6 +39,7 @@ routerPagamento.post('/pagamento/salvar', async (req, res) => {
 
     DAOReserva.insert(dataInicio, dataFim, valorDiaria, idCliente, idReboque, idPagamento).then(inserido => {
         if(inserido){
+            console.log("Nova reserva criada...");
             res.render('pagamento/sucesso', {user: user, mensagem: ""})
         } else {
             res.render('erro', {user: user, mensagem: 'Erro ao criar reserva.'})
@@ -49,7 +52,9 @@ routerPagamento.post('/pagamento/salvar', async (req, res) => {
 routerPagamento.post('/pagamento/pagamento', (req, res) => {
     let user = 'User'
     if(req.session.cliente && req.session.cliente.nome){
-        user = req.session.cliente.nome
+        let a = req.session.cliente.nome
+        let b = req.session.cliente.sobrenome
+        user = a[0] + b[0]
     }
 
     let {nome, sobrenome, email, senha, cpf, rg, telefone, cep, dataNascimento, logradouro, complemento, bairro, 

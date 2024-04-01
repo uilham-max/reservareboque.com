@@ -8,10 +8,16 @@ const { upload } = require('../helpers/uploadFoto');
 
 
 routerReboque.get('/reboque/novo', autorizacao, (req, res) => {
-    res.render('reboque/novo', {mensagem: ""})
+    let user = 'User'
+    if(req.session.admin && req.session.admin.nome){
+        let a = req.session.cliente.nome
+        let b = req.session.cliente.sobrenome
+        user = a[0] + b[0]
+    }
+    res.render('reboque/novo', {user: user, mensagem: ""})
 })
 
-routerReboque.post('/reboque/salvar/:mensagem?', upload.single("foto"), (req, res) => {
+routerReboque.post('/reboque/salvar/', autorizacao, upload.single("foto"), (req, res) => {
     let {modelo, placa, valorDiaria, cor, pesoBruto, comprimento, largura, altura, quantidadeDeEixos, anoFabricacao, ativo, descricao} = req.body
     let foto = `img/${req.file.filename}` 
     DAOReboque.insert(modelo, placa, valorDiaria, cor, foto, pesoBruto, comprimento, largura, altura, quantidadeDeEixos, anoFabricacao, ativo, descricao).then(inserido => {
@@ -23,11 +29,16 @@ routerReboque.post('/reboque/salvar/:mensagem?', upload.single("foto"), (req, re
     })
 })  
 
-routerReboque.get('/reboque/lista/:mensagem?', autorizacao, (req, res) => {
+routerReboque.get('/reboque/lista/', autorizacao, (req, res) => {
+    let user = 'User'
+    if(req.session.admin && req.session.admin.nome){
+        let a = req.session.cliente.nome
+        let b = req.session.cliente.sobrenome
+        user = a[0] + b[0]
+    }
     DAOReboque.getAll().then(reboques => {
         if(reboques){
-            res.render('reboque/reboque', {reboques: reboques, mensagem: req.params.mensagem ? 
-                "Não é possível excluir um reboque já referencia por uma locação.":""})
+            res.render('reboque/reboque', {user: user, reboques: reboques, mensagem: ""})
         } else {
             res.render('erro', {mensagem: "Erro ao listar reboques."})
         }
@@ -35,10 +46,16 @@ routerReboque.get('/reboque/lista/:mensagem?', autorizacao, (req, res) => {
 })
 
 routerReboque.get('/reboque/editar/:id', autorizacao, (req,res) => {
+    let user = 'User'
+    if(req.session.admin && req.session.admin.nome){
+        let a = req.session.cliente.nome
+        let b = req.session.cliente.sobrenome
+        user = a[0] + b[0]
+    }
     let id = req.params.id
     DAOReboque.getOne(id).then(reboque => {
         if(reboque){
-            res.render('reboque/editar', {reboque: reboque})
+            res.render('reboque/editar', {user: user, reboque: reboque})
         } else {
             res.render('erro', {mensagem: "Erro na tentativa de edição. "})
         }

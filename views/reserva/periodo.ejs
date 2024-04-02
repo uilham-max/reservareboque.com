@@ -81,8 +81,12 @@
                       <h5 class="card-text">Diária R$: <%=reboque.valorDiaria%>,00</h5>
                       <hr>
                       <h5 class="card-text"><%=reboque.descricao%></h5>
-                      <hr>
-                      <p class="card-text">Datas de indisponiblidade</p>
+                      
+                      <% if(reservas != '') {%>
+                        <hr>
+                        <h5 class="card-text">Indisponível para estas datas</h5>
+                      <% } %>  
+                      
                       <% reservas.forEach(function(reserva) { %>
                         <p>
                             de <%=reserva.dataSaida.toString().slice(8,10)+'/'+reserva.dataSaida.toString().slice(5,7)+'/'+reserva.dataSaida.toString().slice(0,4)%> 
@@ -101,7 +105,11 @@
 
                 <div class="card card-reserva" style="width: 25rem;">
                     <div class="card-body">
-                      <form action="/cliente/dados_cliente" method="POST">
+                        <% if(user == '') {%>
+                            <form action="/reserva/dados-informa" method="POST">
+                        <% } else {%>
+                            <form action="/reserva/dados-confirma-cliente" method="POST">
+                        <% } %>
                             <h5>Informe o periodo</h5>
                             <hr>
                             <div class="input-group mb-3">

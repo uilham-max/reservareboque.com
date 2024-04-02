@@ -45,7 +45,7 @@ class DAOCliente{
                 where: { cpf: cpf },
                 returning: true // Essa opção é importante para retornar os objetos atualizados
             });
-    
+            console.log(nome, 'atualizou seu cadastro para cliente...');
             return clientesAtualizados[0]; // Retorna o primeiro cliente atualizado do array
         } catch (error) {
             console.log(error.toString());
@@ -76,6 +76,7 @@ class DAOCliente{
     static async insertClienteQueNaoQuerSeCadastrar(nome, sobrenome, email, senha, cpf, rg, telefone, data_nascimento, cep, logradouro, complemento, bairro, localidade, uf, numero_da_casa){
         try{
             const cliente = await Cliente.create({nome, sobrenome, email, senha, cpf, rg, telefone, data_nascimento, cep, logradouro, complemento, bairro, localidade, uf, numero_da_casa, ativo: true, cadastrado: false})
+            console.log(nome, 'criado sem cadasatro...');
             return cliente.id
         }
         catch(erro){
@@ -88,6 +89,7 @@ class DAOCliente{
     static async insert(nome, sobrenome, email, senha, cpf, rg, telefone, data_nascimento, cep, logradouro, complemento, bairro, localidade, uf, numero_da_casa){
         try{
             let cliente = await Cliente.create({nome, sobrenome, email, senha, cpf, rg, telefone, data_nascimento, cep, logradouro, complemento, bairro, localidade, uf, numero_da_casa, ativo: true, cadastrado: true})
+            console.log(nome,'se cadastrou como cliente...');
             return cliente
         }
         catch(erro){

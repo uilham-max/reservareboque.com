@@ -3,7 +3,7 @@ const routerReboque = express.Router()
 const DAOReboque = require('../database/DAOReboque')
 const autorizacao = require('../autorizacao/autorizacao')
 const { upload } = require('../helpers/uploadFoto');
-const getSessionNome = require('../bill_modules/User')
+const getSessionNome = require('../bill_modules/getSessionNomeCliente')
 
 
 

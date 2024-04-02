@@ -7,6 +7,7 @@ class DAOAdmin {
     static async insert(nome, email, senha){
         try{
             await Admin.create({nome: nome, email: email, senha: senha})
+            console.log(nome,'criado como admin...');
             return true
         }
         catch(error){
@@ -20,6 +21,7 @@ class DAOAdmin {
             let admin = await Admin.findOne({where: {email: email}})
             if(admin){
                 if(bcrypt.compareSync(senha, admin.senha)){
+                    console.log(email, 'logou no sistema como admin...');
                     return admin
                 }
             } else {

@@ -1,7 +1,7 @@
 const express = require('express')
 const routerIndex = express.Router()
 const DAOReboque = require('../database/DAOReboque')
-const getSessionNome = require('../bill_modules/User')
+const getSessionNome = require('../bill_modules/getSessionNomeCliente')
 
 
 routerIndex.get('/login', (req, res) => {
@@ -9,24 +9,19 @@ routerIndex.get('/login', (req, res) => {
 })
 
 
-
 routerIndex.get('/cadastro', (req, res) => {
     res.render('cadastro', {user: getSessionNome(req, res), mensagem: ''})
 })
 
 
-
 routerIndex.get('/', (req, res) => {
     DAOReboque.getAll().then(reboques => {
-
         if(reboques){
             res.render('index', {user: getSessionNome(req, res), mensagem: '',reboques: reboques})
         } else {
             res.render('erro', {mensagem: "Erro ao listar reboques."})
         }
     })
-
-    
 })
 
 

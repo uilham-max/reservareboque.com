@@ -1,65 +1,76 @@
-<nav class="navbar fixed-top border-bottom p-0 border-body navbar-expand-lg bg-body-tertiary" data-bs-theme="dark">
-    <div class="container-fluid">
-      <!-- <a class="navbar-brand" href="#">Reboques.com</a> -->
-      
-      <a class="navbar-brand fs-5 " href="/">
-        <img src="/img/logo_icon.png" alt="Logo" width="60" height="50" class="d-inline-block align-text-center">
-        Reboke.com
-      </a>
-      
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
-          
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="/admin/painel">Painel</a>
-          </li>
-          
-          <li class="nav-item">
-            <a class="nav-link" href="/reboque/lista">Reboques</a>
-          </li>
-          
-          <li class="nav-item">
-            <a class="nav-link" href="/cliente/lista">Clientes</a>
-          </li>
+<nav class="navbar bg-body-tertiary fixed-top" data-bs-theme="dark">
+  <div class="container-fluid">
+    
+    <!-- Icone do menu -->
+    <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    
+    <!-- <a class="navbar-brand" href="#">Offcanvas navbar</a> -->
+    <a class="navbar-brand " href="/">
+      <img src="/img/logo_icon.png" alt="Logo" width="50" height="40" class="d-inline-block align-text-center">
+      Reboke.com
+    </a>
+
+    <!-- Icone do usuario -->
+    <div class="btn-group dropstart">
+      <div class="dropdown">
         
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle " href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              Reservas
-            </a>
-            <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="/reserva/novo">Novo</a></li>
-              <li><a class="dropdown-item" href="/reserva/lista">Listar</a></li>
-              <li><a class="dropdown-item" href="/reserva/lucro">Receita</a></li>
-              <li><a class="dropdown-item" href="/reserva/historico">Histórico</a></li>
-            </ul>
-          </li>
-          
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle " href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              <%if(user) {%>
-                <%=user%>
-              <%}%>
-            </a>
-            <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="/admin/login">Entrar</a></li>
-              <li><a class="dropdown-item" href="/admin/cadastro">Cadastrar-se</a></li>
-              <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item" href="/logout">Sair</a></li>
-            </ul>
-          </li>
-          
-          <!-- <li class="nav-item">
-            <a class="nav-link disabled" aria-disabled="true">Disabled</a>
-          </li> -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <% if(user && (user != 'User')) { %>
+          <span ><%= user %></span>
+        <% } else { %>
+          <span class="fa fa-user" aria-hidden="true"></span>
+        <% } %>
+        </button>
+        
+        <ul class="dropdown-menu">
+          <li><a class="dropdown-item" href="/login">Entrar</a></li>
+          <li><a class="dropdown-item" href="/cadastro">Criar conta</a></li>
+          <li><hr class="dropdown-divider"></li>
+          <li><a class="dropdown-item" href="/cliente/logout">Sair</a></li>
         </ul>
-        <form class="d-flex " role="search">
-            <input class="form-control me-2" type="search" placeholder="Buscar" aria-label="Search">
-            <button class="btn btn-outline-success" type="submit">Buscar</button>
+      </div>
+    </div>
+
+
+
+
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+      <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Reoboke.com</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+      </div>
+      <div class="offcanvas-body">
+        <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="/admin/painel">Painel Administrativo</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/reserva/lista">Lista de Reservas</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/reserva/lucro">Receita por Periodo</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/reserva/historico">Histórico de reservas</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/reboque/lista">Lista de Reboques</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/cliente/lista">Lista de Clientes</a>
+          </li>
+        </ul>
+        <form class="d-flex mt-3" role="search">
+          <input class="form-control me-2" type="search" placeholder="" aria-label="Search">
+          <button class="btn btn-outline-success" type="submit">Buscar</button>
         </form>
       </div>
     </div>
-  </nav>
+
+
+
+  </div>
+</nav>

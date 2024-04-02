@@ -1,101 +1,90 @@
 const express = require('express')
 const routerPagamento = express.Router()
-const DAOReboque = require('../database/DAOReboque')
 const DAOPagamento = require('../database/DAOPagamento')
 const DAOCliente = require('../database/DAOCliente')
 const DAOReserva = require('../database/DAOReserva')
-const Diaria = require('../bill_modules/Diaria')
-const getSessionNome = require('../bill_modules/User')
+const getSessionNome = require('../bill_modules/getSessionNomeCliente')
+const clienteAutorizacao = require('../autorizacao/clienteAutorizacao')
 
 
-
-// ISSO DEVE OCORRE QUANDO O QR CODE FOR ESCENADO PELO CLIENTE
-routerPagamento.post('/pagamento/salvar', async (req, res) => {
-
-    let {nome, sobrenome, email, senha, cpf, rg, telefone, dataNascimento, cep, logradouro, complemento, bairro, localidade, uf, numeroDaCasa, idReboque, dataInicio, dataFim, valorDiaria, valorTotalDaReserva} = req.body
-    // console.log("data de nascimento: "+dataNascimento);
-
-    valorTotalDaReserva = Diaria.calcularValorTotalDaReserva(Diaria.calcularDiarias(dataInicio,dataFim), valorDiaria)
-
-    const codigoPagamento = await DAOPagamento.verificaPagamento()
-    if(!codigoPagamento){
-        res.render('erro', { mensagem: 'Erro ao verificar pagamento.'})
-    }
+// ROTA PUBLICA
+routerPagamento.post('/pagamento/realizado', async (req, res) => {
     
-    const idPagamento = await DAOPagamento.insert(codigoPagamento, valorTotalDaReserva)
+    let {idPagamento} = req.body
+    const pagamentoAprovado = await DAOPagamento.verificaPagamento()
+    if(!pagamentoAprovado){
+        res.render('erro', {mensagem: 'erro. pagamento não aprovado'})
+    }
+    const update = await DAOPagamento.atualizarPagamentoParaAprovado(idPagamento)
+    if(!update){
+        res.render('erro', {mensagem: 'erro ao atualizar pagamento para aprovado'})
+    }
+    res.render('pagamento/sucesso', {user: getSessionNome(req, res), mensagem: ""})
+
+})
+
+
+
+// PAGAMENTO REALIZADO SOMENTE POR CLIENTES CADASTRADOS
+routerPagamento.post('/pagamento/qrcode-cliente', clienteAutorizacao, async (req, res) => {
+    
+    let {idCliente, idReboque, dataInicio, dataFim, valorDiaria, valorTotalDaReserva } = req.body
+
+    // Gera o QR code com os dados de pagamento
+    const pagamento = await DAOPagamento.getDadosPagamento(valorTotalDaReserva)
+    if(!pagamento){
+       res.render('erro', { mensagem: "Erro ao criar pagamento."})
+    }
+
+    // Insere o pagamento no BD com a flaq aprovado = false e retorna o seu id
+    const idPagamento = await DAOPagamento.insert(pagamento.codigo, valorTotalDaReserva)
     if(!idPagamento){
        res.render('erro', { mensagem: "Erro ao criar pagamento."})
     }
 
-    const idCliente = await DAOCliente.insertClienteQueNaoQuerSeCadastrar(nome, sobrenome, email, senha, cpf, rg, telefone, dataNascimento, cep, logradouro, complemento, bairro, localidade, uf, numeroDaCasa)
-    if(!idCliente){
-        res.render('erro', {mensagem: 'Erro ao criar cliente.'})
+    // Insere a reserva usando o id do pagamento
+    const reserva = await DAOReserva.insert(dataInicio, dataFim, valorDiaria, idCliente, idReboque, idPagamento)
+    if(!reserva){
+        res.render('erro', {mensagem: 'Erro ao criar reserva.'})
+    } else {
+        res.render('pagamento/qrcode-cliente', {user: getSessionNome(req, res), idPagamento: idPagamento, qrCode: pagamento.qrCode, mensagem: ''})
     }
 
-    DAOReserva.insert(dataInicio, dataFim, valorDiaria, idCliente, idReboque, idPagamento).then(inserido => {
-        if(inserido){
-            console.log("Nova reserva criada...");
-            res.render('pagamento/sucesso', {user: getSessionNome(req, res), mensagem: ""})
-        } else {
-            res.render('erro', {mensagem: 'Erro ao criar reserva.'})
-        }
-    })
 })
 
 
-// GERANDO QR CODE PARA O CLIENTE
-routerPagamento.post('/pagamento/pagamento', (req, res) => {
 
-    let {nome, sobrenome, email, senha, cpf, rg, telefone, cep, dataNascimento, logradouro, complemento, bairro, 
+// PUBLICO
+routerPagamento.post('/pagamento/qrcode', async (req, res) => {
+    
+    let {nome, sobrenome, email, cpf, rg, telefone, cep, dataNascimento, logradouro, complemento, bairro, 
     localidade, uf, numeroDaCasa, idReboque, dataInicio, dataFim, valorDiaria} = req.body
-    // console.log("dataNascimento: "+dataNascimento+ uf);
-    
-    valorTotalDaReserva = Diaria.calcularValorTotalDaReserva(Diaria.calcularDiarias(dataInicio,dataFim), valorDiaria)
 
-    // Cria o objeto Reserva
-    reserva = {
-        'idReboque': idReboque,
-        'dataInicio': dataInicio,
-        'dataFim': dataFim,
-        'valorDiaria': valorDiaria
+    const idCliente = await DAOCliente.insertClienteQueNaoQuerSeCadastrar(nome, sobrenome, email, cpf, rg, telefone, cep, dataNascimento, logradouro, complemento, bairro, localidade, uf, numeroDaCasa)
+    if(!idCliente){
+        res.render('erro', {mensagem: 'erro ao criar cliente'})
     }
 
-    // Cria o objeto Cliente 
-    cliente = {
-        'nome': nome,
-        'sobrenome': sobrenome,
-        'email': email,
-        'senha': senha,
-        'cpf': cpf,
-        'rg': rg,
-        'telefone': telefone,
-        'cep': cep,
-        'dataNascimento': dataNascimento,
-        'logradouro': logradouro,
-        'complemento': complemento,
-        'bairro': bairro,
-        'localidade': localidade,
-        'uf': uf,
-        'numeroDaCasa': numeroDaCasa
+    // Envia os dados de pagamento para API e recebe JSON com os dados de pagamento 
+    const pagamento = await DAOPagamento.getDadosPagamento(valorTotalDaReserva)
+    if(!pagamento){
+       res.render('erro', { mensagem: "Erro ao criar pagamento."})
     }
 
-    // BUSCAR QR CODE NA API NO PSP (PROVEDOR DE SERVIÇOS DE PAGAMENTO)
-    DAOPagamento.getQRCode().then(qrCode => {
-        if(qrCode){
-            DAOReboque.getOne(idReboque).then(reboque => {
-                if(reboque){
-                    res.render('pagamento/pagamento', {user: getSessionNome(req, res), mensagem: "", cliente: cliente, reboque: reboque, reserva: reserva, qrCode: qrCode, valorTotalDaReserva: valorTotalDaReserva})
-                } else {
-                    res.render('erro', { mensagem: "erro => PagamentoController.js"})
-                }
-            })
+    // Insere o pagamento no BD com a flaq aprovado = false e retorna o seu id
+    const idPagamento = await DAOPagamento.insert(pagamento.codigo, valorTotalDaReserva)
+    if(!idPagamento){
+       res.render('erro', { mensagem: "Erro ao criar pagamento."})
+    }
 
-        } else {
-            console.log("erro ao busca qrCode!");
-        }
+    // Insere a reserva usando o id do pagamento e do cliente inserido
+    const reserva = await DAOReserva.insert(dataInicio, dataFim, valorDiaria, idCliente, idReboque, idPagamento)
+    if(!reserva){
+        res.render('erro', {mensagem: 'Erro ao criar reserva.'})
+    } else {
+        res.render('pagamento/qrcode', {user: getSessionNome(req, res), idPagamento: idPagamento, qrCode: pagamento.qrCode, mensagem: ''})
+    }
 
-    })
-    
 })
 
 

@@ -3,9 +3,6 @@ const routerAdmin = express.Router()
 const DAOAdmin = require('../database/DAOAdmin')
 const bcrypt = require('bcryptjs')
 const autorizacao = require('../autorizacao/autorizacao')
-const DAOReboque = require('../database/DAOReboque')
-const getSessionNome = require('../bill_modules/User')
-
 
 
 routerAdmin.get('/admin/painel', autorizacao, (req, res) => {

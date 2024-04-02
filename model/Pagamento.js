@@ -9,7 +9,8 @@ const Pagamento = conexao.define('pagamento', {
     },
     valor: Sequelize.DOUBLE,
     codigoPagamento: Sequelize.INTEGER,
-    descricao: Sequelize.STRING
+    descricao: Sequelize.STRING,
+    aprovado: Sequelize.BOOLEAN
 },
 {
     timestamps: false,

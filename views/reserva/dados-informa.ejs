@@ -8,42 +8,12 @@
 <body  >
     
     <%-include('../partials/navbar.ejs')%>
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h1 class="modal-title fs-5" id="exampleModalLabel">Autenticação do usuário</h1>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form action="/login" method="POST">
-                    <div class="form-group">
-                        <label for="login">Login</label>
-                        <input class="form-control" id="emailModal" type="text" name="emailModal" required>
-                        <small class="form-text text-muted">Nunca informe seu login e senha para estranhos.</small>
-                    </div>
-                    <div class="form-group">
-                        <label for="senha">Senha</label>
-                        <input class="form-control" id="senha" type="password" name="senha" required>
-                    </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary direita" data-bs-toggle="modal" data-bs-target="#exampleModal2">
-                    Cadastrar-se
-                </button>
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-                <input class="btn btn-primary" type="submit" value="Login">
-                </form>
-            </div>
-          </div>
-        </div>
-    </div>
 
     <div class="conteudo" >
         <div class="container" >
             <!-- <h3>Reboque escolhido</h3> -->
             <!--  -->
-            <form action="/pagamento/pagamento" method="POST">
+            <form action="/reserva/dados-confirma" method="POST">
                 <div class="lista-reboques">
 
 
@@ -142,14 +112,10 @@
                         </p>
                     </div>
 
-
                     <input type="hidden" id="idReboque" name="idReboque" value="<%=reboque.id%>">
                     <input type="hidden" id="dataInicio" name="dataInicio" value="<%=dataInicio%>">
                     <input type="hidden" id="dataFim" name="dataFim" value="<%=dataFim%>">
                     <input type="hidden" id="valorDiaria" name="valorDiaria" value="<%=reboque.valorDiaria%>">
-                    <input type="hidden" id="senha" name="senha" value="">
-                
-                    
 
                 </div>
             </form>

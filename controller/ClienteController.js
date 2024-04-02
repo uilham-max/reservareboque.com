@@ -1,19 +1,9 @@
 const express = require('express')
 const routerCliente = express.Router()
 const DAOCliente =  require('../database/DAOCliente')
-const DAOReboque = require('../database/DAOReboque')
 const autorizacao = require('../autorizacao/autorizacao')
-const DAOReserva = require('../database/DAOReserva')
-const Diaria = require('../bill_modules/Diaria')
-const getSessionNome = require('../bill_modules/User')
+const getSessionNome = require('../bill_modules/getSessionNomeCliente')
 const bcrypt = require('bcryptjs')
-
-
-
-routerCliente.get('/cliente/logout', (req, res) => {
-    req.session.cliente = undefined
-    res.redirect('/')
-})
 
 
 
@@ -37,6 +27,12 @@ routerCliente.post('/login/entrar', (req, res) => {
 
 })
 
+
+routerCliente.get('/cliente/logout', (req, res) => {
+    console.log(req.session.cliente.nome,'fez logout...');
+    req.session.cliente = undefined
+    res.redirect('/')
+})
 
 
 // Data da criação 28/03/2024
@@ -102,24 +98,30 @@ routerCliente.post('/cadastro/create', async (req, res) => {
 
 
 
-// PUBLICO
-routerCliente.post('/cliente/dados_cliente', (req, res) => {
-    let {id, dataInicio, dataFim} =  req.body
+/**
+ * FOI FEITO ALGO INTERESSANTE AQUI: INVES DE RENDERIZAR A PÁGINA DE ERRO
+ * O USUÁRIO É REDIRECIONADO PARA A MESMA PÁGINA E O ERRO É UMA MENSAGEM NA TELA.
+ * EU PODERIA USAR ESSA ABORDAGEM NAS OUTRAS PÁGINAS
+*/
 
-    DAOReserva.getVerificaDisponibilidade(id, dataInicio, dataFim).then( resposta => {
-        DAOReboque.getOne(id).then(reboque => {
-            if(reboque && resposta.length === 0){
-                let valorTotalDaReserva = Diaria.calcularValorTotalDaReserva(Diaria.calcularDiarias(dataInicio, dataFim), reboque.valorDiaria)
-                res.render('cliente/dados_cliente', {user: getSessionNome(req, res), reboque: reboque, dataInicio: dataInicio, dataFim: dataFim, valorTotalDaReserva: valorTotalDaReserva})
-            } else {
-                DAOReserva.getAtivas(id).then(reservas => {
-                    res.render('reserva/periodo', {user: getSessionNome(req, res), reboque: reboque, reservas: reservas, mensagem: "Indisponivel para esta data."})
-                })
+// PUBLICO
+// routerCliente.post('/cliente/dados_cliente', (req, res) => {
+//     let {id, dataInicio, dataFim} =  req.body
+
+//     DAOReserva.getVerificaDisponibilidade(id, dataInicio, dataFim).then( resposta => {
+//         DAOReboque.getOne(id).then(reboque => {
+//             if(reboque && resposta.length === 0){
+//                 let valorTotalDaReserva = Diaria.calcularValorTotalDaReserva(Diaria.calcularDiarias(dataInicio, dataFim), reboque.valorDiaria)
+//                 res.render('cliente/dados_cliente', {user: getSessionNome(req, res), reboque: reboque, dataInicio: dataInicio, dataFim: dataFim, valorTotalDaReserva: valorTotalDaReserva})
+//             } else {
+//                 DAOReserva.getAtivas(id).then(reservas => {
+//                     res.render('reserva/periodo', {user: getSessionNome(req, res), reboque: reboque, reservas: reservas, mensagem: "Indisponivel para esta data."})
+//                 })
                 
-            }
-        })
-    } )
-})
+//             }
+//         })
+//     } )
+// })
 
 
 

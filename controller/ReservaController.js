@@ -3,17 +3,101 @@ const routerReserva = express.Router()
 const DAOReserva = require('../database/DAOReserva')
 const DAOCliente = require('../database/DAOCliente')
 const DAOReboque = require('../database/DAOReboque')
-const getSessionNome = require('../bill_modules/User')
+const getSessionNome = require('../bill_modules/getSessionNomeCliente')
 const autorizacao = require('../autorizacao/autorizacao')
+const Diaria = require('../bill_modules/Diaria')
+const clienteAutorizacao = require('../autorizacao/clienteAutorizacao')
 
+
+// ROTA PUBLICA
+routerReserva.post('/reserva/dados-informa', (req, res) => {
+    let {id, dataInicio, dataFim} =  req.body
+
+    DAOReserva.getVerificaDisponibilidade(id, dataInicio, dataFim).then( resposta => {
+        DAOReboque.getOne(id).then(reboque => {
+            if(reboque && resposta.length === 0){
+                let valorTotalDaReserva = Diaria.calcularValorTotalDaReserva(Diaria.calcularDiarias(dataInicio, dataFim), reboque.valorDiaria)
+                res.render('reserva/dados-informa', {user: getSessionNome(req, res), reboque: reboque, dataInicio: dataInicio, dataFim: dataFim, valorTotalDaReserva: valorTotalDaReserva})
+            } else {
+                DAOReserva.getAtivas(id).then(reservas => {
+                    res.render('reserva/periodo', {user: getSessionNome(req, res), reboque: reboque, reservas: reservas, mensagem: "Indisponivel para esta data."})
+                })
+                
+            }
+        })
+    } )
+})
 
 
 /**
- * ROTA PÚBLICA - TELA ONDE É ESCOLHIDO O PERÍODO DA RESERVA
- * 
+ * Essa rota deve verificar as datas informadas. Se estiver tudo certo, então 
+ * deve mostrar a página com o card do reboque e o período escolhido, um card com
+ * os dados do cliente e outro com o endereço dele
+*/
+
+// ROTA PRIVADA DO CLIENTE
+routerReserva.post('/reserva/dados-confirma-cliente', clienteAutorizacao, (req, res) => {
+    let {id, dataInicio, dataFim} =  req.body
+    let idCliente = req.session.cliente.id
+
+    DAOReserva.getVerificaDisponibilidade(id, dataInicio, dataFim).then( resposta => {
+        DAOReboque.getOne(id).then(reboque => {
+            if(reboque && resposta.length === 0){
+                DAOCliente.getOne(idCliente).then(cliente => {
+                    if(cliente){
+                        let valorTotalDaReserva = Diaria.calcularValorTotalDaReserva(Diaria.calcularDiarias(dataInicio, dataFim), reboque.valorDiaria)
+                        let reserva = {
+                            'idReboque': id,
+                            'dataInicio': dataInicio,
+                            'dataFim': dataFim,
+                            'valorDiaria': reboque.valorDiaria
+                        }
+                        res.render('reserva/dados-confirma-cliente', {user: getSessionNome(req, res), reserva: reserva, cliente: cliente, reboque: reboque, dataInicio: dataInicio, dataFim: dataFim, valorTotalDaReserva: valorTotalDaReserva})
+                    } else {
+                        res.render('reserva/periodo', {user: getSessionNome(req, res), reboque: reboque, reservas: reservas, mensagem: "Erro os buscar cliente."})
+                    }
+                })
+            } else {
+                DAOReserva.getAtivas(id).then(reservas => {
+                    res.render('reserva/periodo', {user: getSessionNome(req, res), reboque: reboque, reservas: reservas, mensagem: "Indisponivel para esta data."})
+                })
+            }
+        })
+    } )
+})
+
+
+// ROTA PUBLICA
+routerReserva.post('/reserva/dados-confirma', (req, res) => {
+    let {nome, sobrenome, email, cpf, rg, telefone, cep, dataNascimento, logradouro, complemento, bairro, 
+    localidade, uf, numeroDaCasa, idReboque, dataInicio, dataFim, valorDiaria} = req.body
+
+    valorTotalDaReserva = Diaria.calcularValorTotalDaReserva(Diaria.calcularDiarias(dataInicio,dataFim), valorDiaria)
+
+    // Cria o objeto Reserva
+    reserva = {'idReboque': idReboque,'dataInicio': dataInicio,'dataFim': dataFim,'valorDiaria': valorDiaria}
+
+    // Cria o objeto Cliente 
+    cliente = {'nome':nome, 'sobrenome':sobrenome, 'email':email, 'cpf':cpf, 'rg':rg, 'telefone':telefone, 'cep':cep, 'dataNascimento':dataNascimento, 'logradouro':logradouro, 'complemento':complemento, 'bairro':bairro, 'localidade':localidade, 'uf':uf, 'numeroDaCasa':numeroDaCasa}
+
+    DAOReboque.getOne(idReboque).then(reboque => {
+        if(reboque){
+            res.render('reserva/dados-confirma', {user: getSessionNome(req, res), reboque: reboque, cliente: cliente, reserva: reserva, mensagem: '' })
+        } else {
+            res.render('erro', {mensagem: 'erro ao buscar reboque.'})
+        }
+    })
+
+})
+
+
+/**
  * Se o cliente que estiver acessando essa rota for cadastrado, então ele deve ser redirecionado
  * diretamente para a tela de confirmação dos dados da reserva
+ * Ess rota apenas irá mostrar as datas de indisponibilidade do reboque
 */
+
+// ROTA PÚBLICA - TELA ONDE É ESCOLHIDO O PERÍODO DA RESERVA
 routerReserva.get('/reserva/periodo/:id?', (req, res) => {
     id = req.params.id
     DAOReserva.getAtivasPorID(id).then(reservas => {

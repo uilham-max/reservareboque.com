@@ -60,7 +60,7 @@ routerPagamento.post('/pagamento/qrcode', async (req, res) => {
     let {nome, sobrenome, email, cpf, rg, telefone, cep, dataNascimento, logradouro, complemento, bairro, 
     localidade, uf, numeroDaCasa, idReboque, dataInicio, dataFim, valorDiaria} = req.body
 
-    const idCliente = await DAOCliente.insertClienteQueNaoQuerSeCadastrar(nome, sobrenome, email, cpf, rg, telefone, cep, dataNascimento, logradouro, complemento, bairro, localidade, uf, numeroDaCasa)
+    const idCliente = await DAOCliente.insertClienteQueNaoQuerSeCadastrar(nome, sobrenome, email, cpf, rg, telefone, dataNascimento, cep, logradouro, complemento, bairro, localidade, uf, numeroDaCasa)
     if(!idCliente){
         res.render('erro', {mensagem: 'erro ao criar cliente'})
     }

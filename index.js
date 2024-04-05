@@ -1,40 +1,6 @@
 const conexao = require('./database/conexao.js')
 const express = require('express')
 const session = require('express-session')
-const Pagamento = require('./model/Pagamento')
-const Reserva = require('./model/Reserva.js')
-
-
-const cron = require('node-cron');
-
-// Função para remover pagamentos não aprovados e suas reservas associadas
-async function removerPagamentosNaoAprovados() {
-    try {
-        // Consultar todos os pagamentos não aprovados
-        const pagamentosNaoAprovados = await Pagamento.findAll({ where: { aprovado: false } });
-
-        // Para cada pagamento não aprovado, remover a reserva associada
-        for (const pagamento of pagamentosNaoAprovados) {
-            // Remover a reserva associada ao pagamento
-            await Reserva.destroy({ where: { pagamentoId: pagamento.id } });
-
-            // Remover o pagamento não aprovado
-            await pagamento.destroy();
-        }
-
-        console.log('Pagamentos não aprovados e suas reservas associadas removidos com sucesso.');
-    } catch (error) {
-        console.error('Erro ao remover pagamentos não aprovados e suas reservas associadas:', error);
-    }
-}
-
-// Agendar a execução da função a cada 30 minutos
-cron.schedule('*/20 * * * *', async () => {
-    console.log('Executando função para remover pagamentos não aprovados e suas reservas associadas...');
-    await removerPagamentosNaoAprovados();
-});
-
-
 
 const port = 3000
 
@@ -44,6 +10,7 @@ const ReservaController = require('./controller/ReservaController')
 const AdminController = require('./controller/AdminController')
 const IndexController = require('./controller/IndexController');
 const pagamentoController = require('./controller/PagamentoController');
+// const { removerPagamentosNaoAprovados } = require('./helpers/removerPagamentosNaoAprovados.js')
 // const Pagamento = require('./model/Pagamento.js');
 const app = express()
 

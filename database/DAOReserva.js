@@ -17,9 +17,9 @@ class DAOReserva {
             if (reservas.length === 0) {
                 let diarias = Diaria.calcularDiarias(dataSaida, dataChegada)
                 let valorTotal = diarias*valorDiaria
-                await Reserva.create({ dataSaida: dataSaida, dataChegada: dataChegada, valorDiaria: valorDiaria, diarias: diarias, valorTotal: valorTotal, clienteId: cliente, reboqueId: reboque, pagamentoId: idPagamento })
+                let reserva = await Reserva.create({ dataSaida: dataSaida, dataChegada: dataChegada, valorDiaria: valorDiaria, diarias: diarias, valorTotal: valorTotal, clienteId: cliente, reboqueId: reboque, pagamentoId: idPagamento })
                 console.log('Reserva criada...');
-                return true
+                return reserva
             } else {
                 return false
             }

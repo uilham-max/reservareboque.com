@@ -5,6 +5,8 @@ const DAOCliente = require('../database/DAOCliente')
 const DAOReserva = require('../database/DAOReserva')
 const getSessionNome = require('../bill_modules/getSessionNomeCliente')
 const clienteAutorizacao = require('../autorizacao/clienteAutorizacao')
+const { removerPagamentosNaoAprovados } = require('../helpers/removerPagamentosNaoAprovados')
+
 
 
 // ROTA PUBLICA
@@ -60,10 +62,19 @@ routerPagamento.post('/pagamento/qrcode', async (req, res) => {
     let {nome, sobrenome, email, cpf, rg, telefone, cep, dataNascimento, logradouro, complemento, bairro, 
     localidade, uf, numeroDaCasa, idReboque, dataInicio, dataFim, valorDiaria} = req.body
 
-    const idCliente = await DAOCliente.insertClienteQueNaoQuerSeCadastrar(nome, sobrenome, email, cpf, rg, telefone, dataNascimento, cep, logradouro, complemento, bairro, localidade, uf, numeroDaCasa)
-    if(!idCliente){
-        res.render('erro', {mensagem: 'erro ao criar cliente'})
+    let idCliente
+
+    // Faz aproveitamento de clientes não cadastrados
+    const cliente = await DAOCliente.verificaSeOClienteJaExiste(cpf)
+    if(!cliente){
+        idCliente = await DAOCliente.insertClienteQueNaoQuerSeCadastrar(nome, sobrenome, email, cpf, rg, telefone, dataNascimento, cep, logradouro, complemento, bairro, localidade, uf, numeroDaCasa)
+        if(!idCliente){
+            res.render('erro', {mensagem: 'erro ao criar cliente'})
+        }  
+    } else {
+        idCliente = cliente.id
     }
+
 
     // Envia os dados de pagamento para API e recebe JSON com os dados de pagamento 
     const pagamento = await DAOPagamento.getDadosPagamento(valorTotalDaReserva)

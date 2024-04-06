@@ -3,7 +3,7 @@ const routerPagamento = express.Router()
 const DAOPagamento = require('../database/DAOPagamento')
 const DAOCliente = require('../database/DAOCliente')
 const DAOReserva = require('../database/DAOReserva')
-const getSessionNome = require('../bill_modules/getSessionNomeCliente')
+const {clienteNome} = require('../helpers/getSessionNome')
 const clienteAutorizacao = require('../autorizacao/clienteAutorizacao')
 const { removerPagamentosNaoAprovados } = require('../helpers/removerPagamentosNaoAprovados')
 
@@ -21,7 +21,7 @@ routerPagamento.post('/pagamento/realizado', async (req, res) => {
     if(!update){
         res.render('erro', {mensagem: 'erro ao atualizar pagamento para aprovado'})
     }
-    res.render('pagamento/sucesso', {user: getSessionNome(req, res), mensagem: ""})
+    res.render('pagamento/sucesso', {user: clienteNome(req, res), mensagem: ""})
 
 })
 
@@ -49,7 +49,7 @@ routerPagamento.post('/pagamento/qrcode-cliente', clienteAutorizacao, async (req
     if(!reserva){
         res.render('erro', {mensagem: 'Erro ao criar reserva.'})
     } else {
-        res.render('pagamento/qrcode-cliente', {user: getSessionNome(req, res), idPagamento: idPagamento, qrCode: pagamento.qrCode, mensagem: ''})
+        res.render('pagamento/qrcode-cliente', {user: clienteNome(req, res), idPagamento: idPagamento, qrCode: pagamento.qrCode, mensagem: ''})
     }
 
 })
@@ -93,7 +93,7 @@ routerPagamento.post('/pagamento/qrcode', async (req, res) => {
     if(!reserva){
         res.render('erro', {mensagem: 'Erro ao criar reserva.'})
     } else {
-        res.render('pagamento/qrcode', {user: getSessionNome(req, res), idPagamento: idPagamento, qrCode: pagamento.qrCode, mensagem: ''})
+        res.render('pagamento/qrcode', {user: clienteNome(req, res), idPagamento: idPagamento, qrCode: pagamento.qrCode, mensagem: ''})
     }
 
 })

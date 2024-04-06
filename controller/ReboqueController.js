@@ -3,12 +3,12 @@ const routerReboque = express.Router()
 const DAOReboque = require('../database/DAOReboque')
 const autorizacao = require('../autorizacao/autorizacao')
 const { upload } = require('../helpers/uploadFoto');
-const getSessionNome = require('../bill_modules/getSessionNomeCliente')
+const {adminNome} = require('../helpers/getSessionNome')
 
 
 
 routerReboque.get('/reboque/novo', autorizacao, (req, res) => {
-    res.render('reboque/novo', {user: getSessionNome(req, res), mensagem: ""})
+    res.render('reboque/novo', {user: adminNome(req, res), mensagem: ""})
 })
 
 
@@ -30,7 +30,7 @@ routerReboque.post('/reboque/salvar/', autorizacao, upload.single("foto"), (req,
 routerReboque.get('/reboque/lista/', autorizacao, (req, res) => {
     DAOReboque.getAll().then(reboques => {
         if(reboques){
-            res.render('reboque/reboque', {user: getSessionNome(req, res), reboques: reboques, mensagem: ""})
+            res.render('reboque/reboque', {user: adminNome(req, res), reboques: reboques, mensagem: ""})
         } else {
             res.render('erro', {mensagem: "Erro ao listar reboques."})
         }
@@ -43,7 +43,7 @@ routerReboque.get('/reboque/editar/:id', autorizacao, (req,res) => {
     let id = req.params.id
     DAOReboque.getOne(id).then(reboque => {
         if(reboque){
-            res.render('reboque/editar', {user: getSessionNome(req, res), reboque: reboque})
+            res.render('reboque/editar', {user: adminNome(req, res), reboque: reboque})
         } else {
             res.render('erro', {mensagem: "Erro na tentativa de edição. "})
         }
@@ -52,9 +52,11 @@ routerReboque.get('/reboque/editar/:id', autorizacao, (req,res) => {
 
 
 
-routerReboque.post('/reboque/atualizar', autorizacao, (req,res) => {
+routerReboque.post('/reboque/atualizar', autorizacao, upload.single("foto"), (req,res) => {
     let {id, modelo, placa, valorDiaria, cor} = req.body
-    DAOReboque.update(id, modelo, placa, valorDiaria, cor).then(atualizado => {
+    // console.log("nome da foto",req.file.filename);
+    let foto = `img/${req.file.filename}` 
+    DAOReboque.update(foto, id, modelo, placa, valorDiaria, cor).then(atualizado => {
         if(atualizado){
             res.redirect('/reboque/lista')
         } else {

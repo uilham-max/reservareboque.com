@@ -10,6 +10,18 @@ const sequelize = require('sequelize')
 
 class DAOReserva {
 
+    static async deletePeloPagamento(pagamentoId){
+        try{
+            await Reserva.destroy({where: {pagamentoId: pagamentoId}})
+            console.log("Removendo reserva sem pagamento...");
+            return true
+        }catch(erro){
+            console.log(erro.toString());
+            return false
+        }
+
+    }
+
     // INSERT
     static async insert(dataSaida, dataChegada, valorDiaria, /*diarias, valorTotal,*/ cliente, reboque, idPagamento) {
         try {
@@ -18,7 +30,7 @@ class DAOReserva {
                 let diarias = Diaria.calcularDiarias(dataSaida, dataChegada)
                 let valorTotal = diarias*valorDiaria
                 let reserva = await Reserva.create({ dataSaida: dataSaida, dataChegada: dataChegada, valorDiaria: valorDiaria, diarias: diarias, valorTotal: valorTotal, clienteId: cliente, reboqueId: reboque, pagamentoId: idPagamento })
-                console.log('Reserva criada...');
+                console.log('Reserva criada! aguardando pagamento...');
                 return reserva
             } else {
                 return false
@@ -48,6 +60,7 @@ class DAOReserva {
     static async delete(id) {
         try {
             await Reserva.destroy({ where: { id: id } })
+            console.log("Reserva removida...");
             return true
         }
         catch (error) {

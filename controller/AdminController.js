@@ -3,25 +3,18 @@ const routerAdmin = express.Router()
 const DAOAdmin = require('../database/DAOAdmin')
 const bcrypt = require('bcryptjs')
 const autorizacao = require('../autorizacao/autorizacao')
+const { adminNome } = require('../helpers/getSessionNome')
 
 
 routerAdmin.get('/admin/painel', autorizacao, (req, res) => {
-    let user = 'User'
-    if(req.session.admin && req.session.admin.nome){
-        console.log(req.session.admin.nome);
-        user = req.session.admin.nome
-        res.render('admin/painel', {user: user, mensagem: ''})
-    } else {
-        res.redirect('/')
-    }
-    
+    res.render('admin/painel', {user: adminNome(req, res), mensagem: ''})
 })
 
 
 
 // ROTAS DO CADASTRO
 routerAdmin.get('/admin/cadastro', autorizacao, (req, res) => {
-    res.render('admin/cadastro')
+    res.render('admin/cadastro', {user: adminNome(req, res), mensagem: ''})
 })
 
 
@@ -42,7 +35,7 @@ routerAdmin.post('/admin/cadastro/salvar', autorizacao, (req, res) => {
 
 //ROTAS DO LOGIN
 routerAdmin.get('/admin/login', (req, res) => {
-    res.render('admin/login', {mensagem: ""})
+    res.render('admin/login', {user: adminNome(req, res), mensagem: ""})
 })
 
 

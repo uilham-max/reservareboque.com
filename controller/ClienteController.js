@@ -2,7 +2,7 @@ const express = require('express')
 const routerCliente = express.Router()
 const DAOCliente =  require('../database/DAOCliente')
 const autorizacao = require('../autorizacao/autorizacao')
-const getSessionNome = require('../bill_modules/getSessionNomeCliente')
+const {adminNome, clienteNome} = require('../helpers/getSessionNome')
 const bcrypt = require('bcryptjs')
 
 
@@ -129,7 +129,7 @@ routerCliente.post('/cadastro/create', async (req, res) => {
 routerCliente.get('/cliente/lista/:mensagem?', autorizacao, (req, res) => {
     DAOCliente.getAll().then(clientes => {
         if(clientes){
-            res.render('cliente/cliente', {user: getSessionNome(req, res), clientes: clientes, mensagem: req.params.mensagem? 
+            res.render('cliente/cliente', {user: adminNome(req, res), clientes: clientes, mensagem: req.params.mensagem? 
                 "Não é possivel excluir um cliente já refereciado por uma locação":""})
         } else {
             res.render('erro', {mensagem: "Erro na listagem de clientes."})
@@ -156,7 +156,7 @@ routerCliente.get('/cliente/editar/:id', autorizacao, (req, res) => {
     let id = req.params.id
     DAOCliente.getOne(id).then(cliente => {
         if(cliente){
-            res.render('cliente/editar', {user: getSessionNome(req, res), cliente: cliente} )
+            res.render('cliente/editar', {user: adminNome(req, res), cliente: cliente} )
         } else {
             res.render('erro', {mensagem: "Erro na tentativa de edição de cliente"})
         }
@@ -171,7 +171,7 @@ routerCliente.post('/cliente/atualizar', autorizacao,  (req,res) => {
         if(cliente){
             res.redirect('/cliente/lista')
         } else {
-            res.render('erro', { mensagem: "Não foi possível atualizar o cliente."})
+            res.render('erro', {user: adminNome(req, res), mensagem: "Não foi possível atualizar o cliente."})
         }
     })
 })

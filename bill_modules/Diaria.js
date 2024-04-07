@@ -11,6 +11,16 @@ class Diaria {
 	static calcularValorTotalDaReserva(quantidadeDeDias, valorDaDiaria){
 		return quantidadeDeDias*valorDaDiaria
 	}
+
+	static aplicarDescontoNaDiariaParaCliente(valor, dias){
+		if(dias < 3){
+			return valor * 0.90 
+		} else if(dias < 5){
+			return valor * 0.85 
+		} else {
+			return valor * 0.80
+		} 
+	}
 }
 module.exports = Diaria
 

@@ -19,11 +19,12 @@
                     <div class="card card-reserva" style="width: 25rem;">
                         <img src="../../<%=reboque.foto%>" class="card-img-top" alt="...">
                         <div class="card-body">
-                            <h5 class="card-text">Total R$: <%=valorTotalDaReserva%>,00</h5>
+                            <h5 class="card-text">Total R$: <%=reserva.valorTotalDaReserva%>,00</h5>
                             <h5 class="card-text">PBT: <%=reboque.pesoBruto%> Kg</h5>
                             <hr>
                             <h5 class="card-text">Data Retirada: <%=reserva.dataInicio%></h5>
                             <h5 class="card-text">Data Entrega: <%=reserva.dataFim%></h5>
+                            <h5 class="card-text">Dias: <%=reserva.dias%></h5>
                         </div>
                     </div>
 
@@ -86,8 +87,9 @@
                     <input type="hidden" id="idReboque" name="idReboque" value="<%=reserva.idReboque%>">
                     <input type="hidden" id="dataInicio" name="dataInicio" value="<%=reserva.dataInicio%>">
                     <input type="hidden" id="dataFim" name="dataFim" value="<%=reserva.dataFim%>">
+                    <input type="hidden" id="dias" name="dias" value="<%=reserva.dias%>">
                     <input type="hidden" id="valorDiaria" name="valorDiaria" value="<%=reserva.valorDiaria%>">
-                    <input type="hidden" id="valorTotalDaReserva" name="valorTotalDaReserva" value="<%=valorTotalDaReserva%>">
+                    <input type="hidden" id="valorTotalDaReserva" name="valorTotalDaReserva" value="<%=reserva.valorTotalDaReserva%>">
 
                     <!-- dados cliente -->
                     <input type="hidden" id="nome" name="nome" value="<%=cliente.nome%>">

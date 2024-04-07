@@ -30,7 +30,7 @@ routerPagamento.post('/pagamento/realizado', async (req, res) => {
 // PAGAMENTO REALIZADO SOMENTE POR CLIENTES CADASTRADOS
 routerPagamento.post('/pagamento/qrcode-cliente', clienteAutorizacao, async (req, res) => {
     
-    let {idCliente, idReboque, dataInicio, dataFim, valorDiaria, valorTotalDaReserva } = req.body
+    let {idCliente, idReboque, dataInicio, dataFim, valorDiaria, valorTotalDaReserva, dias } = req.body
 
     // Gera o QR code com os dados de pagamento
     const pagamento = await DAOPagamento.getDadosPagamento(valorTotalDaReserva)
@@ -45,7 +45,7 @@ routerPagamento.post('/pagamento/qrcode-cliente', clienteAutorizacao, async (req
     }
 
     // Insere a reserva usando o id do pagamento
-    const reserva = await DAOReserva.insert(dataInicio, dataFim, valorDiaria, idCliente, idReboque, idPagamento)
+    const reserva = await DAOReserva.insert(dataInicio, dataFim, valorDiaria, dias, valorTotalDaReserva, idCliente, idReboque, idPagamento)
     if(!reserva){
         res.render('erro', {mensagem: 'Erro ao criar reserva.'})
     } else {
@@ -60,7 +60,7 @@ routerPagamento.post('/pagamento/qrcode-cliente', clienteAutorizacao, async (req
 routerPagamento.post('/pagamento/qrcode', async (req, res) => {
     
     let {nome, sobrenome, email, cpf, rg, telefone, cep, dataNascimento, logradouro, complemento, bairro, 
-    localidade, uf, numeroDaCasa, idReboque, dataInicio, dataFim, valorDiaria} = req.body
+    localidade, uf, numeroDaCasa, idReboque, dataInicio, dataFim, valorDiaria, dias, valorTotalDaReserva} = req.body
 
     let idCliente
 
@@ -89,7 +89,7 @@ routerPagamento.post('/pagamento/qrcode', async (req, res) => {
     }
 
     // Insere a reserva usando o id do pagamento e do cliente inserido
-    const reserva = await DAOReserva.insert(dataInicio, dataFim, valorDiaria, idCliente, idReboque, idPagamento)
+    const reserva = await DAOReserva.insert(dataInicio, dataFim, valorDiaria, dias, valorTotalDaReserva, idCliente, idReboque, idPagamento)
     if(!reserva){
         res.render('erro', {mensagem: 'Erro ao criar reserva.'})
     } else {

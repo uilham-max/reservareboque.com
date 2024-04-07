@@ -24,6 +24,7 @@
                             <hr>
                             <h5 class="card-text">Data Retirada: <%=reserva.dataInicio%></h5>
                             <h5 class="card-text">Data Entrega: <%=reserva.dataFim%></h5>
+                            <h5 class="card-text">Dias: <%=reserva.dias%></h5>
                         </div>
                     </div>
 
@@ -85,6 +86,7 @@
                     <input type="hidden" id="dataFim" name="dataFim" value="<%=reserva.dataFim%>">
                     <input type="hidden" id="valorDiaria" name="valorDiaria" value="<%=reserva.valorDiaria%>">
                     <input type="hidden" id="valorTotalDaReserva" name="valorTotalDaReserva" value="<%=valorTotalDaReserva%>">
+                    <input type="hidden" id="dias" name="dias" value="<%=reserva.dias%>">
 
                     <p style="margin: 0.5rem;" >
                         <input class="btn btn-primary" type="submit" value="Gerar QR Code">

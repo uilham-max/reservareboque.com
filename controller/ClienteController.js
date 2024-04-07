@@ -7,6 +7,9 @@ const bcrypt = require('bcryptjs')
 const clienteAutorizacao = require('../autorizacao/clienteAutorizacao')
 const DAOReserva = require('../database/DAOReserva')
 
+
+
+
 routerCliente.get('/cliente/minhas-reservas', clienteAutorizacao, async (req, res) => {
     let idCliente
     if(req.session.cliente && req.session.cliente.id){
@@ -18,6 +21,10 @@ routerCliente.get('/cliente/minhas-reservas', clienteAutorizacao, async (req, re
     }
     res.render('cliente/minhas-reservas', {user: clienteNome(req, res), reservas: reservas, mensagem: ''})
 })
+
+
+
+
 
 // criado em 29/03/2024
 routerCliente.post('/login/entrar', (req, res) => {

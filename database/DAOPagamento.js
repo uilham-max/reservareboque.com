@@ -65,7 +65,7 @@ class DAOPagamento {
     static async delete(id){
         try{
             await Pagamento.destroy({where:{id: id}})
-            console.log("Removendo pagamento da reserva...");
+            console.log("Removendo reserva sem pagamento...");
             return true
         }catch(erro) {
             console.log(erro.toString());

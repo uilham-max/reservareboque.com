@@ -17,8 +17,7 @@ const Reserva = conexao.define('reserva', {
     dataSaida: Sequelize.DATEONLY,
     dataChegada: Sequelize.DATEONLY,
     valorDiaria: Sequelize.INTEGER,
-    diarias: Sequelize.INTEGER,
-    valorTotal: Sequelize.INTEGER
+    diarias: Sequelize.INTEGER
 },{
     timestamps: false,
 }

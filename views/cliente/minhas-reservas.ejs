@@ -40,7 +40,7 @@
                                 <td><%=reserva.dataSaida.toString().slice(8,10)+'/'+reserva.dataSaida.toString().slice(5,7)+'/'+reserva.dataSaida.toString().slice(0,4)%></td>
                                 <td><%=reserva.dataChegada.toString().slice(8,10)+'/'+reserva.dataChegada.toString().slice(5,7)+'/'+reserva.dataChegada.toString().slice(0,4)%></td>
                                 <td><%=reserva.diarias%> dias</td>
-                                <td><%=reserva.valorTotal%>,00</td>
+                                <td><%=reserva.pagamento.valor%>,00</td>
                                 <!-- <td>R$ <%=reserva.diarias*reserva.valorDiaria%>,00</td> -->
                                 <td><a href="/reserva/editar/<%=reserva.id%>" class="fas fa-edit" style="color: black;" 
                                     ata-toggle="tooltip" title="Editar reserva" ></a></td>

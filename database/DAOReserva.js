@@ -6,9 +6,11 @@ const utilitario = require('./utilitario')
 const Diaria = require('../bill_modules/Diaria')
 const conexao = require('./conexao')
 const sequelize = require('sequelize')
+const Pagamento = require('../model/Pagamento.js')
 
 
 class DAOReserva {
+
 
     static async getMinhasReservas(idCliente){
         try {
@@ -22,16 +24,18 @@ class DAOReserva {
                     clienteId: idCliente,
                 },
                 order: ['id'],
-                include: [{ model: Reboque }, { model: Cliente }]
+                include: [{ model: Reboque }, { model: Cliente }, {model: Pagamento}]
             })
             // testando saida
-            console.log('Reservas encontradas:', reservas.map(reserva => reserva.toJSON()));
+            // console.log('Reservas encontradas:', reservas.map(reserva => reserva.toJSON()));
             return reservas
         }catch(erro){
             console.log(erro.toString());
             return false
         }
     }
+
+
 
     static async deletePeloPagamento(pagamentoId){
         try{
@@ -44,27 +48,15 @@ class DAOReserva {
         }
 
     }
+    
+
 
     // INSERT
     static async insert(dataInicio, dataFim, valorDiaria, dias, valorTotal, cliente, reboque, idPagamento) {
         try {
-            
             let reserva = await Reserva.create({ dataSaida: dataInicio, dataChegada: dataFim, valorDiaria: valorDiaria, diarias: dias, valorTotal: valorTotal, clienteId: cliente, reboqueId: reboque, pagamentoId: idPagamento })
             console.log('Reserva criada! aguardando pagamento...');
             return reserva
-           
-           
-           
-            // let reservas = await DAOReserva.getVerificaDisponibilidade(reboque, dataSaida, dataChegada)
-            // if (reservas.length === 0) {
-            //     let diarias = Diaria.calcularDiarias(dataSaida, dataChegada)
-            //     let valorTotal = diarias*valorDiaria
-            //     let reserva = await Reserva.create({ dataSaida: dataSaida, dataChegada: dataChegada, valorDiaria: valorDiaria, diarias: diarias, valorTotal: valorTotal, clienteId: cliente, reboqueId: reboque, pagamentoId: idPagamento })
-            //     console.log('Reserva criada! aguardando pagamento...');
-            //     return reserva
-            // } else {
-            //     return false
-            // }
         }
         catch (error) {
             console.log(error.toString())
@@ -86,6 +78,8 @@ class DAOReserva {
         }
     }
 
+
+
     // DELETE
     static async delete(id) {
         try {
@@ -99,6 +93,8 @@ class DAOReserva {
         }
     }
 
+
+
     // UPDATE
     static async update(id, dataSaida, dataChegada, valorDiaria, cliente, reboque) {
         try {
@@ -110,6 +106,8 @@ class DAOReserva {
             return false
         }
     }
+
+
 
     // DISPONIBILIDADE
     static async getVerificaDisponibilidade(reboque, inicioDoPeriodo, fimDoPeriodo) {
@@ -132,6 +130,8 @@ class DAOReserva {
             return undefined
         }
     }
+
+
 
     /**METODOS ENCARREGADOS PELA PARTE DOS RELATORIOS */
 
@@ -158,30 +158,34 @@ class DAOReserva {
         }
     }
 
-        // RELATORIO ATIVAS POR ID
-        static async getAtivasPorID(id) {
-            try {
-                const currentDate = new Date()
-                const reservas = await Reserva.findAll({
-                    where: {
-                        [Op.or]: [
-                            { dataSaida: { [Op.gte]: currentDate } },
-                            { dataChegada: { [Op.gte]: currentDate } }
-                        ],
-                        reboqueId: id,
-                    },
-                    order: ['id'],
-                    include: [{ model: Reboque }, { model: Cliente }]
-                })
-                // testando saida
-                // console.log('Reservas encontradas:', reservas.map(reserva => reserva.toJSON()));
-                return reservas
-            }
-            catch (error) {
-                console.log(error.toString())
-                return undefined
-            }
+
+
+    // RELATORIO ATIVAS POR ID
+    static async getAtivasPorID(id) {
+        try {
+            const currentDate = new Date()
+            const reservas = await Reserva.findAll({
+                where: {
+                    [Op.or]: [
+                        { dataSaida: { [Op.gte]: currentDate } },
+                        { dataChegada: { [Op.gte]: currentDate } }
+                    ],
+                    reboqueId: id,
+                },
+                order: ['id'],
+                include: [{ model: Reboque }, { model: Cliente }]
+            })
+            // testando saida
+            // console.log('Reservas encontradas:', reservas.map(reserva => reserva.toJSON()));
+            return reservas
         }
+        catch (error) {
+            console.log(error.toString())
+            return undefined
+        }
+    }
+
+
 
     // RELATORIO HISTORICO
     static async getRelatorioHistorico(inicioDoPeriodo, fimDoPeriodo) {
@@ -212,6 +216,8 @@ class DAOReserva {
         }
     }
 
+
+
     static async getLucroTotal(inicioDoPeriodo, fimDoPeriodo) {
         
         if(!inicioDoPeriodo){
@@ -236,6 +242,8 @@ class DAOReserva {
         }
        
     }
+
+
 
     // RELATORIO LUCRO
     static async getRelatorioLucro(inicioDoPeriodo, fimDoPeriodo) {

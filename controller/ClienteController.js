@@ -4,8 +4,20 @@ const DAOCliente =  require('../database/DAOCliente')
 const autorizacao = require('../autorizacao/autorizacao')
 const {adminNome, clienteNome} = require('../helpers/getSessionNome')
 const bcrypt = require('bcryptjs')
+const clienteAutorizacao = require('../autorizacao/clienteAutorizacao')
+const DAOReserva = require('../database/DAOReserva')
 
-
+routerCliente.get('/cliente/minhas-reservas', clienteAutorizacao, async (req, res) => {
+    let idCliente
+    if(req.session.cliente && req.session.cliente.id){
+        idCliente = req.session.cliente.id
+    }
+    let reservas = await DAOReserva.getMinhasReservas(idCliente)
+    if(reservas == ''){
+        res.render('cliente/minhas-reservas', {user: clienteNome(req, res), reservas: reservas, mensagem: "Sua lista de reservas está vazia."})
+    }
+    res.render('cliente/minhas-reservas', {user: clienteNome(req, res), reservas: reservas, mensagem: ''})
+})
 
 // criado em 29/03/2024
 routerCliente.post('/login/entrar', (req, res) => {

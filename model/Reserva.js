@@ -41,8 +41,8 @@ Reboque.hasMany(Reserva, {
 Reserva.belongsTo(Reboque)
 
 
-Pagamento.hasMany(Reserva, {
-    onDelete: 'RESTRICT',
+Pagamento.hasOne(Reserva, {
+    onDelete: 'CASCADE',
     onUpdate: 'CASCADE'
 })
 

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%-include('../partials/header.ejs')%>
+</head>
+<body>
+    <%-include('../partials/navbar.ejs')%>
+    <div class="conteudo" >
+
+        <div class="container-responsive" >
+            
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                <a class="btn btn-primary me-md-2" href="/">Voltar</a>
+                <!-- <a class="btn btn-info me-md-2" href="/reserva/historico">Histórico</a> -->
+            </div>
+            <br>
+
+            <div class="d-flex justify-content-start">
+                <h3 class="display-4">Reservas</h3>
+            </div>
+            <br>
+        
+            <div class="table-responsive">
+                <table class="table table-striped" >
+                    <thead>
+                        <tr>
+                            <th>Reboque</th>
+                            <th>Diária R$</th>
+                            <th>Data início</th>
+                            <th>Data fim</th>
+                            <th>Dias</th>
+                            <th>Total R$</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% reservas.forEach(function(reserva){%>
+                            <tr>
+                                <td><%=reserva.reboque.placa%></td>
+                                <td><%=reserva.valorDiaria%>,00</td>
+                                <td><%=reserva.dataSaida.toString().slice(8,10)+'/'+reserva.dataSaida.toString().slice(5,7)+'/'+reserva.dataSaida.toString().slice(0,4)%></td>
+                                <td><%=reserva.dataChegada.toString().slice(8,10)+'/'+reserva.dataChegada.toString().slice(5,7)+'/'+reserva.dataChegada.toString().slice(0,4)%></td>
+                                <td><%=reserva.diarias%> dias</td>
+                                <td><%=reserva.valorTotal%>,00</td>
+                                <!-- <td>R$ <%=reserva.diarias*reserva.valorDiaria%>,00</td> -->
+                                <td><a href="/reserva/editar/<%=reserva.id%>" class="fas fa-edit" style="color: black;" 
+                                    ata-toggle="tooltip" title="Editar reserva" ></a></td>
+                                <td><a href="/reserva/excluir/<%=reserva.id%>" class="fas fa-trash" style="color: black;"
+                                    ata-toggle="tooltip" title="Cancelar reserva"
+                                    onclick="return confirm('Confirma a exclusão?')" ></a></td>
+                            </tr>
+                        <%})%>
+                    </tbody>
+
+                </table>
+            </div>
+
+            <% if(mensagem != ''){ %>
+                <div class="alert alert-danger">
+                    <strong><%= mensagem %></strong> 
+                </div>
+            <% } %>
+
+        </div>
+    </div>
+
+    <%-include('../partials/footer'); %>
+
+</body>
+</html>

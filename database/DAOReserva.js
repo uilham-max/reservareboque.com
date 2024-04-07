@@ -10,6 +10,29 @@ const sequelize = require('sequelize')
 
 class DAOReserva {
 
+    static async getMinhasReservas(idCliente){
+        try {
+            const currentDate = new Date()
+            const reservas = await Reserva.findAll({
+                where: {
+                    [Op.or]: [
+                        { dataSaida: { [Op.gte]: currentDate } },
+                        { dataChegada: { [Op.gte]: currentDate } }
+                    ],
+                    clienteId: idCliente,
+                },
+                order: ['id'],
+                include: [{ model: Reboque }, { model: Cliente }]
+            })
+            // testando saida
+            console.log('Reservas encontradas:', reservas.map(reserva => reserva.toJSON()));
+            return reservas
+        }catch(erro){
+            console.log(erro.toString());
+            return false
+        }
+    }
+
     static async deletePeloPagamento(pagamentoId){
         try{
             await Reserva.destroy({where: {pagamentoId: pagamentoId}})

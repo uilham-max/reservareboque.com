@@ -4,6 +4,7 @@ const DATABASE = process.env.DATABASE
 const USER = process.env.USER
 const PASSWORD = process.env.PASSWORD
 const URL = process.env.URL
+const DIALECT = process.env.DIALECT
 
 const conexao = new Sequelize(DATABASE, USER, PASSWORD, {
     host: URL,

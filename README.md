@@ -6,4 +6,5 @@
 * Iverter associação entre reserva e pagamento para funcionar ON CASCADE.
 * Se um reboque foi reservado deve receber status de "aguardando pagamento" vou ter que criar 
 um campo na tabela reboque como esse campo.
+* Há um erro depois que um reboque é cadastrado. Porém o cadastro ocorre.
 

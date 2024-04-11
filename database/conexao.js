@@ -1,4 +1,17 @@
 const Sequelize = require('sequelize')
+require('dotenv').config()
+const DATABASE = process.env.DATABASE
+const USER = process.env.USER
+const PASSWORD = process.env.PASSWORD
+const URL = process.env.URL
+
+const conexao = new Sequelize(DATABASE, USER, PASSWORD, {
+    host: URL,
+    dialect: DIALECT,
+    timezone: '-30:00',
+    logging: false
+})
+
 
 // const conexao = new Sequelize('reboquesmvc', 'postgres', 'postgres', {
 //     host: 'localhost',
@@ -7,9 +20,4 @@ const Sequelize = require('sequelize')
 //     logging: false
 // })
 
-const conexao = new Sequelize('postgres://reboquesmvc_user:CScOS7Jmyl7fz2NkQWynsGNFJrUBR0wm@dpg-cobjdm5jm4es739qo6gg-a/reboquesmvc')
-
 module.exports = conexao
-
-// postgres://reboquesmvc_user:CScOS7Jmyl7fz2NkQWynsGNFJrUBR0wm@dpg-cobjdm5jm4es739qo6gg-a/reboquesmvc
-// postgres://reboquesmvc_user:CScOS7Jmyl7fz2NkQWynsGNFJrUBR0wm@dpg-cobjdm5jm4es739qo6gg-a.oregon-postgres.render.com/reboquesmvc

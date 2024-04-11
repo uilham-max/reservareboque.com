@@ -4,8 +4,9 @@ const DATABASE = process.env.DATABASE
 const USER = process.env.USER
 const PASSWORD = process.env.PASSWORD
 const DIALECT = process.env.DIALECT
+const URL = process.env.URL
 
-const conexao = new Sequelize(`${DIALECT}://${USER}:${PASSWORD}@${HOST}/${DATABASE}`)
+const conexao = new Sequelize(URL)
 
 
 // const conexao = new Sequelize('reboquesmvc', 'postgres', 'postgres', {

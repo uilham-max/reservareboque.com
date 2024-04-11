@@ -8,7 +8,6 @@ const DIALECT = process.env.DIALECT
 
 const conexao = new Sequelize(DATABASE, USER, PASSWORD, {
     host: URL,
-    dialect: DIALECT,
     timezone: '-30:00',
     logging: false
 })

@@ -6,7 +6,7 @@ const PASSWORD = process.env.PASSWORD
 const DIALECT = process.env.DIALECT
 const URL = process.env.URL
 
-const conexao = new Sequelize(URL)
+const conexao = new Sequelize("postgres://reboquesmvc_user:CScOS7Jmyl7fz2NkQWynsGNFJrUBR0wm@dpg-cobjdm5jm4es739qo6gg-a/reboquesmvc")
 
 
 // const conexao = new Sequelize('reboquesmvc', 'postgres', 'postgres', {

@@ -1,19 +1,44 @@
 const Sequelize = require('sequelize')
 require('dotenv').config()
-const DATABASE = process.env.DATABASE
-const USER = process.env.USER
-const PASSWORD = process.env.PASSWORD
-const DIALECT = process.env.DIALECT
-const URL = process.env.URL
 
-const conexao = new Sequelize("postgres://reboquesmvc_user:CScOS7Jmyl7fz2NkQWynsGNFJrUBR0wm@dpg-cobjdm5jm4es739qo6gg-a/reboquesmvc")
+/** Conexão remota com banco de dados do Render.com */
 
+const conexao = new Sequelize(process.env.RENDER_DB_NOME, process.env.RENDER_DB_USER, process.env.RENDER_DB_PASSWORD, {
+    host: process.env.RENDER_DB_HOST_EXTERNO,
+    dialect: process.env.RENDER_DB_DIALECT,
+    dialectOptions: {
+        ssl: {
+            required: true,
+            rejectUnauthorized: true
+        }
+    },
+    timezone: '-03:00',
+    logging: false
+})
 
-// const conexao = new Sequelize('reboquesmvc', 'postgres', 'postgres', {
-//     host: 'localhost',
-//     dialect: 'postgres',
+/** Esta conexão deve ser usada no GitHub */ 
+
+// const conexao = new Sequelize(process.env.RENDER_DB_NOME, process.env.RENDER_DB_USER, process.env.RENDER_DB_PASSWORD, {
+//     host: process.env.RENDER_DB_HOST_EXTERNO,
+//     dialect: process.env.RENDER_DB_DIALECT,
+//     dialectOptions: {
+//         ssl: {
+//             required: true,
+//             rejectUnauthorized: true
+//         }
+//     },
 //     timezone: '-03:00',
 //     logging: false
 // })
+
+/**Configuração de conexão com banco de dados local */
+
+// const conexao = new Sequelize(process.env.DB_NOME, process.env.DB_USER, process.env.DB_PASSWORD, {
+//     host: process.env.DB_HOST,
+//     dialect: process.env.DB_DIALECT,
+//     timezone: '-03:00',
+//     logging: false
+// })
+
 
 module.exports = conexao

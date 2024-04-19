@@ -20,12 +20,14 @@ console.log(process.env.RENDER_DB_DIALECT);
 
 /** Conexão interna do Render.com */ 
 
-const conexao = new Sequelize(process.env.RENDER_DB_NOME, process.env.RENDER_DB_USER, process.env.RENDER_DB_PASSWORD, {
-    host: process.env.RENDER_DB_HOST,
-    dialect: process.env.RENDER_DB_DIALECT,
-    timezone: '-03:00',
-    logging: false
-})
+// const conexao = new Sequelize(process.env.RENDER_DB_NOME, process.env.RENDER_DB_USER, process.env.RENDER_DB_PASSWORD, {
+//     host: process.env.RENDER_DB_HOST,
+//     dialect: process.env.RENDER_DB_DIALECT,
+//     timezone: '-03:00',
+//     logging: false
+// })
+
+const conexao = new Sequelize("postgres://reboquesmvc_user:CScOS7Jmyl7fz2NkQWynsGNFJrUBR0wm@dpg-cobjdm5jm4es739qo6gg-a/reboquesmvc")
 
 /**Conexão com banco de dados local */
 

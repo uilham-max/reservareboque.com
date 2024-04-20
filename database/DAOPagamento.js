@@ -1,7 +1,37 @@
+const { Sequelize } = require('sequelize');
 const Pagamento = require('../model/Pagamento')
+const moment = require('moment-timezone')
 
 
 class DAOPagamento {
+
+
+
+
+    static async removePagamentoComPrazoExpirado(){
+        try{
+            // Remover pagamentos expirados
+            var horas = moment.tz(new Date(), 'America/Sao_Paulo')
+            let pagamentos = await Pagamento.destroy({
+                where: {
+                    aprovado: false,
+                    dataExpiracao: { 
+                        [Sequelize.Op.lt]: horas
+                    }
+                }
+            })
+            if(pagamentos){
+                console.log(pagamentos, '> pagamentos expirados removidos');
+            }
+            return pagamentos
+        }catch(erro){
+            console.error(erro.toString());
+            return undefined
+        }
+    }
+
+
+
 
 
     static async atualizarPagamentoParaAprovado(idPagamento){
@@ -28,8 +58,11 @@ class DAOPagamento {
     // Recebe o valor da reserva e um código do sistema de pagamento
     static async insert(codigoPagamento, valorTotalDaReserva){
         try{
-            const pagamento = await Pagamento.create({valor: valorTotalDaReserva, codigoPagamento: codigoPagamento, descricao: "PIX", aprovado: false})
+            var dataExpiracao = moment.tz(new Date(), 'America/Sao_Paulo')
+            dataExpiracao.add(10, 'minutes')
+            const pagamento = await Pagamento.create({valor: valorTotalDaReserva, codigoPagamento: codigoPagamento, descricao: "PIX", aprovado: false, dataExpiracao: dataExpiracao})
             console.log('Pagamento criado...');
+            console.log('Data de expiração: ',dataExpiracao);
             return pagamento.id
 
         } catch(erro){

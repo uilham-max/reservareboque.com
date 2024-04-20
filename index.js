@@ -2,6 +2,13 @@ const conexao = require('./database/conexao.js')
 const express = require('express')
 const session = require('express-session')
 
+// process.env.TZ = "America/Sao_Paulo"
+// const moment = require('moment-timezone');
+
+// console.error(process.env.TZ);
+
+
+
 const port = 3000
 
 const ClienteController = require('./controller/ClienteController')

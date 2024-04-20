@@ -4,6 +4,7 @@
     <%-include('../partials/header.ejs')%>
     <script src="/js/consome_viacep.js" ></script>
     <script src="/js/preenche_pelo_cpf.js" ></script>
+    <script src="/js/validaCamposClienteDados.js" ></script>
 </head>
 <body  >
     
@@ -13,7 +14,7 @@
         <div class="container" >
             <!-- <h3>Reboque escolhido</h3> -->
             <!--  -->
-            <form action="/reserva/dados-confirma" method="POST">
+            <form class="needs-validation" novalidate action="/reserva/dados-confirma" method="POST">
                 <div class="lista-reboques">
 
 
@@ -38,34 +39,78 @@
                                 <h3 class="card-title">Preencha com seus dados</h3>
                                 <hr>
                                 <div class="form-group">
-                                    <label for="cpf">CPF</label>
-                                    <input class="form-control" id="cpf" type="text" name="cpf" >
-                                </div>
-                                <div class="form-group">
                                     <label for="nome">Nome</label>
-                                    <input class="form-control" id="nome" type="text" name="nome">
+                                    <input class="form-control" id="nome" type="text" name="nome" maxlength="20" required>
+                                    <div class="valid-feedback">
+                                        Looks good!
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        Preencha o campo nome.
+                                    </div>
+                                  
                                 </div>
                                 <div class="form-group">
                                     <label for="sobrenome">Sobrenome</label>
-                                    <input class="form-control" id="sobrenome" type="text" name="sobrenome">
+                                    <input class="form-control" id="sobrenome" type="text" name="sobrenome" maxlength="20" required>
+                                    <div class="valid-feedback">
+                                        Looks good!
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        Preencha o campo sobrenome.
+                                    </div>
+                                
+                                </div>
+                                <div class="form-group">
+                                    <label for="cpf">CPF</label>
+                                    <input class="form-control" id="cpf" type="text" name="cpf" maxlength="11">
+                                    <div class="valid-feedback">
+                                        Looks good!
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        Preencha o campo CPF.
+                                    </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="email">Email</label>
-                                    <input class="form-control" id="email" type="email" name="email" >
+                                    <input class="form-control" id="email" type="email" name="email" maxlength="100" >
+                                    <div class="valid-feedback">
+                                        Looks good!
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        Preencha o campo Email.
+                                    </div>
                                 </div>
                                                                                               
                                 <div class="form-group">
                                     <label for="rg">RG</label>
-                                    <input class="form-control" id="rg" type="text" name="rg">
+                                    <input class="form-control" id="rg" type="text" name="rg" maxlength="11">
+                                    <div class="valid-feedback">
+                                        Looks good!
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        Preencha o campo RG.
+                                    </div>
                                 </div>
                                 
                                 <div class="form-group">
                                     <label for="telefone">Telefone</label>
-                                    <input class="form-control" id="telefone" type="text" name="telefone" >
+                                    <input class="form-control" id="telefone" type="text" name="telefone" maxlength="30" >
+                                    <div class="valid-feedback">
+                                        Looks good!
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        Preencha o campo Telefone.
+                                    </div>
                                 </div> 
                                 <div class="form-group">
                                     <label for="dataNascimento">Data de nascimento</label>
-                                    <input class="form-control" id="dataNascimento" type="date" name="dataNascimento" >
+                                    <input class="form-control" id="dataNascimento" type="date" name="dataNascimento">
+                                    <div class="valid-feedback">
+                                        Looks good!
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        Preencha a data.
+                                    </div>
                                 </div> 
                                 
                         </div>
@@ -79,33 +124,73 @@
                             <hr>
                             <div class="form-group">
                                 <label for="cep">CEP</label>
-                                <input class="form-control" id="cep" type="text" name="cep" placeholder="Ex.: 96408560">
+                                <input class="form-control" id="cep" type="text" name="cep" maxlength="8" placeholder="Ex.: 96408560">
+                                <div class="valid-feedback">
+                                    Looks good!
+                                </div>
+                                <div class="invalid-feedback">
+                                    Preencha o campo CEP.
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <label for="logradouro">Logradouro</label>
-                                <input class="form-control" id="logradouro" type="text" name="logradouro">
+                            <div class="row g-3">
+                                <div class="form-group col">
+                                    <label for="logradouro">Rua</label>
+                                    <input class="form-control" id="logradouro" type="text" name="logradouro" maxlength="50">
+                                    <div class="valid-feedback">
+                                        Looks good!
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        Preencha o campo Rua.
+                                    </div>
+                                </div>
+                                <div class="form-group col">
+                                    <label for="numeroDaCasa">N°</label>
+                                    <input class="form-control" id="numeroDaCasa" type="text" name="numeroDaCasa" maxlength="5" >
+                                    <div class="valid-feedback">
+                                        Looks good!
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        Preencha o campo N°.
+                                    </div>
+                                </div>
                             </div>
+                           
                             <div class="form-group">
                                 <label for="complemento">Complemento</label>
-                                <input class="form-control" id="complemento" type="text" name="complemento">
+                                <input class="form-control" id="complemento" type="text" name="complemento" maxlength="100">
                             </div>
                             <div class="form-group">
                                 <label for="bairro">Bairro</label>
-                                <input class="form-control" id="bairro" type="text" name="bairro" >
+                                <input class="form-control" id="bairro" type="text" name="bairro" maxlength="50" >
+                                <div class="valid-feedback">
+                                    Looks good!
+                                </div>
+                                <div class="invalid-feedback">
+                                    Preencha o campo Bairro.
+                                </div>
                             </div>
                             <div class="form-group">
                                 <label for="localidade">Cidade</label>
-                                <input class="form-control" id="localidade" type="text" name="localidade">
+                                <input class="form-control" id="localidade" type="text" name="localidade" maxlength="30">
+                                <div class="valid-feedback">
+                                    Looks good!
+                                </div>
+                                <div class="invalid-feedback">
+                                    Preencha o campo Cidade.
+                                </div>
                             </div>
                             <div class="form-group">
                                 <label for="uf">Estado (UF)</label>
-                                <input class="form-control" id="uf" type="text" name="uf">
+                                <input class="form-control" id="uf" type="text" name="uf" maxlength="2">
+                                <div class="valid-feedback">
+                                    Looks good!
+                                </div>
+                                <div class="invalid-feedback">
+                                    Preencha o campo UF.
+                                </div>
                             </div>
                             
-                            <div class="form-group">
-                                <label for="numeroDaCasa">Número da Casa</label>
-                                <input class="form-control" id="numeroDaCasa" type="text" name="numeroDaCasa" >
-                            </div>
+                            
                             
                         </div>
                         <p style="margin: 0.5rem;" >

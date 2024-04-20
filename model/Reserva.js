@@ -5,9 +5,6 @@ const Cliente = require('./Cliente.js')
 const Reboque = require('./Reboque.js')
 const Pagamento = require('./Pagamento.js')
 
-
-
-
 const Reserva = conexao.define('reserva', {
     id: {
         type: Sequelize.INTEGER,
@@ -18,9 +15,9 @@ const Reserva = conexao.define('reserva', {
     dataChegada: Sequelize.DATEONLY,
     valorDiaria: Sequelize.INTEGER,
     diarias: Sequelize.INTEGER
-},{
-    timestamps: false,
-}
+    },{
+        timestamps: false,
+    }
 )
 
 // um cliente tem muitas locações
@@ -39,21 +36,15 @@ Reboque.hasMany(Reserva, {
 // uma locação pertence a apenas um reboque
 Reserva.belongsTo(Reboque)
 
-
 Pagamento.hasOne(Reserva, {
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE'
 })
-
 Reserva.belongsTo(Pagamento)
-
 
 Cliente.sync(({force: false}))
 Reboque.sync(({force: false}))
 Pagamento.sync(({force: false}))
 Reserva.sync(({force: false}))
 
-
 module.exports = Reserva
-
-

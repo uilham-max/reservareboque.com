@@ -13,6 +13,10 @@ const clienteAutorizacao = require('../autorizacao/clienteAutorizacao')
 routerReserva.post('/reserva/dados-informa', (req, res) => {
     let {id, dataInicio, dataFim} =  req.body
 
+    if(dataInicio > dataFim){
+        res.render('erro', {mensagem: 'Erro com as datas.'})
+    }
+
     DAOReserva.getVerificaDisponibilidade(id, dataInicio, dataFim).then( resposta => {
         DAOReboque.getOne(id).then(reboque => {
             if(reboque && resposta.length === 0){
@@ -79,6 +83,9 @@ routerReserva.post('/reserva/dados-confirma', (req, res) => {
 // ROTA PRIVADA DO CLIENTE
 routerReserva.post('/reserva/dados-confirma-cliente', clienteAutorizacao, (req, res) => {
     let {id, dataInicio, dataFim} =  req.body
+    if(dataInicio > dataFim){
+        res.render('erro', {mensagem: 'Erro com as datas.'})
+    }
     let idCliente = req.session.cliente.id
     DAOReserva.getVerificaDisponibilidade(id, dataInicio, dataFim).then( resposta => {
         DAOReboque.getOne(id).then(reboque => {

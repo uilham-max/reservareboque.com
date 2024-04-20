@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <%-include('../partials/header.ejs')%>
+    <script src="/js/validaInputDataPeriodo.js" ></script>
 </head>
 <body  >
     
@@ -43,22 +44,38 @@
                 <div class="card card-reserva" style="width: 25rem;">
                     <div class="card-body">
                         <% if(user == '') {%>
-                            <form action="/reserva/dados-informa" method="POST">
+                            <form class="needs-validation" novalidate action="/reserva/dados-informa" method="POST">
                         <% } else {%>
-                            <form action="/reserva/dados-confirma-cliente" method="POST">
+                            <form class="needs-validation" novalidate action="/reserva/dados-confirma-cliente" method="POST">
                         <% } %>
                             <h5>Informe o periodo</h5>
                             <hr>
+                            
                             <div class="input-group mb-3">
-                                <span class="input-group-text" >Data de início</span>
+                                <span class="input-group-text" >Data de Retirada</span>
                                 <input class="form-control" id="dataInicio" type="date" name="dataInicio" required>
+                                <div class="valid-feedback">
+                                    Looks good!
+                                </div>
+                                <div class="invalid-feedback">
+                                    Verifique a data.
+                                </div>
+                            
                             </div>
+
                             <div class="input-group mb-3">
-                                <span class="input-group-text" >Data de fim</span>
+                                <span class="input-group-text" >Data de Entrega</span>
                                 <input class="form-control" id="dataFim" type="date" name="dataFim" required>
+                                <div class="valid-feedback">
+                                    Looks good!
+                                </div>
+                                <div class="invalid-feedback">
+                                    Verifique a data.
+                                </div>
                             </div>
+                            
                             <input type="hidden" name="id" value="<%=reboque.id%>" >
-                            <input class="btn btn-primary" type="submit" value="Próximo">
+                            <input class="btn btn-primary" id="botao" type="submit" value="Próximo">
                         </form><br>
 
                     </div>
@@ -67,7 +84,6 @@
             </div>
         </div>
     </div>
-
 
     <%-include('../partials/footer.ejs')%>
 </body>

@@ -92,7 +92,7 @@ async function criarPagamento(customerID, valor, data_vencimento){
         "value": valor,
         "dueDate": data_vencimento,
         "callback": {
-            successUrl: 'https://reboquesoliveira.com/pagamento/sucesso',
+            successUrl: 'https://reboquesoliveira.com',
             autoRedirect: true
         }
     }

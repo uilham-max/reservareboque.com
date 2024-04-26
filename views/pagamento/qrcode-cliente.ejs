@@ -18,7 +18,7 @@
                     <div class="card card-reserva" style="width: 25rem;">
                         <div class="card-body">
                             <h3 class="card-title">Escaneie o QR Code para finalizar a reserva</h3>
-                            <img src="/img/<%=qrCode%>" class="card-img-top" alt="...">
+                            <div id="imageContainer"></div>
                         </div>
                         <input type="hidden" id="idPagamento" name="idPagamento" value="<%= idPagamento %>">
                         <p style="margin: 0.5rem;" >
@@ -37,5 +37,15 @@
 
 
     <%-include('../partials/footer.ejs')%>
+    <script>
+        // Decodifica e exibe a imagem
+        window.onload = function() {
+            const encodedImage = '<%= image %>'; // Obtém a imagem codificada do servidor
+            const imageContainer = document.getElementById('imageContainer');
+            const img = document.createElement('img');
+            img.src = 'data:image/jpeg;base64,' + encodedImage; // Decodifica a imagem e define o src
+            imageContainer.appendChild(img);
+        };
+    </script>
 </body>
 </html>

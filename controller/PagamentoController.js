@@ -5,25 +5,8 @@ const DAOCliente = require('../database/DAOCliente')
 const DAOReserva = require('../database/DAOReserva')
 const {clienteNome} = require('../helpers/getSessionNome')
 const clienteAutorizacao = require('../autorizacao/clienteAutorizacao')
-const { removerPagamentosNaoAprovados } = require('../helpers/removerPagamentosNaoAprovados')
-
-
-
-// ROTA PUBLICA
-routerPagamento.post('/pagamento/realizado', async (req, res) => {
-    
-    let {idPagamento} = req.body
-    const pagamentoAprovado = await DAOPagamento.verificaPagamento()
-    if(!pagamentoAprovado){
-        res.render('erro', {mensagem: 'erro. pagamento não aprovado'})
-    }
-    const update = await DAOPagamento.atualizarPagamentoParaAprovado(idPagamento)
-    if(!update){
-        res.render('erro', {mensagem: 'erro ao atualizar pagamento para aprovado'})
-    }
-    res.render('pagamento/sucesso', {user: clienteNome(req, res), mensagem: ""})
-
-})
+const { criarCobrancaPIX } = require('../helpers/API_Pagamentos')
+const moment = require('moment-timezone')
 
 
 
@@ -32,14 +15,23 @@ routerPagamento.post('/pagamento/qrcode-cliente', clienteAutorizacao, async (req
     
     let {idCliente, idReboque, dataInicio, dataFim, valorDiaria, valorTotalDaReserva, dias } = req.body
 
-    // Gera o QR code com os dados de pagamento
-    const pagamento = await DAOPagamento.getDadosPagamento(valorTotalDaReserva)
-    if(!pagamento){
-       res.render('erro', { mensagem: "Erro ao criar pagamento."})
+    const cliente = await DAOCliente.getOne(idCliente)
+    if(!cliente){
+       res.render('erro', { mensagem: "Erro ao buscar cliente."})
     }
+    
+    let data_vencimento = moment.tz( new Date(), 'America/Sao_Paulo' )
+    data_vencimento = data_vencimento.format('YYYY-MM-DD')
+
+    // Consome API
+    let retorno = await criarCobrancaPIX(cliente.cpf, cliente.nome, valorTotalDaReserva, data_vencimento)
+    if(!retorno){
+       res.render('erro', { mensagem: "Erro ao criar cobrança PIX."})
+    }
+    console.log(retorno.invoiceUrl);
 
     // Insere o pagamento no BD com a flaq aprovado = false e retorna o seu id
-    const idPagamento = await DAOPagamento.insert(pagamento.codigo, valorTotalDaReserva)
+    const idPagamento = await DAOPagamento.insert(retorno.id_cobranca, (retorno.netValue * dias), retorno.billingType)
     if(!idPagamento){
        res.render('erro', { mensagem: "Erro ao criar pagamento."})
     }
@@ -49,8 +41,8 @@ routerPagamento.post('/pagamento/qrcode-cliente', clienteAutorizacao, async (req
     if(!reserva){
         res.render('erro', {mensagem: 'Erro ao criar reserva.'})
     } else {
-        console.log(req.session.cliente.nome, 'realizou um pagamento...');
-        res.render('pagamento/qrcode-cliente', {user: clienteNome(req, res), idPagamento: idPagamento, qrCode: pagamento.qrCode, mensagem: ''})
+        // res.render('pagamento/qrcode-cliente', {user: clienteNome(req, res), image: retorno.encodedImage, idPagamento: idPagamento, mensagem: ''})
+        res.redirect(`${retorno.invoiceUrl}`)
     }
 
 })
@@ -98,6 +90,33 @@ routerPagamento.post('/pagamento/qrcode', async (req, res) => {
     }
 
 })
+
+
+// API de comunicação com Assas
+routerPagamento.post('/pagamento/webhook/pix', async (req, res) => {
+    
+    const idPagamento = req.body.payment.id
+
+    const update = await DAOPagamento.atualizarPagamentoParaAprovado(idPagamento)
+    if(!update){
+        res.sendStatus(500)
+    }
+
+    res.sendStatus(200);
+})
+
+
+// ROTA PUBLICA
+// routerPagamento.post('/pagamento/realizado', async (req, res) => {
+    
+//     let {idPagamento} = req.body
+//     const update = await DAOPagamento.atualizarPagamentoParaAprovado(idPagamento)
+//     if(!update){
+//         res.render('erro', {mensagem: 'erro ao atualizar pagamento para aprovado'})
+//     }
+//     res.render('pagamento/sucesso', {user: clienteNome(req, res), mensagem: ""})
+
+// })
 
 
 module.exports = routerPagamento

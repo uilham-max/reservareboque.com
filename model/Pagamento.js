@@ -7,7 +7,7 @@ const Pagamento = conexao.define('pagamento', {
         primaryKey: true,
         autoIncrement: true
     },
-    codigoPagamento: Sequelize.INTEGER,
+    codigoPagamento: Sequelize.STRING,
     valor: Sequelize.DOUBLE,
     descricao: Sequelize.STRING,
     aprovado: Sequelize.BOOLEAN,

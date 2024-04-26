@@ -38,7 +38,7 @@ class DAOPagamento {
         try{
             const [numLinhasAtualizadas] = await Pagamento.update(
                 {aprovado: true},
-                {where: {id: idPagamento}}
+                {where: {codigoPagamento: idPagamento}}
             );
             // console.log('Atualizando status do pagamento para aprovado...');
             if (numLinhasAtualizadas > 0) {
@@ -56,11 +56,11 @@ class DAOPagamento {
     
 
     // Recebe o valor da reserva e um código do sistema de pagamento
-    static async insert(codigoPagamento, valorTotalDaReserva){
+    static async insert(codigoPagamento, valorTotalDaReserva, billingType){
         try{
             var dataExpiracao = moment.tz(new Date(), 'America/Sao_Paulo')
             dataExpiracao.add(10, 'minutes')
-            const pagamento = await Pagamento.create({valor: valorTotalDaReserva, codigoPagamento: codigoPagamento, descricao: "PIX", aprovado: false, dataExpiracao: dataExpiracao})
+            const pagamento = await Pagamento.create({valor: valorTotalDaReserva, codigoPagamento: codigoPagamento, descricao: billingType, aprovado: false, dataExpiracao: dataExpiracao})
             console.log('Pagamento criado...');
             console.log('Data de expiração: ',dataExpiracao);
             return pagamento.id
@@ -71,29 +71,29 @@ class DAOPagamento {
         }
     }
 
-    static async getDadosPagamento(valorPagamento){
-        try{
-            let pagamento = {
-                'qrCode':  'qrcode.jpg',
-                'codigo': Math.floor(Math.random() * 100000),
-                'valor': valorPagamento
-            }
-            return pagamento
-        } catch(erro){
-            console.log(erro.toString());
-            return undefined
-        }
+    // static async getDadosPagamento(valorPagamento){
+    //     try{
+    //         let pagamento = {
+    //             'qrCode':  'qrcode.jpg',
+    //             'codigo': Math.floor(Math.random() * 100000),
+    //             'valor': valorPagamento
+    //         }
+    //         return pagamento
+    //     } catch(erro){
+    //         console.log(erro.toString());
+    //         return undefined
+    //     }
         
-    }
+    // }
 
-    static async verificaPagamento(){
-        try{
-            return true
-        } catch(erro){
-            console.log(erro.toString());
-            return false
-        }
-    }
+    // static async verificaPagamento(){
+    //     try{
+    //         return true
+    //     } catch(erro){
+    //         console.log(erro.toString());
+    //         return false
+    //     }
+    // }
 
     static async delete(id){
         try{

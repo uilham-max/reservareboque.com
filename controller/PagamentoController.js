@@ -97,14 +97,14 @@ routerPagamento.post('/pagamento/qrcode', async (req, res) => {
 // API de comunicação com Assas
 routerPagamento.post('/pagamento/webhook/pix', async (req, res) => {
     
-    const idPagamento = req.body.payment.id
-
-    const update = await DAOPagamento.atualizarPagamentoParaAprovado(idPagamento)
-    if(!update){
-        res.sendStatus(500)
+    try{
+        let idPagamento = req.body.payment.id
+        let update = await DAOPagamento.atualizarPagamentoParaAprovado(idPagamento)
+    }catch(error){
+        console.warn(error);
+    }finally{
+        res.sendStatus(200);
     }
-
-    res.sendStatus(200);
 })
 
 

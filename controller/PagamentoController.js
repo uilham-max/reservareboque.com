@@ -22,29 +22,31 @@ routerPagamento.post('/pagamento/qrcode-cliente', clienteAutorizacao, async (req
     
     let data_vencimento = moment.tz( new Date(), 'America/Sao_Paulo' )
     data_vencimento = data_vencimento.format('YYYY-MM-DD')
-
+    console.log()
     // Consome API
-    let retorno = await criarCobrancaPIX(cliente.cpf, cliente.nome, valorTotalDaReserva, data_vencimento)
-    if(!retorno){
-       res.render('erro', { mensagem: "Erro ao criar cobrança PIX."})
-    }
-    console.log(retorno.invoiceUrl);
+    let retorno;
+    console.log(cliente.cpf, cliente.nome, valorTotalDaReserva, data_vencimento)
+    try{
+        retorno = await criarCobrancaPIX(cliente.cpf, cliente.nome, valorTotalDaReserva, data_vencimento)
+    }catch(error){
+        res.render('erro', { mensagem: "Erro ao criar cobrança PIX."})
+    }finally{
+        console.log(retorno);
+        // Insere o pagamento no BD com a flaq aprovado = false e retorna o seu id
+        const idPagamento = await DAOPagamento.insert(retorno.id_cobranca, (retorno.netValue * dias), retorno.billingType)
+        if(!idPagamento){
+        res.render('erro', { mensagem: "Erro ao criar pagamento."})
+        }
 
-    // Insere o pagamento no BD com a flaq aprovado = false e retorna o seu id
-    const idPagamento = await DAOPagamento.insert(retorno.id_cobranca, (retorno.netValue * dias), retorno.billingType)
-    if(!idPagamento){
-       res.render('erro', { mensagem: "Erro ao criar pagamento."})
+        // Insere a reserva usando o id do pagamento
+        const reserva = await DAOReserva.insert(dataInicio, dataFim, valorDiaria, dias, valorTotalDaReserva, idCliente, idReboque, idPagamento)
+        if(!reserva){
+            res.render('erro', {mensagem: 'Erro ao criar reserva.'})
+        } else {
+            res.render('pagamento/qrcode-cliente', {user: clienteNome(req, res), image: retorno.encodedImage, idPagamento: idPagamento, mensagem: ''})
+            //res.redirect(`${retorno.invoiceUrl}`)
+        }
     }
-
-    // Insere a reserva usando o id do pagamento
-    const reserva = await DAOReserva.insert(dataInicio, dataFim, valorDiaria, dias, valorTotalDaReserva, idCliente, idReboque, idPagamento)
-    if(!reserva){
-        res.render('erro', {mensagem: 'Erro ao criar reserva.'})
-    } else {
-        // res.render('pagamento/qrcode-cliente', {user: clienteNome(req, res), image: retorno.encodedImage, idPagamento: idPagamento, mensagem: ''})
-        res.redirect(`${retorno.invoiceUrl}`)
-    }
-
 })
 
 

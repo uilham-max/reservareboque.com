@@ -11,6 +11,8 @@ const ReservaController = require('./controller/ReservaController')
 const AdminController = require('./controller/AdminController')
 const IndexController = require('./controller/IndexController');
 const pagamentoController = require('./controller/PagamentoController');
+var { removerPagamentosNaoAprovados } = require('./helpers/removerPagamentosNaoAprovados.js')
+
 const app = express()
 
 // Para Express 4.16 ou superior
@@ -24,14 +26,20 @@ app.use(session({secret: 'udjs93ka0', resave: true, saveUninitialized: true}));
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 
-
-
 app.use(ClienteController)
 app.use(ReboqueController)
 app.use(ReservaController)
 app.use(AdminController)
 app.use(IndexController)
 app.use(pagamentoController)
+
+// Como o render não fica mais de 1 minuto no ar, isso remove pagamenos quando ele sobe.
+try{
+    console.log("Removendo reservas que não pagas...");
+    removerPagamentosNaoAprovados()
+}catch(erro){
+    console.error(erro);
+}
 
 conexao.authenticate().then(()=>{
     app.listen(port,()=>{

@@ -15,3 +15,5 @@ cron.schedule('*/10 * * * *', async () => {
     // console.log('Executando função para remover pagamentos não aprovados e suas reservas associadas...');
     await removerPagamentosNaoAprovados()
 });
+
+module.exports = {removerPagamentosNaoAprovados}

@@ -6,6 +6,15 @@ const moment = require('moment-timezone')
 class DAOPagamento {
 
 
+    static async verificaPagamento(codigoPagamento){
+        try{
+            let resposta = await Pagamento.findOne({where: {codigoPagamento: codigoPagamento}})
+            return resposta
+        }catch(erro){
+            console.error(erro.toString());
+            return undefined
+        }
+    }
 
 
     static async removePagamentoComPrazoExpirado(){
@@ -70,30 +79,6 @@ class DAOPagamento {
             return undefined
         }
     }
-
-    // static async getDadosPagamento(valorPagamento){
-    //     try{
-    //         let pagamento = {
-    //             'qrCode':  'qrcode.jpg',
-    //             'codigo': Math.floor(Math.random() * 100000),
-    //             'valor': valorPagamento
-    //         }
-    //         return pagamento
-    //     } catch(erro){
-    //         console.log(erro.toString());
-    //         return undefined
-    //     }
-        
-    // }
-
-    // static async verificaPagamento(){
-    //     try{
-    //         return true
-    //     } catch(erro){
-    //         console.log(erro.toString());
-    //         return false
-    //     }
-    // }
 
     static async delete(id){
         try{

@@ -21,7 +21,7 @@
                             <div id="imageContainer"></div>
                         </div>
                         <input type="hidden" id="idPagamento" name="idPagamento" value="<%= idPagamento %>">
-                        <input type="hidden" id="id_cobranca" name="id_cobranca" value="<%= id_cobranca %>">
+                        <input type="text" id="id_cobranca" name="id_cobranca" value="<%= id_cobranca %>">
                         <p style="margin: 0.5rem;" >
                             <input class="btn btn-primary" type="submit" value="Verificar Pagamento">
                         </p>
@@ -40,16 +40,14 @@
     <%-include('../partials/footer.ejs')%>
 
     <script>
-        const input_id_cobranca = document.getElementById('id_cobranca')
-        // console.log(input_id_cobranca.value);
         const enviarRequisicao = async () => {
             try {
-                const resposta = await fetch('https://d674-2804-14c-5582-963d-00-1008.ngrok-free.app/pagamento/aprovado', {
+                const resposta = await fetch('http://localhost:3000/pagamento/aprovado', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ codigoPagamento: input_id_cobranca.value })
+                    body: JSON.stringify({ codigoPagamento: 'pay_1212' })
                 });
 
                 const resultado = await resposta.json();
@@ -57,14 +55,16 @@
                 // Verifica se a resposta é verdadeira (aprovada)
                 if (resultado.aprovado) {
                     // Redireciona para a página de sucesso
-                    window.location.href = '/pagamento/realizado';
+                    window.location.href = '/sucesso';
+                } else {
+                    console.log('Pagamento não aprovado');
                 }
             } catch (erro) {
                 console.error('Erro ao enviar requisição:', erro);
             }
         };
 
-        setInterval(enviarRequisicao, 2000);
+        setInterval(enviarRequisicao, 1000);
     </script>
 
 

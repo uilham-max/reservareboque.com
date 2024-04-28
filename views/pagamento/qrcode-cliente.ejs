@@ -44,13 +44,14 @@
         console.log(input_id_cobranca.value);
         const enviarRequisicao = async () => {
             try {
-                const resposta = await fetch('https://reboquesoliveira.com/pagamento/aprovado', {
-                    method: 'POST',
+                const resposta = await fetch(`https://reboquesoliveira.com/pagamento/aprovado/${input_id_cobranca.value}`, {
+                    method: 'GET',
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ codigoPagamento: input_id_cobranca.value })
+                    // body: JSON.stringify({ codigoPagamento: input_id_cobranca.value })
                 });
+                console.log(resposta.value);
 
                 const resultado = await resposta.json();
 

@@ -121,7 +121,7 @@ routerPagamento.post('/pagamento/webhook/pix', async (req, res) => {
 
 
 // API que fica testando se o qrcode do PIX foi pago
-routerPagamento.post('/pagamento/aprovado', async (req, res) => {
+routerPagamento.get('/pagamento/aprovado', async (req, res) => {
     let {codigoPagamento} = req.body
     console.log("Acesso API code:",codigoPagamento);
     try{

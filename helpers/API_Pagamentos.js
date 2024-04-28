@@ -71,6 +71,7 @@ async function cadastrarCliente(cpfCnpj, nome){
 
     try {
         let response = await axios.post(url, newCliente, options);
+        console.log("id do cliente criado:",response.data.id);
         return response.data;
     } catch (err) {
         console.error('error:' + err);
@@ -133,8 +134,10 @@ async function criarCobrancaPIX(cpfCnpj, nome, valor, data_vencimento){
     try{
         customerID = await verificaCadastro(cpfCnpj)
         if(customerID == false){
+            console.log("criar cliente >>> nome:",nome,"cpf:",cpfCnpj);
             let retornoCad = await cadastrarCliente(cpfCnpj, nome);
-            customerID = retornoCad.data[0].id;
+            console.log(retornoCad.id);
+            customerID = retornoCad.id;
         }
         retornoPag = await criarPagamento(customerID, valor, data_vencimento);
         retornoQR = await gerarQRCode(retornoPag.id);

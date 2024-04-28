@@ -35,7 +35,7 @@ app.use(pagamentoController)
 
 // Como o render não fica mais de 1 minuto no ar, isso remove pagamenos quando ele sobe.
 try{
-    console.log("Removendo reservas que não pagas...");
+    console.log("Removendo pagamentos com data vencida...");
     removerPagamentosNaoAprovados()
 }catch(erro){
     console.error(erro);

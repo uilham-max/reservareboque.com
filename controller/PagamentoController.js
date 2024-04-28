@@ -112,6 +112,7 @@ routerPagamento.post('/pagamento/webhook/pix', async (req, res) => {
 
 // Configuração de CORS
 routerPagamento.use((req, res, next) => {
+    res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');

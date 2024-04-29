@@ -2,7 +2,7 @@ const conexao = require('./database/conexao.js')
 const express = require('express')
 const session = require('express-session')
 const bodyParser = require('body-parser')
-// const cors = require('cors')
+const cors = require('cors')
 
 const port = 3000
 
@@ -29,24 +29,7 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 
 
-// Lista de origens permitidas
-// const whitelist = ['https://reboquesoliveira.com', 'https://www.reboquesoliveira.com'];
 
-// Opções do cors
-// const corsOptions = {
-//     origin: function (origin, callback) {
-//         if (whitelist.indexOf(origin) !== -1 || !origin) {
-//             callback(null, true);
-//         } else {
-//             callback(new Error('Not allowed by CORS'));
-//         }
-//     }
-// };
-
-
-
-
-// app.use(cors(corsOptions))
 
 app.use(ClienteController)
 app.use(ReboqueController)
@@ -54,6 +37,25 @@ app.use(ReservaController)
 app.use(AdminController)
 app.use(IndexController)
 app.use(pagamentoController)
+
+// Lista de origens permitidas
+const whitelist = ['https://reboquesoliveira.com', 'https://www.reboquesoliveira.com'];
+
+// Opções do cors
+const corsOptions = {
+    origin: function (origin, callback) {
+        if (whitelist.indexOf(origin) !== -1 || !origin) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    }
+};
+
+
+
+
+app.use(cors(corsOptions))
 
 // Como o render não fica mais de 1 minuto no ar, isso remove pagamenos quando ele sobe.
 try{

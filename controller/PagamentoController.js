@@ -9,6 +9,15 @@ const { criarCobrancaPIX } = require('../helpers/API_Pagamentos')
 const moment = require('moment-timezone')
 
 
+// Configuração de CORS
+routerPagamento.use((req, res, next) => {
+    res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    next();
+});
+
 
 // PAGAMENTO REALIZADO SOMENTE POR CLIENTES CADASTRADOS
 routerPagamento.post('/pagamento/qrcode-cliente', clienteAutorizacao, async (req, res) => {
@@ -110,14 +119,6 @@ routerPagamento.post('/pagamento/webhook/pix', async (req, res) => {
     }
 })
 
-// Configuração de CORS
-// routerPagamento.use((req, res, next) => {
-//     res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
-//     res.setHeader('Access-Control-Allow-Origin', '*');
-//     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-//     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-//     next();
-// });
 
 
 // API que fica testando se o qrcode do PIX foi pago

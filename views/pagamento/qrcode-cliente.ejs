@@ -2,6 +2,8 @@
 <html lang="pt-br">
 <head>
     <%-include('../partials/header.ejs')%>
+    <script src="/js/API_verificaPagamento.js" ></script>
+    <script src="/js/renderizaImagemQRCode.js" ></script>
 </head>
 <body  >
     
@@ -13,8 +15,6 @@
             <form action="/pagamento/realizado" method="POST">
                 <div class="lista-reboques">
                 
-                    
-
                     <div class="card card-reserva" style="width: 25rem;">
                         <div class="card-body">
                             <h3 class="card-title">Escaneie o QR Code para finalizar a reserva</h3>
@@ -26,46 +26,13 @@
                             <input class="btn btn-primary" type="submit" value="Verificar Pagamento">
                         </p>
                     </div>
-
-                    
-
                 
                 </div>
             </form>
         </div>
     </div>
 
-
-
     <%-include('../partials/footer.ejs')%>
 
-    <script>
-        const input_id_cobranca = document.getElementById('id_cobranca')
-        const enviarRequisicao = async () => {
-            try {
-                const resposta = await fetch(`https://www.reboquesoliveira.com/pagamento/aprovado/${input_id_cobranca.value}`);
-                const resultado = await resposta.json();
-                if (resultado.aprovado) {
-                    window.location.href = '/pagamento/realizado';
-                }
-            } catch (erro) {
-                console.error('Erro ao enviar requisição:', erro);
-            }
-        };
-        setInterval(enviarRequisicao, 3000);
-    </script>
-
-
-
-    <script>
-        // Decodifica e exibe a imagem
-        window.onload = function() {
-            const encodedImage = '<%= image %>'; // Obtém a imagem codificada do servidor
-            const imageContainer = document.getElementById('imageContainer');
-            const img = document.createElement('img');
-            img.src = 'data:image/jpeg;base64,' + encodedImage; // Decodifica a imagem e define o src
-            imageContainer.appendChild(img);
-        };
-    </script>
 </body>
 </html>

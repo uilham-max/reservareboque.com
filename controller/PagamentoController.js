@@ -7,17 +7,17 @@ const {clienteNome} = require('../helpers/getSessionNome')
 const clienteAutorizacao = require('../autorizacao/clienteAutorizacao')
 const { criarCobrancaPIX } = require('../helpers/API_Pagamentos')
 const moment = require('moment-timezone')
-const cors = require('cors')
+// const cors = require('cors')
 
 
 // Configuração de CORS
-routerPagamento.use((req, res, next) => {
-    res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-    next();
-});
+// routerPagamento.use((req, res, next) => {
+//     res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
+//     res.setHeader('Access-Control-Allow-Origin', '*');
+//     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+//     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+//     next();
+// });
 
 
 // PAGAMENTO REALIZADO SOMENTE POR CLIENTES CADASTRADOS
@@ -123,7 +123,7 @@ routerPagamento.post('/pagamento/webhook/pix', async (req, res) => {
 
 
 // API que fica testando se o qrcode do PIX foi pago
-routerPagamento.get('/pagamento/aprovado/:codigoPagamento', cors(), async (req, res, next) => {
+routerPagamento.get('/pagamento/aprovado/:codigoPagamento', async (req, res) => {
     let {codigoPagamento} = req.params
     console.log("Acesso API code:",codigoPagamento);
     try{

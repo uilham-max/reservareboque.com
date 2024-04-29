@@ -51,10 +51,10 @@
                     },
                     // body: JSON.stringify({ codigoPagamento: input_id_cobranca.value })
                 });
-                console.log(resposta.value);
-
+                
                 const resultado = await resposta.json();
-
+                
+                console.log(resultado);
                 // Verifica se a resposta é verdadeira (aprovada)
                 if (resultado.aprovado) {
                     // Redireciona para a página de sucesso

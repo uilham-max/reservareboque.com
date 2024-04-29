@@ -17,20 +17,20 @@ var { removerPagamentosNaoAprovados } = require('./helpers/removerPagamentosNaoA
 const app = express()
 
 // Lista de origens permitidas
-const whitelist = ['https://reboquesoliveira.com', 'https://www.reboquesoliveira.com'];
+// const whitelist = ['https://reboquesoliveira.com', 'https://www.reboquesoliveira.com'];
 
 // Opções do cors
-const corsOptions = {
-    origin: function (origin, callback) {
-        if (whitelist.indexOf(origin) !== -1 || !origin) {
-            callback(null, true);
-        } else {
-            callback(new Error('Not allowed by CORS'));
-        }
-    }
-};
+// const corsOptions = {
+//     origin: function (origin, callback) {
+//         if (whitelist.indexOf(origin) !== -1 || !origin) {
+//             callback(null, true);
+//         } else {
+//             callback(new Error('Not allowed by CORS'));
+//         }
+//     }
+// };
 
-app.use(cors(corsOptions))
+app.use(cors())
 
 // Para Express 4.16 ou superior
 app.use(express.json())

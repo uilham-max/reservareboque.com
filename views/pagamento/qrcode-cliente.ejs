@@ -3,7 +3,7 @@
 <head>
     <%-include('../partials/header.ejs')%>
     <script src="/js/API_verificaPagamento.js" ></script>
-    <script src="/js/renderizaImagemQRCode.js" ></script>
+    <script src="/js/renderizaImagemQRCode.js"></script>
 </head>
 <body  >
     
@@ -14,11 +14,14 @@
             <!-- <h3>Reboque escolhido</h3> -->
             <form action="/pagamento/realizado" method="POST">
                 <div class="lista-reboques">
-                
+
                     <div class="card card-reserva" style="width: 25rem;">
                         <div class="card-body">
                             <h3 class="card-title">Escaneie o QR Code para finalizar a reserva</h3>
-                            <div id="imageContainer"></div>
+                            <div id="imageContainer">
+                                <img id="qrCodeImage" src="" alt="QR Code">
+                                <input type="hidden" id="codigoHexaImagem" name="codigoHexaImagem" value="<%=image%>">
+                            </div>
                         </div>
                         <input type="hidden" id="idPagamento" name="idPagamento" value="<%= idPagamento %>">
                         <input type="hidden" id="id_cobranca" name="id_cobranca" value="<%= id_cobranca %>">

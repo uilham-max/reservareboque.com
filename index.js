@@ -2,12 +2,9 @@ const conexao = require('./database/conexao.js')
 const express = require('express')
 const session = require('express-session')
 const bodyParser = require('body-parser')
-// const cors = require('cors')
 
 const port = 3000
 const app = express()
-// app.use(cors())
-
 
 const ClienteController = require('./controller/ClienteController')
 const ReboqueController = require('./controller/ReboqueController')
@@ -16,23 +13,6 @@ const AdminController = require('./controller/AdminController')
 const IndexController = require('./controller/IndexController');
 const pagamentoController = require('./controller/PagamentoController');
 var { removerPagamentosNaoAprovados } = require('./helpers/removerPagamentosNaoAprovados.js')
-
-
-// Lista de origens permitidas
-// const whitelist = ['https://reboquesoliveira.com', 'https://www.reboquesoliveira.com'];
-
-// Opções do cors
-// const corsOptions = {
-//     origin: function (origin, callback) {
-//         if (whitelist.indexOf(origin) !== -1 || !origin) {
-//             callback(null, true);
-//         } else {
-//             callback(new Error('Not allowed by CORS'));
-//         }
-//     }
-// };
-
-
 
 // Para Express 4.16 ou superior
 app.use(express.json())

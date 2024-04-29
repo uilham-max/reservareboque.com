@@ -41,30 +41,17 @@
 
     <script>
         const input_id_cobranca = document.getElementById('id_cobranca')
-        console.log(input_id_cobranca.value);
         const enviarRequisicao = async () => {
             try {
-                const resposta = await fetch(`https://www.reboquesoliveira.com/pagamento/aprovado/${input_id_cobranca.value}`, {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    // body: JSON.stringify({ codigoPagamento: input_id_cobranca.value })
-                });
-                
+                const resposta = await fetch(`https://www.reboquesoliveira.com/pagamento/aprovado/${input_id_cobranca.value}`);
                 const resultado = await resposta.json();
-                
-                console.log(resultado);
-                // Verifica se a resposta é verdadeira (aprovada)
                 if (resultado.aprovado) {
-                    // Redireciona para a página de sucesso
                     window.location.href = '/pagamento/realizado';
                 }
             } catch (erro) {
                 console.error('Erro ao enviar requisição:', erro);
             }
         };
-
         setInterval(enviarRequisicao, 3000);
     </script>
 

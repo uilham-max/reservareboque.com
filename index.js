@@ -5,6 +5,9 @@ const bodyParser = require('body-parser')
 const cors = require('cors')
 
 const port = 3000
+const app = express()
+app.use(cors())
+
 
 const ClienteController = require('./controller/ClienteController')
 const ReboqueController = require('./controller/ReboqueController')
@@ -14,7 +17,6 @@ const IndexController = require('./controller/IndexController');
 const pagamentoController = require('./controller/PagamentoController');
 var { removerPagamentosNaoAprovados } = require('./helpers/removerPagamentosNaoAprovados.js')
 
-const app = express()
 
 // Lista de origens permitidas
 // const whitelist = ['https://reboquesoliveira.com', 'https://www.reboquesoliveira.com'];
@@ -30,7 +32,7 @@ const app = express()
 //     }
 // };
 
-app.use(cors())
+
 
 // Para Express 4.16 ou superior
 app.use(express.json())

@@ -7,6 +7,7 @@ const {clienteNome} = require('../helpers/getSessionNome')
 const clienteAutorizacao = require('../autorizacao/clienteAutorizacao')
 const { criarCobrancaPIX } = require('../helpers/API_Pagamentos')
 const moment = require('moment-timezone')
+const cors = require('cors')
 
 
 // Configuração de CORS

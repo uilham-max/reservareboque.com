@@ -2,11 +2,11 @@ const conexao = require('./database/conexao.js')
 const express = require('express')
 const session = require('express-session')
 const bodyParser = require('body-parser')
-const cors = require('cors')
+// const cors = require('cors')
 
 const port = 3000
 const app = express()
-app.use(cors())
+// app.use(cors())
 
 
 const ClienteController = require('./controller/ClienteController')

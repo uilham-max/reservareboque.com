@@ -77,7 +77,7 @@ class DAOCliente{
         try{
             const cliente = await Cliente.create({nome, sobrenome, email, cpf, rg, telefone, data_nascimento, cep, logradouro, complemento, bairro, localidade, uf, numero_da_casa, ativo: true, cadastrado: false})
             console.log(nome, 'criado sem cadasatro...');
-            return cliente.id
+            return cliente
         }
         catch(erro){
             console.log(erro.toString())

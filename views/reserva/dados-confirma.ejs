@@ -9,6 +9,16 @@
 
 
     <div class="conteudo" >
+
+
+        <!-- Menssagem do topo da página em jumbotron -->
+        <div class="jumbotron jumbotron-fluid">
+            <h1 class="display-4" >Confirme os dados da sua reserva.</h1>
+            <p class="lead">Clientes cadastrados podem ver seu histórico de locações, gerenciar suas reservas e receber
+                descontos.</p>
+        </div>
+
+
         <div class="container" >
             <!-- <h3>Reboque escolhido</h3> -->
             <form action="/pagamento/qrcode" method="POST">
@@ -18,13 +28,28 @@
                     <!-- Card do reboque -->
                     <div class="card card-reserva" style="width: 25rem;">
                         <img src="../../<%=reboque.foto%>" class="card-img-top" alt="...">
+                    </div>
+
+
+                    <!-- Dados de RESERVA -->
+                    <div class="card card-reserva" style="width: 25rem;">
                         <div class="card-body">
-                            <h5 class="card-text">Total R$: <%=reserva.valorTotalDaReserva%>,00</h5>
-                            <h5 class="card-text">PBT: <%=reboque.pesoBruto%> Kg</h5>
+                            <h3 class="card-title">Dados da Reserva</h3>
                             <hr>
-                            <h5 class="card-text">Data Retirada: <%=reserva.dataInicio%></h5>
-                            <h5 class="card-text">Data Entrega: <%=reserva.dataFim%></h5>
-                            <h5 class="card-text">Dias: <%=reserva.dias%></h5>
+                            
+                            <div class="form-group">
+                                <label for="dataInicio_input">Data de início</label>
+                                <input class="form-control" id="dataInicio_input" type="text" name="dataInicio_input" value="<%=reserva.dataInicio.toString().slice(8,10)+'/'+reserva.dataInicio.toString().slice(5,7)+'/'+reserva.dataInicio.toString().slice(0,4)%>" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label for="dataFim_input">Data de fim</label>
+                                <input class="form-control" id="dataFim_input" type="text" name="dataFim_input" value="<%=reserva.dataFim.toString().slice(8,10)+'/'+reserva.dataFim.toString().slice(5,7)+'/'+reserva.dataFim.toString().slice(0,4)%>" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label for="valorTotalDaReserva_input">Valor Total R$</label>
+                                <input class="form-control" id="valorTotalDaReserva_input" type="text" name="valorTotalDaReserva_input" value="<%=reserva.valorTotalDaReserva%>" disabled>
+                            </div>
+                        
                         </div>
                     </div>
 
@@ -39,21 +64,25 @@
                                 <input class="form-control" id="nome_input" type="text" name="nome_input" value="<%=cliente.nome%>" disabled>
                             </div>
                             <div class="form-group">
+                                <label for="cpf_input">CPF</label>
+                                <input class="form-control" id="cpf_input" type="text" name="cpf_input" value="<%=cliente.cpf%>" disabled>
+                            </div>
+                            <!-- <div class="form-group">
                                 <label for="sobrenome_input">Sobrenome</label>
                                 <input class="form-control" id="sobrenome_input" type="text" name="sobrenome_input"value="<%=cliente.sobrenome%>" disabled>
-                            </div>
+                            </div> -->
                             <div class="form-group">
                                 <label for="telefone_input">Telefone</label>
                                 <input class="form-control" id="telefone_input" type="text" name="telefone_input" value="<%=cliente.telefone%>" disabled>
                             </div>
-                            <div class="form-group">
+                            <!-- <div class="form-group">
                                 <label for="email_input">Email</label>
                                 <input class="form-control" id="email_input" type="email" name="email_input"value="<%=cliente.email%>" disabled>
-                            </div>
-                            <div class="form-group">
+                            </div> -->
+                            <!-- <div class="form-group">
                                 <label for="dataNascimento_input">Nascimento</label>
                                 <input class="form-control" id="dataNascimento_input" type="date" name="dataNascimento_input"value="<%=cliente.dataNascimento%>" disabled>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
 
@@ -64,6 +93,10 @@
                             <h3 class="card-title">Endereço</h3>
                             <hr>
                             <div class="form-group">
+                                <label for="cep_input">CEP</label>
+                                <input class="form-control" id="cep_input" type="text" name="cep_input"value="<%=cliente.cep%>" disabled>
+                            </div>
+                            <div class="form-group">
                                 <label for="logradouro_input">Nome da rua</label>
                                 <input class="form-control" id="logradouro_input" type="text" name="logradouro_input"value="<%=cliente.logradouro%>" disabled>
                             </div>
@@ -71,15 +104,20 @@
                                 <label for="numeroDaCasa_input">Número da casa</label>
                                 <input class="form-control" id="numeroDaCasa_input" type="text" name="numeroDaCasa_input"value="<%=cliente.numeroDaCasa%>" disabled>
                             </div>
-                            <div class="form-group">
+                            <!-- <div class="form-group">
                                 <label for="bairro_input">Bairro</label>
                                 <input class="form-control" id="bairro_input" type="text" name="bairro_input"value="<%=cliente.bairro%>" disabled>
-                            </div>
+                            </div> -->
                             <div class="form-group">
                                 <label for="cidade_input">Cidade</label>
                                 <input class="form-control" id="cidade_input" type="text" name="cidade_input"value="<%=cliente.localidade%>" disabled>
                             </div>
                         </div>
+                        
+                        <p style="margin: 0.5rem;" >
+                            <input class="btn btn-primary" type="submit" value="Gerar QR Code PIX">
+                        </p>
+
                     </div>
 
 
@@ -93,28 +131,26 @@
 
                     <!-- dados cliente -->
                     <input type="hidden" id="nome" name="nome" value="<%=cliente.nome%>">
-                    <input type="hidden" id="sobrenome" name="sobrenome" value="<%=cliente.sobrenome%>">
-                    <input type="hidden" id="email" name="email" value="<%=cliente.email%>">
+                    <!-- <input type="hidden" id="sobrenome" name="sobrenome" value="<%=cliente.sobrenome%>"> -->
+                    <!-- <input type="hidden" id="email" name="email" value="<%=cliente.email%>"> -->
                     <input type="hidden" id="cpf" name="cpf" value="<%=cliente.cpf%>">
-                    <input type="hidden" id="rg" name="rg" value="<%=cliente.rg%>">
+                    <!-- <input type="hidden" id="rg" name="rg" value="<%=cliente.rg%>"> -->
                     <input type="hidden" id="telefone" name="telefone" value="<%=cliente.telefone%>">
-                    <input type="hidden" id="dataNascimento" name="dataNascimento" value="<%=cliente.dataNascimento%>">
+                    <!-- <input type="hidden" id="dataNascimento" name="dataNascimento" value="<%=cliente.dataNascimento%>"> -->
 
                     <!-- dados endereço -->
                     <input type="hidden" id="logradouro" name="logradouro" value="<%=cliente.logradouro%>">
                     <input type="hidden" id="numeroDaCasa" name="numeroDaCasa" value="<%=cliente.numeroDaCasa%>">
-                    <input type="hidden" id="bairro" name="bairro" value="<%=cliente.bairro%>">
+                    <!-- <input type="hidden" id="bairro" name="bairro" value="<%=cliente.bairro%>"> -->
                     <input type="hidden" id="localidade" name="localidade" value="<%=cliente.localidade%>">
-                    <input type="hidden" id="uf" name="uf" value="<%=cliente.uf%>">
+                    <!-- <input type="hidden" id="uf" name="uf" value="<%=cliente.uf%>"> -->
                     <input type="hidden" id="cep" name="cep" value="<%=cliente.cep%>">
                     <input type="hidden" id="complemento" name="complemento" value="<%=cliente.complemento%>">
 
 
 
 
-                    <p style="margin: 0.5rem;" >
-                        <input class="btn btn-primary" type="submit" value="Gerar QR Code">
-                    </p>
+                   
 
                     
 

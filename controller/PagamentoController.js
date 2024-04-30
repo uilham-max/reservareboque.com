@@ -25,13 +25,9 @@ routerPagamento.post('/pagamento/qrcode-cliente', clienteAutorizacao, async (req
     // Consome API
     let retorno;
     try{
-
         retorno = await criarCobrancaPIX(cliente.cpf, cliente.nome, valorTotalDaReserva, data_vencimento)
-    
     }catch(error){
-
         res.render('erro', { mensagem: "Erro ao criar cobrança PIX."})
-
     }finally{
 
         // Insere o pagamento no BD com a flaq aprovado = false e retorna o seu id
@@ -53,45 +49,56 @@ routerPagamento.post('/pagamento/qrcode-cliente', clienteAutorizacao, async (req
 })
 
 
-
-// PUBLICO
+// GERAR QR CODE PARA CLIENTES NÃO CADASTRADOS
 routerPagamento.post('/pagamento/qrcode', async (req, res) => {
     
     let {nome, sobrenome, email, cpf, rg, telefone, cep, dataNascimento, logradouro, complemento, bairro, 
     localidade, uf, numeroDaCasa, idReboque, dataInicio, dataFim, valorDiaria, dias, valorTotalDaReserva} = req.body
 
     let idCliente
-
-    // Faz aproveitamento de clientes não cadastrados
-    const cliente = await DAOCliente.verificaSeOClienteJaExiste(cpf)
+    // VERIFICA SE O CPF FOI USADO ANTERIORMENTE. SE FOR, A RESERVA SERÁ CONTABILIZADA NESTE CPF
+    var cliente = await DAOCliente.verificaSeOClienteJaExiste(cpf)
+    
     if(!cliente){
-        idCliente = await DAOCliente.insertClienteQueNaoQuerSeCadastrar(nome, sobrenome, email, cpf, rg, telefone, dataNascimento, cep, logradouro, complemento, bairro, localidade, uf, numeroDaCasa)
-        if(!idCliente){
+        
+        // CASO O CPF NÃO SEJA ENCONTRADO SERÁ CRIADO UM CLIENTE NOVO 
+        console.log(nome, "<- cliente novo foi cadastrado");
+        cliente = await DAOCliente.insertClienteQueNaoQuerSeCadastrar(nome, sobrenome, email, cpf, rg, telefone, dataNascimento, cep, logradouro, complemento, bairro, localidade, uf, numeroDaCasa)
+        // console.log(cliente);
+        
+        if(!cliente){
             res.render('erro', {mensagem: 'erro ao criar cliente'})
         }  
-    } else {
-        idCliente = cliente.id
+
     }
 
+    let data_vencimento = moment.tz( new Date(), 'America/Sao_Paulo' )
+    data_vencimento = data_vencimento.format('YYYY-MM-DD')
 
-    // Envia os dados de pagamento para API e recebe JSON com os dados de pagamento 
-    const pagamento = await DAOPagamento.getDadosPagamento(valorTotalDaReserva)
-    if(!pagamento){
-       res.render('erro', { mensagem: "Erro ao criar pagamento."})
-    }
+    // Consome API de pagamento
+    let retorno;
+    try{
+        retorno = await criarCobrancaPIX(cliente.cpf, cliente.nome, valorTotalDaReserva, data_vencimento)
+    }catch(error){
+        res.render('erro', { mensagem: "Erro ao criar cobrança PIX."})
+    }finally{
 
-    // Insere o pagamento no BD com a flaq aprovado = false e retorna o seu id
-    const idPagamento = await DAOPagamento.insert(pagamento.codigo, valorTotalDaReserva)
-    if(!idPagamento){
-       res.render('erro', { mensagem: "Erro ao criar pagamento."})
-    }
+        // Insere o pagamento no BD com a flaq aprovado = false e retorna o seu id
+        const idPagamento = await DAOPagamento.insert(retorno.id_cobranca, (retorno.netValue * dias), retorno.billingType)
+        if(!idPagamento){
+        res.render('erro', { mensagem: "Erro ao criar pagamento."})
+        }
 
-    // Insere a reserva usando o id do pagamento e do cliente inserido
-    const reserva = await DAOReserva.insert(dataInicio, dataFim, valorDiaria, dias, valorTotalDaReserva, idCliente, idReboque, idPagamento)
-    if(!reserva){
-        res.render('erro', {mensagem: 'Erro ao criar reserva.'})
-    } else {
-        res.render('pagamento/qrcode', {user: clienteNome(req, res), idPagamento: idPagamento, qrCode: pagamento.qrCode, mensagem: ''})
+
+        // Insere a reserva usando o id do pagamento
+        const reserva = await DAOReserva.insert(dataInicio, dataFim, valorDiaria, dias, valorTotalDaReserva, cliente.id, idReboque, idPagamento)
+        if(!reserva){
+            res.render('erro', {mensagem: 'Erro ao criar reserva.'})
+        } else {
+            res.render('pagamento/qrcode-cliente', {user: clienteNome(req, res),id_cobranca: retorno.id_cobranca, image: retorno.encodedImage, PIXCopiaECola: retorno.PIXCopiaECola, mensagem: ''})
+            //res.redirect(`${retorno.invoiceUrl}`)
+        }
+
     }
 
 })
@@ -108,7 +115,6 @@ routerPagamento.post('/pagamento/webhook/pix', async (req, res) => {
         res.sendStatus(200) ;
     }
 })
-
 
 
 // API que fica testando se o qrcode do PIX foi pago

@@ -49,7 +49,7 @@
                                     </div>
                                   
                                 </div>
-                                <div class="form-group">
+                                <!-- <div class="form-group">
                                     <label for="sobrenome">Sobrenome</label>
                                     <input class="form-control" id="sobrenome" type="text" name="sobrenome" maxlength="20" required>
                                     <div class="valid-feedback">
@@ -59,7 +59,7 @@
                                         Preencha o campo sobrenome.
                                     </div>
                                 
-                                </div>
+                                </div> -->
                                 <div class="form-group">
                                     <label for="cpf">CPF</label>
                                     <input class="form-control" id="cpf" type="text" name="cpf" maxlength="11">
@@ -70,7 +70,7 @@
                                         Preencha o campo CPF.
                                     </div>
                                 </div>
-                                <div class="form-group">
+                                <!-- <div class="form-group">
                                     <label for="email">Email</label>
                                     <input class="form-control" id="email" type="email" name="email" maxlength="100" >
                                     <div class="valid-feedback">
@@ -79,9 +79,9 @@
                                     <div class="invalid-feedback">
                                         Preencha o campo Email.
                                     </div>
-                                </div>
+                                </div> -->
                                                                                               
-                                <div class="form-group">
+                                <!-- <div class="form-group">
                                     <label for="rg">RG</label>
                                     <input class="form-control" id="rg" type="text" name="rg" maxlength="11">
                                     <div class="valid-feedback">
@@ -90,7 +90,7 @@
                                     <div class="invalid-feedback">
                                         Preencha o campo RG.
                                     </div>
-                                </div>
+                                </div> -->
                                 
                                 <div class="form-group">
                                     <label for="telefone">Telefone</label>
@@ -102,7 +102,7 @@
                                         Preencha o campo Telefone.
                                     </div>
                                 </div> 
-                                <div class="form-group">
+                                <!-- <div class="form-group">
                                     <label for="dataNascimento">Data de nascimento</label>
                                     <input class="form-control" id="dataNascimento" type="date" name="dataNascimento">
                                     <div class="valid-feedback">
@@ -111,7 +111,7 @@
                                     <div class="invalid-feedback">
                                         Preencha a data.
                                     </div>
-                                </div> 
+                                </div>  -->
                                 
                         </div>
                     </div>
@@ -159,7 +159,7 @@
                                 <label for="complemento">Complemento</label>
                                 <input class="form-control" id="complemento" type="text" name="complemento" maxlength="100">
                             </div>
-                            <div class="form-group">
+                            <!-- <div class="form-group">
                                 <label for="bairro">Bairro</label>
                                 <input class="form-control" id="bairro" type="text" name="bairro" maxlength="50" >
                                 <div class="valid-feedback">
@@ -168,7 +168,7 @@
                                 <div class="invalid-feedback">
                                     Preencha o campo Bairro.
                                 </div>
-                            </div>
+                            </div> -->
                             <div class="form-group">
                                 <label for="localidade">Cidade</label>
                                 <input class="form-control" id="localidade" type="text" name="localidade" maxlength="30">
@@ -179,7 +179,7 @@
                                     Preencha o campo Cidade.
                                 </div>
                             </div>
-                            <div class="form-group">
+                            <!-- <div class="form-group">
                                 <label for="uf">Estado (UF)</label>
                                 <input class="form-control" id="uf" type="text" name="uf" maxlength="2">
                                 <div class="valid-feedback">
@@ -188,13 +188,13 @@
                                 <div class="invalid-feedback">
                                     Preencha o campo UF.
                                 </div>
-                            </div>
+                            </div> -->
                             
                             
                             
                         </div>
                         <p style="margin: 0.5rem;" >
-                            <input class="btn btn-primary" type="submit" value="Pagar com PIX">
+                            <input class="btn btn-primary" type="submit" value="Confirmar">
                         </p>
                     </div>
 
@@ -204,6 +204,8 @@
                     <input type="hidden" id="valorDiaria" name="valorDiaria" value="<%=reboque.valorDiaria%>">
                     <input type="hidden" id="dias" name="dias" value="<%=dias%>">
                     <input type="hidden" id="valorTotalDaReserva" name="valorTotalDaReserva" value="<%=valorTotalDaReserva%>">
+                    <input type="hidden" id="bairro" name="bairro" value="">
+                    <input type="hidden" id="uf" name="uf" value="">
 
 
                 </div>

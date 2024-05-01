@@ -9,6 +9,19 @@
     <%-include('../partials/navbar.ejs')%>
 
     <div class="conteudo" >
+
+        <% if (user == '') { %>
+
+            <!-- Menssagem do topo da página em jumbotron -->
+            <div class="jumbotron jumbotron-fluid">
+                <h1 class="display-4" >Cadastre-se para receber descontos!</h1>
+                <p class="lead">Clientes cadastrados podem ver seu histórico de locações, gerenciar suas reservas e receber
+                    descontos.</p>
+            </div>
+
+        <% } %>
+
+
         <div class="container" >
             <!-- <h3>Reboque escolhido</h3> -->
             <div class="lista-reboques">
@@ -19,35 +32,37 @@
                       <h5 class="card-text">Diária R$: <%=reboque.valorDiaria%>,00</h5>
                       <hr>
                       <h5 class="card-text"><%=reboque.descricao%></h5>
-                      
-                      <% if(reservas != '') {%>
-                        <hr>
-                        <h5 class="card-text">Indisponível para estas datas</h5>
-                      <% } %>  
-                      
-                      <% reservas.forEach(function(reserva) { %>
-                        <p>
-                            de <%=reserva.dataSaida.toString().slice(8,10)+'/'+reserva.dataSaida.toString().slice(5,7)+'/'+reserva.dataSaida.toString().slice(0,4)%> 
-                            à  <%=reserva.dataChegada.toString().slice(8,10)+'/'+reserva.dataChegada.toString().slice(5,7)+'/'+reserva.dataChegada.toString().slice(0,4)%>
-                        </p>
-                        <%})%>
-                        <% if(mensagem){%>
-                            <div class="alert alert-danger">
-                                <strong>Erro!</strong>
-                                <%= mensagem %>
-                            </div>
-                        <% } %>
                     </div>
                 </div>
 
 
                 <div class="card card-reserva" style="width: 25rem;">
                     <div class="card-body">
+                        
                         <% if(user == '') {%>
                             <form class="needs-validation" novalidate action="/reserva/dados-informa" method="POST">
                         <% } else {%>
                             <form class="needs-validation" novalidate action="/reserva/dados-confirma-cliente" method="POST">
                         <% } %>
+
+
+                        
+                            <% if(reservas != '') {%>
+                                <div class="alert alert-danger">
+                                    <h5 class="card-text">Indisponível para estas datas</h5>
+                                    <% reservas.forEach(function(reserva) { %>
+                                        <p>
+                                            de <%=reserva.dataSaida.toString().slice(8,10)+'/'+reserva.dataSaida.toString().slice(5,7)+'/'+reserva.dataSaida.toString().slice(0,4)%> 
+                                            à  <%=reserva.dataChegada.toString().slice(8,10)+'/'+reserva.dataChegada.toString().slice(5,7)+'/'+reserva.dataChegada.toString().slice(0,4)%>
+                                        </p>
+        
+                                    <%})%>
+                                </div>
+                                
+                                <hr>
+                            <% } %>  
+
+
                             <h5>Informe o periodo</h5>
                             <hr>
                             
@@ -55,7 +70,7 @@
                                 <span class="input-group-text" >Data de Retirada</span>
                                 <input class="form-control" id="dataInicio" type="date" name="dataInicio" required>
                                 <div class="valid-feedback">
-                                    Looks good!
+                                    <!-- Looks good! -->
                                 </div>
                                 <div class="invalid-feedback">
                                     Verifique a data.
@@ -67,7 +82,7 @@
                                 <span class="input-group-text" >Data de Entrega</span>
                                 <input class="form-control" id="dataFim" type="date" name="dataFim" required>
                                 <div class="valid-feedback">
-                                    Looks good!
+                                    <!-- Looks good! -->
                                 </div>
                                 <div class="invalid-feedback">
                                     Verifique a data.
@@ -75,7 +90,13 @@
                             </div>
                             
                             <input type="hidden" name="id" value="<%=reboque.id%>" >
-                            <input class="btn btn-primary" id="botao" type="submit" value="Próximo">
+                            <input class="btn btn-primary" id="botao" type="submit" value="Próximo"><br><br>
+                            <% if(mensagem){%>
+                                <div class="alert alert-danger">
+                                    <strong>Atenção!</strong>
+                                    <%= mensagem %>
+                                </div>
+                            <% } %>
                         </form><br>
 
                     </div>

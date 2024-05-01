@@ -9,6 +9,27 @@ const Diaria = require('../bill_modules/Diaria')
 const clienteAutorizacao = require('../autorizacao/clienteAutorizacao')
 
 
+/**
+ * Se o cliente que estiver acessando essa rota for cadastrado, então ele deve ser redirecionado
+ * diretamente para a tela de confirmação dos dados da reserva
+ * Ess rota apenas irá mostrar as datas de indisponibilidade do reboque
+*/
+
+// ROTA PÚBLICA - TELA ONDE É ESCOLHIDO O PERÍODO DA RESERVA
+routerReserva.get('/reserva/periodo/:id?', (req, res) => {
+    id = req.params.id
+    DAOReserva.getAtivasPorID(id).then(reservas => {
+        DAOReboque.getOne(id).then(reboque => {
+            if(reboque){
+                res.render('reserva/periodo', {user: clienteNome(req, res), mensagem: "", reboque: reboque, reservas: reservas})
+            } else {
+                res.render('erro', {mensagem: "Erro ao mostrar reboque."})
+            }
+        })
+    })
+})
+
+
 // ROTA PUBLICA - APARECE APENAS PARA CLIENTES SEM CADASTRO
 routerReserva.post('/reserva/dados-informa', (req, res) => {
     let {id, dataInicio, dataFim} =  req.body
@@ -22,10 +43,12 @@ routerReserva.post('/reserva/dados-informa', (req, res) => {
             if(reboque && resposta.length === 0){
                 let dias = Diaria.calcularDiarias(dataInicio, dataFim)
                 let valorTotalDaReserva = Diaria.calcularValorTotalDaReserva(dias, reboque.valorDiaria)
-                res.render('reserva/dados-informa', {user: clienteNome(req, res), dias: dias, reboque: reboque, dataInicio: dataInicio, dataFim: dataFim, valorTotalDaReserva: valorTotalDaReserva})
+                let valorTotalDaReservaComDesconto = Diaria.aplicarDescontoNaDiariaParaCliente(valorTotalDaReserva, dias)
+                        
+                res.render('reserva/dados-informa', {user: clienteNome(req, res), dias: dias, reboque: reboque, dataInicio: dataInicio, dataFim: dataFim, valorTotalDaReserva: valorTotalDaReserva,  valorTotalDaReservaComDesconto: valorTotalDaReservaComDesconto,})
             } else {
-                DAOReserva.getAtivas(id).then(reservas => {
-                    res.render('reserva/periodo', {user: clienteNome(req, res), reboque: reboque, reservas: reservas, mensagem: "Indisponivel para esta data."})
+                DAOReserva.getAtivasPorID(id).then(reservas => {
+                    res.render('reserva/periodo', {user: clienteNome(req, res), reboque: reboque, reservas: reservas, mensagem: "Indisponível para esta data."})
                 })
                 
             }
@@ -118,27 +141,6 @@ routerReserva.post('/reserva/dados-confirma-cliente', clienteAutorizacao, (req, 
     } )
 })
 
-
-
-/**
- * Se o cliente que estiver acessando essa rota for cadastrado, então ele deve ser redirecionado
- * diretamente para a tela de confirmação dos dados da reserva
- * Ess rota apenas irá mostrar as datas de indisponibilidade do reboque
-*/
-
-// ROTA PÚBLICA - TELA ONDE É ESCOLHIDO O PERÍODO DA RESERVA
-routerReserva.get('/reserva/periodo/:id?', (req, res) => {
-    id = req.params.id
-    DAOReserva.getAtivasPorID(id).then(reservas => {
-        DAOReboque.getOne(id).then(reboque => {
-            if(reboque){
-                res.render('reserva/periodo', {user: clienteNome(req, res), mensagem: "", reboque: reboque, reservas: reservas})
-            } else {
-                res.render('erro', {mensagem: "Erro ao mostrar reboque."})
-            }
-        })
-    })
-})
 
 
 

@@ -2,22 +2,23 @@
   <div class="container-fluid">
     
     <!-- Icone do menu -->
-    <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon fs-6"></span>
+    <button style="border-width: 0;" class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+      <!-- <span class="navbar-toggler-icon fs-6"></span> -->
+      <span class="fa fa-bars"></span>
     </button>
 
     
     <!-- <a class="navbar-brand" href="#">Offcanvas navbar</a> -->
     <a class="navbar-brand " href="/">
       <img src="/img/logo_icon.png" alt="Logo" width="50" height="40" class="d-inline-block align-text-center">
-      Reboke.com
+      Reboques Oliveira
     </a>
 
     <!-- Icone do usuario -->
     <div class="btn-group dropstart">
       <div class="dropdown">
         
-        <button class="navbar-toggler" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <button style="border-width: 0;" class="navbar-toggler" type="button" data-bs-toggle="dropdown" aria-expanded="false">
         <% if(user && (user != 'User')) { %>
           <span ><%= user.nome.slice(0,2) %></span>
         <% } else { %>
@@ -27,19 +28,20 @@
         
         <ul class="dropdown-menu">
           <% if(user != ''){ %>
-            <li><a class="dropdown-item" href="/login"><%= user.email %></a></li>
+            <!-- <span class="fa fa-user" aria-hidden="true"></span> -->
+            <li><a class="dropdown-item fa fa-user" href="#">   <%=  user.email %></a></li>
           <% }else{%>
-            <li><a class="dropdown-item" href="/login">Entrar</a></li>
+            <li><a class="dropdown-item fa fa-user" href="/login">   Entrar</a></li>
           <%}%>
           
           <% if(user != ''){ %>
-            <li><a class="dropdown-item" href="/cadastro">Trocar usuário</a></li>
+            <li><a class="dropdown-item fa fa-user-plus" href="/cadastro">  Trocar usuário</a></li>
           <% }else{ %>
-            <li><a class="dropdown-item" href="/cadastro">Criar conta</a></li>
+            <li><a class="dropdown-item fa fa-user-plus " href="/cadastro">  Criar conta</a></li>
           <% } %>
           
           <% if(user != ''){ %>
-            <li><a class="dropdown-item" href="/cliente/logout">Sair</a></li>
+            <li><a class="dropdown-item fa fa-arrow-circle-left" href="/cliente/logout">  Sair</a></li>
           <% } %>
 
         </ul>

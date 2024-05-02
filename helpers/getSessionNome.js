@@ -1,3 +1,5 @@
+
+// RETORNA SOMENTE AS INICIAS DO NOME
 function clienteNome(req, res){
     if(req.session.cliente && req.session.cliente.nome){
         let a = req.session.cliente.nome

@@ -96,9 +96,15 @@
                                 <input class="form-control" id="dataFim_input" type="text" name="dataFim_input" value="<%=reserva.dataFim.toString().slice(8,10)+'/'+reserva.dataFim.toString().slice(5,7)+'/'+reserva.dataFim.toString().slice(0,4)%>" disabled>
                             </div>
                             <div class="input-group mb-3">
-                                <span class="input-group-text" >Valor Total R$</span>
-                                <input class="form-control" id="valorTotalDaReserva_input" type="text" name="valorTotalDaReserva_input" value="<%=reserva.valorTotalDaReserva%>" disabled>
+                                <span class="input-group-text" >Valor Total</span>
+                                <input class="form-control" id="valorTotalDaReserva_input" type="text" name="valorTotalDaReserva_input" value="R$ <%=reserva.valorTotalDaReserva.toFixed(2)%>" disabled>
                             </div>
+                            <% if(user != '') { %>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" >Desconto aplicado</span>
+                                <input class="form-control" id="desconto_input" type="text" name="desconto_input" value="R$ <%=reserva.desconto.toFixed(2)%>" disabled>
+                            </div>
+                            <% } %>
                         
                         </div>
 

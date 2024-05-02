@@ -61,7 +61,7 @@ routerCliente.get('/cliente/existe/:cpf?', (req, res) => {
      * OS CAMPOS DE INPUTS DA PÁGINA DE CADASTRO DE CLIENTE
     */
     let cpf = req.params.cpf
-    DAOCliente.verificaSeOClienteJaExiste(cpf).then(cliente => {
+    DAOCliente.verificaSeClienteExiste(cpf).then(cliente => {
         if(cliente){
             res.json(cliente);
         }

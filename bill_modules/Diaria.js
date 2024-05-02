@@ -9,17 +9,25 @@ class Diaria {
 	}
 
 	static calcularValorTotalDaReserva(quantidadeDeDias, valorDaDiaria){
-		return quantidadeDeDias*valorDaDiaria
+		let valor = quantidadeDeDias*valorDaDiaria
+		if(valor > 600){
+			valor = 600
+		}
+		return valor
 	}
 
 	static aplicarDescontoNaDiariaParaCliente(valor, dias){
 		if(dias < 3){
-			return valor * 0.90 
+			valor =+ valor * 0.90 
 		} else if(dias < 5){
-			return valor * 0.85 
+			valor =+ valor * 0.85 
 		} else {
-			return valor * 0.80
+			valor =+ valor * 0.80
 		} 
+		if(valor > 500){
+			valor = 500
+		}
+		return valor
 	}
 }
 module.exports = Diaria

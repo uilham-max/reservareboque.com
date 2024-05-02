@@ -3,7 +3,7 @@
 <head>
     <%-include('../partials/header.ejs')%>
     <script src="/js/consome_viacep.js" ></script>
-    <script src="/js/preenche_pelo_cpf.js" ></script>
+    <script src="/js/validaCPF.js" ></script>
     <script src="/js/validaCamposClienteDados.js" ></script>
 </head>
 <body  >
@@ -155,12 +155,12 @@
 
                             <div class="input-group mb-3">
                                 <span class="input-group-text" >Total R$</span>
-                                <input class="form-control" id="dataFim_input" type="text" name="dataFim_input" value="<%=valorTotalDaReserva%>" disabled>
+                                <input class="form-control" id="dataFim_input" type="text" name="dataFim_input" value="<%=valorTotalDaReserva.toFixed(2)%>" disabled>
                             </div>
                         
                         </div><br>
 
-                        <p class="fs-6" >Click em <a href="/cadastro"> cadastrar-se </a> e economize R$ <%= valorTotalDaReserva - valorTotalDaReservaComDesconto %> nesta reserva </p>
+                        <p class="fs-6" >Click em <a href="/cadastro"> cadastrar-se </a> e economize R$ <%= (valorTotalDaReserva-valorTotalDaReservaComDesconto).toFixed(2) %></p>
 
                         <p style="margin: 0.5rem;" >
                             <input class="btn btn-primary" type="submit" value="Confirmar">

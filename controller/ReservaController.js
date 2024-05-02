@@ -17,9 +17,9 @@ const clienteAutorizacao = require('../autorizacao/clienteAutorizacao')
 
 // ROTA PÚBLICA - TELA ONDE É ESCOLHIDO O PERÍODO DA RESERVA
 routerReserva.get('/reserva/periodo/:id?', (req, res) => {
-    id = req.params.id
-    DAOReserva.getAtivasPorID(id).then(reservas => {
-        DAOReboque.getOne(id).then(reboque => {
+    let idReboque = req.params.id
+    DAOReserva.getAtivasPorID(idReboque).then(reservas => {
+        DAOReboque.getOne(idReboque).then(reboque => {
             if(reboque){
                 res.render('reserva/periodo', {user: clienteNome(req, res), mensagem: "", reboque: reboque, reservas: reservas})
             } else {
@@ -30,16 +30,16 @@ routerReserva.get('/reserva/periodo/:id?', (req, res) => {
 })
 
 
-// ROTA PUBLICA - APARECE APENAS PARA CLIENTES SEM CADASTRO
+// SOMENTE PARA CLIENTES SEM CADASTRO
 routerReserva.post('/reserva/dados-informa', (req, res) => {
-    let {id, dataInicio, dataFim} =  req.body
+    let {idReboque, dataInicio, dataFim} =  req.body
 
     if(dataInicio > dataFim){
         res.render('erro', {mensagem: 'Erro com as datas.'})
     }
 
-    DAOReserva.getVerificaDisponibilidade(id, dataInicio, dataFim).then( resposta => {
-        DAOReboque.getOne(id).then(reboque => {
+    DAOReserva.getVerificaDisponibilidade(idReboque, dataInicio, dataFim).then( resposta => {
+        DAOReboque.getOne(idReboque).then(reboque => {
             if(reboque && resposta.length === 0){
                 let dias = Diaria.calcularDiarias(dataInicio, dataFim)
                 let valorTotalDaReserva = Diaria.calcularValorTotalDaReserva(dias, reboque.valorDiaria)
@@ -47,7 +47,7 @@ routerReserva.post('/reserva/dados-informa', (req, res) => {
                         
                 res.render('reserva/dados-informa', {user: clienteNome(req, res), dias: dias, reboque: reboque, dataInicio: dataInicio, dataFim: dataFim, valorTotalDaReserva: valorTotalDaReserva,  valorTotalDaReservaComDesconto: valorTotalDaReservaComDesconto,})
             } else {
-                DAOReserva.getAtivasPorID(id).then(reservas => {
+                DAOReserva.getAtivasPorID(idReboque).then(reservas => {
                     res.render('reserva/periodo', {user: clienteNome(req, res), reboque: reboque, reservas: reservas, mensagem: "Indisponível para esta data."})
                 })
                 
@@ -59,44 +59,62 @@ routerReserva.post('/reserva/dados-informa', (req, res) => {
 
 
 // ROTA PUBLICA
-routerReserva.post('/reserva/dados-confirma', (req, res) => {
-    let {nome, sobrenome, email, cpf, rg, telefone, cep, dataNascimento, logradouro, complemento, bairro, 
-    localidade, uf, numeroDaCasa, idReboque, dataInicio, dataFim, valorDiaria, dias, valorTotalDaReserva} = req.body
+routerReserva.post('/reserva/dados-confirma', async (req, res) => {
+    
+    let {nome, cpf, telefone, cep, logradouro, complemento, localidade,
+    numeroDaCasa, idReboque, dataInicio, dataFim} = req.body
 
+
+    // CLIENTE LOGADO
+    let clienteLogado = {}
+    if(req.session.cliente){
+        clienteLogado = await DAOCliente.getOne(req.session.cliente.id)
+        if(!clienteLogado){
+            res.render('erro', {mensagem: "Erro ao buscar cliente"})
+        }
+    }
+
+
+    // Cria o objeto Cliente 
+    cliente = {
+        'nome': clienteLogado.nome ? clienteLogado.nome : nome, 
+        'cpf':clienteLogado.cpf ? clienteLogado.cpf : cpf, 
+        'telefone':clienteLogado.telefone ? clienteLogado.telefone : telefone, 
+        'cep':clienteLogado.cep ? clienteLogado.cep : cep, 
+        'logradouro':clienteLogado.logradouro ? clienteLogado.logradouro : logradouro, 
+        'complemento':clienteLogado.complemento ? clienteLogado.complemento : complemento, 
+        'localidade':clienteLogado.localidade ? clienteLogado.localidade : localidade, 
+        'numeroDaCasa':clienteLogado.numero_da_casa ? clienteLogado.numero_da_casa : numeroDaCasa,
+    }
+
+
+    // BUSCA REBOQUE POR ID
+    let reboque = await DAOReboque.getOne(idReboque)
+    if(!reboque){
+        res.render('erro', {mensagem: "Erro ao buscar reboque"})
+    }
+
+
+    // CALCULA VALORES E APLICA DESCONTOS
+    let dias = Diaria.calcularDiarias(dataInicio, dataFim)
+    let valorTotalDaReserva = Diaria.calcularValorTotalDaReserva(dias, reboque.valorDiaria)
+    let valorTotalDaReservaComDesconto = Diaria.aplicarDescontoNaDiariaParaCliente(valorTotalDaReserva, dias)
+    
+    
     // Cria o objeto Reserva
     reserva = {
         'idReboque': idReboque,
         'dataInicio': dataInicio,
         'dataFim': dataFim,
-        'valorDiaria': valorDiaria, 
+        'valorDiaria': req.session.cliente ? reboque.valorDiaria/dias : reboque.valorDiaria, 
         'dias': dias, 
-        'valorTotalDaReserva': valorTotalDaReserva
+        'valorTotalDaReserva': req.session.cliente ? valorTotalDaReservaComDesconto : valorTotalDaReserva,
+        'desconto': valorTotalDaReserva - valorTotalDaReservaComDesconto,
     }
 
-    // Cria o objeto Cliente 
-    cliente = {
-        'nome':nome, 
-        'sobrenome':sobrenome, 
-        'email':email, 
-        'cpf':cpf, 
-        'rg':rg, 
-        'telefone':telefone, 
-        'cep':cep, 
-        'dataNascimento':dataNascimento, 
-        'logradouro':logradouro, 
-        'complemento':complemento, 
-        'bairro':bairro, 
-        'localidade':localidade, 
-        'uf':uf, 
-        'numeroDaCasa':numeroDaCasa
-    }
 
-    DAOReboque.getOne(idReboque).then(reboque => {
-        if(reboque){
-            res.render('reserva/dados-confirma', {user: clienteNome(req, res), reboque: reboque, cliente: cliente, reserva: reserva, mensagem: '' })
-        } else {
-            res.render('erro', {mensagem: 'erro ao buscar reboque.'})
-        }
+    res.render('reserva/dados-confirma', 
+        {user: clienteNome(req, res), reboque: reboque, cliente: cliente, reserva: reserva, mensagem: '' 
     })
 
 })
@@ -104,47 +122,49 @@ routerReserva.post('/reserva/dados-confirma', (req, res) => {
 
 
 // ROTA PRIVADA DO CLIENTE
-routerReserva.post('/reserva/dados-confirma-cliente', clienteAutorizacao, (req, res) => {
-    let {id, dataInicio, dataFim} =  req.body
-    if(dataInicio > dataFim){
-        res.render('erro', {mensagem: 'Erro com as datas.'})
-    }
-    let idCliente = req.session.cliente.id
-    DAOReserva.getVerificaDisponibilidade(id, dataInicio, dataFim).then( resposta => {
-        DAOReboque.getOne(id).then(reboque => {
-            if(reboque && resposta.length === 0){
-                DAOCliente.getOne(idCliente).then(cliente => {
-                    if(cliente){
+// routerReserva.post('/reserva/dados-confirma-cliente', clienteAutorizacao, (req, res) => {
+//     let {id, dataInicio, dataFim} =  req.body
+//     if(dataInicio > dataFim){
+//         res.render('erro', {mensagem: 'Erro com as datas.'})
+//     }
+//     let idCliente = req.session.cliente.id
+//     DAOReserva.getVerificaDisponibilidade(id, dataInicio, dataFim).then( resposta => {
+//         DAOReboque.getOne(id).then(reboque => {
+//             if(reboque && resposta.length === 0){
+//                 DAOCliente.getOne(idCliente).then(cliente => {
+//                     if(cliente){
                         
-                        let dias = Diaria.calcularDiarias(dataInicio, dataFim)
-                        let valorTotalDaReserva = Diaria.calcularValorTotalDaReserva(dias, reboque.valorDiaria)
-                        let valorTotalDaReservaComDesconto = Diaria.aplicarDescontoNaDiariaParaCliente(valorTotalDaReserva, dias)
+//                         let dias = Diaria.calcularDiarias(dataInicio, dataFim)
+//                         let valorTotalDaReserva = Diaria.calcularValorTotalDaReserva(dias, reboque.valorDiaria)
+//                         let valorTotalDaReservaComDesconto = Diaria.aplicarDescontoNaDiariaParaCliente(valorTotalDaReserva, dias)
                         
-                        let reserva = {
-                            'idReboque': id,
-                            'dataInicio': dataInicio,
-                            'dataFim': dataFim,
-                            'dias': dias,
-                            'valorDiaria': reboque.valorDiaria
-                        }
-                        res.render('reserva/dados-confirma-cliente', {user: clienteNome(req, res), reserva: reserva, cliente: cliente, reboque: reboque, dataInicio: dataInicio, dataFim: dataFim, valorTotalDaReserva: valorTotalDaReservaComDesconto})
-                    } else {
-                        res.render('reserva/periodo', {user: clienteNome(req, res), reboque: reboque, reservas: reservas, mensagem: "Erro os buscar cliente."})
-                    }
-                })
-            } else {
-                DAOReserva.getAtivas(id).then(reservas => {
-                    res.render('reserva/periodo', {user: clienteNome(req, res), reboque: reboque, reservas: reservas, mensagem: "Indisponivel para esta data."})
-                })
-            }
-        })
-    } )
-})
+//                         let reserva = {
+//                             'idReboque': id,
+//                             'dataInicio': dataInicio,
+//                             'dataFim': dataFim,
+//                             'dias': dias,
+//                             'valorDiaria': reboque.valorDiaria
+//                         }
+//                         res.render('reserva/dados-confirma-cliente', {user: clienteNome(req, res), reserva: reserva, cliente: cliente, reboque: reboque, dataInicio: dataInicio, dataFim: dataFim, valorTotalDaReserva: valorTotalDaReservaComDesconto})
+//                     } else {
+//                         res.render('reserva/periodo', {user: clienteNome(req, res), reboque: reboque, reservas: reservas, mensagem: "Erro os buscar cliente."})
+//                     }
+//                 })
+//             } else {
+//                 DAOReserva.getAtivas(id).then(reservas => {
+//                     res.render('reserva/periodo', {user: clienteNome(req, res), reboque: reboque, reservas: reservas, mensagem: "Indisponivel para esta data."})
+//                 })
+//             }
+//         })
+//     } )
+// })
 
 
 
 
 // CRIAR GET
+
+
 routerReserva.get('/reserva/novo', autorizacao, (req, res) => {
     DAOReboque.getAll().then(reboques => {
         DAOCliente.getAll().then(clientes => {

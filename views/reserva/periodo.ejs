@@ -42,7 +42,7 @@
                         <% if(user == '') {%>
                             <form class="needs-validation" novalidate action="/reserva/dados-informa" method="POST">
                         <% } else {%>
-                            <form class="needs-validation" novalidate action="/reserva/dados-confirma-cliente" method="POST">
+                            <form class="needs-validation" novalidate action="/reserva/dados-confirma" method="POST">
                         <% } %>
 
 
@@ -89,7 +89,7 @@
                                 </div>
                             </div>
                             
-                            <input type="hidden" name="id" value="<%=reboque.id%>" >
+                            <input type="hidden" name="idReboque" value="<%=reboque.id%>" >
                             <input class="btn btn-primary" id="botao" type="submit" value="Próximo"><br><br>
                             <% if(mensagem){%>
                                 <div class="alert alert-danger">

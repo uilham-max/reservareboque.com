@@ -3,7 +3,7 @@
     
     <!-- Icone do menu -->
     <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
+      <span class="navbar-toggler-icon fs-6"></span>
     </button>
 
     
@@ -19,17 +19,29 @@
         
         <button class="navbar-toggler" type="button" data-bs-toggle="dropdown" aria-expanded="false">
         <% if(user && (user != 'User')) { %>
-          <span ><%= user %></span>
+          <span ><%= user.nome.slice(0,2) %></span>
         <% } else { %>
           <span class="fa fa-user" aria-hidden="true"></span>
         <% } %>
         </button>
         
         <ul class="dropdown-menu">
-          <li><a class="dropdown-item" href="/login">Entrar</a></li>
-          <li><a class="dropdown-item" href="/cadastro">Criar conta</a></li>
-          <li><hr class="dropdown-divider"></li>
-          <li><a class="dropdown-item" href="/cliente/logout">Sair</a></li>
+          <% if(user != ''){ %>
+            <li><a class="dropdown-item" href="/login"><%= user.email %></a></li>
+          <% }else{%>
+            <li><a class="dropdown-item" href="/login">Entrar</a></li>
+          <%}%>
+          
+          <% if(user != ''){ %>
+            <li><a class="dropdown-item" href="/cadastro">Trocar usuário</a></li>
+          <% }else{ %>
+            <li><a class="dropdown-item" href="/cadastro">Criar conta</a></li>
+          <% } %>
+          
+          <% if(user != ''){ %>
+            <li><a class="dropdown-item" href="/cliente/logout">Sair</a></li>
+          <% } %>
+
         </ul>
       </div>
     </div>

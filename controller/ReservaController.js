@@ -6,14 +6,7 @@ const DAOReboque = require('../database/DAOReboque')
 var {clienteNome, adminNome} = require('../helpers/getSessionNome')
 const autorizacao = require('../autorizacao/autorizacao')
 const Diaria = require('../bill_modules/Diaria')
-const clienteAutorizacao = require('../autorizacao/clienteAutorizacao')
 
-
-/**
- * Se o cliente que estiver acessando essa rota for cadastrado, então ele deve ser redirecionado
- * diretamente para a tela de confirmação dos dados da reserva
- * Ess rota apenas irá mostrar as datas de indisponibilidade do reboque
-*/
 
 // ROTA PÚBLICA - TELA ONDE É ESCOLHIDO O PERÍODO DA RESERVA
 routerReserva.get('/reserva/periodo/:id?', (req, res) => {
@@ -120,51 +113,7 @@ routerReserva.post('/reserva/dados-confirma', async (req, res) => {
 })
 
 
-
-// ROTA PRIVADA DO CLIENTE
-// routerReserva.post('/reserva/dados-confirma-cliente', clienteAutorizacao, (req, res) => {
-//     let {id, dataInicio, dataFim} =  req.body
-//     if(dataInicio > dataFim){
-//         res.render('erro', {mensagem: 'Erro com as datas.'})
-//     }
-//     let idCliente = req.session.cliente.id
-//     DAOReserva.getVerificaDisponibilidade(id, dataInicio, dataFim).then( resposta => {
-//         DAOReboque.getOne(id).then(reboque => {
-//             if(reboque && resposta.length === 0){
-//                 DAOCliente.getOne(idCliente).then(cliente => {
-//                     if(cliente){
-                        
-//                         let dias = Diaria.calcularDiarias(dataInicio, dataFim)
-//                         let valorTotalDaReserva = Diaria.calcularValorTotalDaReserva(dias, reboque.valorDiaria)
-//                         let valorTotalDaReservaComDesconto = Diaria.aplicarDescontoNaDiariaParaCliente(valorTotalDaReserva, dias)
-                        
-//                         let reserva = {
-//                             'idReboque': id,
-//                             'dataInicio': dataInicio,
-//                             'dataFim': dataFim,
-//                             'dias': dias,
-//                             'valorDiaria': reboque.valorDiaria
-//                         }
-//                         res.render('reserva/dados-confirma-cliente', {user: clienteNome(req, res), reserva: reserva, cliente: cliente, reboque: reboque, dataInicio: dataInicio, dataFim: dataFim, valorTotalDaReserva: valorTotalDaReservaComDesconto})
-//                     } else {
-//                         res.render('reserva/periodo', {user: clienteNome(req, res), reboque: reboque, reservas: reservas, mensagem: "Erro os buscar cliente."})
-//                     }
-//                 })
-//             } else {
-//                 DAOReserva.getAtivas(id).then(reservas => {
-//                     res.render('reserva/periodo', {user: clienteNome(req, res), reboque: reboque, reservas: reservas, mensagem: "Indisponivel para esta data."})
-//                 })
-//             }
-//         })
-//     } )
-// })
-
-
-
-
 // CRIAR GET
-
-
 routerReserva.get('/reserva/novo', autorizacao, (req, res) => {
     DAOReboque.getAll().then(reboques => {
         DAOCliente.getAll().then(clientes => {

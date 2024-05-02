@@ -11,50 +11,6 @@ const DAOReboque = require('../database/DAOReboque')
 const Diaria = require('../bill_modules/Diaria')
 
 
-// PAGAMENTO REALIZADO SOMENTE POR CLIENTES CADASTRADOS
-// routerPagamento.post('/pagamento/qrcode-cliente', clienteAutorizacao, async (req, res) => {
-    
-//     let {idCliente, idReboque, dataInicio, dataFim, valorDiaria, valorTotalDaReserva, dias } = req.body
-
-//     const cliente = await DAOCliente.getOne(idCliente)
-//     if(!cliente){
-//        res.render('erro', { mensagem: "Erro ao buscar cliente."})
-//     }
-    
-//     let data_vencimento = moment.tz( new Date(), 'America/Sao_Paulo' )
-//     data_vencimento = data_vencimento.format('YYYY-MM-DD')
-
-//     // Consome API
-//     let retorno;
-//     try{
-//         retorno = await criarCobrancaPIX(cliente.cpf, cliente.nome, valorTotalDaReserva, data_vencimento)
-//     }catch(error){
-//         res.render('erro', { mensagem: "Erro ao criar cobrança PIX."})
-//     }finally{
-
-//         // Insere o pagamento no BD com a flaq aprovado = false e retorna o seu id
-//         const idPagamento = await DAOPagamento.insert(retorno.id_cobranca, (retorno.netValue * dias), retorno.billingType)
-//         if(!idPagamento){
-//         res.render('erro', { mensagem: "Erro ao criar pagamento."})
-//         }
-
-//         // Insere a reserva usando o id do pagamento
-//         const reserva = await DAOReserva.insert(dataInicio, dataFim, valorDiaria, dias, valorTotalDaReserva, idCliente, idReboque, idPagamento)
-//         if(!reserva){
-//             res.render('erro', {mensagem: 'Erro ao criar reserva.'})
-//         } else {
-//             res.render('pagamento/qrcode-cliente', {user: clienteNome(req, res),id_cobranca: retorno.id_cobranca, image: retorno.encodedImage, PIXCopiaECola: retorno.PIXCopiaECola, mensagem: ''})
-//             //res.redirect(`${retorno.invoiceUrl}`)
-//         }
-
-//     }
-// })
-
-
-// GERAR QR CODE PARA CLIENTES NÃO CADASTRADOS
-
-
-
 routerPagamento.post('/pagamento/qrcode', async (req, res) => {
     
     let {nome, cpf, telefone, cep, logradouro, complemento, 

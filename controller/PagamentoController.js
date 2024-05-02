@@ -74,7 +74,7 @@ routerPagamento.post('/pagamento/qrcode', async (req, res) => {
         if(!reserva){
             res.render('erro', {mensagem: 'Erro ao criar reserva.'})
         } else {
-            res.render('pagamento/qrcode-cliente', {user: clienteNome(req, res),id_cobranca: retorno.id_cobranca, image: retorno.encodedImage, PIXCopiaECola: retorno.PIXCopiaECola, mensagem: ''})
+            res.render('pagamento/qrcode', {user: clienteNome(req, res),id_cobranca: retorno.id_cobranca, image: retorno.encodedImage, PIXCopiaECola: retorno.PIXCopiaECola, mensagem: ''})
             //res.redirect(`${retorno.invoiceUrl}`)
         }
 

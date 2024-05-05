@@ -93,7 +93,7 @@ routerCliente.post('/cadastro/create', async (req, res) => {
      * aproveitando o mesmo id que ele usava
     */
     
-    let cliente = await DAOCliente.verificaSeOClienteJaExiste(cpf)
+    let cliente = await DAOCliente.verificaSeClienteExiste(cpf)
     if(cliente){
         cliente = await DAOCliente.updateClienteComReservaMasNaoEraCadastrado(nome, sobrenome, email, senha, cpf, rg, telefone, dataNascimento, cep, logradouro, complemento, bairro, localidade, uf, numeroDaCasa)
         if(!cliente){
@@ -114,34 +114,6 @@ routerCliente.post('/cadastro/create', async (req, res) => {
         res.render('erro', {mensagem: 'Erro ao inserir cliente'})
     }
 })
-
-
-
-/**
- * FOI FEITO ALGO INTERESSANTE AQUI: INVES DE RENDERIZAR A PÁGINA DE ERRO
- * O USUÁRIO É REDIRECIONADO PARA A MESMA PÁGINA E O ERRO É UMA MENSAGEM NA TELA.
- * EU PODERIA USAR ESSA ABORDAGEM NAS OUTRAS PÁGINAS
-*/
-
-// PUBLICO
-// routerCliente.post('/cliente/dados_cliente', (req, res) => {
-//     let {id, dataInicio, dataFim} =  req.body
-
-//     DAOReserva.getVerificaDisponibilidade(id, dataInicio, dataFim).then( resposta => {
-//         DAOReboque.getOne(id).then(reboque => {
-//             if(reboque && resposta.length === 0){
-//                 let valorTotalDaReserva = Diaria.calcularValorTotalDaReserva(Diaria.calcularDiarias(dataInicio, dataFim), reboque.valorDiaria)
-//                 res.render('cliente/dados_cliente', {user: getSessionNome(req, res), reboque: reboque, dataInicio: dataInicio, dataFim: dataFim, valorTotalDaReserva: valorTotalDaReserva})
-//             } else {
-//                 DAOReserva.getAtivas(id).then(reservas => {
-//                     res.render('reserva/periodo', {user: getSessionNome(req, res), reboque: reboque, reservas: reservas, mensagem: "Indisponivel para esta data."})
-//                 })
-                
-//             }
-//         })
-//     } )
-// })
-
 
 
 // DEVO TESTAR ESSA MENSAGEM PASSADA POR PARAMENTRO, POIS AINDA NÃO SEI COMO ELA FUNCIONA

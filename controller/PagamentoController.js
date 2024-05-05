@@ -9,11 +9,16 @@ const { criarCobrancaPIX } = require('../helpers/API_Pagamentos')
 const moment = require('moment-timezone')
 const DAOReboque = require('../database/DAOReboque')
 const Diaria = require('../bill_modules/Diaria')
+const nodemailer = require("nodemailer");
+const emailPagamentoAprovado = require('../helpers/emailPagamentoAprovado')
+const MAIL_USER = process.env.MAIL_USER
+const MAIL_PASS = process.env.MAIL_PASS
+
 
 
 routerPagamento.post('/pagamento/qrcode', async (req, res) => {
     
-    let {nome, cpf, telefone, cep, logradouro, complemento, 
+    let {nome, cpf, telefone, email, cep, logradouro, complemento, 
     localidade, numeroDaCasa, idReboque, dataInicio, dataFim} = req.body
     let valorDiaria = 0
 
@@ -43,7 +48,7 @@ routerPagamento.post('/pagamento/qrcode', async (req, res) => {
         cliente = await DAOCliente.verificaSeClienteExiste(cpf)
         if(!cliente){
             // CASO O CPF NÃO SEJA ENCONTRADO SERÁ CRIADO UM CLIENTE NOVO 
-            cliente = await DAOCliente.insertClienteQueNaoQuerSeCadastrar(nome, cpf, telefone, cep, logradouro, complemento, localidade, numeroDaCasa)
+            cliente = await DAOCliente.insertClienteQueNaoQuerSeCadastrar(nome, cpf, telefone, email, cep, logradouro, complemento, localidade, numeroDaCasa)
             if(!cliente){
                 res.render('erro', {mensagem: 'erro ao criar cliente'})
             }  
@@ -51,25 +56,28 @@ routerPagamento.post('/pagamento/qrcode', async (req, res) => {
         valorDiaria = reboque.valorDiaria
     }
 
+    // console.log(cliente.dataValues);
+
+    // return
 
     // CHAMA A API DO SISTEMA DE PAGAMENTO
     let retorno;
     try{
         let data_vencimento = moment.tz( new Date(), 'America/Sao_Paulo' )
         data_vencimento = data_vencimento.format('YYYY-MM-DD')
-        retorno = await criarCobrancaPIX(cliente.cpf, cliente.nome, valorTotalDaReserva, data_vencimento)
+        retorno = await criarCobrancaPIX(cliente.cpf, cliente.nome, telefone, email, valorTotalDaReserva, data_vencimento, dataInicio, dataFim, reboque.placa)
     }catch(error){
         res.render('erro', { mensagem: "Erro ao criar cobrança PIX."})
     }finally{
 
-        // Insere o pagamento no BD com a flaq aprovado = false e retorna o seu id
+        // PAGAMENTO INSERT
         const idPagamento = await DAOPagamento.insert(retorno.id_cobranca, retorno.netValue, retorno.billingType)
         if(!idPagamento){
         res.render('erro', { mensagem: "Erro ao criar pagamento."})
         }
 
 
-        // Insere a reserva usando o id do pagamento
+        // RESERVA INSERT
         const reserva = await DAOReserva.insert(dataInicio, dataFim, valorDiaria, dias, retorno.netValue, cliente.id, idReboque, idPagamento)
         if(!reserva){
             res.render('erro', {mensagem: 'Erro ao criar reserva.'})
@@ -87,7 +95,7 @@ routerPagamento.post('/pagamento/qrcode', async (req, res) => {
 routerPagamento.post('/pagamento/webhook/pix', async (req, res) => {
     try{
         let idPagamento = req.body.payment.id
-        let update = await DAOPagamento.atualizarPagamentoParaAprovado(idPagamento)
+        await DAOPagamento.atualizarPagamentoParaAprovado(idPagamento)
     }catch(error){
         console.warn(error);
     }finally{
@@ -115,6 +123,11 @@ routerPagamento.get('/pagamento/aprovado/:codigoPagamento', async (req, res) => 
 
 // ROTA PUBLICA
 routerPagamento.get('/pagamento/realizado', async (req, res) => {
+
+    // if(req.session.cliente){
+    //     await emailPagamentoAprovado(req.session.cliente.email)
+    // }
+
     res.render('pagamento/sucesso', {user: clienteNome(req, res), mensagem: ""})
 })
 

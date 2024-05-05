@@ -34,12 +34,14 @@ routerReserva.post('/reserva/dados-informa', (req, res) => {
     DAOReserva.getVerificaDisponibilidade(idReboque, dataInicio, dataFim).then( resposta => {
         DAOReboque.getOne(idReboque).then(reboque => {
             if(reboque && resposta.length === 0){
+                
                 let dias = Diaria.calcularDiarias(dataInicio, dataFim)
                 let valorTotalDaReserva = Diaria.calcularValorTotalDaReserva(dias, reboque.valorDiaria)
                 let valorTotalDaReservaComDesconto = Diaria.aplicarDescontoNaDiariaParaCliente(valorTotalDaReserva, dias)
-                        
                 res.render('reserva/dados-informa', {user: clienteNome(req, res), dias: dias, reboque: reboque, dataInicio: dataInicio, dataFim: dataFim, valorTotalDaReserva: valorTotalDaReserva,  valorTotalDaReservaComDesconto: valorTotalDaReservaComDesconto,})
+
             } else {
+                
                 DAOReserva.getAtivasPorID(idReboque).then(reservas => {
                     res.render('reserva/periodo', {user: clienteNome(req, res), reboque: reboque, reservas: reservas, mensagem: "Indisponível para esta data."})
                 })
@@ -54,7 +56,7 @@ routerReserva.post('/reserva/dados-informa', (req, res) => {
 // ROTA PUBLICA
 routerReserva.post('/reserva/dados-confirma', async (req, res) => {
     
-    let {nome, cpf, telefone, cep, logradouro, complemento, localidade,
+    let {nome, cpf, telefone, email, cep, logradouro, complemento, localidade,
     numeroDaCasa, idReboque, dataInicio, dataFim} = req.body
 
 
@@ -73,6 +75,7 @@ routerReserva.post('/reserva/dados-confirma', async (req, res) => {
         'nome': clienteLogado.nome ? clienteLogado.nome : nome, 
         'cpf':clienteLogado.cpf ? clienteLogado.cpf : cpf, 
         'telefone':clienteLogado.telefone ? clienteLogado.telefone : telefone, 
+        'email':clienteLogado.email ? clienteLogado.email : email, 
         'cep':clienteLogado.cep ? clienteLogado.cep : cep, 
         'logradouro':clienteLogado.logradouro ? clienteLogado.logradouro : logradouro, 
         'complemento':clienteLogado.complemento ? clienteLogado.complemento : complemento, 

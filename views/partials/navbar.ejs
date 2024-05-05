@@ -4,7 +4,7 @@
     <!-- Icone do menu -->
     <button style="border-width: 0;" class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
       <!-- <span class="navbar-toggler-icon fs-6"></span> -->
-      <span class="fa fa-bars"></span>
+      <span class="bi bi-list fs-3"></span>
     </button>
 
     
@@ -22,7 +22,7 @@
         <% if(user && (user != 'User')) { %>
           <span ><%= user.nome.slice(0,2) %></span>
         <% } else { %>
-          <span class="fa fa-user" aria-hidden="true"></span>
+          <span class="bi bi-person-fill fs-3" aria-hidden="true"></span>
         <% } %>
         </button>
         
@@ -31,12 +31,14 @@
 
           <% if(user != ''){ %>
             <li class="dropdown-item">  
-              <i class="fa fa-user fs-3"></i>  
+              <i class="bi bi-person-fill  fs-4"></i>  
               <a href="/cliente/minhas-reservas"><%=user.email%></a>
             </li>
           <% }else{%>
             <li class="dropdown-item" >
-              <i class="fa fa-user fs-3"></i>
+              <!-- <i class="fa fa-user fs-3"></i> -->
+              <!-- <i class="bi-alarm"></i> -->
+              <i class="bi bi-box-arrow-in-right fs-4" ></i>
               <a href="/login">Entrar</a>
             </li>
           <%}%>
@@ -44,12 +46,12 @@
 
           <% if(user != ''){ %>
             <li class="dropdown-item ">   
-              <i class="fa fa-user-plus fs-3"></i>  
-              <a href="/cadastro">Trocar usuário</a>
+              <i class="bi bi-arrow-left-right  fs-4"></i>  
+              <a href="/login">Trocar usuário</a>
             </li>
           <% }else{ %>
             <li class="dropdown-item">
-              <i class="fa fa-user-plus fs-3" ></i>
+              <i class="bi bi-person-fill-add  fs-4"></i>
               <a  href="/cadastro">Criar conta</a>
             </li>
           <% } %>
@@ -58,7 +60,7 @@
           <% if(user != ''){ %>
             <hr>
             <li class="dropdown-item">   
-              <i class="fa fa-arrow-circle-left  fs-3" ></i> 
+              <i class="bi bi-box-arrow-in-left   fs-4" ></i> 
               <a href="/cliente/logout">Sair</a>   
             </li>
           <% } %>

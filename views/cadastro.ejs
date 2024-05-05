@@ -114,15 +114,30 @@
                                 </div>
                             </div>
 
-                            <div class="form-group">
-                                <label for="logradouro">Rua</label>
-                                <input class="form-control" id="logradouro" type="text" name="logradouro" required>
-                                <div class="valid-feedback">
-                                    <!-- Looks good! -->
+                            <div class="row">
+
+                                <div class="form-group col">
+                                    <label for="logradouro">Rua</label>
+                                    <input class="form-control" id="logradouro" type="text" name="logradouro" required>
+                                    <div class="valid-feedback">
+                                        <!-- Looks good! -->
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        Preencha o campo.
+                                    </div>
                                 </div>
-                                <div class="invalid-feedback">
-                                    Preencha o campo.
+    
+                                <div class="form-group col">
+                                    <label for="numeroDaCasa">Nº</label>
+                                    <input class="form-control" id="numeroDaCasa" type="text" name="numeroDaCasa"  required>
+                                    <div class="valid-feedback">
+                                        <!-- Looks good! -->
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        Preencha o campo.
+                                    </div>
                                 </div>
+                                
                             </div>
 
                             <div class="form-group">
@@ -141,22 +156,10 @@
                                 </div>
                             </div>
 
-                            <div class="form-group">
-                                <label for="localidade">Cidade</label>
-                                <input class="form-control" id="localidade" type="text" name="localidade" required>
-                                <div class="valid-feedback">
-                                    <!-- Looks good! -->
-                                </div>
-                                <div class="invalid-feedback">
-                                    Preencha o campo.
-                                </div>
-                            </div>
-
                             <div class="row">
-
                                 <div class="form-group col">
-                                    <label for="uf">Estado</label>
-                                    <input class="form-control" id="uf" type="text" name="uf" required>
+                                    <label for="localidade">Cidade</label>
+                                    <input class="form-control" id="localidade" type="text" name="localidade" required>
                                     <div class="valid-feedback">
                                         <!-- Looks good! -->
                                     </div>
@@ -164,10 +167,10 @@
                                         Preencha o campo.
                                     </div>
                                 </div>
-                                
+    
                                 <div class="form-group col">
-                                    <label for="numeroDaCasa">Número da Casa</label>
-                                    <input class="form-control" id="numeroDaCasa" type="text" name="numeroDaCasa"  required>
+                                    <label for="uf">UF</label>
+                                    <input class="form-control" id="uf" type="text" name="uf" required>
                                     <div class="valid-feedback">
                                         <!-- Looks good! -->
                                     </div>
@@ -185,8 +188,6 @@
                         <div class="card-body">
                             <h3 class="card-title">Informções de login</h3>
                             <hr>
-                            <br>
-
                             <div class="form-group">
                                 <label for="email">Login</label>
                                 <input class="form-control" id="email" type="email" name="email" >
@@ -202,7 +203,7 @@
                             <div class="form-group">
                                 <label for="senha">Senha</label>
                                 <input class="form-control" id="senha" type="password" name="senha" >
-                                <small class="form-text text-muted">Mínimo 8 digitos.</small>
+                                <small class="form-text text-muted">No mínimo 8 dígitos.</small>
                                 <div class="valid-feedback">
                                     <!-- Looks good! -->
                                 </div>
@@ -222,14 +223,11 @@
                                 </div>
                             </div>
                                             
-                            <p style="margin: 0.5rem;" >
-                                <input class="btn btn-primary" type="submit" value="Salvar">
+                            <br><p style="margin: 0.5rem;" >
+                                <input class="btn btn-primary" type="submit" value="Enviar">
                             </p>
                         </div>
                     </div>
-
-                     
-                    
 
                 </div>
             </form>
@@ -237,14 +235,7 @@
         </div>
     </div>
 
-
-
     <%-include('./partials/footer.ejs')%>
-
-
-
-
-
 
 </body>
 </html>

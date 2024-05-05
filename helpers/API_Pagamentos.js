@@ -56,7 +56,7 @@ async function verificaCadastro(cpfCnpj) {
     }
 }
 
-async function cadastrarCliente(cpfCnpj, nome){
+async function cadastrarCliente(cpfCnpj, nome, telefone, email){
     let url = URL_BASE + '/customers';
     let options = {
         headers: {
@@ -66,7 +66,9 @@ async function cadastrarCliente(cpfCnpj, nome){
     };
     let newCliente = {
         "name": nome,
-        "cpfCnpj": cpfCnpj
+        "cpfCnpj": cpfCnpj,
+        "mobilePhone": telefone,
+        "email": email
     }
 
     try {
@@ -79,23 +81,26 @@ async function cadastrarCliente(cpfCnpj, nome){
     }
 }
 
-async function criarPagamento(customerID, valor, data_vencimento){
+async function criarPagamento(customerID, valor, data_vencimento, dataInicio, dataFim, placa){
+    dataInicio = dataInicio.toString().slice(8,10)+'/'+dataInicio.toString().slice(5,7)+'/'+dataInicio.toString().slice(0,4)
+    dataFim = dataFim.toString().slice(8,10)+'/'+dataFim.toString().slice(5,7)+'/'+dataFim.toString().slice(0,4)
     let url = URL_BASE + '/payments';
     let options = {
         headers: {
             accept: 'application/json',
             access_token: ACCESS_TOKEN
         }
-    };
+    }; 
     let newCobranca = {
         "customer": customerID,
         "billingType": 'PIX',
         "value": valor,
+        "description": `Reserva de reboque com início de placa ${placa.slice(0,3)} do dia ${dataInicio} até o dia ${dataFim}`,
         "dueDate": data_vencimento,
-        "callback": {
-            successUrl: 'https://reboquesoliveira.com',
-            autoRedirect: true
-        }
+        // "callback": {
+        //     successUrl: 'https://reboquesoliveira.com',
+        //     autoRedirect: true
+        // }
     }
 
     try {
@@ -127,7 +132,7 @@ async function gerarQRCode(id_cobranca){
 }
 
 
-async function criarCobrancaPIX(cpfCnpj, nome, valor, data_vencimento){
+async function criarCobrancaPIX(cpfCnpj, nome, telefone, email, valor, data_vencimento, dataInicio, dataFim, placa){
     let customerID;
     let retornoPag;
 
@@ -135,11 +140,11 @@ async function criarCobrancaPIX(cpfCnpj, nome, valor, data_vencimento){
         customerID = await verificaCadastro(cpfCnpj)
         if(customerID == false){
             console.log("criar cliente >>> nome:",nome,"cpf:",cpfCnpj);
-            let retornoCad = await cadastrarCliente(cpfCnpj, nome);
+            let retornoCad = await cadastrarCliente(cpfCnpj, nome, telefone, email);
             console.log(retornoCad.id);
             customerID = retornoCad.id;
         }
-        retornoPag = await criarPagamento(customerID, valor, data_vencimento);
+        retornoPag = await criarPagamento(customerID, valor, data_vencimento, dataInicio, dataFim, placa);
         retornoQR = await gerarQRCode(retornoPag.id);
         return {
             "id_cobranca": retornoPag.id, // "pay_080225913252"

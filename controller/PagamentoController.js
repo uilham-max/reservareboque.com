@@ -124,9 +124,9 @@ routerPagamento.get('/pagamento/aprovado/:codigoPagamento', async (req, res) => 
 // ROTA PUBLICA
 routerPagamento.get('/pagamento/realizado', async (req, res) => {
 
-    // if(req.session.cliente){
-    //     await emailPagamentoAprovado(req.session.cliente.email)
-    // }
+    if(req.session.cliente){
+        emailPagamentoAprovado(req.session.cliente.email)
+    }
 
     res.render('pagamento/sucesso', {user: clienteNome(req, res), mensagem: ""})
 })

@@ -3,6 +3,66 @@ const axios = require('axios');
 const ACCESS_TOKEN = process.env.ACCESS_TOKEN
 const URL_BASE = process.env.URL_BASE
 
+async function notificacoesAtualizaBatch(notifications){
+    let customerId = notifications[0].customer
+    // HABILITA SOMENTE O RECEBIMENTO DE EMAIL E WHATSAPP QUANDO O PAGAMENTO É RECEBIDO
+    data = {
+        customer: customerId,
+        notifications: [
+            {
+                id: notifications[0].id,
+                emailEnabledForProvider: true,
+                smsEnabledForProvider: false,
+                emailEnabledForCustomer: true,
+                smsEnabledForCustomer: false,
+                phoneCallEnabledForCustomer: false,
+                whatsappEnabledForCustomer: true,
+            },
+            {id: notifications[1].id, enabled: false},
+            {id: notifications[2].id, enabled: false},
+            {id: notifications[3].id, enabled: false},
+            {id: notifications[4].id, enabled: false},
+            {id: notifications[5].id, enabled: false},
+            {id: notifications[6].id, enabled: false},
+            {id: notifications[7].id, enabled: false},
+        ]
+    }
+
+    let url = `${URL_BASE}/notifications/batch`
+    let options = {
+        headers: {
+            accept: 'application/json',
+            access_token: ACCESS_TOKEN
+        }
+    }
+    try{
+        let response = await axios.post(url, data, options)
+        console.log(`habilitar cliente a receber notificações por WhatsApp...`);
+    }catch(err){
+        console.error('error:' + err);
+        throw err;
+    }
+}
+
+
+async function recuperaNotificacao(customerID){
+    let url = `${URL_BASE}/customers/${customerID}/notifications` 
+    let options = {
+        headers: {
+            accept: 'application/json',
+            access_token: ACCESS_TOKEN
+        }
+    }
+    try{
+        let notificacoes = await axios.get(url, options)
+        return notificacoes.data.data
+    }catch(err){
+        console.error('error:' + err);
+        throw err;
+    }
+}
+
+
 
 async function listar_clientes(filtro_cpfCnpj) {
     if (filtro_cpfCnpj) {
@@ -138,14 +198,19 @@ async function criarCobrancaPIX(cpfCnpj, nome, telefone, email, valor, data_venc
 
     try{
         customerID = await verificaCadastro(cpfCnpj)
+
         if(customerID == false){
+
             console.log("criar cliente >>> nome:",nome,"cpf:",cpfCnpj);
             let retornoCad = await cadastrarCliente(cpfCnpj, nome, telefone, email);
-            console.log(retornoCad.id);
+            let notifications = await recuperaNotificacao(retornoCad.id)
+            await notificacoesAtualizaBatch(notifications)
             customerID = retornoCad.id;
         }
+
         retornoPag = await criarPagamento(customerID, valor, data_vencimento, dataInicio, dataFim, placa);
         retornoQR = await gerarQRCode(retornoPag.id);
+
         return {
             "id_cobranca": retornoPag.id, // "pay_080225913252"
             "custumer": customerID, // "cus_G7Dvo4iphUNk"
@@ -157,6 +222,7 @@ async function criarCobrancaPIX(cpfCnpj, nome, telefone, email, valor, data_venc
             "billingType": retornoPag.billingType, // "PIX"
             "invoiceUrl": retornoPag.invoiceUrl, // URL de redirecionamento de pagamento do Assas
         }
+
     }catch(err){
         console.error(err);
         throw err;

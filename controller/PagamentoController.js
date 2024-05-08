@@ -83,7 +83,7 @@ routerPagamento.post('/pagamento/qrcode', async (req, res) => {
     }finally{
 
         var dataExpiracao = moment.tz(new Date(), 'America/Sao_Paulo')
-        dataExpiracao.add(1, 'minutes')
+        dataExpiracao.add(60, 'minutes')
 
         // PAGAMENTO INSERT
         const idPagamento = await DAOPagamento.insert(retorno.id_cobranca, retorno.netValue, retorno.billingType, dataExpiracao)

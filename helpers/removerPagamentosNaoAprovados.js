@@ -17,7 +17,7 @@ const removerPagamentosAPI = async () => {
 }
 
 // Agendar a execução da função a cada 30 minutos
-cron.schedule('*/3 * * * *', async () => {
+cron.schedule('*/10 * * * *', async () => {
     await removerPagamentosAPI()
 });
 

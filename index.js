@@ -43,7 +43,7 @@ try{
     
 conexao.authenticate().then(()=>{
     app.listen(port,()=>{
-        console.log(`Servidor rodando http://localhost:${port}`)
+        console.log(`Servidor rodando!`)
     })
 }).catch(() => {
     console.error("Erro. Banco de dados não iniciado.")

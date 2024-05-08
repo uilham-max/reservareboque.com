@@ -25,33 +25,48 @@
                 <table class="table table-striped" >
                     <thead>
                         <tr>
-                            <th>ID</th>
+                            <!-- <th>ID</th> -->
                             <th>Cliente</th>
                             <th>Reboque</th>
                             <th>Diária</th>
                             <th>Data saída</th>
                             <th>Data entrega</th>
-                            <th>Tempo</th>
+                            <!-- <th>Tempo</th> -->
                             <th>Total</th>
                         </tr>
                     </thead>
                     <tbody>
                         <% reservas.forEach(function(reserva){%>
                             <tr>
-                                <td><%=reserva.id%></td>
+                                <!-- <td><%=reserva.pagamento.codigoPagamento%></td> -->
                                 <td><%=reserva.cliente.nome%></td>
                                 <td><%=reserva.reboque.placa%></td>
-                                <td>R$ <%=reserva.valorDiaria%>,00</td>
+                                <td>R$ <%=(reserva.valorDiaria/reserva.diarias)%>,00</td>
                                 <td><%=reserva.dataSaida.toString().slice(8,10)+'/'+reserva.dataSaida.toString().slice(5,7)+'/'+reserva.dataSaida.toString().slice(0,4)%></td>
                                 <td><%=reserva.dataChegada.toString().slice(8,10)+'/'+reserva.dataChegada.toString().slice(5,7)+'/'+reserva.dataChegada.toString().slice(0,4)%></td>
-                                <td><%=reserva.diarias%> dias</td>
-                                <td>R$ <%=reserva.valorTotal%>,00</td>
+                                <!-- <td><%=reserva.diarias%> dias</td> -->
+                                <td>R$ <%=reserva.pagamento.valor%></td>
                                 <!-- <td>R$ <%=reserva.diarias*reserva.valorDiaria%>,00</td> -->
                                 <td><a href="/reserva/editar/<%=reserva.id%>" class="fas fa-edit" style="color: black;" 
                                     ata-toggle="tooltip" title="Editar reserva" ></a></td>
                                 <td><a href="/reserva/excluir/<%=reserva.id%>" class="fas fa-trash" style="color: black;"
                                     ata-toggle="tooltip" title="Excluir reserva"
                                     onclick="return confirm('Confirma a exclusão?')" ></a></td>
+                                
+                                <% if(reserva.pagamento.aprovado == false){ %>
+                                <td>
+                                    <form action="/pagamento/recebeEmDinheiro" method="POST">
+                                        <input type="hidden" id="codigoPagamento" name="codigoPagamento" value="<%=reserva.pagamento.codigoPagamento%>">
+                                        <input type="hidden" id="valor" name="valor" value="<%=reserva.pagamento.valor%>">
+                                        <!-- <input  class="btn btn-success" type="submit" value="Receber"> -->
+                                        <button type="submit" class="btn btn-outline-success"
+                                            style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
+                                            Receber
+                                        </button>
+                                    </form>
+                                </td>
+                                <% } %>
+                                
                             </tr>
                         <%})%>
                     </tbody>

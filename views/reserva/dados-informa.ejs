@@ -171,12 +171,38 @@
                         
                         </div><br>
 
+                        
+
+                    </div>
+
+
+                    <!-- Informções de pagamento -->
+                    <div class="card card-reserva" style="width: 25rem;">
+                        <div class="card-body">
+                            <h3 class="card-title">Informações do Pagamento</h3>
+                            <hr>
+                            
+                            <div class="form-check input-group">
+                                <input class="form-check-input" type="radio" name="formaPagamento" id="formaPagamento" value="PIX" checked>
+                                Pagar com PIX
+                            </div>
+                            <div class="form-check input-group">
+                            <input class="form-check-input" type="radio" name="formaPagamento" id="formaPagamento" value="DINHEIRO">
+                                Pagar com Dinheiro
+                            </div>
+                              
+
+
+                        </div>
+
+                        
                         <p class="fs-6" >Click em <a href="/cadastro"> cadastrar-se </a> e economize R$ <%= (valorTotalDaReserva-valorTotalDaReservaComDesconto).toFixed(2) %></p>
 
                         <p style="margin: 0.5rem;" >
                             <input class="btn btn-primary" type="submit" value="Confirmar">
                         </p>
 
+                        
                     </div>
 
                     <input type="hidden" id="idReboque" name="idReboque" value="<%=reboque.id%>">

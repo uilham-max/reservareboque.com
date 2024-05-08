@@ -57,8 +57,7 @@ routerReserva.post('/reserva/dados-informa', (req, res) => {
 routerReserva.post('/reserva/dados-confirma', async (req, res) => {
     
     let {nome, cpf, telefone, email, cep, logradouro, complemento, localidade,
-    numeroDaCasa, idReboque, dataInicio, dataFim} = req.body
-
+    numeroDaCasa, idReboque, dataInicio, dataFim, formaPagamento} = req.body
 
     // CLIENTE LOGADO
     let clienteLogado = {}
@@ -106,6 +105,7 @@ routerReserva.post('/reserva/dados-confirma', async (req, res) => {
         'dias': dias, 
         'valorTotalDaReserva': req.session.cliente ? valorTotalDaReservaComDesconto : valorTotalDaReserva,
         'desconto': valorTotalDaReserva - valorTotalDaReservaComDesconto,
+        'formaPagamento': formaPagamento,
     }
 
 

@@ -8,3 +8,4 @@ um campo na tabela reboque como esse campo.
 com um status de "pagamento_expirado" = true
 * Há um problema quando é submetida uma data de indisponiblididade. A aplicação retorna as datas
 de indesponibilidade de todos os reboques
+* Ao remover uma reserva que não foi paga devo remover a cobrança do sistema de pagamento.

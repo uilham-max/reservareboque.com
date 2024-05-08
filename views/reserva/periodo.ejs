@@ -40,9 +40,9 @@
                     <div class="card-body">
                         
                         <% if(user == '') {%>
-                            <form class="needs-validation" novalidate action="/reserva/dados-informa" method="POST">
+                        <form class="needs-validation" novalidate action="/reserva/dados-informa" method="POST">
                         <% } else {%>
-                            <form class="needs-validation" novalidate action="/reserva/dados-confirma" method="POST">
+                        <form class="needs-validation" novalidate action="/reserva/dados-confirma" method="POST">
                         <% } %>
 
 
@@ -87,17 +87,36 @@
                                 <div class="invalid-feedback">
                                     Verifique a data.
                                 </div>
+                            </div><br>
+
+                            <% if(user != ''){ %>
+                            <div class="form-check input-group">
+                                <input class="form-check-input" type="radio" name="formaPagamento" id="formaPagamento" value="PIX" checked>
+                                Pagar com PIX
                             </div>
+                            <br>
+                            <div class="form-check input-group">
+                                <input class="form-check-input" type="radio" name="formaPagamento" id="formaPagamento" value="DINHEIRO">
+                                Pagar com Dinheiro
+                            </div>
+                            <% } %>
+
+                            
                             
                             <input type="hidden" name="idReboque" value="<%=reboque.id%>" >
-                            <input class="btn btn-primary" id="botao" type="submit" value="Próximo"><br><br>
+                            <br><input class="btn btn-primary" id="botao" type="submit" value="Próximo">
+                            
+                            
                             <% if(mensagem){%>
                                 <div class="alert alert-danger">
                                     <strong>Atenção!</strong>
                                     <%= mensagem %>
                                 </div>
                             <% } %>
-                        </form><br>
+
+
+
+                        </form>
 
                     </div>
                 </div>

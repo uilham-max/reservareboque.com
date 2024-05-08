@@ -65,10 +65,10 @@ class DAOPagamento {
     
 
     // Recebe o valor da reserva e um código do sistema de pagamento
-    static async insert(codigoPagamento, valorTotalDaReserva, billingType){
+    static async insert(codigoPagamento, valorTotalDaReserva, billingType, dataExpiracao){
         try{
-            var dataExpiracao = moment.tz(new Date(), 'America/Sao_Paulo')
-            dataExpiracao.add(10, 'minutes')
+            // var dataExpiracao = moment.tz(new Date(), 'America/Sao_Paulo')
+            // dataExpiracao.add(10, 'minutes')
             const pagamento = await Pagamento.create({valor: valorTotalDaReserva, codigoPagamento: codigoPagamento, descricao: billingType, aprovado: false, dataExpiracao: dataExpiracao})
             console.log('Pagamento criado...');
             console.log('Data de expiração: ',dataExpiracao);

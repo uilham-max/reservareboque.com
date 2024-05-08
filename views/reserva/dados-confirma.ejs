@@ -89,7 +89,7 @@
                     <!-- Dados de RESERVA -->
                     <div class="card card-reserva" style="width: 25rem;">
                         <div class="card-body">
-                            <h3 class="card-title">Informações do Período</h3>
+                            <h3 class="card-title">Informações da Reserva</h3>
                             <hr>
                             
                             <div class="input-group mb-3">
@@ -110,11 +110,15 @@
                                 <input class="form-control" id="desconto_input" type="text" name="desconto_input" value="R$ <%=reserva.desconto.toFixed(2)%>" disabled>
                             </div>
                             <% } %>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" >Forma de Pagamento</span>
+                                <input class="form-control" id="formaPagamento" type="text" name="formaPagamento" value="<%=reserva.formaPagamento%>" disabled>
+                            </div>
                         
                         </div>
 
                         <p style="margin: 0.5rem;" >
-                            <input class="btn btn-primary" type="submit" value="Gerar QR Code PIX">
+                            <input class="btn btn-primary" type="submit" value="Confirmar">
                         </p>
 
                         
@@ -128,6 +132,8 @@
                     <input type="hidden" id="dias" name="dias" value="<%=reserva.dias%>">
                     <input type="hidden" id="valorDiaria" name="valorDiaria" value="<%=reserva.valorDiaria%>">
                     <input type="hidden" id="valorTotalDaReserva" name="valorTotalDaReserva" value="<%=reserva.valorTotalDaReserva%>">
+                    <input type="hidden" id="formaPagamento"  name="formaPagamento" value="<%=reserva.formaPagamento%>">
+
 
                     <!-- dados cliente -->
                     <input type="hidden" id="nome" name="nome" value="<%=cliente.nome%>">

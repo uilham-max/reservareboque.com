@@ -148,7 +148,7 @@ class DAOReserva {
                     ],
                 },
                 order: ['id'],
-                include: [{ model: Reboque }, { model: Cliente }]
+                include: [{ model: Reboque }, { model: Cliente }, {model: Pagamento}]
             })
             return reservas
         }

@@ -11,7 +11,7 @@ const removerPagamentosNaoAprovados = async () => {
 }
 
 // Agendar a execução da função a cada 30 minutos
-cron.schedule('*/10 * * * *', async () => {
+cron.schedule('*/60 * * * *', async () => {
     // console.log('Executando função para remover pagamentos não aprovados e suas reservas associadas...');
     await removerPagamentosNaoAprovados()
 });

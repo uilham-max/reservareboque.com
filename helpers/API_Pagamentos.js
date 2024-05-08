@@ -3,10 +3,48 @@ const axios = require('axios');
 const ACCESS_TOKEN = process.env.ACCESS_TOKEN
 const URL_BASE = process.env.URL_BASE
 
+
+
+async function receiveInCash(idCobranca, value, paymentDate){
+    let url = `${URL_BASE}/payments/${idCobranca}/receiveInCash`
+    
+    let options = {
+        headers: {
+            accept: 'application/json',
+            access_token: ACCESS_TOKEN
+        }
+    }
+
+    let data = {
+        paymentDate: paymentDate,
+        value: value
+    }
+    
+    try{
+        let response = await axios.post(url, data, options)
+        console.log("Efetuado pagamento em dinheiro!");
+        return response
+    } catch(err){
+        console.error(err.toString());
+        return undefined
+    }
+}
+
+
+
 async function notificacoesAtualizaBatch(notifications){
+    let url = `${URL_BASE}/notifications/batch`
     let customerId = notifications[0].customer
+    
+    let options = {
+        headers: {
+            accept: 'application/json',
+            access_token: ACCESS_TOKEN
+        }
+    }
+    
     // HABILITA SOMENTE O RECEBIMENTO DE EMAIL E WHATSAPP QUANDO O PAGAMENTO É RECEBIDO
-    data = {
+    let data = {
         customer: customerId,
         notifications: [
             {
@@ -14,7 +52,7 @@ async function notificacoesAtualizaBatch(notifications){
                 emailEnabledForProvider: true,
                 smsEnabledForProvider: false,
                 emailEnabledForCustomer: true,
-                smsEnabledForCustomer: false,
+                smsEnabledForCustomer: true,
                 phoneCallEnabledForCustomer: false,
                 whatsappEnabledForCustomer: true,
             },
@@ -28,15 +66,8 @@ async function notificacoesAtualizaBatch(notifications){
         ]
     }
 
-    let url = `${URL_BASE}/notifications/batch`
-    let options = {
-        headers: {
-            accept: 'application/json',
-            access_token: ACCESS_TOKEN
-        }
-    }
     try{
-        let response = await axios.post(url, data, options)
+        let response = await axios.put(url, data, options)
         console.log(`habilitar cliente a receber notificações por WhatsApp...`);
     }catch(err){
         console.error('error:' + err);
@@ -141,9 +172,15 @@ async function cadastrarCliente(cpfCnpj, nome, telefone, email){
     }
 }
 
-async function criarPagamento(customerID, valor, data_vencimento, dataInicio, dataFim, placa){
+async function criarPagamento(customerID, valor, data_vencimento, dataInicio, dataFim, placa, formaPagamento){
+    
     dataInicio = dataInicio.toString().slice(8,10)+'/'+dataInicio.toString().slice(5,7)+'/'+dataInicio.toString().slice(0,4)
     dataFim = dataFim.toString().slice(8,10)+'/'+dataFim.toString().slice(5,7)+'/'+dataFim.toString().slice(0,4)
+    
+    if(formaPagamento != 'PIX'){
+        formaPagamento = 'UNDEFINED'
+    }
+
     let url = URL_BASE + '/payments';
     let options = {
         headers: {
@@ -153,7 +190,7 @@ async function criarPagamento(customerID, valor, data_vencimento, dataInicio, da
     }; 
     let newCobranca = {
         "customer": customerID,
-        "billingType": 'PIX',
+        "billingType": formaPagamento,
         "value": valor,
         "description": `Reserva de reboque com início de placa ${placa.slice(0,3)} do dia ${dataInicio} até o dia ${dataFim}`,
         "dueDate": data_vencimento,
@@ -192,15 +229,19 @@ async function gerarQRCode(id_cobranca){
 }
 
 
-async function criarCobrancaPIX(cpfCnpj, nome, telefone, email, valor, data_vencimento, dataInicio, dataFim, placa){
+async function criarCobranca(cpfCnpj, nome, telefone, email, valor, data_vencimento, dataInicio, dataFim, placa, formaPagamento){
     let customerID;
     let retornoPag;
+    let retornoQR = {
+        "encodedImage": '',
+        "PIXCopiaECola": '',
+        "expirationDate": '',
+    }
 
     try{
         customerID = await verificaCadastro(cpfCnpj)
 
         if(customerID == false){
-
             console.log("criar cliente >>> nome:",nome,"cpf:",cpfCnpj);
             let retornoCad = await cadastrarCliente(cpfCnpj, nome, telefone, email);
             let notifications = await recuperaNotificacao(retornoCad.id)
@@ -208,8 +249,15 @@ async function criarCobrancaPIX(cpfCnpj, nome, telefone, email, valor, data_venc
             customerID = retornoCad.id;
         }
 
-        retornoPag = await criarPagamento(customerID, valor, data_vencimento, dataInicio, dataFim, placa);
-        retornoQR = await gerarQRCode(retornoPag.id);
+        retornoPag = await criarPagamento(customerID, valor, data_vencimento, dataInicio, dataFim, placa, formaPagamento);
+
+        if(retornoPag.billingType == 'UNDEFINED'){
+            retornoPag.billingType = 'DINHEIRO'
+        }
+
+        if(formaPagamento == 'PIX'){
+            retornoQR = await gerarQRCode(retornoPag.id);
+        }
 
         return {
             "id_cobranca": retornoPag.id, // "pay_080225913252"
@@ -219,7 +267,7 @@ async function criarCobrancaPIX(cpfCnpj, nome, telefone, email, valor, data_venc
             "expirationDate": retornoQR.expirationDate,
             "netValue": retornoPag.netValue,
             "dateCreated": retornoPag.dateCreated,
-            "billingType": retornoPag.billingType, // "PIX"
+            "billingType": retornoPag.billingType,
             "invoiceUrl": retornoPag.invoiceUrl, // URL de redirecionamento de pagamento do Assas
         }
 
@@ -229,4 +277,14 @@ async function criarCobrancaPIX(cpfCnpj, nome, telefone, email, valor, data_venc
     }
 } 
 
-module.exports = {listar_clientes, verificaCadastro, cadastrarCliente, criarCobrancaPIX, criarPagamento, gerarQRCode};
+module.exports = {
+    listar_clientes, 
+    verificaCadastro, 
+    cadastrarCliente, 
+    criarCobranca, 
+    criarPagamento, 
+    gerarQRCode, 
+    notificacoesAtualizaBatch,
+    recuperaNotificacao,
+    receiveInCash,
+};

@@ -12,7 +12,7 @@ const ReservaController = require('./controller/ReservaController')
 const AdminController = require('./controller/AdminController')
 const IndexController = require('./controller/IndexController');
 const pagamentoController = require('./controller/PagamentoController');
-var { removerPagamentosNaoAprovados } = require('./helpers/removerPagamentosNaoAprovados.js')
+var { removerPagamentosAPI } = require('./helpers/removerPagamentosNaoAprovados.js')
 
 // Para Express 4.16 ou superior
 app.use(express.json())
@@ -36,7 +36,7 @@ app.use(pagamentoController)
     
 try{
     console.log("Removendo pagamentos com data vencida...");
-    removerPagamentosNaoAprovados()
+    removerPagamentosAPI()
 }catch(erro){
     console.error(erro);
 }

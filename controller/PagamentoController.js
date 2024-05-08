@@ -78,13 +78,12 @@ routerPagamento.post('/pagamento/qrcode', async (req, res) => {
         let data_vencimento = moment.tz( new Date(), 'America/Sao_Paulo' )
         data_vencimento = data_vencimento.format('YYYY-MM-DD')
         retorno = await criarCobranca(cliente.cpf, cliente.nome, telefone, email, valorTotalDaReserva, data_vencimento, dataInicio, dataFim, reboque.placa, formaPagamento)
-        console.log(retorno);
     }catch(error){
         res.render('erro', { mensagem: "Erro ao criar cobrança PIX."})
     }finally{
 
         var dataExpiracao = moment.tz(new Date(), 'America/Sao_Paulo')
-        dataExpiracao.add(60, 'minutes')
+        dataExpiracao.add(1, 'minutes')
 
         // PAGAMENTO INSERT
         const idPagamento = await DAOPagamento.insert(retorno.id_cobranca, retorno.netValue, retorno.billingType, dataExpiracao)

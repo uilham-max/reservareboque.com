@@ -1,19 +1,24 @@
 const DAOPagamento = require('../database/DAOPagamento');
 const cron = require('node-cron');
+const { deleteCobranca } = require('./API_Pagamentos');
 
-const removerPagamentosNaoAprovados = async () => {
+const removerPagamentosAPI = async () => {
     try {
-        // Remover pagamentos sem pagamento no prazo indicado
-        await DAOPagamento.removePagamentoComPrazoExpirado()
-    } catch (error) {
-        console.error('Erro ao remover pagamentos não aprovados e suas reservas associadas:', error);
+        const lista = await DAOPagamento.listaPagamentosComPrazoExpirado()
+        lista.forEach(element => {
+            // REMOVE PAGAMENTOS EXTERNOS
+            deleteCobranca(element.dataValues.codigoPagamento)
+            // REMOVE PAGAMENTOS INTERNOS
+            DAOPagamento.removePeloCodigoPagamento(element.dataValues.codigoPagamento)
+        });
+    } catch(erro) {
+        console.error(erro.toString());
     }
 }
 
 // Agendar a execução da função a cada 30 minutos
-cron.schedule('*/60 * * * *', async () => {
-    // console.log('Executando função para remover pagamentos não aprovados e suas reservas associadas...');
-    await removerPagamentosNaoAprovados()
+cron.schedule('*/3 * * * *', async () => {
+    await removerPagamentosAPI()
 });
 
-module.exports = {removerPagamentosNaoAprovados}
+module.exports = {removerPagamentosAPI}

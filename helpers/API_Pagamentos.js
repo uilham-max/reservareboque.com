@@ -4,6 +4,23 @@ const ACCESS_TOKEN = process.env.ACCESS_TOKEN
 const URL_BASE = process.env.URL_BASE
 
 
+async function deleteCobranca(codigoPagamento){
+    let url = `${URL_BASE}/payments/${codigoPagamento}`
+    let options = {
+        headers: {
+            accept: 'application/json',
+            access_token: ACCESS_TOKEN
+        }
+    }
+    try{
+        let resposta = await axios.delete(url, options)
+        console.log("Pagamento removido do Sistema de Pagamentos:", codigoPagamento);
+    } catch (err){
+        console.error(err.toString());
+        throw err
+    }
+}
+
 
 async function receiveInCash(idCobranca, value, paymentDate){
     let url = `${URL_BASE}/payments/${idCobranca}/receiveInCash`
@@ -287,4 +304,5 @@ module.exports = {
     notificacoesAtualizaBatch,
     recuperaNotificacao,
     receiveInCash,
+    deleteCobranca,
 };

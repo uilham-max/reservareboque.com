@@ -6,6 +6,37 @@ const moment = require('moment-timezone')
 class DAOPagamento {
 
 
+    static async removePeloCodigoPagamento(codigoPagamento){
+        try {
+            let removido = await Pagamento.destroy({where: {codigoPagamento: codigoPagamento}})
+            if(removido){
+                console.log("Pagamento removido do sistema:", codigoPagamento);
+            }
+        } catch(erro) {
+            console.error(erro.toString());
+        }
+    }
+
+
+    static async listaPagamentosComPrazoExpirado(){
+        try {
+            var horas = moment.tz(new Date(), 'America/Sao_Paulo')
+            let lista = await Pagamento.findAll({
+                where: {
+                    aprovado: false,
+                    dataExpiracao: {
+                        [Sequelize.Op.lt]: horas
+                    }
+                }
+            })
+            return lista
+        } catch(erro) {
+            console.error(erro.toString());
+            return undefined
+        }
+    }
+
+
     static async verificaPagamento(codigoPagamento){
         try{
             let resposta = await Pagamento.findOne({where: {codigoPagamento: codigoPagamento}})
@@ -17,27 +48,27 @@ class DAOPagamento {
     }
 
 
-    static async removePagamentoComPrazoExpirado(){
-        try{
-            // Remover pagamentos expirados
-            var horas = moment.tz(new Date(), 'America/Sao_Paulo')
-            let pagamentos = await Pagamento.destroy({
-                where: {
-                    aprovado: false,
-                    dataExpiracao: { 
-                        [Sequelize.Op.lt]: horas
-                    }
-                }
-            })
-            if(pagamentos){
-                console.log(pagamentos, '> pagamentos expirados removidos');
-            }
-            return pagamentos
-        }catch(erro){
-            console.error(erro.toString());
-            return undefined
-        }
-    }
+    // static async removePagamentoComPrazoExpirado(){
+    //     try{
+    //         // Remover pagamentos expirados
+    //         var horas = moment.tz(new Date(), 'America/Sao_Paulo')
+    //         let pagamentos = await Pagamento.destroy({
+    //             where: {
+    //                 aprovado: false,
+    //                 dataExpiracao: { 
+    //                     [Sequelize.Op.lt]: horas
+    //                 }
+    //             }
+    //         })
+    //         if(pagamentos){
+    //             console.log(pagamentos, '> pagamentos expirados removidos');
+    //         }
+    //         return pagamentos
+    //     }catch(erro){
+    //         console.error(erro.toString());
+    //         return undefined
+    //     }
+    // }
 
 
 

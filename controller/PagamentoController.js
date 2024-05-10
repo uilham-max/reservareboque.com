@@ -98,7 +98,7 @@ routerPagamento.post('/pagamento/qrcode', async (req, res) => {
             res.render('erro', {mensagem: 'Erro ao criar reserva.'})
         } else {
             if(formaPagamento == 'PIX'){
-                res.render('pagamento/qrcode', {user: clienteNome(req, res),id_cobranca: retorno.id_cobranca, image: retorno.encodedImage, PIXCopiaECola: retorno.PIXCopiaECola, mensagem: ''})
+                res.render('pagamento/qrcode', {user: clienteNome(req, res), formaPagamento: formaPagamento, id_cobranca: retorno.id_cobranca, image: retorno.encodedImage, PIXCopiaECola: retorno.PIXCopiaECola, mensagem: ''})
             } else {
                 res.render('pagamento/sucesso', {user: clienteNome(req, res), formaPagamento: formaPagamento, mensagem: ""})
             }
@@ -141,13 +141,11 @@ routerPagamento.get('/pagamento/aprovado/:codigoPagamento', async (req, res) => 
 
 
 // ROTA PUBLICA
-routerPagamento.get('/pagamento/realizado', async (req, res) => {
-
+routerPagamento.get('/pagamento/realizado/:formaPagamento?', async (req, res) => {
     if(req.session.cliente){
         emailPagamentoAprovado(req.session.cliente.email)
     }
-
-    res.render('pagamento/sucesso', {user: clienteNome(req, res), mensagem: ""})
+    res.render('pagamento/sucesso', {user: clienteNome(req, res), formaPagamento: req.params.formaPagamento, mensagem: ""})
 })
 
 

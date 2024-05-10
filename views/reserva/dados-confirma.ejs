@@ -114,8 +114,20 @@
                                 <span class="input-group-text" >Forma de Pagamento</span>
                                 <input class="form-control" id="formaPagamento" type="text" name="formaPagamento" value="<%=reserva.formaPagamento%>" disabled>
                             </div>
+                            
+                            <% if(reserva.formaPagamento == 'DINHEIRO') {%>
+                                <div class="alert alert-info">
+                                    <strong>Atenção!</strong>
+                                    Forma de pagamento em <strong>dinheiro</strong> depende da aprovação do administrador.
+                                    Contate-o por WhatsApp ou E-mail para aprovar sua reserva. 
+                                    <p></p>
+                                    <strong>Se não for aprovada em até 1 hora ela será removida.</strong>
+                                </div>
+                            <% } %>
                         
                         </div>
+
+
 
                         <p style="margin: 0.5rem;" >
                             <input class="btn btn-primary" type="submit" value="Confirmar">

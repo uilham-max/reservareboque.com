@@ -100,7 +100,7 @@ routerPagamento.post('/pagamento/qrcode', async (req, res) => {
             if(formaPagamento == 'PIX'){
                 res.render('pagamento/qrcode', {user: clienteNome(req, res),id_cobranca: retorno.id_cobranca, image: retorno.encodedImage, PIXCopiaECola: retorno.PIXCopiaECola, mensagem: ''})
             } else {
-                res.render('pagamento/sucesso', {user: clienteNome(req, res), mensagem: ""})
+                res.render('pagamento/sucesso', {user: clienteNome(req, res), formaPagamento: formaPagamento, mensagem: ""})
             }
             //res.redirect(`${retorno.invoiceUrl}`)
         }

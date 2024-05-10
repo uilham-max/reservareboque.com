@@ -10,8 +10,18 @@
     <div class="conteudo" >
         <div class="container" >
             <div class="jumbotron jumbotron-fluid">
-                <h1 class="display-4" >Parabéns! Reserva realizada com sucesso.</h1>
-                <p class="lead">Verifique seu email para visualizar os dados da reserva.</p>
+
+            <% if(formaPagamento == 'DINHEIRO') {%>
+            <h1 class="display-4" >Pedido realizado! Contate a empresa para aprovar seu pedido.</h1>
+            <p class="lead">Você receberá um aviso por WhatsApp e E-mail quando o adminstrador aprovar sua reserva.</p>
+            <% } else { %>
+            <h1 class="display-4" >Parabéns! Reserva realizada com sucesso.</h1>
+            <p class="lead">Verifique seu email para visualizar os dados da reserva.</p>
+            <% }%>
+
+
+
+                
             </div>
         </div>
     </div>

@@ -41,7 +41,7 @@
                                 <!-- <td><%=reserva.pagamento.codigoPagamento%></td> -->
                                 <td><%=reserva.cliente.nome%></td>
                                 <td><%=reserva.reboque.placa%></td>
-                                <td>R$ <%=(reserva.valorDiaria/reserva.diarias)%>,00</td>
+                                <td>R$ <%=(reserva.valorDiaria/reserva.diarias)%></td>
                                 <td><%=reserva.dataSaida.toString().slice(8,10)+'/'+reserva.dataSaida.toString().slice(5,7)+'/'+reserva.dataSaida.toString().slice(0,4)%></td>
                                 <td><%=reserva.dataChegada.toString().slice(8,10)+'/'+reserva.dataChegada.toString().slice(5,7)+'/'+reserva.dataChegada.toString().slice(0,4)%></td>
                                 <!-- <td><%=reserva.diarias%> dias</td> -->
@@ -49,8 +49,8 @@
                                 <!-- <td>R$ <%=reserva.diarias*reserva.valorDiaria%>,00</td> -->
                                 <td><a href="/reserva/editar/<%=reserva.id%>" class="fas fa-edit" style="color: black;" 
                                     ata-toggle="tooltip" title="Editar reserva" ></a></td>
-                                <td><a href="/reserva/excluir/<%=reserva.id%>" class="fas fa-trash" style="color: black;"
-                                    ata-toggle="tooltip" title="Excluir reserva"
+                                <td><a href="/reserva/remover/<%=reserva.pagamento.codigoPagamento%>" class="fas fa-trash" style="color: black;"
+                                    ata-toggle="tooltip" title="Pedir reenbolso"
                                     onclick="return confirm('Confirma a exclusão?')" ></a></td>
                                 
                                 <% if(reserva.pagamento.aprovado == false){ %>

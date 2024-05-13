@@ -4,6 +4,39 @@ const ACCESS_TOKEN = process.env.ACCESS_TOKEN
 const URL_BASE = process.env.URL_BASE
 
 
+
+
+
+
+async function estornoPagamento(codigoPagamento, valor){
+    let url = `${URL_BASE}/payments/${codigoPagamento}/refund`
+    let options = {
+        headers: {
+            accept: 'application/json',
+            access_token: ACCESS_TOKEN
+        }
+    }
+    let data = {
+        value: valor
+    }
+    try {
+        let retorno = await axios.post(url, data, options)
+        console.log(retorno);
+        // return retorno
+    } catch(err){
+        // console.error(err.toString());
+        // return undefined
+    }
+}
+
+
+
+
+
+
+
+
+
 async function deleteCobranca(codigoPagamento){
     let url = `${URL_BASE}/payments/${codigoPagamento}`
     let options = {
@@ -305,4 +338,5 @@ module.exports = {
     recuperaNotificacao,
     receiveInCash,
     deleteCobranca,
+    estornoPagamento,
 };

@@ -6,6 +6,23 @@ const DAOReboque = require('../database/DAOReboque')
 var {clienteNome, adminNome} = require('../helpers/getSessionNome')
 const autorizacao = require('../autorizacao/autorizacao')
 const Diaria = require('../bill_modules/Diaria')
+const { estornoPagamento } = require('../helpers/API_Pagamentos')
+const DAOPagamento = require('../database/DAOPagamento')
+const clienteAutorizacao = require('../autorizacao/clienteAutorizacao')
+
+
+
+routerReserva.get('/reserva/remover/:codigoPagamento?/:valor?', clienteAutorizacao, async (req, res) => {
+
+    await estornoPagamento(req.params.codigoPagamento, req.params.valor)
+    // O MESMO QUE REMOVER A RESERVA (DELETE ON CASCADE)
+    await DAOPagamento.removePeloCodigoPagamento(req.params.codigoPagamento)
+    res.redirect('/cliente/minhas-reservas')
+})
+
+
+
+
 
 
 // ROTA PÚBLICA - TELA ONDE É ESCOLHIDO O PERÍODO DA RESERVA

@@ -34,8 +34,12 @@ routerPagamento.post('/pagamento/qrcode', async (req, res) => {
     
     let {nome, cpf, telefone, email, cep, logradouro, complemento, 
     localidade, numeroDaCasa, idReboque, dataInicio, dataFim, formaPagamento} = req.body
+    
+    cpf = cpf.replace(/\D/g, '')
+    telefone = telefone.replace(/\D/g, '')
+    cep = cep.replace(/\D/g, '')
+
     let valorDiaria = 0
-    console.log(formaPagamento);
 
     // BUSCAR REBOQUE NO BD
     let reboque = await DAOReboque.getOne(idReboque)

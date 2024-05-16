@@ -4,10 +4,6 @@ const ACCESS_TOKEN = process.env.ACCESS_TOKEN
 const URL_BASE = process.env.URL_BASE
 
 
-
-
-
-
 async function estornoPagamento(codigoPagamento, valor){
     let url = `${URL_BASE}/payments/${codigoPagamento}/refund`
     let options = {
@@ -28,13 +24,6 @@ async function estornoPagamento(codigoPagamento, valor){
         // return undefined
     }
 }
-
-
-
-
-
-
-
 
 
 async function deleteCobranca(codigoPagamento){

@@ -11,7 +11,7 @@ const DAOPagamento = require('../database/DAOPagamento')
 const clienteAutorizacao = require('../autorizacao/clienteAutorizacao')
 
 
-
+// CANCELAMENTO DE RESERVA
 routerReserva.get('/reserva/remover/:codigoPagamento?/:valor?', clienteAutorizacao, async (req, res) => {
 
     await estornoPagamento(req.params.codigoPagamento, req.params.valor)
@@ -22,10 +22,7 @@ routerReserva.get('/reserva/remover/:codigoPagamento?/:valor?', clienteAutorizac
 
 
 
-
-
-
-// ROTA PÚBLICA - TELA ONDE É ESCOLHIDO O PERÍODO DA RESERVA
+// PERÍODO
 routerReserva.get('/reserva/periodo/:id?', (req, res) => {
     let idReboque = req.params.id
     DAOReserva.getAtivasPorID(idReboque).then(reservas => {
@@ -40,7 +37,7 @@ routerReserva.get('/reserva/periodo/:id?', (req, res) => {
 })
 
 
-// SOMENTE PARA CLIENTES SEM CADASTRO
+// INFORMAR DADOS
 routerReserva.post('/reserva/dados-informa', (req, res) => {
     let {idReboque, dataInicio, dataFim} =  req.body
 

@@ -8,7 +8,6 @@ document.addEventListener('DOMContentLoaded', () => {
     inputCep.addEventListener('blur', async () => {
         const cep = inputCep.value.replace(/\D/g, ''); // Remove caracteres não numéricos do CEP
         if (cep.length !== 8) {
-            alert('CEP inválido. Informe um CEP válido com 8 dígitos.');
             return;
         } 
 

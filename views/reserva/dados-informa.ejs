@@ -3,8 +3,7 @@
 <head>
     <%-include('../partials/header.ejs')%>
     <script src="/js/consome_viacep.js" ></script>
-    <script src="/js/validaCPF.js" ></script>
-    <script src="/js/validaCamposClienteDados.js" ></script>
+    <script src="/js/validaDadosFormulario.js" ></script>
 </head>
 <body  >
     
@@ -41,47 +40,47 @@
                             <hr>
 
                             <div class="form-group">
-                                <label for="nome">Nome</label>
-                                <input class="form-control" id="nome" type="text" name="nome" maxlength="20" required>
+                                <label for="nome">Nome completo</label>
+                                <span class="text-danger"> * </span>
+                                <input class="form-control" id="nome" type="text" name="nome" minlength="5" maxlength="50" pattern="[a-zA-Z]" required>
                                 <div class="valid-feedback">
                                     <!-- Looks good! -->
                                 </div>
                                 <div class="invalid-feedback">
-                                    Preencha o campo nome.
+                                    <span id="invalidNome" ></span>
                                 </div>
                                 
                             </div>
 
                             <div class="form-group">
                                 <label for="cpf">CPF</label>
-                                <input class="form-control" id="cpf" type="text" name="cpf" maxlength="11">
+                                <span class="text-danger"> * </span>
+                                <input class="form-control" id="cpf" type="text" name="cpf" minlength="14" maxlength="14" pattern="[0-9]" required>
                                 <div class="valid-feedback">
                                     <!-- Looks good! -->
                                 </div>
                                 <div class="invalid-feedback">
-                                    Preencha o campo CPF.
+                                    <span id="invalidCPF" ></span>
                                 </div>
                             </div>
                                                                                             
                             <div class="form-group">
                                 <label for="telefone">Telefone</label>
-                                <input class="form-control" id="telefone" type="text" name="telefone" maxlength="30" >
+                                <span class="text-danger"> * </span>
+                                <input class="form-control" id="telefone" type="text" name="telefone" maxlength="15" placeholder="Ex.: 53997032373" required>
                                 <div class="valid-feedback">
                                     <!-- Looks good! -->
                                 </div>
                                 <div class="invalid-feedback">
-                                    Preencha o campo Telefone.
+                                    <span id="invalidTelefone" ></span>
                                 </div>
                             </div> 
 
                             <div class="form-group">
                                 <label for="email">E-mail</label>
-                                <input class="form-control" id="email" type="email" name="email" maxlength="70" >
-                                <div class="valid-feedback">
-                                    <!-- Looks good! -->
-                                </div>
+                                <input class="form-control" id="email" type="email" name="email" maxlength="70" pattern="[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$">
                                 <div class="invalid-feedback">
-                                    Preencha o campo Telefone.
+                                    <span id="invalidEmail"></span>
                                 </div>
                             </div> 
                             
@@ -97,51 +96,58 @@
                             
                             <div class="form-group">
                                 <label for="cep">CEP</label>
-                                <input class="form-control" id="cep" type="text" name="cep" maxlength="8" placeholder="Ex.: 96408560" required>
+                                <span class="text-danger"> * </span>
+                                <input class="form-control" id="cep" type="text" name="cep" minlength="9" maxlength="9" pattern="[0-9]" placeholder="Ex.: 96408560" required>
                                 <div class="valid-feedback">
                                     <!-- Looks good! -->
                                 </div>
                                 <div class="invalid-feedback">
-                                    Preencha o campo CEP.
+                                    <span id="invalidCep"></span>
                                 </div>
                             </div>
                             
                             <div class="row g-3">
                                 <div class="form-group col">
                                     <label for="logradouro">Rua</label>
-                                    <input class="form-control" id="logradouro" type="text" name="logradouro" maxlength="50">
+                                <span class="text-danger"> * </span>
+                                <input class="form-control" id="logradouro" type="text" name="logradouro" placeholder="Ex.: Waltter Dias da Costa" minlength="2" maxlength="100" required>
                                     <div class="valid-feedback">
                                         <!-- Looks good! -->
                                     </div>
                                     <div class="invalid-feedback">
-                                        Preencha o campo Rua.
+                                        <span id="invalidLogradouro"></span>
                                     </div>
                                 </div>
                                 <div class="form-group col">
                                     <label for="numeroDaCasa">Nº</label>
-                                    <input class="form-control" id="numeroDaCasa" type="text" name="numeroDaCasa" maxlength="5" required >
+                                <span class="text-danger"> * </span>
+                                <input class="form-control" id="numeroDaCasa" type="text" name="numeroDaCasa" maxlength="5" required >
                                     <div class="valid-feedback">
                                         <!-- Looks good! -->
                                     </div>
                                     <div class="invalid-feedback">
-                                        Preencha o campo N°.
+                                        <span id="invalidNumeroDaCasa"></span>
                                     </div>
                                 </div>
                             </div>
                            
                             <div class="form-group">
                                 <label for="complemento">Complemento</label>
-                                <input class="form-control" id="complemento" type="text" name="complemento" maxlength="100">
+                                <input class="form-control" id="complemento" type="text" name="complemento" maxlength="200">
+                                <div class="invalid-feedback">
+                                    <span id="invalidComplento"></span>
+                                </div>
                             </div>
                           
                             <div class="form-group">
                                 <label for="localidade">Cidade</label>
-                                <input class="form-control" id="localidade" type="text" name="localidade" maxlength="30">
+                                <span class="text-danger"> * </span>
+                                <input class="form-control" id="localidade" type="text" minlength="3" name="localidade" maxlength="50" required>
                                 <div class="valid-feedback">
                                     <!-- Looks good! -->
                                 </div>
                                 <div class="invalid-feedback">
-                                    Preencha o campo Cidade.
+                                    <span id="invalidLocalidade"></span>
                                 </div>
                             </div>
                         </div>
@@ -166,13 +172,10 @@
 
                             <div class="input-group mb-3">
                                 <span class="input-group-text" >Total R$</span>
-                                <input class="form-control" id="dataFim_input" type="text" name="dataFim_input" value="<%=valorTotalDaReserva.toFixed(2)%>" disabled>
+                                <input class="form-control" id="dataFim_input" type="text" name="dataFim_input" value="<%=(valorTotalDaReserva.toFixed(2)).replace('.',',')%>" disabled>
                             </div>
                         
                         </div><br>
-
-                        
-
                     </div>
 
 
@@ -181,7 +184,7 @@
                         <div class="card-body">
                             <h3 class="card-title">Informações do Pagamento</h3>
                             <hr>
-                            
+                            <br>
                             <div class="form-check input-group">
                                 <input class="form-check-input" type="radio" name="formaPagamento" id="formaPagamento" value="PIX" checked>
                                 Pagar com PIX
@@ -190,19 +193,23 @@
                             <input class="form-check-input" type="radio" name="formaPagamento" id="formaPagamento" value="DINHEIRO">
                                 Pagar com Dinheiro
                             </div>
-                              
+                            <br>
 
+                            <div>
+                                <div class="alert alert-info">
+                                    Economeze R$ 
+                                    <%= ((valorTotalDaReserva-valorTotalDaReservaComDesconto).toFixed(2)).replace('.',',') %> 
+                                    nesta reserva criando uma conta.                                
+                                    <a class="btn btn-outline-primary" href="/cadastro"> Criar conta </a> 
+                                </div>
+                            </div>
 
+                            <p style="margin: 0.5rem;" >
+                                <input class="btn btn-primary validation" id="botao" type="submit" value="Confirmar">
+                            </p>
+
+                            
                         </div>
-
-                        
-                        <p class="fs-6" >Click em <a href="/cadastro"> cadastrar-se </a> e economize R$ <%= (valorTotalDaReserva-valorTotalDaReservaComDesconto).toFixed(2) %></p>
-
-                        <p style="margin: 0.5rem;" >
-                            <input class="btn btn-primary" type="submit" value="Confirmar">
-                        </p>
-
-                        
                     </div>
 
                     <input type="hidden" id="idReboque" name="idReboque" value="<%=reboque.id%>">
@@ -218,7 +225,6 @@
 
             </form>
 
-            <!--  -->
         </div>
     </div>
 

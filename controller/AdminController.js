@@ -10,6 +10,7 @@ const DAOReboque = require('../database/DAOReboque')
 
 
 routerAdmin.get('/admin/painel', autorizacao, async (req, res) => {
+
     let dataAtual = moment.tz('America/Sao_Paulo');
     let dia = [];
     let datasets = [];
@@ -34,7 +35,7 @@ routerAdmin.get('/admin/painel', autorizacao, async (req, res) => {
                 let dataInicio = parseInt(reservas[j].dataValues.dataSaida.slice(8, 10));
                 let dataFim = parseInt(reservas[j].dataValues.dataChegada.slice(8, 10));
                 let maxDay = dataAtual.daysInMonth();
-                let valorDiaria = reservas[j].dataValues.valorDiaria.toFixed(2);
+                let valorDiaria = (reservas[j].pagamento.valor / reservas[j].dataValues.diarias).toFixed(2);
 
                 if (dataFim < dataInicio) {
                     dataFim = maxDay;
@@ -58,6 +59,7 @@ routerAdmin.get('/admin/painel', autorizacao, async (req, res) => {
                 }
             }
 
+            // MONTA O ARRAY DE CALENDARIO DE CADA REBOQUE QUE SERÁ PASSADO PARA O CHART
             datasets.push({ type: "line", label: reboques[i].placa.slice(0, 3), data: [...dia] });
 
             // RESETA O CALENDARIO

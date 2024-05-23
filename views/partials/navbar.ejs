@@ -12,9 +12,6 @@
     <a href="/">
       <img src="/img/logoimage.png" alt="Logo" width="160" height="25" class="d-inline-block align-text-center">
     </a>  
-  
-    
-
 
 
 
@@ -22,6 +19,7 @@
     <div class="btn-group dropstart">
       <div class="dropdown">
         
+        <!-- mostra botão ou nome do usuário logado -->
         <button style="border-width: 0;" class="navbar-toggler" type="button" data-bs-toggle="dropdown" aria-expanded="false">
         <% if(user && (user != 'User')) { %>
           <span ><%= user.nome.slice(0,2) %></span>
@@ -30,8 +28,9 @@
         <% } %>
         </button>
         
+
+
         <ul class="dropdown-menu">
-          
 
           <% if(user != ''){ %>
             <li class="dropdown-item">  
@@ -69,9 +68,11 @@
             </li>
           <% } %>
 
-
         </ul>
+
+
       </div>
+
     </div>
 
 

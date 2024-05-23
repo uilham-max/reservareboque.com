@@ -13,7 +13,8 @@ function clienteNome(req, res){
 function adminNome(req, res){
     if(req.session.admin && req.session.admin.nome){
         let nome = req.session.admin.nome
-        return nome
+        // return nome
+        return req.session.admin
     } else {
         return ""
     }

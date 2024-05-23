@@ -14,7 +14,8 @@ class DAOReserva {
     static async getReservas(reboqueId){
         try {
             let reservas = await Reserva.findAll({
-                where: {reboqueId: reboqueId}
+                where: {reboqueId: reboqueId},
+                include: [{model: Pagamento}]
             })
             return reservas
         } catch(erro) {

@@ -41,7 +41,7 @@
                                 <!-- <td><%=reserva.pagamento.codigoPagamento%></td> -->
                                 <td><%=reserva.cliente.nome%></td>
                                 <td><%=reserva.reboque.placa%></td>
-                                <td>R$ <%=(reserva.valorDiaria/reserva.diarias)%></td>
+                                <td>R$ <%=((reserva.pagamento.valor/reserva.diarias).toFixed(2)).replace('.',',')%></td>
                                 <td><%=reserva.dataSaida.toString().slice(8,10)+'/'+reserva.dataSaida.toString().slice(5,7)+'/'+reserva.dataSaida.toString().slice(0,4)%></td>
                                 <td><%=reserva.dataChegada.toString().slice(8,10)+'/'+reserva.dataChegada.toString().slice(5,7)+'/'+reserva.dataChegada.toString().slice(0,4)%></td>
                                 <!-- <td><%=reserva.diarias%> dias</td> -->

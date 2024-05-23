@@ -11,6 +11,29 @@ const Pagamento = require('../model/Pagamento.js')
 
 class DAOReserva {
 
+    static async getReservas(reboqueId){
+        try {
+            let reservas = await Reserva.findAll({
+                where: {reboqueId: reboqueId}
+            })
+            return reservas
+        } catch(erro) {
+            console.log(erro.toString());
+            return undefined
+        }
+    }
+
+
+    static async getAll(){
+        try { 
+            let reservas = await Reserva.findAll()
+            return reservas
+        } catch(erro) {
+            console.log(erro.toString());
+            return undefined
+        }
+    }
+
 
     static async getMinhasReservas(idCliente){
         try {

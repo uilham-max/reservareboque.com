@@ -6,7 +6,50 @@ const {adminNome, clienteNome} = require('../helpers/getSessionNome')
 const bcrypt = require('bcryptjs')
 const clienteAutorizacao = require('../autorizacao/clienteAutorizacao')
 const DAOReserva = require('../database/DAOReserva')
+const DAOReboque = require('../database/DAOReboque')
 
+
+routerCliente.post('/cliente/atualizar-reserva', (req, res) => {
+
+    res.send('Recurso indisponivel no momento. Contate o suporte.')
+
+})
+
+
+routerCliente.get('/cliente/editar-reserva/:idReserva', async (req, res) => {
+
+    let idReserva = req.params.idReserva
+    let reserva = await DAOReserva.editarReserva(idReserva)
+    if(!reserva){
+        res.render('erro', {mensagem: "Erro ao obter reserva."})
+    }
+
+    DAOReserva.getAtivasPorID(reserva.dataValues.reboqueId).then(reservas => {
+        DAOReboque.getOne(reserva.dataValues.reboqueId).then(reboque => {
+            if(reboque){
+                res.render('cliente/editar-reserva', {user: clienteNome(req, res), mensagem: "", reboque: reboque, reservas: reservas, reserva: reserva})
+            } else {
+                res.render('erro', {mensagem: "Erro ao mostrar reboque."})
+            }
+        })
+    })
+
+})
+
+
+
+routerCliente.get('/cliente/minhas-locacoes', clienteAutorizacao, async (req, res) => {
+    let idCliente
+    if(req.session.cliente && req.session.cliente.id){
+        idCliente = req.session.cliente.id
+    }
+    let locacoes = await DAOReserva.historicoLocacoes(idCliente)
+    console.log('Reservas erro:',locacoes);
+    if(!locacoes){
+        res.render('erro', {mensagem: "Erro ao obter locações."})
+    }
+    res.render('cliente/minhas-locacoes', {user: clienteNome(req, res), mensagem: "", locacoes: locacoes})
+})
 
 
 

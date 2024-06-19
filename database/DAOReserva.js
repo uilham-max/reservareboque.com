@@ -7,9 +7,78 @@ const Diaria = require('../bill_modules/Diaria')
 const conexao = require('./conexao')
 const sequelize = require('sequelize')
 const Pagamento = require('../model/Pagamento.js')
+const moment = require('moment-timezone')
 
 
 class DAOReserva {
+
+
+
+    static async editarReserva(idReserva){
+        try {
+            let reserva = Reserva.findByPk(idReserva, {
+                
+                include: [
+                    {
+                        model: Reboque,
+                        required: true
+                    },
+                    {
+                        model: Pagamento,
+                        required: true
+                    }
+                ]
+            })
+            // console.log(reserva);
+            return reserva
+        } catch(erro) {
+            console.log(erro.toString());
+            return false
+        }
+    }
+
+
+
+    static async historicoLocacoes(id){
+        let dataAtual = moment.tz(new Date(), 'America/Sao_Paulo')
+        try {
+            let locacoes = Reserva.findAll({
+                include: [
+                  {
+                    model: Cliente,
+                    where: { id: id }, // Filtra pelo cliente com id 16
+                    required: true     // Garante que apenas reservas com clientes correspondentes sejam retornadas
+                  },
+                  {
+                    model: Pagamento,
+                    required: true     // Inclui a associação com pagamentos
+                  },
+                  {
+                    model: Reboque,
+                    required: true
+                  }
+                ],
+                where: {
+                  dataSaida: {
+                    [Sequelize.Op.lt]: dataAtual // Filtra onde dataChegada é anterior à data atual
+                  }
+                }
+              }).then(reservas => {
+                console.log(reservas);
+                return reservas
+              }).catch(error => {
+                console.error(error.toString());
+                return undefined
+            });
+            return locacoes
+        } catch(erro){
+            console.log(erro.toString());
+            return false
+        }
+
+    }
+
+
 
     static async getReservas(reboqueId){
         try {

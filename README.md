@@ -10,3 +10,12 @@ com um status de "pagamento_expirado" = true
 de indesponibilidade de todos os reboques
 * Ao remover uma reserva que não foi paga devo remover a cobrança do sistema de pagamento.
 * Adicionar no footer as informções de contato e endereço. Devem ser links para mapa e WhatsApp
+
+* Criar recurso para recuperar senha.
+* Criar recurso para tirar dúvidas
+* Criar recurso para informar como funciona uma reserva/locação
+
+# Onde parei?
+
+* Criando recurso para o cliente poder editar sua reserva ( tela de edição pronta ). 
+* Criar DAO para atualizar 

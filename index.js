@@ -40,7 +40,7 @@ try{
 }catch(erro){
     console.error(erro);
 }
-    
+
 conexao.authenticate().then(()=>{
     app.listen(port,()=>{
         console.log(`Servidor rodando!`)

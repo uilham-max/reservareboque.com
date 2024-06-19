@@ -16,7 +16,7 @@
             <br>
 
             <div class="d-flex justify-content-start">
-                <h3 class="display-4">Reservas</h3>
+                <h3 class="display-4">Histórico de locações</h3>
             </div>
             <br>
         
@@ -33,7 +33,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <% reservas.forEach(function(reserva){%>
+                        <% locacoes.forEach(function(reserva){%>
                             <tr>
                                 <td><%=reserva.reboque.placa%></td>
                                 <td><%=((reserva.valorDiaria).toFixed(2)).replace('.',',')%></td>
@@ -41,11 +41,6 @@
                                 <td><%=reserva.dataChegada.toString().slice(8,10)+'/'+reserva.dataChegada.toString().slice(5,7)+'/'+reserva.dataChegada.toString().slice(0,4)%></td>
                                 <td><%=reserva.diarias%> dias</td>
                                 <td><%=((reserva.valorDiaria*reserva.diarias).toFixed(2)).replace('.',',')%></td>
-                                <!-- <td>R$ <%=reserva.diarias*reserva.valorDiaria%>,00</td> -->
-                                <td><a href="/cliente/editar-reserva/<%=reserva.id%>" class="fas fa-edit" style="color: black;" 
-                                    ata-toggle="tooltip" title="Alterar a reserva" ></a></td>
-                                <td><a href="/reserva/remover/<%=reserva.pagamento.codigoPagamento%>/<%=reserva.pagamento.valor%>/<%=reserva.dataSaida%>" class="fas fa-trash"
-                                    ata-toggle="tooltip" title="Cancelar reserva" onclick="return confirm('Confirma a exclusão?')" ></a></td>
                             </tr>
                         <%})%>
                     </tbody>

@@ -9,15 +9,54 @@ const Diaria = require('../bill_modules/Diaria')
 const { estornoPagamento } = require('../helpers/API_Pagamentos')
 const DAOPagamento = require('../database/DAOPagamento')
 const clienteAutorizacao = require('../autorizacao/clienteAutorizacao')
+const moment = require('moment-timezone')
 
 
 // CANCELAMENTO DE RESERVA
-routerReserva.get('/reserva/remover/:codigoPagamento?/:valor?', clienteAutorizacao, async (req, res) => {
+routerReserva.get('/reserva/remover/:codigoPagamento?/:valor?/:dataSaida?', async (req, res) => {
 
-    await estornoPagamento(req.params.codigoPagamento, req.params.valor)
-    // O MESMO QUE REMOVER A RESERVA (DELETE ON CASCADE)
-    await DAOPagamento.removePeloCodigoPagamento(req.params.codigoPagamento)
-    res.redirect('/cliente/minhas-reservas')
+    console.log("Executando o cancelamento da reserva...");
+
+    let idCliente
+    if(req.session.cliente && req.session.cliente.id){
+        idCliente = req.session.cliente.id
+    }
+
+    // Pega a data atual
+    let dataAtual =  moment.tz( new Date(), 'America/Sao_Paulo' )
+
+    // Formata a data de saida da reserva ( necessário para realizar o cálculo )
+    let dataSaida = moment(req.params.dataSaida)
+
+    console.log();
+    console.log(dataSaida.format("YYYY-MM-DD") == dataAtual.format("YYYY-MM-DD"));
+
+
+    // Calcula a diferença entre a datas d saída e atual ( horas )
+    var horasRestantes = dataSaida.diff(dataAtual, 'hours')
+
+    let reservas
+
+    // Não será possível cancelar a reserva se houver menos de 24h para a retirada
+    if( horasRestantes < 48 || (dataSaida.format("YYYY-MM-DD") == dataAtual.format("YYYY-MM-DD"))) {
+        reservas = await DAOReserva.getMinhasReservas(idCliente)
+        console.error("Não foi possível cancelar a reserva!");
+        res.render('cliente/minhas-reservas', {user: clienteNome(req, res), reservas: reservas, mensagem: "Sua reserva não pode ser cancelada. Faltam menos de 24 horas para retirada."})
+    } else {
+        console.log('Estornando o pagamento...');
+        await estornoPagamento(req.params.codigoPagamento, req.params.valor)
+        // O MESMO QUE REMOVER A RESERVA (DELETE ON CASCADE)
+        console.log('Cancelando a reserva...');
+        await DAOPagamento.removePeloCodigoPagamento(req.params.codigoPagamento)
+
+        reservas = await DAOReserva.getMinhasReservas(idCliente)
+        
+        if(reservas == ''){
+            res.render('cliente/minhas-reservas', {user: clienteNome(req, res), reservas: reservas, mensagem: "Sua lista de reservas está vazia."})
+        }
+        res.render('cliente/minhas-reservas', {user: clienteNome(req, res), reservas: reservas, mensagem: ''})
+    }
+    
 })
 
 

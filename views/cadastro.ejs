@@ -2,9 +2,10 @@
 <html lang="en">
 <head>
     <%-include('./partials/header.ejs')%>
-    <script src="/js/validaCPF.js" ></script>
+    <!-- <script src="/js/validaCPF.js" ></script> -->
     <script src="/js/consome_viacep.js" ></script>
-    <script src="/js/validar_senha.js" ></script>
+    <!-- <script src="/js/validar_senha.js" ></script> -->
+    <script src="/js/validaDadosFormularioCadastro.js" ></script>
 </head>
 <body  >
     
@@ -12,7 +13,7 @@
     
     <div class="conteudo" >
         <div class="jumbotron junbotron-fluid">
-            <h1 class="display-4" >Bem-Vindo à página de cadastro</h1>
+            <h1 class="display-4" >Página de cadastro</h1>
         </div>
         <div class="container" >
             <!-- <h3>Reboque escolhido</h3> -->
@@ -28,71 +29,56 @@
                             <hr>
                                 
                             <div class="form-group">
-                                <label for="nome">Nome</label>
-                                <input class="form-control" id="nome" type="text" name="nome" required>
+                                <label for="nome">Nome completo</label>
+                                <span class="text-danger"> * </span>
+                                <input class="form-control" id="nome" type="text" name="nome" minlength="5" maxlength="50" required>
                                 <div class="valid-feedback">
                                     <!-- Looks good! -->
                                 </div>
                                 <div class="invalid-feedback">
-                                    Preencha o campo.
+                                    <span id="invalidNome" ></span>
                                 </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="cpf">Sobrenome</label>
-                                <input class="form-control" id="sobrenome" type="text" name="sobrenome" required>
-                                <div class="valid-feedback">
-                                    <!-- Looks good! -->
-                                </div>
-                                <div class="invalid-feedback">
-                                    Preencha o campo.
-                                </div>
+                                
                             </div>
 
                                          
                             <div class="form-group">
                                 <label for="cpf">CPF</label>
-                                <input class="form-control" id="cpf" type="text" name="cpf" required>
+                                <span class="text-danger"> * </span>
+                                <input class="form-control" id="cpf" type="text" name="cpf" minlength="14" maxlength="14" required>
                                 <div class="valid-feedback">
                                     <!-- Looks good! -->
                                 </div>
                                 <div class="invalid-feedback">
-                                    Preencha o campo.
+                                    <span id="invalidCPF" ></span>
                                 </div>
                             </div>
 
-
-                            <div class="form-group">
-                                <label for="email">RG</label>
-                                <input class="form-control" id="rg" type="text" name="rg" required>
-                                <div class="valid-feedback">
-                                    <!-- Looks good! -->
-                                </div>
-                                <div class="invalid-feedback">
-                                    Preencha o campo.
-                                </div>
-                            </div>
                             
                             <div class="form-group">
-                                <label for="cep">Telefone</label>
-                                <input class="form-control" id="telefone" type="text" name="telefone"  required>
+                                <label for="telefone">Telefone</label>
+                                <span class="text-danger"> * </span>
+                                <input class="form-control" id="telefone" type="text" name="telefone" maxlength="15" placeholder="Ex.: 53997032373" required>
                                 <div class="valid-feedback">
                                     <!-- Looks good! -->
                                 </div>
                                 <div class="invalid-feedback">
-                                    Preencha o campo.
+                                    <span id="invalidTelefone" ></span>
                                 </div>
                             </div> 
+
                             <div class="form-group">
-                                <label for="cep">Data de nascimento</label>
+                                <label for="cep">Nascimento</label>
+                                <span class="text-danger"> * </span>
                                 <input class="form-control" id="dataNascimento" type="date" name="dataNascimento" required >
                                 <div class="valid-feedback">
                                     <!-- Looks good! -->
                                 </div>
                                 <div class="invalid-feedback">
-                                    Preencha o campo.
+                                    <span id="invalidDataNascimento" ></span>
                                 </div>
                             </div> 
+
                         </div>
                     </div>
 
@@ -100,87 +86,68 @@
                     <!-- Dados de endereço -->
                     <div class="card card-reserva" style="width: 25rem;">
                         <div class="card-body">
-                            <h3 class="card-title">Infomações de Endereço</h3>
+                            <h3 class="card-title">Informções de Endereço</h3>
                             <hr>
 
+                            <div class="row g-3">
+                                <div class="form-group col">
+                                    <label for="cep">CEP</label>
+                                    <span class="text-danger"> * </span>
+                                    <input class="form-control" id="cep" type="text" name="cep" minlength="9" maxlength="9" placeholder="Ex.: 96408560" required>
+                                    <div class="valid-feedback">
+                                        <!-- Looks good! -->
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        <span id="invalidCep"></span>
+                                    </div>
+                                </div>
+                                <div class="form-group col">
+                                    <label for="numeroDaCasa">Nº da casa</label>
+                                    <span class="text-danger"> * </span>
+                                    <input class="form-control" id="numeroDaCasa" type="text" name="numeroDaCasa" maxlength="5" required >
+                                    <div class="valid-feedback">
+                                        <!-- Looks good! -->
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        <span id="invalidNumeroDaCasa"></span>
+                                    </div>
+                                </div>
+                            </div>
+                           
+
                             <div class="form-group">
-                                <label for="cep">CEP</label>
-                                <input class="form-control" id="cep" type="text" name="cep" placeholder="Ex.: 96408560" required>
+                                <label for="logradouro">Rua</label>
+                                <span class="text-danger"> * </span>
+                                <input class="form-control" id="logradouro" type="text" name="logradouro" placeholder="Ex.: Waltter Dias da Costa" minlength="2" maxlength="100" required>
                                 <div class="valid-feedback">
                                     <!-- Looks good! -->
                                 </div>
                                 <div class="invalid-feedback">
-                                    Preencha o campo.
+                                    <span id="invalidLogradouro"></span>
                                 </div>
-                            </div>
-
-                            <div class="row">
-
-                                <div class="form-group col">
-                                    <label for="logradouro">Rua</label>
-                                    <input class="form-control" id="logradouro" type="text" name="logradouro" required>
-                                    <div class="valid-feedback">
-                                        <!-- Looks good! -->
-                                    </div>
-                                    <div class="invalid-feedback">
-                                        Preencha o campo.
-                                    </div>
-                                </div>
-    
-                                <div class="form-group col">
-                                    <label for="numeroDaCasa">Nº</label>
-                                    <input class="form-control" id="numeroDaCasa" type="text" name="numeroDaCasa"  required>
-                                    <div class="valid-feedback">
-                                        <!-- Looks good! -->
-                                    </div>
-                                    <div class="invalid-feedback">
-                                        Preencha o campo.
-                                    </div>
-                                </div>
-                                
                             </div>
 
                             <div class="form-group">
                                 <label for="complemento">Complemento</label>
-                                <input class="form-control" id="complemento" type="text" name="complemento">
+                                <input class="form-control" id="complemento" type="text" name="complemento" maxlength="200">
+                                <div class="invalid-feedback">
+                                    <span id="invalidComplento"></span>
+                                </div>
                             </div>
-
+                          
                             <div class="form-group">
-                                <label for="bairro">Bairro</label>
-                                <input class="form-control" id="bairro" type="text" name="bairro"  required>
+                                <label for="localidade">Cidade</label>
+                                <span class="text-danger"> * </span>
+                                <input class="form-control" id="localidade" type="text" minlength="3" name="localidade" maxlength="50" required>
                                 <div class="valid-feedback">
                                     <!-- Looks good! -->
                                 </div>
                                 <div class="invalid-feedback">
-                                    Preencha o campo.
+                                    <span id="invalidLocalidade"></span>
                                 </div>
                             </div>
-
-                            <div class="row">
-                                <div class="form-group col">
-                                    <label for="localidade">Cidade</label>
-                                    <input class="form-control" id="localidade" type="text" name="localidade" required>
-                                    <div class="valid-feedback">
-                                        <!-- Looks good! -->
-                                    </div>
-                                    <div class="invalid-feedback">
-                                        Preencha o campo.
-                                    </div>
-                                </div>
-    
-                                <div class="form-group col">
-                                    <label for="uf">UF</label>
-                                    <input class="form-control" id="uf" type="text" name="uf" required>
-                                    <div class="valid-feedback">
-                                        <!-- Looks good! -->
-                                    </div>
-                                    <div class="invalid-feedback">
-                                        Preencha o campo.
-                                    </div>
-                                </div>
-                            </div>
-                            
                         </div>
+                        
                     </div>
 
                     <!-- Dados do login -->
@@ -190,36 +157,39 @@
                             <hr>
                             <div class="form-group">
                                 <label for="email">Login</label>
+                                <span class="text-danger"> * </span>
                                 <input class="form-control" id="email" type="email" name="email" >
                                 <small class="form-text text-muted">Informe o seu e-mail como login.</small>
                                 <div class="valid-feedback">
                                     <!-- Looks good! -->
                                 </div>
                                 <div class="invalid-feedback">
-                                    Preencha o campo.
+                                    <span id="invalidEmail"></span>
                                 </div>
                             </div>
 
                             <div class="form-group">
                                 <label for="senha">Senha</label>
+                                <span class="text-danger"> * </span>
                                 <input class="form-control" id="senha" type="password" name="senha" >
                                 <small class="form-text text-muted">No mínimo 8 dígitos.</small>
                                 <div class="valid-feedback">
                                     <!-- Looks good! -->
                                 </div>
                                 <div class="invalid-feedback">
-                                    Preencha o campo.
+                                    <span id="invalidSenha"></span>
                                 </div>
                             </div>
                             
                             <div class="form-group">
                                 <label for="senhaRepita">Repita a Senha</label>
+                                <span class="text-danger"> * </span>
                                 <input class="form-control" id="senhaRepita" type="password" name="senhaRepita" >
                                 <div class="valid-feedback">
                                     <!-- Looks good! -->
                                 </div>
                                 <div class="invalid-feedback">
-                                    Preencha o campo.
+                                    <span id="invalidSenhaRepita"></span>
                                 </div>
                             </div>
                                             
@@ -228,6 +198,8 @@
                             </p>
                         </div>
                     </div>
+                    <input type="hidden" id="bairro" name="bairro" value="">
+                    <input type="hidden" id="uf" name="uf" value="">
 
                 </div>
             </form>

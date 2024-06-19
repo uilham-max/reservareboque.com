@@ -9,11 +9,22 @@
     <div class="conteudo">
         
         <!-- Menssagem do topo da página em jumbotron -->
+
+
+        <% if(user == '') { %>
         <div class="jumbotron jumbotron-fluid">
             <h1 class="display-4" >Cadastre-se para receber descontos!</h1>
             <p class="lead">Clientes cadastrados podem ver seu histórico de locações, gerenciar suas reservas e receber
                 descontos.</p>
         </div>
+        <% } else { %>
+            <div class="jumbotron jumbotron-fluid">
+                <h1 class="display-4" >Bem-Vindo, <%=user.nome%>!</h1>
+                <p class="lead">Você pode criar uma nova reserva ou ver suas reservas e locanções no menu esquerdo.</p>
+            </div>
+        <% } %>
+
+        
 
         <!-- <iframe 
             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d358.32315593659564!2d-54.11436231243298!3d-31.304759722809663!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x950675599b9b3737%3A0xb423eb4019c27cfd!2sAluguel%20de%20reboques!5e0!3m2!1spt-BR!2sbr!4v1715353455914!5m2!1spt-BR!2sbr" 

@@ -35,10 +35,11 @@
                             <img class="card-img-top" src="<%=reboque.foto%>" alt="Reboque 1">
                         </a>
                         <div class="card-body">
-                          <h5 class="display-4">Diaria R$: <%=reboque.valorDiaria%>,00</h5>
-                          <h5 class="display-4">Dimensões: <%=reboque.comprimento%> x <%=reboque.largura%> x <%=reboque.altura%></h5>
-                          <h5 class="display-4">PBT: <%=reboque.pesoBruto%> Kg</h5>
-                          <!-- <a href="#" class="btn btn-primary">Go somewhere</a> -->
+                          <h6 class="">Diaria R$: <%=reboque.valorDiaria%>,00</h6>
+                          <h6 class="">Dimensões: <%=reboque.comprimento%> x <%=reboque.largura%> x <%=reboque.altura%></h6>
+                          <h6 class="">PBT: <%=reboque.pesoBruto%> Kg</h6>
+                          <hr>
+                          <a href="/reserva/periodo/<%=reboque.id%>" class="btn btn-outline-success">Reserve agora</a>
                         </div>
                     </div>
                 <% }) %>

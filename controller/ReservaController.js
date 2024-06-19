@@ -12,8 +12,28 @@ const clienteAutorizacao = require('../autorizacao/clienteAutorizacao')
 const moment = require('moment-timezone')
 
 
-// CANCELAMENTO DE RESERVA
-routerReserva.get('/reserva/remover/:codigoPagamento?/:valor?/:dataSaida?', async (req, res) => {
+// REMOVER RESERVA ADMIN
+routerReserva.get('/admin/reserva/remover/:codigoPagamento?/:valor?', autorizacao, async (req, res) => {
+
+    console.log("Removendo a reserva...");
+    console.log('Estornando o pagamento...');
+    await estornoPagamento(req.params.codigoPagamento, req.params.valor)
+    // O MESMO QUE REMOVER A RESERVA (DELETE ON CASCADE)
+    console.log('Cancelando a reserva...');
+    await DAOPagamento.removePeloCodigoPagamento(req.params.codigoPagamento)
+
+    let reservas = await DAOReserva.getAtivas()
+    
+    if(reservas == ''){
+        res.render('reserva/reserva', {user: adminNome(req, res), reservas: reservas, mensagem: "A lista de reservas está vazia."})
+    }
+    res.render('reserva/reserva', {user: adminNome(req, res), reservas: reservas, mensagem: ''})
+    
+})
+
+
+// CANCELAMENTO DE RESERVA PELO CLIENTE
+routerReserva.get('/reserva/remover/:codigoPagamento?/:valor?/:dataSaida?', clienteAutorizacao, async (req, res) => {
 
     console.log("Executando o cancelamento da reserva...");
 
@@ -27,10 +47,6 @@ routerReserva.get('/reserva/remover/:codigoPagamento?/:valor?/:dataSaida?', asyn
 
     // Formata a data de saida da reserva ( necessário para realizar o cálculo )
     let dataSaida = moment(req.params.dataSaida)
-
-    console.log();
-    console.log(dataSaida.format("YYYY-MM-DD") == dataAtual.format("YYYY-MM-DD"));
-
 
     // Calcula a diferença entre a datas d saída e atual ( horas )
     var horasRestantes = dataSaida.diff(dataAtual, 'hours')

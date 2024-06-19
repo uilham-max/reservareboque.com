@@ -12,9 +12,8 @@ const moment = require('moment-timezone')
 
 class DAOReserva {
 
-
-
-    static async editarReserva(idReserva){
+    
+    static async getReserva(idReserva){
         try {
             let reserva = Reserva.findByPk(idReserva, {
                 

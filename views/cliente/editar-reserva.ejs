@@ -79,21 +79,7 @@
                                 <div class="invalid-feedback">
                                     Verifique a data.
                                 </div>
-                            </div><br>
-
-                            <% if(user != ''){ %>
-                            <div class="form-check input-group">
-                                <input class="form-check-input" type="radio" name="formaPagamento" id="formaPagamento" value="PIX" checked>
-                                Pagar com PIX
-                            </div>
-                            <br>
-                            <div class="form-check input-group">
-                                <input class="form-check-input" type="radio" name="formaPagamento" id="formaPagamento" value="DINHEIRO">
-                                Pagar com Dinheiro
-                            </div>
-                            <% } %>
-
-                            
+                            </div><br>                        
                             
                             <input type="hidden" name="idReboque" value="<%=reboque.id%>" >
                             <br><input class="btn btn-primary" id="botao" type="submit" value="Atualizar minha reserva">

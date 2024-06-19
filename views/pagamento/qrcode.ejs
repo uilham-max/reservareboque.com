@@ -14,18 +14,32 @@
             <!-- <h3>Reboque escolhido</h3> -->
                 <div class="lista-reboques">
 
+
+                    <div class="jumbotron jumbotron-fluid">
+                        <h1 class="display-4" >Não escenear este QR code!</h1>
+                        <!-- <p class="lead">Clientes cadastrados podem ver seu histórico de locações, gerenciar suas reservas e receber -->
+                            <!-- descontos.</p> -->
+                    </div>
+
+
                     <div class="card card-reserva" style="width: 25rem;">
                         <div class="card-body">
                             
                             <div class="alert alert-danger">
                                 <strong>Atenção!</strong>
-                                Sua reserva vai expirar em 30 minutos! Este QR Code é uma simulação. Porém, foi gerada uma cobrança, que será aceita pelo adminstrador.
+                                Para sua reserva ser aprovada você precisa comunicar o administrador pelo WhatsApp (53) 9 9703 2373
                             </div>
-                            <div class="alert alert-success">
-                                <strong>Sucesso!</strong>
-                                Informe o nome do cliente pelo WhatsApp (53)99703-2373 ou E-mail uilhamgoncalves@agmail.com para aprovar sua reserva.
-                            </div>
-                                
+
+                            
+
+                            <% if(formaPagamento == 'DINHEIRO') { %>
+                                <div class="alert alert-success">
+                                    <strong>Sucesso!</strong>
+                                    Sua reserva será confirmada pelo administrador.
+                                    Informe o seu nome completo pelo WhatsApp (53) 9 9703 2373 ou 
+                                    E-mail uilhamgoncalves@agmail.com para aprová-la.
+                                </div>
+                            <% } %>
                         </div>
                     </div>
 

@@ -19,7 +19,7 @@ routerCliente.post('/cliente/atualizar-reserva', (req, res) => {
 routerCliente.get('/cliente/editar-reserva/:idReserva', async (req, res) => {
 
     let idReserva = req.params.idReserva
-    let reserva = await DAOReserva.editarReserva(idReserva)
+    let reserva = await DAOReserva.getReserva(idReserva)
     if(!reserva){
         res.render('erro', {mensagem: "Erro ao obter reserva."})
     }

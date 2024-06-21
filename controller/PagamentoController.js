@@ -9,7 +9,9 @@ const moment = require('moment-timezone')
 const DAOReboque = require('../database/DAOReboque')
 const Diaria = require('../bill_modules/Diaria')
 const emailPagamentoAprovado = require('../helpers/emailPagamentoAprovado')
+const emailPagamentoCriado = require('../helpers/emailPagamentoCriado')
 const autorizacao = require('../autorizacao/autorizacao')
+
 
 
 routerPagamento.post('/pagamento/recebeEmDinheiro', autorizacao, async (req, res)=>{
@@ -114,8 +116,25 @@ routerPagamento.post('/pagamento/qrcode', async (req, res) => {
 })
 
 
-// API de comunicação com Assas
+// API PIX CRIADO
+routerPagamento.post('/pagamento/webhook/pixCriado', async (req, res) => {
+    let destino = "uilhamgoncalves@gmail.com"
+    try{
+        console.log(req.body.event, "Enviar email para o admin.");
+        emailPagamentoCriado(destino)
+    }catch(error){
+        console.warn(error);
+    }finally{
+        res.sendStatus(200) ;
+    }
+    
+})
+
+
+// API PIX RECEBIDO
 routerPagamento.post('/pagamento/webhook/pix', async (req, res) => {
+    
+    console.log(req.body.event);
     try{
         let idPagamento = req.body.payment.id
         await DAOPagamento.atualizarPagamentoParaAprovado(idPagamento)
@@ -123,7 +142,8 @@ routerPagamento.post('/pagamento/webhook/pix', async (req, res) => {
         console.warn(error);
     }finally{
         res.sendStatus(200) ;
-    }
+    }    
+    
 })
 
 

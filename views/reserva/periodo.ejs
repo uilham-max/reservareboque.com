@@ -54,6 +54,13 @@
 
                                 <h5>Informe o periodo</h5>
                                 <hr>
+
+                                <% if(mensagem){%>
+                                    <div class="alert alert-danger">
+                                        <strong>Atenção!</strong>
+                                        <%= mensagem %>
+                                    </div>
+                                <% } %>
                                 
                                 <div class="input-group mb-3 mt-5">
                                     <span class="input-group-text" >Data de Retirada</span>
@@ -90,12 +97,7 @@
                                 </div>
                                 <% } %>
                                 
-                                <% if(mensagem){%>
-                                    <div class="alert alert-danger">
-                                        <strong>Atenção!</strong>
-                                        <%= mensagem %>
-                                    </div>
-                                <% } %>
+                                
                             
 
                         </div>
@@ -113,7 +115,7 @@
                         <div class="card card-reserva" style="width: 25rem;">
                             <div class="card-body">
     
-                                <div class="alert alert-danger">
+                                <div class="alert alert-info">
                                     <h5 class="card-text">Indisponível para estas datas</h5>
                                     <% reservas.forEach(function(reserva) { %>
                                     <p>

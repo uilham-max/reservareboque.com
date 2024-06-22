@@ -151,7 +151,7 @@ class DAOReserva {
             return reserva
         }
         catch (error) {
-            console.log(error.toString())
+            console.log("Restrição de Unicidade.",error.toString())
             return false
         }
     }

@@ -250,7 +250,7 @@ document.addEventListener('DOMContentLoaded', () => {
     })
 
 
-    // VALIDA SE É MAIOR DE 18 ANOS
+    // IDADE ENTRE 18 E 100 ANOS
     inputDataNascimento.addEventListener('blur', () => {
 
         // Obter o valor do input
@@ -265,14 +265,15 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // Validar se é maior de 18 anos
-        if (idade >= 18) {
+        if (idade < 18 || idade > 100  ) {
+            inputDataNascimento.classList.add('is-invalid')
+            inputDataNascimento.setCustomValidity('mensagem')
+            invalidDataNascimento.textContent = 'Deve estar entre 18 e 100 anos.';
+            return
+        } else {
             inputDataNascimento.classList.remove('is-invalid')
             inputDataNascimento.setCustomValidity('')
             invalidDataNascimento.textContent = '';
-        } else {
-            inputDataNascimento.classList.add('is-invalid')
-            inputDataNascimento.setCustomValidity('mensagem')
-            invalidDataNascimento.textContent = 'Deve ser maior de 18 anos.';
         }
     })
 

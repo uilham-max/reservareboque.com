@@ -12,6 +12,18 @@ const moment = require('moment-timezone')
 
 class DAOReserva {
 
+    // Não permite realizar dois pagamentos de uma mesma reserva
+    static async verificaPagamentoId(){
+        try {
+            let reservas = Reserva.findAll({order:['id']})
+            return reservas
+        } catch(erro){
+            console.error(erro.toString());
+            return false
+        }
+    }
+
+
     
     static async getReserva(idReserva){
         try {

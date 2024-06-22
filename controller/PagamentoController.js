@@ -36,6 +36,9 @@ routerPagamento.post('/pagamento/qrcode', async (req, res) => {
     
     let {nome, cpf, telefone, email, cep, logradouro, complemento, 
     localidade, numeroDaCasa, idReboque, dataInicio, dataFim, formaPagamento} = req.body
+
+    // let reservas = await DAOReserva.verificaPagamentoId()
+    // console.log(reservas);
     
     cpf = cpf.replace(/\D/g, '')
     telefone = telefone.replace(/\D/g, '')

@@ -11,14 +11,12 @@
     <div class="conteudo" >
 
         <% if (user == '') { %>
-
             <!-- Menssagem do topo da página em jumbotron -->
             <div class="jumbotron jumbotron-fluid">
                 <h1 class="display-4" >Cadastre-se para receber descontos!</h1>
                 <p class="lead">Clientes cadastrados podem ver seu histórico de locações, gerenciar suas reservas e receber
                     descontos.</p>
             </div>
-
         <% } %>
 
 
@@ -32,9 +30,6 @@
             <% } %>
             
                 <div class="lista-reboques">
-                    
-
-
 
                     <div class="card card-reserva" style="width: 25rem;">
                         <img src="../../<%=reboque.foto%>" class="card-img-top" alt="...">
@@ -45,9 +40,6 @@
                         <h5 class="card-text"><%=reboque.descricao%></h5>
                         </div>
                     </div>
-
-
-                    
 
                     <div class="card card-reserva" style="width: 25rem;">
                         <div class="card-body">

@@ -5,7 +5,7 @@ const {clienteNome} = require('../helpers/getSessionNome')
 
 
 routerIndex.get('/login', (req, res) => {
-    res.render('login', {mensagem: ""})
+    res.render('login', {user: clienteNome(req, res), mensagem: ""})
 })
 
 

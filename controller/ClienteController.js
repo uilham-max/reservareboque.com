@@ -119,6 +119,10 @@ routerCliente.post('/cadastro/create', async (req, res) => {
     let {nome, sobrenome, email, senha, senhaRepita, cpf, rg, telefone, dataNascimento, cep, 
         logradouro, complemento, bairro, localidade, uf, numeroDaCasa} = req.body
 
+    cpf = cpf.replace(/\D/g, '')
+    telefone = telefone.replace(/\D/g, '')
+    cep = cep.replace(/\D/g, '')
+
     if(senha.length < 8){
         res.render('erro', {mensagem: "Erro. Senha com menos de 8 dígitos."})
     }
@@ -150,7 +154,7 @@ routerCliente.post('/cadastro/create', async (req, res) => {
     }
 
     if(cliente){
-        req.session.cliente = {id: cliente.id, nome: cliente.nome, sobrenome: cliente.sobrenome, email: cliente.email}
+        // req.session.cliente = {id: cliente.id, nome: cliente.nome, sobrenome: cliente.sobrenome, email: cliente.email}
         console.log(cliente.nome,"criado...");
         res.redirect('/')
     } else {

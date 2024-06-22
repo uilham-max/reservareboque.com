@@ -9,11 +9,17 @@ const Cliente = conexao.define('cliente', {
     },
     nome: Sequelize.STRING,
     sobrenome: Sequelize.STRING,
-    email: Sequelize.STRING, // tornar unique mais tarde
+    email: {
+        type: Sequelize.STRING,
+        unique: true,
+    },
     senha: Sequelize.STRING,
-    cpf: Sequelize.STRING, // tornar unique mais tarde
+    cpf: {
+        type: Sequelize.STRING,
+        unique: true,
+    }, 
     rg: Sequelize.STRING,
-    telefone: Sequelize.STRING, // tornar unique mais tarde
+    telefone: Sequelize.STRING,
     data_nascimento: Sequelize.DATEONLY,
     cep: Sequelize.STRING,
     logradouro: Sequelize.STRING,

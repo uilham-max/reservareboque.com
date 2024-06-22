@@ -14,8 +14,9 @@
         <% if(user == '') { %>
         <div class="jumbotron jumbotron-fluid">
             <h1 class="display-4" >Cadastre-se para receber descontos!</h1>
-            <p class="lead">Clientes cadastrados podem ver seu histórico de locações, gerenciar suas reservas e receber
-                descontos.</p>
+            <h4>Clique em <a href="/login"> entrar </a> ou <a href="/cadastro">cadastrar-se</a> para receber descontos</h4>
+            <!-- <p class="lead">Clientes cadastrados podem ver seu histórico de locações, gerenciar suas reservas e receber -->
+                <!-- descontos.</p> -->
         </div>
         <% } else { %>
             <div class="jumbotron jumbotron-fluid">
@@ -23,18 +24,6 @@
                 <p class="lead">Você pode criar uma nova reserva ou ver suas reservas e locanções no menu esquerdo.</p>
             </div>
         <% } %>
-
-        
-
-        <!-- <iframe 
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d358.32315593659564!2d-54.11436231243298!3d-31.304759722809663!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x950675599b9b3737%3A0xb423eb4019c27cfd!2sAluguel%20de%20reboques!5e0!3m2!1spt-BR!2sbr!4v1715353455914!5m2!1spt-BR!2sbr" 
-            width="450" 
-            height="300" 
-            style="border:0;" 
-            allowfullscreen="" 
-            loading="lazy" 
-            referrerpolicy="no-referrer-when-downgrade">
-        </iframe> -->
         
         <div class="container" >
 
@@ -46,9 +35,9 @@
                             <img class="card-img-top" src="<%=reboque.foto%>" alt="Reboque 1">
                         </a>
                         <div class="card-body">
-                          <h6 class="">Diaria R$: <%=reboque.valorDiaria%>,00</h6>
+                          <h6 class="">Valor da diária R$: <%=reboque.valorDiaria%>,00</h6>
                           <h6 class="">Dimensões: <%=reboque.comprimento%> x <%=reboque.largura%> x <%=reboque.altura%></h6>
-                          <h6 class="">PBT: <%=reboque.pesoBruto%> Kg</h6>
+                          <h6 class="">Peso suportado: <%=reboque.pesoBruto%> Kg</h6>
                           <hr>
                           <a href="/reserva/periodo/<%=reboque.id%>" class="btn btn-outline-success">Reserve agora</a>
                         </div>

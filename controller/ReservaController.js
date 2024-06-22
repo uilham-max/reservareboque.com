@@ -128,12 +128,23 @@ routerReserva.post('/reserva/dados-confirma', async (req, res) => {
     let {nome, cpf, telefone, email, cep, logradouro, complemento, localidade,
     numeroDaCasa, idReboque, dataInicio, dataFim, formaPagamento} = req.body
 
+    let resposta = await DAOReserva.getVerificaDisponibilidade(idReboque, dataInicio, dataFim)
+    if(resposta.length > 0){
+        let reboque = await DAOReboque.getOne(idReboque)
+        let reservas = await DAOReserva.getAtivasPorID(idReboque)
+        res.render('reserva/periodo', {user: clienteNome(req, res), reboque: reboque, reservas: reservas, mensagem: "Indisponível para esta data."})
+        return
+    }
+
+
     // CLIENTE LOGADO
     let clienteLogado = {}
     if(req.session.cliente){
         clienteLogado = await DAOCliente.getOne(req.session.cliente.id)
         if(!clienteLogado){
             res.render('erro', {mensagem: "Erro ao buscar cliente"})
+            return
+
         }
     }
 

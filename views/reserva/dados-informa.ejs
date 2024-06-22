@@ -185,6 +185,7 @@
                     <!-- Informções de pagamento -->
                     <div class="card card-reserva" style="width: 25rem;">
                         <div class="card-body">
+                            
                             <h3 class="card-title">Informações do Pagamento</h3>
                             <hr>
                             <br>
@@ -192,6 +193,7 @@
                                 <input class="form-check-input" type="radio" name="formaPagamento" id="formaPagamento" value="PIX" checked>
                                 Pagar com PIX
                             </div>
+                            <br>
                             <div class="form-check input-group">
                             <input class="form-check-input" type="radio" name="formaPagamento" id="formaPagamento" value="DINHEIRO">
                                 Pagar com Dinheiro
@@ -207,9 +209,14 @@
                                 </div>
                             </div>
 
-                            <p style="margin: 0.5rem;" >
+                            <!-- <p style="margin: 0.5rem;" >
                                 <input class="btn btn-primary validation" id="botao" type="submit" value="Confirmar">
-                            </p>
+                            </p> -->
+
+                            <div class="d-flex justify-content-center" style="margin: 0.5rem;">
+                                <button class="btn btn-secondary me-3" type="button" onclick="history.back()">Voltar</button>
+                                <input class="btn btn-primary validation" id="botao" type="submit" value="Confirmar">
+                            </div>
 
                             
                         </div>

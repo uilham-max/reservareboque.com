@@ -8,8 +8,8 @@
 <body>
     <div class="conteudo">
 
-        <div class="container">
-            <div class="card">
+        <div class="container" style="width: 30rem;">
+            <div class="card" >
                 <div class="card-body">
                     <h3 class="card-title">Autenticação do usuário</h3>
                     <form action="/login/entrar" method="POST">
@@ -23,8 +23,15 @@
                             <input class="form-control" id="senha" type="password" name="senha" required>
                         </div>
                         <br>
-                        <a href="/" class="btn btn-primary">Voltar</a>
-                        <input class="btn btn-success" type="submit" value="Login"><br>
+
+                        <div class="d-flex justify-content-center" style="margin: 0.5rem;">
+                            <button class="btn btn-secondary me-5" type="button" onclick="history.back()">Voltar</button>
+                            <input class="btn btn-primary" id="botao" type="submit" value="Entrar">
+                        </div>
+
+                        <!-- <a href="/" class="btn btn-secondary">Voltar</a>
+                        <input class="btn btn-success" type="submit" value="Login"><br> -->
+
                         <a href="/cadastro" class="btn-link">Quero me cadastrar.</a>
                         <a href="/admin/login" class="btn-link">Sou admin.</a>
                     </form>

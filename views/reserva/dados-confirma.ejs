@@ -7,9 +7,7 @@
     
     <%-include('../partials/navbar.ejs')%>
 
-
     <div class="conteudo" >
-
 
         <!-- Menssagem do topo da página em jumbotron -->
         <div class="jumbotron jumbotron-fluid">
@@ -17,7 +15,6 @@
             <p class="lead">Clientes cadastrados podem ver seu histórico de locações, gerenciar suas reservas e receber
                 descontos.</p>
         </div>
-
 
         <div class="container" >
             <!-- <h3>Reboque escolhido</h3> -->
@@ -27,13 +24,24 @@
 
                     <!-- Card do reboque -->
                     <div class="card card-reserva" style="width: 25rem;">
+
                         <img src="../../<%=reboque.foto%>" class="card-img-top" alt="...">
+
+                        <div class="alert alert-info mt-5">
+                            <strong>Atenção!</strong>
+                            O cancelamento da reserva deve ser solicitado <strong>48 horas</strong> antes do dia da retirada!
+                        </div>
+
+                        <div class="d-flex justify-content-center mt-3  mb-3" >
+                            <button class="btn btn-secondary me-3" type="button" onclick="history.back()">Voltar</button>
+                            <input class="btn btn-primary" type="submit" value="Confirmar">
+                        </div>
                     </div>
 
                     <!-- Dados de cadastro -->
                     <div class="card card-reserva" style="width: 25rem;">
                         <div class="card-body">
-                            <h3 class="card-title">Informações Pessoais</h3>
+                            <h3 class="card-title">Informações da reserva</h3>
                             <hr>
                             <div class="form-group">
                                 <label for="nome_input">Nome</label>
@@ -49,10 +57,49 @@
                                 <input class="form-control" id="telefone_input" type="text" name="telefone_input" value="<%=cliente.telefone%>" disabled>
                             </div>
 
-                            <div class="form-group">
+                            <div class="form-group mb-3">
                                 <label for="email_input">E-mail</label>
                                 <input class="form-control" id="email_input" type="email" name="email_input" value="<%=cliente.email%>" disabled>
                             </div>
+
+                            <hr>
+
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" >Data de Retirada</span>
+                                <input class="form-control" id="dataInicio_input" type="text" name="dataInicio_input" value="<%=reserva.dataInicio.toString().slice(8,10)+'/'+reserva.dataInicio.toString().slice(5,7)+'/'+reserva.dataInicio.toString().slice(0,4)%>" disabled>
+                            </div>
+                            
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" >Data de Entrega</span>
+                                <input class="form-control" id="dataFim_input" type="text" name="dataFim_input" value="<%=reserva.dataFim.toString().slice(8,10)+'/'+reserva.dataFim.toString().slice(5,7)+'/'+reserva.dataFim.toString().slice(0,4)%>" disabled>
+                            </div>
+
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" >Valor Total</span>
+                                <input class="form-control" id="valorTotalDaReserva_input" type="text" name="valorTotalDaReserva_input" value="R$ <%=reserva.valorTotalDaReserva.toFixed(2)%>" disabled>
+                            </div>
+
+
+                            <% if(user != '') { %>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" >Desconto aplicado</span>
+                                <input class="form-control" id="desconto_input" type="text" name="desconto_input" value="R$ <%=reserva.desconto.toFixed(2)%>" disabled>
+                            </div>
+                            <% } %>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" >Forma de Pagamento</span>
+                                <input class="form-control" id="formaPagamento" type="text" name="formaPagamento" value="<%=reserva.formaPagamento%>" disabled>
+                            </div>
+                            
+                            <% if(reserva.formaPagamento == 'DINHEIRO') {%>
+                                <div class="alert alert-info">
+                                    <strong>Atenção!</strong>
+                                    Forma de pagamento em <strong>dinheiro</strong> depende da aprovação do administrador.
+                                    Contate-o por WhatsApp ou E-mail para aprovar sua reserva. 
+                                    <p></p>
+                                    <strong>Se não for aprovada em até 1 hora ela será removida.</strong>
+                                </div>
+                            <% } %>
                            
                         </div>
                     </div>
@@ -81,61 +128,7 @@
                                 <input class="form-control" id="cidade_input" type="text" name="cidade_input"value="<%=cliente.localidade%>" disabled>
                             </div>
                         </div>
-                        
-                        
                     </div>
-
-
-                    <!-- Dados de RESERVA -->
-                    <div class="card card-reserva" style="width: 25rem;">
-                        <div class="card-body">
-                            <h3 class="card-title">Informações da Reserva</h3>
-                            <hr>
-                            
-                            <div class="input-group mb-3">
-                                <span class="input-group-text" >Data de Retirada</span>
-                                <input class="form-control" id="dataInicio_input" type="text" name="dataInicio_input" value="<%=reserva.dataInicio.toString().slice(8,10)+'/'+reserva.dataInicio.toString().slice(5,7)+'/'+reserva.dataInicio.toString().slice(0,4)%>" disabled>
-                            </div>
-                            <div class="input-group mb-3">
-                                <span class="input-group-text" >Data de Entrega</span>
-                                <input class="form-control" id="dataFim_input" type="text" name="dataFim_input" value="<%=reserva.dataFim.toString().slice(8,10)+'/'+reserva.dataFim.toString().slice(5,7)+'/'+reserva.dataFim.toString().slice(0,4)%>" disabled>
-                            </div>
-                            <div class="input-group mb-3">
-                                <span class="input-group-text" >Valor Total</span>
-                                <input class="form-control" id="valorTotalDaReserva_input" type="text" name="valorTotalDaReserva_input" value="R$ <%=reserva.valorTotalDaReserva.toFixed(2)%>" disabled>
-                            </div>
-                            <% if(user != '') { %>
-                            <div class="input-group mb-3">
-                                <span class="input-group-text" >Desconto aplicado</span>
-                                <input class="form-control" id="desconto_input" type="text" name="desconto_input" value="R$ <%=reserva.desconto.toFixed(2)%>" disabled>
-                            </div>
-                            <% } %>
-                            <div class="input-group mb-3">
-                                <span class="input-group-text" >Forma de Pagamento</span>
-                                <input class="form-control" id="formaPagamento" type="text" name="formaPagamento" value="<%=reserva.formaPagamento%>" disabled>
-                            </div>
-                            
-                            <% if(reserva.formaPagamento == 'DINHEIRO') {%>
-                                <div class="alert alert-info">
-                                    <strong>Atenção!</strong>
-                                    Forma de pagamento em <strong>dinheiro</strong> depende da aprovação do administrador.
-                                    Contate-o por WhatsApp ou E-mail para aprovar sua reserva. 
-                                    <p></p>
-                                    <strong>Se não for aprovada em até 1 hora ela será removida.</strong>
-                                </div>
-                            <% } %>
-                        
-                        </div>
-
-
-
-                        <p style="margin: 0.5rem;" >
-                            <input class="btn btn-primary" type="submit" value="Confirmar">
-                        </p>
-
-                        
-                    </div>
-
 
                     <!-- dados da reserva -->
                     <input type="hidden" id="idReboque" name="idReboque" value="<%=reserva.idReboque%>">

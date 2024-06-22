@@ -265,7 +265,7 @@ class DAOReserva {
                     reboqueId: id,
                 },
                 order: ['id'],
-                include: [{ model: Reboque }, { model: Cliente }]
+                include: [{ model: Reboque }, { model: Cliente }, {model: Pagamento}]
             })
             // testando saida
             // console.log('Reservas encontradas:', reservas.map(reserva => reserva.toJSON()));

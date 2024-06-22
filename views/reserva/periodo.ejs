@@ -121,6 +121,9 @@
                                     <p>
                                         de <%=reserva.dataSaida.toString().slice(8,10)+'/'+reserva.dataSaida.toString().slice(5,7)+'/'+reserva.dataSaida.toString().slice(0,4)%> 
                                         à  <%=reserva.dataChegada.toString().slice(8,10)+'/'+reserva.dataChegada.toString().slice(5,7)+'/'+reserva.dataChegada.toString().slice(0,4)%>
+                                        <%if(reserva.pagamento.aprovado == false) {%>
+                                        Aguardando pagamento
+                                        <% } %>
                                     </p>
         
                                     <%})%>

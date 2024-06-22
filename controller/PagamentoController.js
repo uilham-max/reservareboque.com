@@ -118,7 +118,6 @@ routerPagamento.post('/pagamento/qrcode', async (req, res) => {
 
 // API PIX CRIADO
 routerPagamento.post('/pagamento/webhook/pixCriado', async (req, res) => {
-    console.log(req.session);
     let destino = "uilhamgoncalves@gmail.com"
     try{
         console.log(req.body.event, "Enviar email para o admin.");

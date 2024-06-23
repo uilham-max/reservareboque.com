@@ -20,7 +20,7 @@ async function emailPagamentoCriado(destino){
             to: destino, // list of receivers
             subject: "Reserva criada.", // Subject line
             text: "Uma reserva criada está esperando a aprovação", // plain text body
-            html: "<b>https://sandbox.asaas.com/dashboard/index</b>", // html body
+            html: "<b>https://sandbox.asaas.com/payment/list</b> <p>Uma reserva criada está esperando a aprovação</p>", // html body
         });
         console.log("E-mail enviado para %s", destino);
         return

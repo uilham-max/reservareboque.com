@@ -14,9 +14,14 @@
             <% if(formaPagamento == 'DINHEIRO') {%>
             <h1 class="display-4" >Pedido realizado! Contate a empresa para aprovar Sua reserva.</h1>
             <p class="lead">Você receberá uma mensagem por WhatsApp e E-mail quando o adminstrador aprovar sua reserva.</p>
+            <a class="btn btn-primary mt-2" href="/cliente/minhas-reservas">Minhas reservas</a>
+            <a class="btn btn-primary mt-2" href="/cliente/minhas-locacoes">Minhas locações</a>
             <% } else { %>
             <h1 class="display-4" >Parabéns! Reserva realizada com sucesso.</h1>
             <p class="lead">Verifique seu email para visualizar os dados da reserva.</p>
+            <a class="btn btn-primary mt-2" href="/cliente/minhas-reservas">Minhas reservas</a>
+            <a class="btn btn-primary mt-2" href="/cliente/minhas-locacoes">Minhas locações</a>
+
             <% }%>
 
 

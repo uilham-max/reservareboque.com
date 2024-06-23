@@ -14,7 +14,9 @@
         <% if(user == '') { %>
         <div class="jumbotron jumbotron-fluid">
             <h1 class="display-4" >Cadastre-se para receber descontos!</h1>
-            <h4>Clique em <a href="/login"> entrar </a> ou <a href="/cadastro">cadastrar-se</a> para receber descontos</h4>
+            <h4>Clique em <a href="/login"> entrar </a> ou <a href="/cadastro">se cadastrar</a></h4>
+            <p class="lead">As imagem foram tiradas da internet. São meramente ilustrativas.</p>
+
             <!-- <p class="lead">Clientes cadastrados podem ver seu histórico de locações, gerenciar suas reservas e receber -->
                 <!-- descontos.</p> -->
         </div>
@@ -22,6 +24,7 @@
             <div class="jumbotron jumbotron-fluid">
                 <h1 class="display-4" >Bem-Vindo, <%=user.nome%>!</h1>
                 <p class="lead">Você pode criar uma nova reserva ou ver suas reservas e locanções no menu esquerdo.</p>
+                <p class="lead">As imagem foram tiradas da internet. São meramente ilustrativas.</p>
             </div>
         <% } %>
         
@@ -35,9 +38,9 @@
                             <img class="card-img-top" src="<%=reboque.foto%>" alt="Reboque 1">
                         </a>
                         <div class="card-body">
-                          <h6 class="">Valor da diária R$: <%=reboque.valorDiaria%>,00</h6>
-                          <h6 class="">Dimensões: <%=reboque.comprimento%> x <%=reboque.largura%> x <%=reboque.altura%></h6>
-                          <h6 class="">Peso suportado: <%=reboque.pesoBruto%> Kg</h6>
+                          <h6 class="">Valor de cada diária: R$ <%=reboque.valorDiaria%>,00</h6>
+                          <h6 class="">Tamanho: <%=reboque.comprimento%>cm x <%=reboque.largura%>cm x <%=reboque.altura%>cm</h6>
+                          <h6 class="">Peso bruto suportado: <%=reboque.pesoBruto%> Kg</h6>
                           <hr>
                           <a href="/reserva/periodo/<%=reboque.id%>" class="btn btn-outline-success">Reserve agora</a>
                         </div>

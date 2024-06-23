@@ -82,7 +82,7 @@ class DAOPagamento {
             );
             // console.log('Atualizando status do pagamento para aprovado...');
             if (numLinhasAtualizadas > 0) {
-                console.log('Pagamento atualizado para aprovado com sucesso.');
+                console.log(idPagamento, '--> Pagamento atualizado para aprovado com sucesso.');
                 return true;
             } else {
                 console.log('Nenhuma linha foi atualizada. O pagamento não foi encontrado.');

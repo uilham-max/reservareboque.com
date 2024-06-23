@@ -269,6 +269,21 @@ async function gerarQRCode(id_cobranca){
 
 
 async function criarCobranca(cpfCnpj, nome, telefone, email, valor, data_vencimento, dataInicio, dataFim, placa, formaPagamento){
+    console.log(
+        "\nCriando cobrança...", 
+        "\nCPF:-------------------", cpfCnpj, 
+        "\nNome:------------------", nome, 
+        "\nTelefone:--------------", telefone, 
+        "\nEmail:-----------------", email, 
+        "\nValor:-----------------", valor, 
+        "\nData de Vencimento:----", data_vencimento, 
+        "\nInício da Reserva:-----", dataInicio, 
+        "\nFim da Reserva:--------", dataFim, 
+        "\nPlaca do Reboque:------", placa, 
+        "\nForma de Pagamento:----", formaPagamento, 
+        "\n"
+    
+    );
     let customerID;
     let retornoPag;
     let retornoQR = {

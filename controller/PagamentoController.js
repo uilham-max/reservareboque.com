@@ -37,8 +37,15 @@ routerPagamento.post('/pagamento/qrcode', async (req, res) => {
     let {nome, cpf, telefone, email, cep, logradouro, complemento, 
     localidade, numeroDaCasa, idReboque, dataInicio, dataFim, formaPagamento} = req.body
 
-    // let reservas = await DAOReserva.verificaPagamentoId()
-    // console.log(reservas);
+    
+    // Criar um identificador único para o formulário
+    const formIdentifier = `${idReboque}-${dataInicio}-${dataFim}`;
+
+    // Verificar se o formulário já foi enviado com base no identificador
+    if (req.session.submittedForms && req.session.submittedForms.includes(formIdentifier)) {
+        console.log("O formulário está duplicado. Envio cancelado!");
+        return res.render('erro', { mensagem: 'Erro. Formulário duplicado!' });
+    }
     
     cpf = cpf.replace(/\D/g, '')
     telefone = telefone.replace(/\D/g, '')
@@ -50,6 +57,7 @@ routerPagamento.post('/pagamento/qrcode', async (req, res) => {
     let reboque = await DAOReboque.getOne(idReboque)
     if(!reboque){
         res.render('erro', {mensagem: 'erro ao buscar reboque'})
+        return
     }
     
     // CALCULA VALORES E APLICA DESCONTOS
@@ -64,6 +72,7 @@ routerPagamento.post('/pagamento/qrcode', async (req, res) => {
         cliente = await DAOCliente.getOne(req.session.cliente.id)
         if(!cliente){
             res.render('erro', {mensagem: "Erro ao buscar cliente"})
+            return
         }
         valorDiaria = valorTotalDaReservaComDesconto/dias
         valorTotalDaReserva = valorTotalDaReservaComDesconto
@@ -75,6 +84,7 @@ routerPagamento.post('/pagamento/qrcode', async (req, res) => {
             cliente = await DAOCliente.insertClienteQueNaoQuerSeCadastrar(nome, cpf, telefone, email, cep, logradouro, complemento, localidade, numeroDaCasa)
             if(!cliente){
                 res.render('erro', {mensagem: 'erro ao criar cliente'})
+                return
             }  
         }
         valorDiaria = reboque.valorDiaria
@@ -86,9 +96,16 @@ routerPagamento.post('/pagamento/qrcode', async (req, res) => {
     try{
         let data_vencimento = moment.tz( new Date(), 'America/Sao_Paulo' )
         data_vencimento = data_vencimento.format('YYYY-MM-DD')
+
+        /**
+         * Verificar se não foi criada uma cobrança para essa reserva.
+         * Não pode haver mais de uma cobrança para uma reserva.
+        */
+
         retorno = await criarCobranca(cliente.cpf, cliente.nome, telefone, email, valorTotalDaReserva, data_vencimento, dataInicio, dataFim, reboque.placa, formaPagamento)
     }catch(error){
         res.render('erro', { mensagem: "Erro ao criar cobrança PIX."})
+        return
     }finally{
 
         var dataExpiracao = moment.tz(new Date(), 'America/Sao_Paulo')
@@ -106,6 +123,12 @@ routerPagamento.post('/pagamento/qrcode', async (req, res) => {
         if(!reserva){
             res.render('erro', {mensagem: 'Erro ao criar reserva.'})
         } else {
+
+            // Marcar o formulário específico como enviado
+            console.log("Marcando formulário como enviado...");
+            req.session.submittedForms = req.session.submittedForms || [];
+            req.session.submittedForms.push(formIdentifier);
+
             if(formaPagamento == 'PIX'){
                 res.render('pagamento/qrcode', {user: clienteNome(req, res), formaPagamento: formaPagamento, id_cobranca: retorno.id_cobranca, image: retorno.encodedImage, PIXCopiaECola: retorno.PIXCopiaECola, mensagem: ''})
             } else {
@@ -134,7 +157,7 @@ routerPagamento.post('/pagamento/webhook/pixCriado', async (req, res) => {
 })
 
 
-// API PIX RECEBIDO
+// ESCUTA O WEBHOOK --- ATUALIZA PAGAMENTO PARA APROVADO --- API PIX RECEBIDO
 routerPagamento.post('/pagamento/webhook/pix', async (req, res) => {
     
     try{
@@ -149,7 +172,7 @@ routerPagamento.post('/pagamento/webhook/pix', async (req, res) => {
 })
 
 
-// API que fica testando se o qrcode do PIX foi pago
+// ESCUTA A ROTA /pagamento/qrcode
 routerPagamento.get('/pagamento/aprovado/:codigoPagamento', async (req, res) => {
     let {codigoPagamento} = req.params
     try{

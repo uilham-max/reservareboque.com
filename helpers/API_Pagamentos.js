@@ -25,7 +25,7 @@ async function estornoPagamento(codigoPagamento, valor){
     }
 }
 
-
+// REMOVE A COBRANÇA DO SISTEMA DE PAGAMENTO
 async function deleteCobranca(codigoPagamento){
     let url = `${URL_BASE}/payments/${codigoPagamento}`
     let options = {
@@ -36,7 +36,7 @@ async function deleteCobranca(codigoPagamento){
     }
     try{
         let resposta = await axios.delete(url, options)
-        console.log("Pagamento removido do Sistema de Pagamentos:", codigoPagamento);
+        console.log(codigoPagamento ," --> Pagamento removido do Sistema de Pagamentos:");
     } catch (err){
         console.error(err.toString());
         throw err
@@ -269,6 +269,7 @@ async function gerarQRCode(id_cobranca){
 
 
 async function criarCobranca(cpfCnpj, nome, telefone, email, valor, data_vencimento, dataInicio, dataFim, placa, formaPagamento){
+    
     console.log(
         "\nCriando cobrança...", 
         "\nCPF:-------------------", cpfCnpj, 
@@ -284,8 +285,10 @@ async function criarCobranca(cpfCnpj, nome, telefone, email, valor, data_vencime
         "\n"
     
     );
+    
     let customerID;
     let retornoPag;
+    
     let retornoQR = {
         "encodedImage": '',
         "PIXCopiaECola": '',

@@ -6,9 +6,9 @@ const removerPagamentosAPI = async () => {
     try {
         const lista = await DAOPagamento.listaPagamentosComPrazoExpirado()
         lista.forEach(element => {
-            // REMOVE PAGAMENTOS EXTERNOS
+            // REMOVE O PAGAMENTO DO SISTEMA DE PAGAMENTO
             deleteCobranca(element.dataValues.codigoPagamento)
-            // REMOVE PAGAMENTOS INTERNOS
+            // REMOVE O PAGAMENTO DO BANCO DE DADOS
             DAOPagamento.removePeloCodigoPagamento(element.dataValues.codigoPagamento)
         });
     } catch(erro) {

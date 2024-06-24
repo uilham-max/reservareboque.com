@@ -108,6 +108,7 @@ routerPagamento.post('/pagamento/qrcode', async (req, res) => {
         return
     }finally{
 
+        // Adiciona 60 minutos como tempo de expiração da reservas caso não seja paga
         var dataExpiracao = moment.tz(new Date(), 'America/Sao_Paulo')
         dataExpiracao.add(60, 'minutes')
 
@@ -177,13 +178,16 @@ routerPagamento.get('/pagamento/aprovado/:codigoPagamento', async (req, res) => 
     let {codigoPagamento} = req.params
     try{
         let resposta = await DAOPagamento.verificaPagamento(codigoPagamento)
+        console.log("\nTestando resposta ao verificar o pagamento..\n",resposta);
         if(resposta.aprovado == true){
-            console.log("Aprovado pagamento com codigo:",codigoPagamento);
+            console.log(codigoPagamento ," --> Aprovado pagamento!");
             res.status(200).json({aprovado: true})
         }else{
+            console.log(codigoPagamento ," --> Aguardando aprovação...");
             res.status(200).json({aprovado: false})
         }
     }catch(erro){
+        console.log(codigoPagamento ," --> Erro ao processar pagamento!");
         console.error(erro);
     }
 })

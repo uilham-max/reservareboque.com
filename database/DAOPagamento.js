@@ -10,7 +10,9 @@ class DAOPagamento {
         try {
             let removido = await Pagamento.destroy({where: {codigoPagamento: codigoPagamento}})
             if(removido){
-                console.log(codigoPagamento ," --> Pagamento removido do BD...");
+                console.log(codigoPagamento ," --> Pagamento removido do BD!");
+            } else {
+                console.log("Sem pagamentos expirados!");
             }
         } catch(erro) {
             console.error(erro.toString());

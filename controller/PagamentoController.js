@@ -178,7 +178,8 @@ routerPagamento.get('/pagamento/aprovado/:codigoPagamento', async (req, res) => 
     let {codigoPagamento} = req.params
     try{
         let resposta = await DAOPagamento.verificaPagamento(codigoPagamento)
-        // console.log("\nTestando resposta ao verificar o pagamento..\n",resposta);
+        console.log("Testando resposta ao verificar o pagamento -->",resposta.aprovado);
+        console.log("Testando resposta dataValues ao verificar o pagamento --> ",resposta.dataValues.aprovado);
         if(resposta.aprovado == true){
             console.log(codigoPagamento ," --> Aprovado pagamento!");
             res.status(200).json({aprovado: true})

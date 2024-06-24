@@ -1,6 +1,7 @@
 const DAOPagamento = require('../database/DAOPagamento');
 const cron = require('node-cron');
 const { deleteCobranca } = require('./API_Pagamentos');
+const moment = require('moment-timezone')
 
 const removerPagamentosAPI = async () => {
     try {
@@ -17,7 +18,8 @@ const removerPagamentosAPI = async () => {
 }
 
 // Agendar a execução da função a cada 30 minutos
-cron.schedule('*/10 * * * *', async () => {
+cron.schedule('*/30 * * * *', async () => {
+    console.log("Executando o agendamento -->", moment.tz(new Date(), 'America/Sao_Paulo'));
     await removerPagamentosAPI()
 });
 

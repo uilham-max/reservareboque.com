@@ -9,49 +9,60 @@
 
         <div class="container-responsive" >
             
-            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+            <!-- <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                 <a class="btn btn-primary me-md-2" href="/">Voltar</a>
-                <!-- <a class="btn btn-info me-md-2" href="/reserva/historico">Histórico</a> -->
             </div>
-            <br>
+            <br> -->
 
-            <div class="d-flex justify-content-start">
+            <!-- <div class="d-flex justify-content-start">
                 <h3 class="display-4">Reservas</h3>
             </div>
-            <br>
-        
-            <div class="table-responsive">
-                <table class="table table-striped" >
-                    <thead>
-                        <tr>
-                            <th>Reboque</th>
-                            <th>Diária R$</th>
-                            <th>Data início</th>
-                            <th>Data fim</th>
-                            <th>Dias</th>
-                            <th>Total R$</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <% reservas.forEach(function(reserva){%>
-                            <tr>
-                                <td><%=reserva.reboque.placa%></td>
-                                <td><%=((reserva.valorDiaria).toFixed(2)).replace('.',',')%></td>
-                                <td><%=reserva.dataSaida.toString().slice(8,10)+'/'+reserva.dataSaida.toString().slice(5,7)+'/'+reserva.dataSaida.toString().slice(0,4)%></td>
-                                <td><%=reserva.dataChegada.toString().slice(8,10)+'/'+reserva.dataChegada.toString().slice(5,7)+'/'+reserva.dataChegada.toString().slice(0,4)%></td>
-                                <td><%=reserva.diarias%> dias</td>
-                                <td><%=((reserva.valorDiaria*reserva.diarias).toFixed(2)).replace('.',',')%></td>
-                                <!-- <td>R$ <%=reserva.diarias*reserva.valorDiaria%>,00</td> -->
-                                <td><a href="/cliente/editar-reserva/<%=reserva.id%>" class="fas fa-edit" style="color: black;" 
-                                    ata-toggle="tooltip" title="Alterar a reserva" ></a></td>
-                                <td><a href="/reserva/remover/<%=reserva.pagamento.codigoPagamento%>/<%=reserva.pagamento.valor%>/<%=reserva.dataSaida%>" class="fas fa-trash"
-                                    ata-toggle="tooltip" title="Cancelar reserva" onclick="return confirm('Confirma a exclusão?')" ></a></td>
-                            </tr>
-                        <%})%>
-                    </tbody>
+            <br> -->
 
-                </table>
+
+
+            <div class="conteudo">
+                <div class="container">
+                    <div class="lista-reboques">
+                        <div class="card card-reserva" style="width: 40rem;">
+                            <div class="card-body">
+                                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                    <a class="btn btn-secondary me-md-2" href="/">Voltar</a>
+                                </div>
+                                <h3 class="display-4">Lista de Reservas</h3>
+                                <br>
+                                <div class="table-responsive">
+                                    <table class="table table-striped" >
+                                        <thead>
+                                            <tr>
+                                                <th>Reboque</th>
+                                                <th>Data início</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <% reservas.forEach(function(reserva){%>
+                                                <tr>
+                                                    <td><%=reserva.reboque.placa%></td>
+                                                    <td><%=reserva.dataSaida.toString().slice(8,10)+'/'+reserva.dataSaida.toString().slice(5,7)+'/'+reserva.dataSaida.toString().slice(0,4)%></td>
+                                                    <td><a href="/cliente/reserva-detalhe/<%=reserva.id%>" class="btn btn-success">Ver detalhes</a></td>
+                                                    <!-- <td><a href="/cliente/editar-reserva/<%=reserva.id%>" class="fas fa-edit" style="color: black;" 
+                                                        ata-toggle="tooltip" title="Alterar a reserva" ></a></td>
+                                                    <td><a href="/reserva/remover/<%=reserva.pagamento.codigoPagamento%>/<%=reserva.pagamento.valor%>/<%=reserva.dataSaida%>" class="fas fa-trash"
+                                                        ata-toggle="tooltip" title="Cancelar reserva" onclick="return confirm('Confirma a exclusão?')" ></a></td> -->
+                                                </tr>
+                                            <%})%>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
+
+
+        
+            
 
             <% if(mensagem != ''){ %>
                 <div class="alert alert-danger">

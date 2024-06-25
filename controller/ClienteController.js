@@ -9,21 +9,25 @@ const DAOReserva = require('../database/DAOReserva')
 const DAOReboque = require('../database/DAOReboque')
 
 
-routerCliente.post('/cliente/atualizar-reserva', (req, res) => {
-
-    res.send('Recurso indisponivel no momento. Contate o suporte.')
+routerCliente.get('/cliente/reserva-detalhe/:reservaId?', clienteAutorizacao, async (req, res) => {
+    
+    let reserva = await DAOReserva.getOne(req.params.reservaId)
+    res.render('cliente/reserva-detalhe', {user: clienteNome(req, res), mensagem: '', reserva: reserva})
 
 })
 
 
-routerCliente.get('/cliente/editar-reserva/:idReserva', async (req, res) => {
+routerCliente.post('/cliente/atualizar-reserva', clienteAutorizacao, (req, res) => {
+    res.send('Recurso indisponivel no momento. Contate o suporte.')
+})
 
+
+routerCliente.get('/cliente/editar-reserva/:idReserva', clienteAutorizacao,  async (req, res) => {
     let idReserva = req.params.idReserva
     let reserva = await DAOReserva.getReserva(idReserva)
     if(!reserva){
         res.render('erro', {mensagem: "Erro ao obter reserva."})
     }
-
     DAOReserva.getAtivasPorID(reserva.dataValues.reboqueId).then(reservas => {
         DAOReboque.getOne(reserva.dataValues.reboqueId).then(reboque => {
             if(reboque){
@@ -33,7 +37,6 @@ routerCliente.get('/cliente/editar-reserva/:idReserva', async (req, res) => {
             }
         })
     })
-
 })
 
 
@@ -154,7 +157,7 @@ routerCliente.post('/cadastro/create', async (req, res) => {
     }
 
     if(cliente){
-        // req.session.cliente = {id: cliente.id, nome: cliente.nome, sobrenome: cliente.sobrenome, email: cliente.email}
+        req.session.cliente = {id: cliente.id, nome: cliente.nome, sobrenome: cliente.sobrenome, email: cliente.email}
         console.log(cliente.nome,"criado...");
         res.redirect('/')
     } else {

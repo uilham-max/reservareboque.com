@@ -173,7 +173,8 @@ class DAOReserva {
     // GETONE
     static async getOne(id) {
         try {
-            let reserva = await Reserva.findByPk(id)
+            console.log('ID -->', id);
+            let reserva = await Reserva.findByPk(id, {include: [{model: Cliente}, {model: Reboque}, {model: Pagamento}]})
             return reserva
         }
         catch (error) {

@@ -15,6 +15,7 @@ de indesponibilidade de todos os reboques
 * Adicionar CNPJ, endereço
 
 # Inplemntações Futuras
+* Acima de 30 dias avisar o cliente sobre o valor da mensalidade.
 * Criar recurso para recuperar senha.
 * Criar recurso para tirar dúvidas.
 * Criar recurso para informar como funciona uma reserva/locação.

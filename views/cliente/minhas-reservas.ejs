@@ -27,7 +27,7 @@
                         <div class="card card-reserva" style="width: 40rem;">
                             <div class="card-body">
                                 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                                    <a class="btn btn-secondary me-md-2" href="/">Voltar</a>
+                                    <a class="btn btn-primary me-md-2" href="/">Voltar</a>
                                 </div>
                                 <h3 class="display-4">Lista de Reservas</h3>
                                 <br>
@@ -36,7 +36,7 @@
                                         <thead>
                                             <tr>
                                                 <th>Reboque</th>
-                                                <th>Data início</th>
+                                                <th>Data</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -44,12 +44,8 @@
                                                 <tr>
                                                     <td><%=reserva.reboque.placa%></td>
                                                     <td><%=reserva.dataSaida.toString().slice(8,10)+'/'+reserva.dataSaida.toString().slice(5,7)+'/'+reserva.dataSaida.toString().slice(0,4)%></td>
-                                                    <td><a href="/cliente/reserva-detalhe/<%=reserva.id%>" class="btn btn-success">Ver detalhes</a></td>
-                                                    <!-- <td><a href="/cliente/editar-reserva/<%=reserva.id%>" class="fas fa-edit" style="color: black;" 
-                                                        ata-toggle="tooltip" title="Alterar a reserva" ></a></td>
-                                                    <td><a href="/reserva/remover/<%=reserva.pagamento.codigoPagamento%>/<%=reserva.pagamento.valor%>/<%=reserva.dataSaida%>" class="fas fa-trash"
-                                                        ata-toggle="tooltip" title="Cancelar reserva" onclick="return confirm('Confirma a exclusão?')" ></a></td> -->
-                                                </tr>
+                                                    <td><a href="/cliente/reserva-detalhe/<%=reserva.id%>" class="btn btn-primary">Detalhes</a></td>
+                                                   </tr>
                                             <%})%>
                                         </tbody>
                                     </table>

@@ -73,7 +73,7 @@ routerCliente.get('/cliente/minhas-reservas', clienteAutorizacao, async (req, re
 
 
 // criado em 29/03/2024
-routerCliente.post('/login/entrar', (req, res) => {
+routerCliente.post('/login/entrar', async (req, res) => {
     let {email, senha} = req.body
     DAOCliente.login(email, senha).then( cliente => {
         if(cliente){
@@ -83,10 +83,10 @@ routerCliente.post('/login/entrar', (req, res) => {
                 res.redirect('/')
             } else {
                 
-                res.render('login', {mensagem: 'Usuário ou senha inválidos.'})
+                res.render('login', {user: clienteNome(req, res), mensagem: 'Usuário ou senha inválidos.'})
             }
         } else {
-            res.render('login', {mensagem: 'Usuário ou senha inválidos.'})
+            res.render('login', {user: clienteNome(req, res), mensagem: 'Usuário ou senha inválidos.'})
         }
     })
 

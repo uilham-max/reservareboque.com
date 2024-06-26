@@ -49,15 +49,16 @@
     
                             <a href="/cadastro" class="btn-link">Quero me cadastrar.</a>
                             <a href="/admin/login" class="btn-link">Sou admin.</a>
+                            <% if(mensagem){ %>
+                                <div class="alert alert-danger">
+                                    <strong>Alerta!</strong>
+                                    <%= mensagem %>
+                                </div>
+                            <% } %>
                         </form>
                     </div>
                 </div>
-                <% if(mensagem){ %>
-                    <div class="alert alert-danger">
-                        <strong>Alerta!</strong>
-                        <%= mensagem %>
-                    </div>
-                <% } %>
+                
 
 
             </div>

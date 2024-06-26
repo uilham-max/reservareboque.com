@@ -21,6 +21,7 @@
         <div class="container" >
             <!-- <h3>Reboque escolhido</h3> -->
             <div class="lista-reboques">
+                
                 <div class="card card-reserva" style="width: 25rem;">
                     <img src="../../<%=reserva.reboque.foto%>" class="card-img-top" alt="...">
                     <div class="card-body">
@@ -34,28 +35,8 @@
 
                 <div class="card card-reserva" style="width: 25rem;">
                     <div class="card-body">
-                        
                         <form class="needs-validation" novalidate action="/cliente/atualizar-reserva" method="POST">
-
-
-                        
-                            <% if(reservas != '') {%>
-                                <div class="alert alert-danger">
-                                    <h5 class="card-text">Indisponível para estas datas</h5>
-                                    <% reservas.forEach(function(reserva) { %>
-                                        <p>
-                                            de <%=reserva.dataSaida.toString().slice(8,10)+'/'+reserva.dataSaida.toString().slice(5,7)+'/'+reserva.dataSaida.toString().slice(0,4)%> 
-                                            à  <%=reserva.dataChegada.toString().slice(8,10)+'/'+reserva.dataChegada.toString().slice(5,7)+'/'+reserva.dataChegada.toString().slice(0,4)%>
-                                        </p>
-        
-                                    <%})%>
-                                </div>
-                                
-                                <hr>
-                            <% } %>  
-
-
-                            <h5>Informe o periodo</h5>
+                            <h5>Alterar Período</h5>
                             <hr>
                             
                             <div class="input-group mb-3">
@@ -92,12 +73,26 @@
                                 </div>
                             <% } %>
 
-
-
                         </form>
-
                     </div>
                 </div>
+
+                <divc class="card card-reserva" style="width: 25rem;">
+                    <div class="card card-body">
+                        <% if(reservas != '') {%>
+                            <div class="alert alert-info">
+                                <h5 class="card-text">Indisponível para estas datas</h5>
+                                <% reservas.forEach(function(reserva) { %>
+                                    <p>
+                                        de <%=reserva.dataSaida.toString().slice(8,10)+'/'+reserva.dataSaida.toString().slice(5,7)+'/'+reserva.dataSaida.toString().slice(0,4)%> 
+                                        à  <%=reserva.dataChegada.toString().slice(8,10)+'/'+reserva.dataChegada.toString().slice(5,7)+'/'+reserva.dataChegada.toString().slice(0,4)%>
+                                    </p>
+    
+                                <%})%>
+                            </div>
+                        <% } %>  
+                    </div>
+                </divc>
 
             </div>
         </div>

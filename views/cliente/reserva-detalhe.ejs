@@ -26,18 +26,16 @@
                         <img src="../../<%=reserva.reboque.foto%>" class="card-img-top" alt="...">
                         <div class="card-body">
                             <h5 class="card-text"><%=reserva.reboque.descricao%></h5>
+                            <hr>
+                            <h5><b>Tipo de Reboque: </b><%=reserva.reboque.modelo%></h5>
+                            <h5><b>Valor da Diária: </b>R$ <%=reserva.reboque.valorDiaria%>,00</h5>
                         </div>
                     </div>
 
                     <div class="card card-reserva" style="width: 25rem;">
-                        
                         <div class="card-body">
-
-                            <h5 class="card-title"> Informaçãoes</h5>
+                            <h5 class="card-title"> <b>Informaçãoes</b></h5>
                             <hr>
-
-                            <h5><b>Tipo de Reboque: </b><%=reserva.reboque.modelo%></h5>
-                            <h5><b>Valor da Diária: </b>R$ <%=reserva.reboque.valorDiaria%>,00</h5>
                             <!-- <h5><b>Placa : </b><%=reserva.reboque.placa%></h5> -->
                             <h5><b>Valor Pago na Diária: </b>R$ <%=((reserva.valorDiaria).toFixed(2)).replace('.',',')%></h5>
                             <h5><b>Data da Retirada: </b><%=reserva.dataSaida.toString().slice(8,10)+'/'+reserva.dataSaida.toString().slice(5,7)+'/'+reserva.dataSaida.toString().slice(0,4)%></h5>
@@ -46,7 +44,7 @@
                             <h5><b>Valor Total da Reserva: </b>R$ <%=((reserva.valorDiaria*reserva.diarias).toFixed(2)).replace('.',',')%></h5>
                             <% if(reserva.pagamento.aprovado == true) { %>
                             <h5><b>Status do Pagamento: </b>Aprovado</h5>
-                            <% } else { %>0
+                            <% } else { %>
                             <h5><b>Status do Pagamento: </b>Pendente</h5>
                             <% } %>
 
@@ -59,10 +57,10 @@
                         </div>
 
     
-                        <div class="d-flex justify-content-center" style="margin: 0.5rem;">
-                            <button class="btn btn-secondary me-md-2" type="button" onclick="history.back()">Voltar</button>
-                            <a class="btn btn-primary me-md-2" href="/cliente/editar-reserva/<%=reserva.id%>" >Editar</a>
-                            <a onclick="return confirm('Confirma a exclusão?')" class="btn btn-danger me-md-2" href="/reserva/remover/<%=reserva.pagamento.codigoPagamento%>/<%=reserva.pagamento.valor%>/<%=reserva.dataSaida%>">Cancelar</a>
+                        <div class="d-md-flex justify-content-center" style="margin: 0.5rem;">
+                            <button style="margin: 0.3rem;" class="btn btn-secondary" type="button" onclick="history.back()">Voltar</button>
+                            <a style="margin: 0.3rem;" class="btn btn-primary" href="/cliente/editar-reserva/<%=reserva.id%>" >Editar</a>
+                            <a style="margin: 0.3rem;" class="btn btn-danger" onclick="return confirm('Confirma a exclusão?')"  href="/reserva/remover/<%=reserva.pagamento.codigoPagamento%>/<%=reserva.pagamento.valor%>/<%=reserva.dataSaida%>">Cancelar</a>
                             
                         </div>
 

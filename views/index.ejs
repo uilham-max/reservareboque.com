@@ -35,7 +35,7 @@
                 <% reboques.forEach(function(reboque){ %>
                     <div class="card card-index" style="width: 18rem;">
                         <a href="/reserva/periodo/<%=reboque.id%>">
-                            <img class="card-img-top" src="img/<%=reboque.foto%>" alt="Reboque 1">
+                            <img class="card-img-top" src="<%=reboque.foto%>" alt="Reboque 1">
                         </a>
                         <div class="card-body">
                           <h6 class="">Valor de cada diária: R$ <%=reboque.valorDiaria%>,00</h6>

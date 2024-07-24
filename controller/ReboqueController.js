@@ -55,8 +55,8 @@ routerReboque.get('/reboque/editar/:id', autorizacao, (req,res) => {
 routerReboque.post('/reboque/atualizar', autorizacao, upload.single("foto"), (req,res) => {
     let {id, modelo, placa, valorDiaria, cor} = req.body
     // console.log("nome da foto",req.file.filename);
-    // let foto = `img/${req.file.filename}` 
-    let foto = `${req.file.filename}` 
+    let foto = `img/${req.file.filename}` 
+    // let foto = `${req.file.filename}` 
     DAOReboque.update(foto, id, modelo, placa, valorDiaria, cor).then(atualizado => {
         if(atualizado){
             res.redirect('/reboque/lista')

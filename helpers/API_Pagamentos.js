@@ -227,16 +227,14 @@ async function criarPagamento(customerID, valor, data_vencimento, dataInicio, da
             access_token: ACCESS_TOKEN
         }
     }; 
+
     let newCobranca = {
         "customer": customerID,
         "billingType": formaPagamento,
         "value": valor,
         "description": `Reserva de reboque com início de placa ${placa.slice(0,3)} do dia ${dataInicio} até o dia ${dataFim}`,
         "dueDate": data_vencimento,
-        // "callback": {
-        //     successUrl: 'https://reboquesoliveira.com',
-        //     autoRedirect: true
-        // }
+        // "callback": {successUrl: 'https://reboquesoliveira.com',autoRedirect: true}
     }
 
     try {
@@ -335,14 +333,14 @@ async function criarCobranca(cpfCnpj, nome, telefone, email, valor, data_vencime
 } 
 
 module.exports = {
-    listar_clientes, 
     verificaCadastro, 
+    listar_clientes, 
     cadastrarCliente, 
-    criarCobranca, 
-    criarPagamento, 
-    gerarQRCode, 
-    notificacoesAtualizaBatch,
     recuperaNotificacao,
+    notificacoesAtualizaBatch,
+    criarCobranca, 
+    gerarQRCode, 
+    criarPagamento, 
     receiveInCash,
     deleteCobranca,
     estornoPagamento,

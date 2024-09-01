@@ -14,7 +14,7 @@
             <!-- <h3>Reboque escolhido</h3> -->
 
             <div class="jumbotron jumbotron-fluid">
-                <h1 class="display-4" >Não escanear QR code!</h1>
+                <h1 class="display-4" >Escanear QR code!</h1>
                 <!-- <p class="lead">Clientes cadastrados podem ver seu histórico de locações, gerenciar suas reservas e receber -->
                     <!-- descontos.</p> -->
             </div>
@@ -25,21 +25,21 @@
                     <div class="card card-reserva" style="width: 25rem;">
                         <div class="card-body">
 
-                            <% if(formaPagamento == 'DINHEIRO') { %>
+                            <!-- <% if(formaPagamento == 'DINHEIRO') { %>
                                 <div class="alert alert-success">
                                     <strong>Sucesso!</strong>
                                     Sua reserva será confirmada pelo administrador.
                                     Informe o seu nome completo pelo WhatsApp (53) 9 9703 2373 ou 
                                     E-mail uilhamgoncalves@agmail.com para aprová-la.
                                 </div>
-                            <% } %>
+                            <% } %> -->
 
-                            <div class="alert alert-info">
+                            <!-- <div class="alert alert-info">
                                 <strong>Atenção!</strong>
                                 O administrador recebeu por email o pedido de sua reserva, a qual será aprovada por ele.
-                            </div>
+                            </div> -->
                             
-                            <h3 class="card-title"><strong>Não escanear</strong></h3>
+                            <h3 class="card-title"><strong>Escanear QR code para confirmar a reserva</strong></h3>
                             
                             <div id="imageContainer">
                                 <img class="img-fluid" id="qrCodeImage" src="" alt="QR Code">
@@ -50,10 +50,14 @@
                             <input type="hidden" id="id_cobranca" name="id_cobranca" value="<%= id_cobranca %>">
                             <input type="hidden" id="formaPagamento" name="formaPagamento" value="<%= formaPagamento %>">
 
+                            <h6 class="card-title">Clique no botão abaixo para copiar o codigo para a área de transferência e colar no App do seu banco</h6>
                             
-                            <p style="margin: 0.5rem;" >
-                                <button class="btn btn-primary" id="copyPIXButton" >PIX Copia e cola</button>
-                            </p>
+                            <div class="mt-3">
+                                <p style="margin: 0.5rem;" >
+                                    <button class="btn btn-primary" id="copyPIXButton" >PIX Copia e cola</button>
+                                </p>
+                            </div>
+                           
     
                         </div>
                     </div>

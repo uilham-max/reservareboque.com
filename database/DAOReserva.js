@@ -3,14 +3,59 @@ const Reboque = require('../model/Reboque.js')
 const Cliente = require('../model/Cliente.js')
 const { Op, Sequelize, QueryTypes } = require('sequelize')
 const utilitario = require('./utilitario')
-const Diaria = require('../bill_modules/Diaria')
-const conexao = require('./conexao')
 const sequelize = require('sequelize')
 const Pagamento = require('../model/Pagamento.js')
 const moment = require('moment-timezone')
 
 
 class DAOReserva {
+
+
+    // Atualiza situação de uma reserva para cancelada
+    static async atualizaSituacaoParaAprovada(pagamentoId){
+        try{
+            await Reserva.update({situacao: "APROVADA"},{where: {pagamentoId: pagamentoId}})
+            console.log('Atualizando a situação da reserva para "APROVADA"...');
+            return true
+        }catch(erro){
+            console.log(erro.toString());
+            return false
+        }
+
+    }
+
+
+
+    // Atualiza situação de uma reserva para cancelada
+    static async atualizaSituacaoParaCancelada(pagamentoId){
+        try{
+            await Reserva.update({situacao: "CANCELADA"},{where: {pagamentoId: pagamentoId}})
+            console.log('Atualizando a situação da reserva para "CANCELADA"...');
+            return true
+        }catch(erro){
+            console.log(erro.toString());
+            return false
+        }
+
+    }
+
+
+
+    // Remove as reservas que não foram pagas em 60 minutos
+    // static async deletePeloPagamento(pagamentoId){
+    //     try{
+    //         await Reserva.destroy({where: {pagamentoId: pagamentoId}})
+    //         console.log("Removendo reserva sem pagamento...");
+    //         return true
+    //     }catch(erro){
+    //         console.log(erro.toString());
+    //         return false
+    //     }
+
+    // }
+    
+
+
 
     // Não permite realizar dois pagamentos de uma mesma reserva
     static async verificaPagamentoId(){
@@ -115,7 +160,7 @@ class DAOReserva {
         }
     }
 
-
+    // Recupera as reservas de um cliente
     static async getMinhasReservas(idCliente){
         try {
             const currentDate = new Date()
@@ -141,24 +186,11 @@ class DAOReserva {
 
 
 
-    static async deletePeloPagamento(pagamentoId){
-        try{
-            await Reserva.destroy({where: {pagamentoId: pagamentoId}})
-            console.log("Removendo reserva sem pagamento...");
-            return true
-        }catch(erro){
-            console.log(erro.toString());
-            return false
-        }
 
-    }
-    
-
-
-    // INSERT
+    // INSERT - Cria uma reserva com situação igual a aguardando pagamento
     static async insert(dataInicio, dataFim, valorDiaria, dias, valorTotal, cliente, reboque, idPagamento) {
         try {
-            let reserva = await Reserva.create({ dataSaida: dataInicio, dataChegada: dataFim, valorDiaria: valorDiaria, diarias: dias, valorTotal: valorTotal, clienteId: cliente, reboqueId: reboque, pagamentoId: idPagamento })
+            let reserva = await Reserva.create({ dataSaida: dataInicio, dataChegada: dataFim, valorDiaria: valorDiaria, diarias: dias, valorTotal: valorTotal, clienteId: cliente, reboqueId: reboque, pagamentoId: idPagamento, situacao: "AGUARDANDO_PAGAMENTO" })
             console.log('Reserva criada! aguardando pagamento...');
             return reserva
         }

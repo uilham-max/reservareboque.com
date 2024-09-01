@@ -6,11 +6,12 @@ const moment = require('moment-timezone')
 class DAOPagamento {
 
 
-    static async removePeloCodigoPagamento(codigoPagamento){
+    // Atualiza a situação do pagamento para cancelado
+    static async atualizaSituacaoParaCancelado(codigoPagamento){
         try {
-            let removido = await Pagamento.destroy({where: {codigoPagamento: codigoPagamento}})
-            if(removido){
-                console.log(codigoPagamento ," --> Pagamento removido do BD!");
+            let cancelado = await Pagamento.update({situacao: "CANCELADO"},{where: {codigoPagamento: codigoPagamento}})
+            if(cancelado){
+                console.log(codigoPagamento ," --> Pagamento com situacao 'CANCELADO' no BD!");
             } else {
                 console.log("Sem pagamentos expirados!");
             }
@@ -18,6 +19,20 @@ class DAOPagamento {
             console.error(erro.toString());
         }
     }
+
+
+    // static async removePeloCodigoPagamento(codigoPagamento){
+    //     try {
+    //         let removido = await Pagamento.destroy({where: {codigoPagamento: codigoPagamento}})
+    //         if(removido){
+    //             console.log(codigoPagamento ," --> Pagamento removido do BD!");
+    //         } else {
+    //             console.log("Sem pagamentos expirados!");
+    //         }
+    //     } catch(erro) {
+    //         console.error(erro.toString());
+    //     }
+    // }
 
 
     static async listaPagamentosComPrazoExpirado(){
@@ -50,45 +65,22 @@ class DAOPagamento {
     }
 
 
-    // static async removePagamentoComPrazoExpirado(){
-    //     try{
-    //         // Remover pagamentos expirados
-    //         var horas = moment.tz(new Date(), 'America/Sao_Paulo')
-    //         let pagamentos = await Pagamento.destroy({
-    //             where: {
-    //                 aprovado: false,
-    //                 dataExpiracao: { 
-    //                     [Sequelize.Op.lt]: horas
-    //                 }
-    //             }
-    //         })
-    //         if(pagamentos){
-    //             console.log(pagamentos, '> pagamentos expirados removidos');
-    //         }
-    //         return pagamentos
-    //     }catch(erro){
-    //         console.error(erro.toString());
-    //         return undefined
-    //     }
-    // }
-
-
-
-
-
-    static async atualizarPagamentoParaAprovado(idPagamento){
+    static async atualizarPagamentoParaAprovado(codigoPagamento){
         try{
             const [numLinhasAtualizadas] = await Pagamento.update(
-                {aprovado: true},
-                {where: {codigoPagamento: idPagamento}}
+                {aprovado: true, situacao: "APROVADO"},
+                {where: {codigoPagamento: codigoPagamento}}
             );
             // console.log('Atualizando status do pagamento para aprovado...');
             if (numLinhasAtualizadas > 0) {
-                console.log(idPagamento, '--> Pagamento atualizado para aprovado com sucesso.');
-                return true;
+                console.log(codigoPagamento, '--> Pagamento atualizado para aprovado com sucesso.');
+                let pagamento = await Pagamento.findOne(
+                    {where: {codigoPagamento: codigoPagamento}}
+                )
+                return pagamento;
             } else {
                 console.log('Nenhuma linha foi atualizada. O pagamento não foi encontrado.');
-                return false;
+                return undefined;
             }
         } catch(erro){
             console.error('Erro ao atualizar o status do pagamento para aprovado:', erro);
@@ -102,7 +94,7 @@ class DAOPagamento {
         try{
             // var dataExpiracao = moment.tz(new Date(), 'America/Sao_Paulo')
             // dataExpiracao.add(10, 'minutes')
-            const pagamento = await Pagamento.create({valor: valorTotalDaReserva, codigoPagamento: codigoPagamento, descricao: billingType, aprovado: false, dataExpiracao: dataExpiracao})
+            const pagamento = await Pagamento.create({valor: valorTotalDaReserva, codigoPagamento: codigoPagamento, descricao: billingType, aprovado: false, dataExpiracao: dataExpiracao, situacao: "AGUARDANDO_PAGAMENTO"})
             console.log('Pagamento criado...');
             console.log('Data de expiração: ',dataExpiracao);
             return pagamento.id

@@ -20,7 +20,8 @@ routerReserva.get('/admin/reserva/remover/:codigoPagamento?/:valor?', autorizaca
     await estornoPagamento(req.params.codigoPagamento, req.params.valor)
     // O MESMO QUE REMOVER A RESERVA (DELETE ON CASCADE)
     console.log('Cancelando a reserva...');
-    await DAOPagamento.removePeloCodigoPagamento(req.params.codigoPagamento)
+    // await DAOPagamento.removePeloCodigoPagamento(req.params.codigoPagamento)
+    await DAOPagamento.atualizaSituacaoParaCancelado(req.params.codigoPagamento)
 
     let reservas = await DAOReserva.getAtivas()
     
@@ -63,7 +64,8 @@ routerReserva.get('/reserva/remover/:codigoPagamento?/:valor?/:dataSaida?', clie
         await estornoPagamento(req.params.codigoPagamento, req.params.valor)
         // O MESMO QUE REMOVER A RESERVA (DELETE ON CASCADE)
         console.log('Cancelando a reserva...');
-        await DAOPagamento.removePeloCodigoPagamento(req.params.codigoPagamento)
+        // await DAOPagamento.removePeloCodigoPagamento(req.params.codigoPagamento)
+        await DAOPagamento.atualizaSituacaoParaCancelado(req.params.codigoPagamento)
 
         reservas = await DAOReserva.getMinhasReservas(idCliente)
         

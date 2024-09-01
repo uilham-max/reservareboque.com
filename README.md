@@ -25,5 +25,23 @@ de indesponibilidade de todos os reboques
 
 
 # Onde parei?
-* Criar campo 'cancelada' na tabela 'reserva'. Reservas não devem ser excluídas, mas sim canceladas
+* Criar campo 'cancelada' na tabela 'reserva'. Reservas não devem ser excluídas, mas sim canceladas. (cancelamento  lógico, não físico)
+* STATUS RESERVA, CONCLUIDA, CANCELADA, ANDAMENTO, AGUARDANDOPAGAMENTO
+* Implementar taxa de cancelamento no estorno de pagamento.
 
+
+# Versão 1
+* Implementar alteração de data de retirada.
+* Implementar o botão na área de amin para informar que o cliente ja entregou o reboque. Quando o cliente entregar o reboque, não deve permitir o cliente alterar a reserva na painel através do botão EDITAR. Inabilitar o botão editar e o botao cancelar. Permanecer ativo somente o botão voltar.
+* Implementar botão na área admin para informar a entrega.
+* Incluir coluna data retirada e data de entrega -  https://www.reboquesoliveira.com/cliente/minhas-reservas
+* na tela https://www.reboquesoliveira.com/cliente/reserva-detalhe/2 - quando clica no botão cancelar, alterar a mensagem do dialog.
+
+# Fluxo Dinheiro
+* https://www.reboquesoliveira.com/reserva/dados-confirma - corrigir preenchimento dos dados do cliente quando perde a sessão de logado. (tentar entender o cenário)
+
+
+
+# Versão 2
+* Implementar hora de retirada e de entrega
+* Implementar geração de crédito para ao cliente no estorno

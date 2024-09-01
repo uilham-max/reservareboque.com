@@ -3,8 +3,8 @@ document.addEventListener('DOMContentLoaded', ()=>{
     const enviarRequisicao = async () => {
         try {
             console.log(document.getElementById('formaPagamento').value);
-            // const resposta = await fetch(`https://83b5-24-152-81-25.ngrok-free.app/pagamento/aprovado/${input_id_cobranca.value}`);
-            const resposta = await fetch(`https://www.reboquesoliveira.com/pagamento/aprovado/${input_id_cobranca.value}`);
+            const resposta = await fetch(`https://786d-179-105-28-196.ngrok-free.app/pagamento/aprovado/${input_id_cobranca.value}`);
+            // const resposta = await fetch(`https://www.reboquesoliveira.com/pagamento/aprovado/${input_id_cobranca.value}`);
             const resultado = await resposta.json();
             if (resultado.aprovado) {
                 window.location.href = `/pagamento/realizado/${document.getElementById('formaPagamento').value}`;

@@ -35,6 +35,9 @@ const Reserva = conexao.define('reserva', {
             model: Reboque,
             key: 'id'
         }
+    },
+    situacao: {
+        type: Sequelize.TEXT
     }
 }, {
     timestamps: false,

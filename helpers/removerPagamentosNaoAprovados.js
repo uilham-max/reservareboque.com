@@ -10,7 +10,8 @@ const removerPagamentosAPI = async () => {
             // REMOVE O PAGAMENTO DO SISTEMA DE PAGAMENTO
             deleteCobranca(element.dataValues.codigoPagamento)
             // REMOVE O PAGAMENTO DO BANCO DE DADOS
-            DAOPagamento.removePeloCodigoPagamento(element.dataValues.codigoPagamento)
+            DAOPagamento.atualizaSituacaoParaCancelado(element.dataValues.codigoPagamento)
+            // DAOPagamento.removePeloCodigoPagamento(element.dataValues.codigoPagamento)
         });
     } catch(erro) {
         console.error(erro.toString());

@@ -34,7 +34,7 @@
             <div class="lista-reboques">
                 <% reboques.forEach(function(reboque){ %>
                     <div class="card card-index" style="width: 18rem;">
-                        <a href="/reserva/periodo/<%=reboque.id%>">
+                        <a href="/reserva/periodo/<%=reboque.placa%>">
                             <img class="card-img-top" src="<%=reboque.foto%>" alt="Reboque 1">
                         </a>
                         <div class="card-body">
@@ -42,7 +42,7 @@
                           <h6 class="">Tamanho: <%=reboque.comprimento%>cm x <%=reboque.largura%>cm x <%=reboque.altura%>cm</h6>
                           <h6 class="">Peso bruto suportado: <%=reboque.pesoBruto%> Kg</h6>
                           <hr>
-                          <a href="/reserva/periodo/<%=reboque.id%>" class="btn btn-primary d-grid">Reserve agora</a>
+                          <a href="/reserva/periodo/<%=reboque.placa%>" class="btn btn-primary d-grid">Reserve agora</a>
                         </div>
                     </div>
                 <% }) %>

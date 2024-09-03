@@ -88,7 +88,7 @@ routerReserva.get('/reserva/remover/:codigoPagamento?/:valor?/:dataSaida?', clie
 
 // PERÍODO
 routerReserva.get('/reserva/periodo/:reboquePlaca?', (req, res) => {
-    let reboquePlaca = req.params.placa
+    let reboquePlaca = req.params.reboquePlaca
     DAOReserva.getAtivasPorID(reboquePlaca).then(reservas => {
         DAOReboque.getOne(reboquePlaca).then(reboque => {
             if(reboque){

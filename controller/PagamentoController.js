@@ -162,11 +162,11 @@ routerPagamento.post('/pagamento/webhook/pixCriado', async (req, res) => {
 routerPagamento.post('/pagamento/webhook/pix', async (req, res) => {
     
     try{ 
-        console.log("Executar: Atualizar situação de pagamento e reserva para aprovado");
         let codigoPagamento = req.body.payment.id
+        console.log("Executar: Atualizar situação de pagamento e reserva para aprovado:",codigoPagamento);
         let pagamento = await DAOPagamento.atualizarPagamentoParaAprovado(codigoPagamento)
-        console.log(pagamento);
-        console.log(pagamento.id);
+        // console.log(pagamento);
+        // console.log(pagamento.id);
         await DAOReserva.atualizaSituacaoParaAprovada((pagamento.id)) // Recuperar Id da reserva para atualizar a situação dela para aprovado
 
     }catch(error){
@@ -186,7 +186,7 @@ routerPagamento.get('/pagamento/aprovado/:codigoPagamento', async (req, res) => 
         // console.log("Testando resposta ao verificar o pagamento -->",resposta.aprovado);
         // console.log("Testando resposta dataValues ao verificar o pagamento --> ",resposta.dataValues.aprovado);
         if(resposta.aprovado == true){
-            console.log(codigoPagamento ," --> Aprovado pagamento!");
+            console.log("Pagamento aprovado:",codigoPagamento);
             res.status(200).json({aprovado: true})
         }else{
             // console.log(codigoPagamento ," --> Aguardando aprovação...");

@@ -27,24 +27,23 @@ const Reserva = conexao.define('reserva', {
         type: Sequelize.INTEGER,
         allowNull: false,
     },
-    // Definindo o campo reboqueId que será parte do índice único
     reboquePlaca: { 
         type: Sequelize.STRING,
         allowNull: false,
         references: {
             model: Reboque,
-            key: 'reboquePlaca'
+            key: 'placa'
         }
     },
     situacao: {
-        type: Sequelize.TEXT
+        type: Sequelize.STRING
     }
 }, {
     timestamps: false,
     indexes: [
         {
             unique: true,
-            fields: ['dataSaida', 'dataChegada', 'reboquePlaca']
+            fields: ['dataSaida', 'dataChegada', 'reboquePlaca'] // ESTAS COLUNAS FORMAM A CHAVE PRIMÁRIA COMPOSTA
         }
     ]
 });

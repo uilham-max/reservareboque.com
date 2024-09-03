@@ -180,7 +180,7 @@ class DAOReserva {
     // INSERT - Cria uma reserva com situação igual a aguardando pagamento
     static async insert(dataInicio, dataFim, valorDiaria, dias, valorTotal, clienteCpf, reboquePlaca, codigoPagamento) {
         try {
-            let reserva = await Reserva.create({id: reboquePlaca+codigoPagamento, dataSaida: dataInicio, dataChegada: dataFim, valorDiaria: valorDiaria, diarias: dias, valorTotal: valorTotal, clienteCpf: clienteCpf, reboquePlaca: reboquePlaca, pagamentoCodigoPagamento: codigoPagamento, situacao: "AGUARDANDO_PAGAMENTO" })
+            let reserva = await Reserva.create({id: reboquePlaca+"_"+codigoPagamento, dataSaida: dataInicio, dataChegada: dataFim, valorDiaria: valorDiaria, diarias: dias, valorTotal: valorTotal, clienteCpf: clienteCpf, reboquePlaca: reboquePlaca, pagamentoCodigoPagamento: codigoPagamento, situacao: "AGUARDANDO_PAGAMENTO" })
             console.log('Reserva criada! aguardando pagamento...');
             return reserva
         }
@@ -383,9 +383,9 @@ class DAOReserva {
 
         try {
             let reboques = await Reserva.findAll({
-                attributes: ['reboqueId', [Sequelize.fn('SUM', Sequelize.col('valorTotal')), 'valorTotal']],
+                attributes: ['reboquePlaca', [Sequelize.fn('SUM', Sequelize.col('valorTotal')), 'valorTotal']],
                 where:{ dataSaida: { [Op.between]: [inicioDoPeriodo, fimDoPeriodo] } },
-                group: ['reboque.id', 'reserva.reboqueId'],
+                group: ['reboque.placa', 'reserva.reboquePlaca'],
                 include: [{ model: Reboque }]
             })
             return reboques

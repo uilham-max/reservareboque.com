@@ -179,20 +179,6 @@ routerCliente.get('/cliente/lista/:mensagem?', autorizacao, (req, res) => {
 })
 
 
-
-// routerCliente.get('/cliente/excluir/:id', autorizacao, (req,res) => {
-//     let id = req.params.id
-//     DAOCliente.delete(id).then(excluido => {
-//         if(excluido){
-//             res.redirect('/cliente/lista')
-//         } else {
-//             res.render('erro', { mensagem: "Erro ao excluir cliente."})
-//         }
-//     })
-// })
-
-
-
 routerCliente.get('/cliente/editar/:cpf', autorizacao, (req, res) => {
     let id = req.params.cpf
     DAOCliente.getOne(id).then(cliente => {

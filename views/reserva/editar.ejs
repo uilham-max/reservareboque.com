@@ -19,10 +19,10 @@
                             <label for="reboque">Reboque</label>
                             <select id="reboque"  name="reboque" class="form-control">
                                 <% reboques.forEach( function(reboque){%>
-                                    <%if(reboque.id == reserva.reboqueId){%>
-                                        <option value="<%=reboque.id%>" selected><%=reboque.placa%></option>
+                                    <%if(reboque.placa == reserva.reboqueId){%>
+                                        <option value="<%=reboque.placa%>" selected><%=reboque.placa%></option>
                                     <%} else {%>
-                                        <option value="<%=reboque.id%>"><%=reboque.placa%></option>
+                                        <option value="<%=reboque.placa%>"><%=reboque.placa%></option>
                                     <%}%>
                                     
                                 <%})%>

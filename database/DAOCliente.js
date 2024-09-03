@@ -84,9 +84,9 @@ class DAOCliente{
     }
 
 
-    static async insert(nome, email, senha, cpf, rg, telefone, data_nascimento, cep, logradouro, complemento, bairro, localidade, uf, numero_da_casa){
+    static async insert(nome, email, senha, cpf, telefone, data_nascimento, cep, logradouro, complemento, bairro, localidade, uf, numero_da_casa){
         try{
-            let cliente = await Cliente.create({nome, email, senha, cpf, rg, telefone, data_nascimento, cep, logradouro, complemento, bairro, localidade, uf, numero_da_casa, ativo: true, cadastrado: true})
+            let cliente = await Cliente.create({nome, email, senha, cpf, telefone, data_nascimento, cep, logradouro, complemento, bairro, localidade, uf, numero_da_casa, ativo: true, cadastrado: true})
             console.log(nome,'se cadastrou como cliente...');
             return cliente
         }

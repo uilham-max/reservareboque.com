@@ -39,7 +39,7 @@ class DAOReboque {
 
     static async getOne(placa){
         try{
-            let reboque = await Reboque.findOne(placa)
+            let reboque = await Reboque.findByPk(placa)
             return reboque
         }
         catch(error){

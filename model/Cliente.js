@@ -8,7 +8,6 @@ const Cliente = conexao.define('cliente', {
         autoIncrement: true
     },
     nome: Sequelize.STRING,
-    sobrenome: Sequelize.STRING,
     email: {
         type: Sequelize.STRING,
         unique: true,

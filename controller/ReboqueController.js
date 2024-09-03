@@ -68,16 +68,16 @@ routerReboque.post('/reboque/atualizar', autorizacao, upload.single("foto"), (re
 
 
 
-// routerReboque.get('/reboque/excluir/:id', autorizacao, (req, res) => {
-//     let id = req.params.id
-//     DAOReboque.delete(id).then(excluido =>{
-//         if(excluido){
-//             res.redirect('/reboque/lista')
-//         } else {
-//             res.render('erro', {mensagem: "Erro ao excluir"})
-//         }
-//     })
-// })
+routerReboque.get('/reboque/excluir/:reboquePlaca', autorizacao, (req, res) => {
+    let reboquePlaca = req.params.reboquePlaca
+    DAOReboque.delete(reboquePlaca).then(excluido =>{
+        if(excluido){
+            res.redirect('/reboque/lista')
+        } else {
+            res.render('erro', {mensagem: "Erro ao excluir"})
+        }
+    })
+})
 
 
 

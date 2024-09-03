@@ -16,7 +16,7 @@ const Pagamento = conexao.define('pagamento', {
     descricao: Sequelize.STRING,
     aprovado: Sequelize.BOOLEAN,
     dataExpiracao: Sequelize.DATE,
-    situacao: Sequelize.TEXT,
+    situacao: Sequelize.STRING,
 },
 {
     timestamps: false,

@@ -1,9 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     const inputCpf = document.getElementById('cpf')
     const inputNome = document.getElementById('nome')
-    const inputSobrenome = document.getElementById('sobrenome')
     const inputEmail = document.getElementById('email')
-    const inputRg = document.getElementById('rg')
     const inputTelefone = document.getElementById('telefone')
     const inputDataNascimento = document.getElementById('dataNascimento')
     const inputCep = document.getElementById('cep')
@@ -32,8 +30,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if(!cliente.cadastrado){
             inputEmail.value = cliente.email;
             inputNome.value = cliente.nome;
-            inputSobrenome.value = cliente.sobrenome;
-            inputRg.value = cliente.rg;
             inputTelefone.value = cliente.telefone;
             inputDataNascimento.value = cliente.data_nascimento;
             inputCep.value = cliente.cep;

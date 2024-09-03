@@ -12,11 +12,11 @@ class DAOReserva {
 
 
     // Atualiza situação de uma reserva para aprovado
-    static async atualizaSituacaoParaAprovada(pagamentoId){
+    static async atualizaSituacaoParaAprovada(codigoPagamento){
         try{
             await Reserva.update(
                 {situacao: "APROVADO"},
-                {where: {pagamentoId: pagamentoId}}
+                {where: {pagamentoCodigoPagamento: codigoPagamento}}
             )
             console.log('Atualizando a situação da reserva para "APROVADO"...');
             return true
@@ -30,11 +30,11 @@ class DAOReserva {
 
 
     // Atualiza situação de uma reserva para cancelado
-    static async atualizaSituacaoParaCancelada(pagamentoId){
+    static async atualizaSituacaoParaCancelada(codigoPagamento){
         try{
             await Reserva.update(
                 {situacao: "CANCELADO"},
-                {where: {pagamentoId: pagamentoId}},
+                {where: {pagamentoCodigoPagamento: codigoPagamento}},
             )
             console.log('Atualizando a situação da reserva para CANCELADO...');
             return true
@@ -44,22 +44,6 @@ class DAOReserva {
         }
 
     }
-
-
-
-    // Remove as reservas que não foram pagas em 60 minutos
-    // static async deletePeloPagamento(pagamentoId){
-    //     try{
-    //         await Reserva.destroy({where: {pagamentoId: pagamentoId}})
-    //         console.log("Removendo reserva sem pagamento...");
-    //         return true
-    //     }catch(erro){
-    //         console.log(erro.toString());
-    //         return false
-    //     }
-
-    // }
-    
 
 
 
@@ -101,14 +85,14 @@ class DAOReserva {
 
 
 
-    static async historicoLocacoes(id){
+    static async historicoLocacoes(cpf){
         let dataAtual = moment.tz(new Date(), 'America/Sao_Paulo')
         try {
             let locacoes = Reserva.findAll({
                 include: [
                   {
                     model: Cliente,
-                    where: { id: id }, // Filtra pelo cliente com id 16
+                    where: { cpf: cpf }, // Filtra pelo cliente com id 16
                     required: true     // Garante que apenas reservas com clientes correspondentes sejam retornadas
                   },
                   {
@@ -142,10 +126,10 @@ class DAOReserva {
 
 
 
-    static async getReservas(reboqueId){
+    static async getReservas(reboquePlaca){
         try {
             let reservas = await Reserva.findAll({
-                where: {reboqueId: reboqueId},
+                where: {reboquePlaca: reboquePlaca},
                 include: [{model: Pagamento}]
             })
             return reservas
@@ -167,7 +151,7 @@ class DAOReserva {
     }
 
     // Recupera as reservas de um cliente
-    static async getMinhasReservas(idCliente){
+    static async getMinhasReservas(cpf){
         try {
             const currentDate = new Date()
             const reservas = await Reserva.findAll({
@@ -176,7 +160,7 @@ class DAOReserva {
                         { dataSaida: { [Op.gte]: currentDate } },
                         { dataChegada: { [Op.gte]: currentDate } }
                     ],
-                    clienteId: idCliente,
+                    clienteCpf: cpf,
                 },
                 order: ['id'],
                 include: [{ model: Reboque }, { model: Cliente }, {model: Pagamento}]
@@ -194,9 +178,9 @@ class DAOReserva {
 
 
     // INSERT - Cria uma reserva com situação igual a aguardando pagamento
-    static async insert(dataInicio, dataFim, valorDiaria, dias, valorTotal, cliente, reboque, idPagamento) {
+    static async insert(dataInicio, dataFim, valorDiaria, dias, valorTotal, clienteCpf, reboquePlaca, codigoPagamento) {
         try {
-            let reserva = await Reserva.create({ dataSaida: dataInicio, dataChegada: dataFim, valorDiaria: valorDiaria, diarias: dias, valorTotal: valorTotal, clienteId: cliente, reboqueId: reboque, pagamentoId: idPagamento, situacao: "AGUARDANDO_PAGAMENTO" })
+            let reserva = await Reserva.create({id: reboquePlaca+codigoPagamento, dataSaida: dataInicio, dataChegada: dataFim, valorDiaria: valorDiaria, diarias: dias, valorTotal: valorTotal, clienteCpf: clienteCpf, reboquePlaca: reboquePlaca, pagamentoCodigoPagamento: codigoPagamento, situacao: "AGUARDANDO_PAGAMENTO" })
             console.log('Reserva criada! aguardando pagamento...');
             return reserva
         }
@@ -224,24 +208,24 @@ class DAOReserva {
 
 
     // DELETE
-    static async delete(id) {
-        try {
-            await Reserva.destroy({ where: { id: id } })
-            console.log("Reserva removida...");
-            return true
-        }
-        catch (error) {
-            console.log(error.toString())
-            return false
-        }
-    }
+    // static async delete(id) {
+    //     try {
+    //         await Reserva.destroy({ where: { id: id } })
+    //         console.log("Reserva removida...");
+    //         return true
+    //     }
+    //     catch (error) {
+    //         console.log(error.toString())
+    //         return false
+    //     }
+    // }
 
 
 
     // UPDATE
-    static async update(id, dataSaida, dataChegada, valorDiaria, cliente, reboque) {
+    static async update(id, dataSaida, dataChegada, valorDiaria, clienteCpf, reboquePlaca) {
         try {
-            await Reserva.update({ dataSaida: dataSaida, dataChegada: dataChegada, valorDiaria: valorDiaria, clienteId: cliente, reboqueId: reboque }, { where: { id: id } })
+            await Reserva.update({ dataSaida: dataSaida, dataChegada: dataChegada, valorDiaria: valorDiaria, clienteCpf: clienteCpf, reboquePlaca: reboquePlaca }, { where: { id: id } })
             return true
         }
         catch (error) {
@@ -253,13 +237,13 @@ class DAOReserva {
 
 
     // DISPONIBILIDADE
-    static async getVerificaDisponibilidade(reboque, inicioDoPeriodo, fimDoPeriodo) {
+    static async getVerificaDisponibilidade(reboquePlaca, inicioDoPeriodo, fimDoPeriodo) {
         try {
             let reservas = await Reserva.findAll({
                 where: {
                     [Op.and]: [
                         sequelize.literal(`("dataSaida", "dataChegada") OVERLAPS (:inicioDoPeriodo, :fimDoPeriodo)`),
-                        {reboqueId: reboque},
+                        {reboquePlaca: reboquePlaca},
                     ],
                 },
                 replacements: {inicioDoPeriodo, fimDoPeriodo},
@@ -304,7 +288,7 @@ class DAOReserva {
 
 
     // RELATORIO ATIVAS POR ID
-    static async getAtivasPorID(id) {
+    static async getAtivasPorID(reboquePlaca) {
         try {
             const currentDate = new Date()
             const reservas = await Reserva.findAll({
@@ -313,7 +297,7 @@ class DAOReserva {
                         { dataSaida: { [Op.gte]: currentDate } },
                         { dataChegada: { [Op.gte]: currentDate } }
                     ],
-                    reboqueId: id,
+                    reboquePlaca: reboquePlaca,
                 },
                 order: ['id'],
                 include: [{ model: Reboque }, { model: Cliente }, {model: Pagamento}]

@@ -5,15 +5,15 @@ const moment = require('moment-timezone')
 
 class DAOPagamento {
 
-    static async recuperaPeloCodigoPagamento(codigoPagamento){
-        try{
-            let pagamento = await Pagamento.findOne({where: {codigoPagamento: codigoPagamento}})
-            return pagamento.id
-        } catch(erro){
-            console.log("Erro ao buscar pagamento pelo codigoPagamento:",erro);
-            return false
-        }
-    }
+    // static async recuperaPeloCodigoPagamento(codigoPagamento){
+    //     try{
+    //         let pagamento = await Pagamento.findOne({where: {codigoPagamento: codigoPagamento}})
+    //         return pagamento.id
+    //     } catch(erro){
+    //         console.log("Erro ao buscar pagamento pelo codigoPagamento:",erro);
+    //         return false
+    //     }
+    // }
 
 
     // Atualiza a situação do pagamento para cancelado
@@ -108,7 +108,7 @@ class DAOPagamento {
             const pagamento = await Pagamento.create({valor: valorTotalDaReserva, codigoPagamento: codigoPagamento, descricao: billingType, aprovado: false, dataExpiracao: dataExpiracao, situacao: "AGUARDANDO_PAGAMENTO"})
             console.log('Pagamento criado...');
             console.log('Data de expiração: ',dataExpiracao);
-            return pagamento.id
+            return pagamento.codigoPagamento
 
         } catch(erro){
             console.log(erro.toString());
@@ -116,16 +116,16 @@ class DAOPagamento {
         }
     }
 
-    static async delete(id){
-        try{
-            await Pagamento.destroy({where:{id: id}})
-            console.log("Removendo reserva sem pagamento...");
-            return true
-        }catch(erro) {
-            console.log(erro.toString());
-            return false
-        }
-    }
+    // static async delete(id){
+    //     try{
+    //         await Pagamento.destroy({where:{id: id}})
+    //         console.log("Removendo reserva sem pagamento...");
+    //         return true
+    //     }catch(erro) {
+    //         console.log(erro.toString());
+    //         return false
+    //     }
+    // }
 
     static async getAllPagamentosFalse(){
         try{

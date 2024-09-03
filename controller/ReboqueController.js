@@ -40,8 +40,8 @@ routerReboque.get('/reboque/lista/', autorizacao, (req, res) => {
 
 
 routerReboque.get('/reboque/editar/:id', autorizacao, (req,res) => {
-    let id = req.params.id
-    DAOReboque.getOne(id).then(reboque => {
+    let placa = req.params.placa
+    DAOReboque.getOne(placa).then(reboque => {
         if(reboque){
             res.render('reboque/editar', {user: adminNome(req, res), reboque: reboque})
         } else {
@@ -53,11 +53,11 @@ routerReboque.get('/reboque/editar/:id', autorizacao, (req,res) => {
 
 
 routerReboque.post('/reboque/atualizar', autorizacao, upload.single("foto"), (req,res) => {
-    let {id, modelo, placa, valorDiaria, cor} = req.body
+    let {modelo, placa, valorDiaria, cor} = req.body
     // console.log("nome da foto",req.file.filename);
     let foto = `img/${req.file.filename}` 
     // let foto = `${req.file.filename}` 
-    DAOReboque.update(foto, id, modelo, placa, valorDiaria, cor).then(atualizado => {
+    DAOReboque.update(foto, modelo, placa, valorDiaria, cor).then(atualizado => {
         if(atualizado){
             res.redirect('/reboque/lista')
         } else {
@@ -68,16 +68,16 @@ routerReboque.post('/reboque/atualizar', autorizacao, upload.single("foto"), (re
 
 
 
-routerReboque.get('/reboque/excluir/:id', autorizacao, (req, res) => {
-    let id = req.params.id
-    DAOReboque.delete(id).then(excluido =>{
-        if(excluido){
-            res.redirect('/reboque/lista')
-        } else {
-            res.render('erro', {mensagem: "Erro ao excluir"})
-        }
-    })
-})
+// routerReboque.get('/reboque/excluir/:id', autorizacao, (req, res) => {
+//     let id = req.params.id
+//     DAOReboque.delete(id).then(excluido =>{
+//         if(excluido){
+//             res.redirect('/reboque/lista')
+//         } else {
+//             res.render('erro', {mensagem: "Erro ao excluir"})
+//         }
+//     })
+// })
 
 
 

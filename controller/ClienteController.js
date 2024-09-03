@@ -28,8 +28,8 @@ routerCliente.get('/cliente/editar-reserva/:idReserva', clienteAutorizacao,  asy
     if(!reserva){
         res.render('erro', {mensagem: "Erro ao obter reserva."})
     }
-    DAOReserva.getAtivasPorID(reserva.dataValues.reboqueId).then(reservas => {
-        DAOReboque.getOne(reserva.dataValues.reboqueId).then(reboque => {
+    DAOReserva.getAtivasPorID(reserva.dataValues.reboquePlaca).then(reservas => {
+        DAOReboque.getOne(reserva.dataValues.reboquePlaca).then(reboque => {
             if(reboque){
                 res.render('cliente/editar-reserva', {user: clienteNome(req, res), mensagem: "", reboque: reboque, reservas: reservas, reserva: reserva})
             } else {
@@ -42,11 +42,11 @@ routerCliente.get('/cliente/editar-reserva/:idReserva', clienteAutorizacao,  asy
 
 
 routerCliente.get('/cliente/minhas-locacoes', clienteAutorizacao, async (req, res) => {
-    let idCliente
-    if(req.session.cliente && req.session.cliente.id){
-        idCliente = req.session.cliente.id
+    let clienteCpf
+    if(req.session.cliente && req.session.cliente.cpf){
+        clienteCpf = req.session.cliente.cpf
     }
-    let locacoes = await DAOReserva.historicoLocacoes(idCliente)
+    let locacoes = await DAOReserva.historicoLocacoes(clienteCpf)
     console.log('Reservas erro:',locacoes);
     if(!locacoes){
         res.render('erro', {mensagem: "Erro ao obter locações."})
@@ -57,11 +57,11 @@ routerCliente.get('/cliente/minhas-locacoes', clienteAutorizacao, async (req, re
 
 
 routerCliente.get('/cliente/minhas-reservas', clienteAutorizacao, async (req, res) => {
-    let idCliente
-    if(req.session.cliente && req.session.cliente.id){
-        idCliente = req.session.cliente.id
+    let clienteCpf
+    if(req.session.cliente && req.session.cliente.cpf){
+        clienteCpf = req.session.cliente.cpf
     }
-    let reservas = await DAOReserva.getMinhasReservas(idCliente)
+    let reservas = await DAOReserva.getMinhasReservas(clienteCpf)
     if(reservas == ''){
         res.render('cliente/minhas-reservas', {user: clienteNome(req, res), reservas: reservas, mensagem: "Sua lista de reservas está vazia."})
     }
@@ -78,7 +78,7 @@ routerCliente.post('/login/entrar', async (req, res) => {
     DAOCliente.login(email, senha).then( cliente => {
         if(cliente){
             if(bcrypt.compareSync(senha, cliente.senha)){
-                req.session.cliente = {id: cliente.id, nome: cliente.nome, sobrenome: cliente.sobrenome, email: cliente.email}
+                req.session.cliente = {cpf: cliente.cpf, nome: cliente.nome, email: cliente.email}
                 console.log(req.session.cliente.nome, "fez login...");
                 res.redirect('/')
             } else {
@@ -119,7 +119,7 @@ routerCliente.get('/cliente/existe/:cpf?', (req, res) => {
 
 routerCliente.post('/cadastro/create', async (req, res) => {
 
-    let {nome, sobrenome, email, senha, senhaRepita, cpf, rg, telefone, dataNascimento, cep, 
+    let {nome, email, senha, senhaRepita, cpf, telefone, dataNascimento, cep, 
         logradouro, complemento, bairro, localidade, uf, numeroDaCasa} = req.body
 
     cpf = cpf.replace(/\D/g, '')
@@ -145,19 +145,19 @@ routerCliente.post('/cadastro/create', async (req, res) => {
     
     let cliente = await DAOCliente.verificaSeClienteExiste(cpf)
     if(cliente){
-        cliente = await DAOCliente.updateClienteComReservaMasNaoEraCadastrado(nome, sobrenome, email, senha, cpf, rg, telefone, dataNascimento, cep, logradouro, complemento, bairro, localidade, uf, numeroDaCasa)
+        cliente = await DAOCliente.updateClienteComReservaMasNaoEraCadastrado(nome, email, senha, cpf, telefone, dataNascimento, cep, logradouro, complemento, bairro, localidade, uf, numeroDaCasa)
         if(!cliente){
             res.render('erro', {mensagem: 'Erro ao inserir cliente'})
         }
     } else {
-        cliente = await DAOCliente.insert(nome, sobrenome, email, senha, cpf, rg, telefone, dataNascimento, cep, logradouro, complemento, bairro, localidade, uf, numeroDaCasa)
+        cliente = await DAOCliente.insert(nome, email, senha, cpf, telefone, dataNascimento, cep, logradouro, complemento, bairro, localidade, uf, numeroDaCasa)
         if(!cliente){
             res.render('erro', {mensagem: 'Erro ao inserir cliente'})
         }
     }
 
     if(cliente){
-        req.session.cliente = {id: cliente.id, nome: cliente.nome, sobrenome: cliente.sobrenome, email: cliente.email}
+        req.session.cliente = {cpf: cliente.cpf, nome: cliente.nome, email: cliente.email}
         console.log(cliente.nome,"criado...");
         res.redirect('/')
     } else {
@@ -180,21 +180,21 @@ routerCliente.get('/cliente/lista/:mensagem?', autorizacao, (req, res) => {
 
 
 
-routerCliente.get('/cliente/excluir/:id', autorizacao, (req,res) => {
-    let id = req.params.id
-    DAOCliente.delete(id).then(excluido => {
-        if(excluido){
-            res.redirect('/cliente/lista')
-        } else {
-            res.render('erro', { mensagem: "Erro ao excluir cliente."})
-        }
-    })
-})
+// routerCliente.get('/cliente/excluir/:id', autorizacao, (req,res) => {
+//     let id = req.params.id
+//     DAOCliente.delete(id).then(excluido => {
+//         if(excluido){
+//             res.redirect('/cliente/lista')
+//         } else {
+//             res.render('erro', { mensagem: "Erro ao excluir cliente."})
+//         }
+//     })
+// })
 
 
 
-routerCliente.get('/cliente/editar/:id', autorizacao, (req, res) => {
-    let id = req.params.id
+routerCliente.get('/cliente/editar/:cpf', autorizacao, (req, res) => {
+    let id = req.params.cpf
     DAOCliente.getOne(id).then(cliente => {
         if(cliente){
             res.render('cliente/editar', {user: adminNome(req, res), cliente: cliente} )
@@ -207,8 +207,8 @@ routerCliente.get('/cliente/editar/:id', autorizacao, (req, res) => {
 
 
 routerCliente.post('/cliente/atualizar', autorizacao,  (req,res) => {
-    let {id, nome, cpf, telefone, endereco} = req.body
-    DAOCliente.update(id, nome, cpf, telefone, endereco).then(cliente => {
+    let {nome, cpf, telefone, endereco} = req.body
+    DAOCliente.update(nome, cpf, telefone, endereco).then(cliente => {
         if(cliente){
             res.redirect('/cliente/lista')
         } else {

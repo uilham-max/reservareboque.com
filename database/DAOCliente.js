@@ -21,15 +21,13 @@ class DAOCliente{
     }
 
     // Data da criação 28/03/2024
-    static async updateClienteComReservaMasNaoEraCadastrado(nome, sobrenome, email, senha, cpf, rg, telefone, data_nascimento, cep, logradouro, complemento, bairro, localidade, uf, numero_da_casa) {
+    static async updateClienteComReservaMasNaoEraCadastrado(nome, email, senha, cpf, telefone, data_nascimento, cep, logradouro, complemento, bairro, localidade, uf, numero_da_casa) {
         try {
             let [numLinhasAtualizadas, clientesAtualizados] = await Cliente.update({
                 nome: nome,
-                sobrenome: sobrenome,
                 email: email,
                 senha: senha,
                 cpf: cpf,
-                rg: rg,
                 telefone: telefone,
                 data_nascimento: data_nascimento,
                 cep: cep,
@@ -75,7 +73,7 @@ class DAOCliente{
     // Criado em 20/03/2024
     static async insertClienteQueNaoQuerSeCadastrar(nome, cpf, telefone, email, cep, logradouro, complemento, bairro, localidade, uf, numero_da_casa){
         try{
-            const cliente = await Cliente.create({nome, sobrenome: "", email: email, cpf, rg: "", telefone, data_nascimento: null, cep, logradouro, complemento, bairro, localidade, uf, numero_da_casa, ativo: true, cadastrado: false})
+            const cliente = await Cliente.create({nome, email: email, cpf, telefone, data_nascimento: null, cep, logradouro, complemento, bairro, localidade, uf, numero_da_casa, ativo: true, cadastrado: false})
             console.log(nome, 'criado sem cadasatro...');
             return cliente
         }
@@ -86,9 +84,9 @@ class DAOCliente{
     }
 
 
-    static async insert(nome, sobrenome, email, senha, cpf, rg, telefone, data_nascimento, cep, logradouro, complemento, bairro, localidade, uf, numero_da_casa){
+    static async insert(nome, email, senha, cpf, rg, telefone, data_nascimento, cep, logradouro, complemento, bairro, localidade, uf, numero_da_casa){
         try{
-            let cliente = await Cliente.create({nome, sobrenome, email, senha, cpf, rg, telefone, data_nascimento, cep, logradouro, complemento, bairro, localidade, uf, numero_da_casa, ativo: true, cadastrado: true})
+            let cliente = await Cliente.create({nome, email, senha, cpf, rg, telefone, data_nascimento, cep, logradouro, complemento, bairro, localidade, uf, numero_da_casa, ativo: true, cadastrado: true})
             console.log(nome,'se cadastrou como cliente...');
             return cliente
         }
@@ -113,20 +111,20 @@ class DAOCliente{
 
 
 
-    static async delete(id){
-        try{
-            await Cliente.destroy({where: {id: id}})
-            return true
-        }
-        catch(error){
-            console.log(error.toString())
-            return false
-        }
-    }
+    // static async delete(id){
+    //     try{
+    //         await Cliente.destroy({where: {id: id}})
+    //         return true
+    //     }
+    //     catch(error){
+    //         console.log(error.toString())
+    //         return false
+    //     }
+    // }
 
-    static async getOne(id){
+    static async getOne(cpf){
         try{
-            let cliente = await Cliente.findByPk(id)
+            let cliente = await Cliente.findByPk(cpf)
             return cliente
         }
         catch(error){

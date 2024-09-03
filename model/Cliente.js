@@ -19,7 +19,6 @@ const Cliente = conexao.define('cliente', {
         primaryKey: true,
         unique: true,
     }, 
-    // rg: Sequelize.STRING,
     telefone: Sequelize.STRING,
     data_nascimento: Sequelize.DATEONLY,
     cep: Sequelize.STRING,

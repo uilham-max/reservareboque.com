@@ -35,11 +35,11 @@ routerPagamento.post('/pagamento/recebeEmDinheiro', autorizacao, async (req, res
 routerPagamento.post('/pagamento/qrcode', async (req, res) => {
     
     let {nome, cpf, telefone, email, cep, logradouro, complemento, 
-    localidade, numeroDaCasa, idReboque, dataInicio, dataFim, formaPagamento} = req.body
+    localidade, numeroDaCasa, reboquePlaca, dataInicio, dataFim, formaPagamento} = req.body
 
     
     // Criar um identificador único para o formulário
-    const formIdentifier = `${idReboque}-${dataInicio}-${dataFim}`;
+    const formIdentifier = `${reboquePlaca}-${dataInicio}-${dataFim}`;
 
     // Verificar se o formulário já foi enviado com base no identificador
     if (req.session.submittedForms && req.session.submittedForms.includes(formIdentifier)) {
@@ -54,7 +54,7 @@ routerPagamento.post('/pagamento/qrcode', async (req, res) => {
     let valorDiaria = 0
 
     // BUSCAR REBOQUE NO BD
-    let reboque = await DAOReboque.getOne(idReboque)
+    let reboque = await DAOReboque.getOne(reboquePlaca)
     if(!reboque){
         res.render('erro', {mensagem: 'erro ao buscar reboque'})
         return
@@ -69,7 +69,7 @@ routerPagamento.post('/pagamento/qrcode', async (req, res) => {
     // CLIENTE COM LOGIN?
     let cliente = {}
     if(req.session.cliente){
-        cliente = await DAOCliente.getOne(req.session.cliente.id)
+        cliente = await DAOCliente.getOne(req.session.cliente.cpf)
         if(!cliente){
             res.render('erro', {mensagem: "Erro ao buscar cliente"})
             return
@@ -113,14 +113,14 @@ routerPagamento.post('/pagamento/qrcode', async (req, res) => {
         dataExpiracao.add(60, 'minutes')
 
         // PAGAMENTO INSERT
-        const idPagamento = await DAOPagamento.insert(retorno.id_cobranca, retorno.netValue, retorno.billingType, dataExpiracao)
-        if(!idPagamento){
+        const codigoPagamento = await DAOPagamento.insert(retorno.id_cobranca, retorno.netValue, retorno.billingType, dataExpiracao)
+        if(!codigoPagamento){
         res.render('erro', { mensagem: "Erro ao criar pagamento."})
         }
 
 
         // RESERVA INSERT
-        const reserva = await DAOReserva.insert(dataInicio, dataFim, valorDiaria, dias, retorno.netValue, cliente.id, idReboque, idPagamento)
+        const reserva = await DAOReserva.insert(dataInicio, dataFim, valorDiaria, dias, retorno.netValue, cliente.cpf, reboquePlaca, codigoPagamento)
         if(!reserva){
             res.render('erro', {mensagem: 'Erro ao criar reserva.'})
         } else {
@@ -143,7 +143,7 @@ routerPagamento.post('/pagamento/qrcode', async (req, res) => {
 })
 
 
-// API PIX CRIADO
+// WEB SERVICE - API PIX CRIADO
 routerPagamento.post('/pagamento/webhook/pixCriado', async (req, res) => {
     let destino = "uilhamgoncalves@gmail.com"
     try{

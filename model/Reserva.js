@@ -7,9 +7,9 @@ const Pagamento = require('./Pagamento.js');
 
 const Reserva = conexao.define('reserva', {
     id: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
         primaryKey: true,
-        autoIncrement: true
+        // autoIncrement: true
     },
     dataSaida: {
         type: Sequelize.DATEONLY,
@@ -29,7 +29,7 @@ const Reserva = conexao.define('reserva', {
     },
     // Definindo o campo reboqueId que será parte do índice único
     reboquePlaca: { 
-        type: Sequelize.TEXT,
+        type: Sequelize.STRING,
         allowNull: false,
         references: {
             model: Reboque,

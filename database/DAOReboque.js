@@ -17,7 +17,7 @@ class DAOReboque {
 
     static async update(foto, id, modelo, placa, valorDiaria, cor){
         try{
-            await Reboque.update({foto: foto, modelo: modelo, placa: placa, valorDiaria: valorDiaria, cor: cor, foto: foto}, {where: {id: id}})
+            await Reboque.update({foto: foto, modelo: modelo, placa: placa, valorDiaria: valorDiaria, cor: cor, foto: foto}, {where: {placa: placa}})
             return true
         }
         catch(error){
@@ -26,20 +26,20 @@ class DAOReboque {
         }
     }
 
-    static async delete(id){
-        try{
-            await Reboque.destroy({where: {id: id}})
-            return true
-        }
-        catch(error){
-            console.log(error.toString())
-            return false
-        }
-    }
+    // static async delete(placa){
+    //     try{
+    //         await Reboque.destroy({where: {placa: placa}})
+    //         return true
+    //     }
+    //     catch(error){
+    //         console.log(error.toString())
+    //         return false
+    //     }
+    // }
 
-    static async getOne(id){
+    static async getOne(placa){
         try{
-            let reboque = await Reboque.findByPk(id)
+            let reboque = await Reboque.findOne(placa)
             return reboque
         }
         catch(error){

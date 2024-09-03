@@ -6,10 +6,14 @@ const Cliente = require('./Cliente.js')
 const Reboque = conexao.define('reboque', {
     id: {
         type: Sequelize.INTEGER,
-        primaryKey: true,
+        // primaryKey: true,
         autoIncrement: true
     },
-    placa: {type: Sequelize.STRING, unique: true},
+    placa: {
+        type: Sequelize.STRING, 
+        primaryKey: true,
+        unique: true
+    },
     modelo: Sequelize.STRING,
     cor: Sequelize.STRING,
     valorDiaria: Sequelize.FLOAT,

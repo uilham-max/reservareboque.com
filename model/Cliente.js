@@ -4,7 +4,7 @@ const conexao = require('../database/conexao.js')
 const Cliente = conexao.define('cliente', {
     id: {
         type: Sequelize.INTEGER,
-        primaryKey: true,
+        // primaryKey: true,
         autoIncrement: true
     },
     nome: Sequelize.STRING,
@@ -16,9 +16,10 @@ const Cliente = conexao.define('cliente', {
     senha: Sequelize.STRING,
     cpf: {
         type: Sequelize.STRING,
+        primaryKey: true,
         unique: true,
     }, 
-    rg: Sequelize.STRING,
+    // rg: Sequelize.STRING,
     telefone: Sequelize.STRING,
     data_nascimento: Sequelize.DATEONLY,
     cep: Sequelize.STRING,

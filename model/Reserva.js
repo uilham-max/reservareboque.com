@@ -28,12 +28,12 @@ const Reserva = conexao.define('reserva', {
         allowNull: false,
     },
     // Definindo o campo reboqueId que será parte do índice único
-    reboqueId: {
-        type: Sequelize.INTEGER,
+    reboquePlaca: { 
+        type: Sequelize.TEXT,
         allowNull: false,
         references: {
             model: Reboque,
-            key: 'id'
+            key: 'reboquePlaca'
         }
     },
     situacao: {
@@ -44,7 +44,7 @@ const Reserva = conexao.define('reserva', {
     indexes: [
         {
             unique: true,
-            fields: ['dataSaida', 'dataChegada', 'reboqueId']
+            fields: ['dataSaida', 'dataChegada', 'reboquePlaca']
         }
     ]
 });

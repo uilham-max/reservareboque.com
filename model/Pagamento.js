@@ -4,11 +4,12 @@ const conexao = require('../database/conexao.js')
 const Pagamento = conexao.define('pagamento', {
     id: {
         type: Sequelize.INTEGER,
-        primaryKey: true,
+        // primaryKey: true,
         autoIncrement: true
     },
     codigoPagamento: {
         type:  Sequelize.STRING,
+        primaryKey: true,
         unique: true,
     },
     valor: Sequelize.DOUBLE,

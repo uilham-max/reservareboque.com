@@ -27,10 +27,12 @@ de indesponibilidade de todos os reboques
 # Onde parei?
 * Criar campo 'cancelada' na tabela 'reserva'. Reservas não devem ser excluídas, mas sim canceladas. (cancelamento  lógico, não físico)
 * STATUS RESERVA, CONCLUIDA, CANCELADA, ANDAMENTO, AGUARDANDOPAGAMENTO
+* IMPLEMENTAR RECUPERAÇÃO DE SENHA
 * Implementar taxa de cancelamento no estorno de pagamento.
 
 
 # Versão 1
+* IMPLEMENTAR RECUPERAÇÃO DE SENHA
 * Implementar alteração de data de retirada.
 * Implementar o botão na área de amin para informar que o cliente ja entregou o reboque. Quando o cliente entregar o reboque, não deve permitir o cliente alterar a reserva na painel através do botão EDITAR. Inabilitar o botão editar e o botao cancelar. Permanecer ativo somente o botão voltar.
 * Implementar botão na área admin para informar a entrega.

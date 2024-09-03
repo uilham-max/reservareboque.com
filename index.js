@@ -33,7 +33,6 @@ app.use(IndexController)
 app.use(pagamentoController)
 
 // Como o render não fica mais de 1 minuto no ar, isso remove pagamenos quando ele sobe.
-    
 try{
     console.log("Removendo pagamentos com data vencida...");
     removerPagamentosAPI()
@@ -43,10 +42,10 @@ try{
 
 conexao.authenticate().then(()=>{
     app.listen(port,()=>{
-        console.log(`Servidor rodando!`)
+        console.log(`Conexão com BD foi estabelecida com sucesso!`)
     })
-}).catch(() => {
-    console.error("Erro. Banco de dados não iniciado.")
+}).catch((erro) => {
+    console.error(`Erro. Banco de dados não iniciado.\n ${erro}`)
 })
 
 

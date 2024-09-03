@@ -15,6 +15,8 @@ const moment = require('moment-timezone')
 // REMOVER RESERVA ADMIN
 routerReserva.get('/admin/reserva/remover/:codigoPagamento?/:valor?', autorizacao, async (req, res) => {
 
+    // console.log(req.params.codigoPagamento, "coidgoPagamento");
+
     console.log("Removendo a reserva...");
     console.log('Estornando o pagamento...');
     await estornoPagamento(req.params.codigoPagamento, req.params.valor)
@@ -22,6 +24,7 @@ routerReserva.get('/admin/reserva/remover/:codigoPagamento?/:valor?', autorizaca
     console.log('Cancelando a reserva...');
     // await DAOPagamento.removePeloCodigoPagamento(req.params.codigoPagamento)
     await DAOPagamento.atualizaSituacaoParaCancelado(req.params.codigoPagamento)
+    // await DAOReserva.atualizaSituacaoParaCancelada()
 
     let reservas = await DAOReserva.getAtivas()
     
@@ -65,7 +68,11 @@ routerReserva.get('/reserva/remover/:codigoPagamento?/:valor?/:dataSaida?', clie
         // O MESMO QUE REMOVER A RESERVA (DELETE ON CASCADE)
         console.log('Cancelando a reserva...');
         // await DAOPagamento.removePeloCodigoPagamento(req.params.codigoPagamento)
+        console.log(req.params.codigoPagamento, "coidgoPagamento");
+
         await DAOPagamento.atualizaSituacaoParaCancelado(req.params.codigoPagamento)
+        let pagamentoId = await DAOPagamento.recuperaPeloCodigoPagamento(req.params.codigoPagamento)
+        await DAOReserva.atualizaSituacaoParaCancelada(pagamentoId)
 
         reservas = await DAOReserva.getMinhasReservas(idCliente)
         

@@ -11,11 +11,14 @@ const moment = require('moment-timezone')
 class DAOReserva {
 
 
-    // Atualiza situação de uma reserva para cancelada
+    // Atualiza situação de uma reserva para aprovado
     static async atualizaSituacaoParaAprovada(pagamentoId){
         try{
-            await Reserva.update({situacao: "APROVADA"},{where: {pagamentoId: pagamentoId}})
-            console.log('Atualizando a situação da reserva para "APROVADA"...');
+            await Reserva.update(
+                {situacao: "APROVADO"},
+                {where: {pagamentoId: pagamentoId}}
+            )
+            console.log('Atualizando a situação da reserva para "APROVADO"...');
             return true
         }catch(erro){
             console.log(erro.toString());
@@ -26,14 +29,17 @@ class DAOReserva {
 
 
 
-    // Atualiza situação de uma reserva para cancelada
+    // Atualiza situação de uma reserva para cancelado
     static async atualizaSituacaoParaCancelada(pagamentoId){
         try{
-            await Reserva.update({situacao: "CANCELADA"},{where: {pagamentoId: pagamentoId}})
-            console.log('Atualizando a situação da reserva para "CANCELADA"...');
+            await Reserva.update(
+                {situacao: "CANCELADO"},
+                {where: {pagamentoId: pagamentoId}},
+            )
+            console.log('Atualizando a situação da reserva para CANCELADO...');
             return true
         }catch(erro){
-            console.log(erro.toString());
+            console.log("Erro ao atualizar reserva para CANCELADO\n",erro.toString());
             return false
         }
 

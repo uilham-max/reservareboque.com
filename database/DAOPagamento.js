@@ -5,13 +5,23 @@ const moment = require('moment-timezone')
 
 class DAOPagamento {
 
+    static async recuperaPeloCodigoPagamento(codigoPagamento){
+        try{
+            let pagamento = await Pagamento.findOne({where: {codigoPagamento: codigoPagamento}})
+            return pagamento.id
+        } catch(erro){
+            console.log("Erro ao buscar pagamento pelo codigoPagamento:",erro);
+            return false
+        }
+    }
+
 
     // Atualiza a situação do pagamento para cancelado
     static async atualizaSituacaoParaCancelado(codigoPagamento){
         try {
             let cancelado = await Pagamento.update({situacao: "CANCELADO"},{where: {codigoPagamento: codigoPagamento}})
             if(cancelado){
-                console.log(codigoPagamento ," --> Pagamento com situacao 'CANCELADO' no BD!");
+                console.log(codigoPagamento ," --> Pagamento atualizado para CANCELADO");
             } else {
                 console.log("Sem pagamentos expirados!");
             }
@@ -41,6 +51,7 @@ class DAOPagamento {
             let lista = await Pagamento.findAll({
                 where: {
                     aprovado: false,
+                    situacao: "AGUARDANDO_PAGAMENTO",
                     dataExpiracao: {
                         [Sequelize.Op.lt]: horas
                     }

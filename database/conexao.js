@@ -1,6 +1,8 @@
 const Sequelize = require('sequelize')
 require('dotenv').config()
 
+console.log("Estabelecendo conexão com o BD...");
+
 /** Conectando (usando) ao BD remoto no Render.com */
 const conexao = new Sequelize(process.env.RENDER_DB_NOME, process.env.RENDER_DB_USER, process.env.RENDER_DB_PASSWORD, {
     host: process.env.RENDER_DB_HOST_EXTERNO,

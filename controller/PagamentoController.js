@@ -158,10 +158,11 @@ routerPagamento.post('/pagamento/webhook/pixCriado', async (req, res) => {
 })
 
 
-// ESCUTA O WEBHOOK --- ATUALIZA PAGAMENTO PARA APROVADO --- API PIX RECEBIDO
+// WEB SERVICE - ESCUTA O WEBHOOK --- ATUALIZA PAGAMENTO PARA APROVADO --- API PIX RECEBIDO
 routerPagamento.post('/pagamento/webhook/pix', async (req, res) => {
     
-    try{
+    try{ 
+        console.log("Executar: Atualizar situação de pagamento e reserva para aprovado");
         let codigoPagamento = req.body.payment.id
         let pagamento = await DAOPagamento.atualizarPagamentoParaAprovado(codigoPagamento)
         console.log(pagamento);
@@ -177,7 +178,7 @@ routerPagamento.post('/pagamento/webhook/pix', async (req, res) => {
 })
 
 
-// ESCUTA A ROTA /pagamento/qrcode
+// WEB SERVICE - ESCUTA A ROTA /pagamento/qrcode
 routerPagamento.get('/pagamento/aprovado/:codigoPagamento', async (req, res) => {
     let {codigoPagamento} = req.params
     try{

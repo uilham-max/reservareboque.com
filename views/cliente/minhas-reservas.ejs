@@ -36,7 +36,8 @@
                                         <thead>
                                             <tr>
                                                 <th>Reboque</th>
-                                                <th>Data</th>
+                                                <th>Início</th>
+                                                <th>Fim</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -44,6 +45,7 @@
                                                 <tr>
                                                     <td><%=reserva.reboque.placa%></td>
                                                     <td><%=reserva.dataSaida.toString().slice(8,10)+'/'+reserva.dataSaida.toString().slice(5,7)+'/'+reserva.dataSaida.toString().slice(0,4)%></td>
+                                                    <td><%=reserva.dataChegada.toString().slice(8,10)+'/'+reserva.dataChegada.toString().slice(5,7)+'/'+reserva.dataChegada.toString().slice(0,4)%></td>
                                                     <td><a href="/cliente/reserva-detalhe/<%=reserva.id%>" class="btn btn-primary">Detalhes</a></td>
                                                    </tr>
                                             <%})%>

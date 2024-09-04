@@ -25,7 +25,7 @@ routerAdmin.get('/admin/painel', autorizacao, async (req, res) => {
     // ITERA POR CADA REBOQUE
     for (let i = 0; i < reboques.length; i++) {
         // RETORNA RESERVAS DE CADA REBOQUE
-        let reservas = await DAOReserva.getReservas(reboques[i].id);
+        let reservas = await DAOReserva.getReservas(reboques[i].placa);
 
         if (reservas) {
             let datasArray = [];

@@ -7,6 +7,65 @@ const bcrypt = require('bcryptjs')
 const clienteAutorizacao = require('../autorizacao/clienteAutorizacao')
 const DAOReserva = require('../database/DAOReserva')
 const DAOReboque = require('../database/DAOReboque')
+const moment = require('moment-timezone')
+
+
+// RECURSO PARA ALTERAR A DATA DE UMA RESERVA PELO CLIENTE
+routerCliente.post('/cliente/editarDataReserva', clienteAutorizacao, async (req, res) => {
+    let {idReserva, reboquePlaca, dataInicioAntiga, dataInicioNova, dataFimNova, diarias} = req.body;
+
+    // CALCULA PERIODO EM HORAS DA RESERVA ANTIGA
+    let horasPeriodoAntigo = diarias*24
+
+    // RECUPERAR A HORA ATUAL DO PEDIDO
+    let dataAtual = moment.tz(new Date(), 'America/Sao_Paulo');
+
+    // PARSE PARA OBJETO MOMENT.TZ
+    dataInicioAntiga = moment.tz(dataInicioAntiga, 'America/Sao_Paulo'); 
+    
+    // CALCULAR O PERIODO EM HORAS DA NOVA RESERVA
+    dataInicioNova = moment.tz(dataInicioNova, 'America/Sao_Paulo')
+    dataFimNova = moment.tz(dataFimNova, 'America/Sao_Paulo')
+    let horasPeriodoNovo = dataFimNova.diff(dataInicioNova, 'hours')
+    
+    // CALCULAR DIFERENÇA EM HORAS DA DATA ATUAL E DATA SOLICITADA PARA A NOVA RESERVA
+    let diferencaEmHorasPrazo = dataInicioAntiga.diff(dataAtual, 'hours');
+    
+    // O PRAZO DEVE SER MAIOR QUE 48 HORAS PARA FAZER A ALTERAÇÃO
+    if(diferencaEmHorasPrazo < 48){
+        console.log("Tentativa de alteração de data da reserva negada. Menos de 48h.");
+        return res.render('erro', {mensagem: 'Erro. Faltam menos de 48h para retirada'});
+    }
+    
+    // O PERIODO NÃO PODE SER MAIOR QUE O ORIGINAL
+    if(horasPeriodoAntigo != horasPeriodoNovo){
+        console.log("Tentativa de alteração de data da reserva negada. Período diferente.");
+        return res.render('erro', {mensagem: 'Erro. O período deve ser o mesmo'});
+    }
+
+    // FORMATA AS DATAS PRA STRING
+    dataInicioNova = dataInicioNova.format('YYYY-MM-DD')
+    dataFimNova = dataFimNova.format('YYYY-MM-DD')
+    
+    console.log("Data da reserva alterada com sucesso.");
+    
+    // VERIFICA DISPONIBILIDADE
+    let reservas = await DAOReserva.getVerificaDisponibilidade(reboquePlaca, dataInicioNova, dataFimNova); 
+    if(reservas.length !== 0){
+        return res.render('erro', {mensagem: 'Não foi possível alterar a data. Erro ao verificar disponibilidade'});
+    }
+    
+    // ACESSA O BANCO DE DADOS PARA REALIZAR A ALTERAÇÃO DAS DATAS
+    let resposta = await DAOReserva.alterarDataReserva(idReserva, dataInicioNova, dataFimNova); 
+    if(!resposta){
+        return res.render('erro', {mensagem: 'Erro ao alterar a data da reserva'});
+    }
+    
+    // RETORNA A RESERVA ALTERADA AO CLIENTE
+    let reserva = await DAOReserva.getOne(idReserva); 
+    res.render('cliente/reserva-detalhe', {user: clienteNome(req, res), mensagem: '', reserva: reserva});
+});
+
 
 
 routerCliente.get('/cliente/reserva-detalhe/:reservaId?', clienteAutorizacao, async (req, res) => {
@@ -14,11 +73,6 @@ routerCliente.get('/cliente/reserva-detalhe/:reservaId?', clienteAutorizacao, as
     let reserva = await DAOReserva.getOne(req.params.reservaId)
     res.render('cliente/reserva-detalhe', {user: clienteNome(req, res), mensagem: '', reserva: reserva})
 
-})
-
-
-routerCliente.post('/cliente/atualizar-reserva', clienteAutorizacao, (req, res) => {
-    res.send('Recurso indisponivel no momento. Contate o suporte.')
 })
 
 

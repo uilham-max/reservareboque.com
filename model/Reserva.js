@@ -6,7 +6,7 @@ const Reboque = require('./Reboque.js');
 const Pagamento = require('./Pagamento.js');
 
 const Reserva = conexao.define('reserva', {
-    id: {
+    id: { // O ID É COMPOSTO POR reboquePlaca + codigoPagamento, DAS MODELS REBOQUE E PAGAMENTO
         type: Sequelize.STRING,
         primaryKey: true,
         // autoIncrement: true
@@ -35,7 +35,7 @@ const Reserva = conexao.define('reserva', {
             key: 'placa'
         }
     },
-    situacao: {
+    situacao: { // 1 - AGUARDANDO_PAGAMENTO, 2 - ANDAMENTO, 3 - CONCLUIDA, 4 - CANCELADA, 5 - ADIADA
         type: Sequelize.STRING
     }
 }, {
@@ -43,7 +43,7 @@ const Reserva = conexao.define('reserva', {
     indexes: [
         {
             unique: true,
-            fields: ['dataSaida', 'dataChegada', 'reboquePlaca'] // ESTAS COLUNAS FORMAM A CHAVE PRIMÁRIA COMPOSTA
+            fields: ['dataSaida', 'dataChegada', 'reboquePlaca']
         }
     ]
 });
@@ -66,6 +66,7 @@ Reboque.hasMany(Reserva, {
 // uma locação pertence a apenas um reboque
 Reserva.belongsTo(Reboque);
 
+// RELACIONAMENTO 1:1
 Pagamento.hasOne(Reserva, {
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE'

@@ -15,7 +15,7 @@ class DAOReboque {
         }
     }
 
-    static async update(foto, id, modelo, placa, valorDiaria, cor){
+    static async update(foto, modelo, placa, valorDiaria, cor){
         try{
             await Reboque.update({foto: foto, modelo: modelo, placa: placa, valorDiaria: valorDiaria, cor: cor, foto: foto}, {where: {placa: placa}})
             return true

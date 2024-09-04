@@ -10,6 +10,19 @@ const moment = require('moment-timezone')
 
 class DAOReserva {
 
+    static async alterarDataReserva(idReserva, dataIncio, dataFim){
+        try{
+            await Reserva.update(
+                {dataSaida: dataIncio, dataChegada: dataFim},
+                {where: {id: idReserva}},
+            )
+            return true
+        } catch(erro) {
+            console.log("Erro ao alterar data da reserva", erro);
+            return false
+        }
+    }
+
 
     // Atualiza situação de uma reserva para aprovado
     static async atualizaSituacaoParaAprovada(codigoPagamento){

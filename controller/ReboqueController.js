@@ -18,7 +18,7 @@ routerReboque.post('/reboque/salvar/', autorizacao, upload.single("foto"), (req,
     let foto = `img/${req.file.filename}` 
     DAOReboque.insert(modelo, placa, valorDiaria, cor, foto, pesoBruto, comprimento, largura, altura, quantidadeDeEixos, anoFabricacao, ativo, descricao).then(inserido => {
         if(inserido){
-            res.render('reboque/novo', {mensagem: "Reboque incluído!"})
+            res.render('reboque/novo', {user: adminNome(req, res), mensagem: "Reboque incluído!"})
         } else {
             res.render('erro', {mensagem: "Não foi possível incluir reboque"})
         }
@@ -39,7 +39,7 @@ routerReboque.get('/reboque/lista/', autorizacao, (req, res) => {
 
 
 
-routerReboque.get('/reboque/editar/:id', autorizacao, (req,res) => {
+routerReboque.get('/reboque/editar/:placa', autorizacao, (req,res) => {
     let placa = req.params.placa
     DAOReboque.getOne(placa).then(reboque => {
         if(reboque){

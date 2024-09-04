@@ -12,7 +12,7 @@
 
             <!-- Menssagem do topo da página em jumbotron -->
             <div class="jumbotron jumbotron-fluid">
-                <h1 class="display-4" >Recurso Indisponível no memento.</h1>
+                <h1 class="display-4" >Alterar data da reserva.</h1>
                 <!-- <p class="lead">Clientes cadastrados podem ver seu histórico de locações, gerenciar suas reservas e receber -->
                     <!-- descontos.</p> -->
             </div>
@@ -35,13 +35,13 @@
 
                 <div class="card card-reserva" style="width: 25rem;">
                     <div class="card-body">
-                        <form class="needs-validation" novalidate action="/cliente/atualizar-reserva" method="POST">
+                        <form class="needs-validation" novalidate action="/cliente/editarDataReserva" method="POST">
                             <h5>Alterar Período</h5>
                             <hr>
                             
                             <div class="input-group mb-3">
                                 <span class="input-group-text" >Data de Retirada</span>
-                                <input class="form-control" id="dataInicio" type="date" name="dataInicio" required>
+                                <input class="form-control" id="dataInicio" type="date" name="dataInicioNova" required>
                                 <div class="valid-feedback">
                                     <!-- Looks good! -->
                                 </div>
@@ -53,7 +53,7 @@
 
                             <div class="input-group mb-3">
                                 <span class="input-group-text" >Data de Entrega</span>
-                                <input class="form-control" id="dataFim" type="date" name="dataFim" required>
+                                <input class="form-control" id="dataFim" type="date" name="dataFimNova" required>
                                 <div class="valid-feedback">
                                     <!-- Looks good! -->
                                 </div>
@@ -62,8 +62,12 @@
                                 </div>
                             </div><br>                        
                             
+
+                            <input type="hidden" name="diarias" value="<%=reserva.diarias%>" >
+                            <input type="hidden" name="dataInicioAntiga" value="<%=reserva.dataSaida%>" >
                             <input type="hidden" name="reboquePlaca" value="<%=reboque.placa%>" >
-                            <br><input class="btn btn-primary" id="botao" type="submit" value="Atualizar minha reserva">
+                            <input type="hidden" name="idReserva" value="<%=reserva.id%>" >
+                            <br><input class="btn btn-primary" id="botao" type="submit" value="Finalizar">
                             
                             
                             <% if(mensagem){%>

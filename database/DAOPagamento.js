@@ -85,9 +85,7 @@ class DAOPagamento {
             // console.log('Atualizando status do pagamento para aprovado...');
             if (numLinhasAtualizadas > 0) {
                 console.log(codigoPagamento, '--> Pagamento atualizado para aprovado com sucesso.');
-                let pagamento = await Pagamento.findOne(
-                    {where: {codigoPagamento: codigoPagamento}}
-                )
+                let pagamento = await Pagamento.findByPk(codigoPagamento)
                 return pagamento;
             } else {
                 console.log('Nenhuma linha foi atualizada. O pagamento não foi encontrado.');

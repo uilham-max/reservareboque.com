@@ -2,6 +2,7 @@ const conexao = require('./database/conexao.js')
 const express = require('express')
 const session = require('express-session')
 const bodyParser = require('body-parser')
+const moment = require('moment-timezone')
 
 const port = 3000
 const app = express()
@@ -31,6 +32,29 @@ app.use(ReservaController)
 app.use(AdminController)
 app.use(IndexController)
 app.use(pagamentoController)
+
+// TESTENDO MOMENT.TZ
+let hoje = moment.tz(new Date(), 'America/Sao_Paulo')
+let inicio = moment.tz(new Date(), 'America/Sao_Paulo')
+let fim = moment.tz(new Date(), 'America/Sao_Paulo')
+let dia = moment.tz(new Date(), 'America/Sao_Paulo')
+
+inicio.add(10,'days')
+fim.add(12,'days')
+dia.add(11, 'days')
+
+console.log("hoje:", hoje);
+// console.log("inicio:", inicio);
+// console.log("fim:", fim);
+// console.log("dia:", dia);
+
+
+// if(dia > inicio && dia < fim){
+//     console.log("entre");
+// }
+
+
+// console.log(hoje.add(-9,'days'));
 
 // Como o render não fica mais de 1 minuto no ar, isso remove pagamenos quando ele sobe.
 try{

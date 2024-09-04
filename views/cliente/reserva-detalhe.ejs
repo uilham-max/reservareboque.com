@@ -59,8 +59,8 @@
     
                         <div class="d-md-flex justify-content-center" style="margin: 0.5rem;">
                             <button style="margin: 0.3rem;" class="btn btn-secondary" type="button" onclick="history.back()">Voltar</button>
-                            <a style="margin: 0.3rem;" class="btn btn-primary" href="/cliente/editar-reserva/<%=reserva.id%>" >Editar</a>
-                            <a style="margin: 0.3rem;" class="btn btn-danger" onclick="return confirm('Confirma o cancelamento?')"  href="/reserva/remover/<%=reserva.pagamento.codigoPagamento%>/<%=reserva.pagamento.valor%>/<%=reserva.dataSaida%>">Cancelar</a>
+                            <a style="margin: 0.3rem;" class="btn btn-primary" href="/cliente/editar-reserva/<%=reserva.id%>" >Alterar reserva</a>
+                            <a style="margin: 0.3rem;" class="btn btn-danger" onclick="return confirm('Confirma o cancelamento?')"  href="/reserva/remover/<%=reserva.pagamento.codigoPagamento%>/<%=reserva.pagamento.valor%>/<%=reserva.dataSaida%>">Cancelar reserva</a>
                             
                         </div>
 

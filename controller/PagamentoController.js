@@ -144,31 +144,27 @@ routerPagamento.post('/pagamento/qrcode', async (req, res) => {
 
 
 // WEB SERVICE - API PIX CRIADO
-routerPagamento.post('/pagamento/webhook/pixCriado', async (req, res) => {
-    let destino = "uilhamgoncalves@gmail.com"
-    try{
-        console.log(req.body.event, "Enviar email para o admin.");
-        emailPagamentoCriado(destino)
-    }catch(error){
-        console.warn(error);
-    }finally{
-        res.sendStatus(200) ;
-    }
+// routerPagamento.post('/pagamento/webhook/pixCriado', async (req, res) => {
+//     let destino = "uilhamgoncalves@gmail.com"
+//     try{
+//         console.log(req.body.event, "Enviar email para o admin.");
+//         emailPagamentoCriado(destino)
+//     }catch(error){
+//         console.warn(error);
+//     }finally{
+//         res.sendStatus(200) ;
+//     }
     
-})
+// })
 
 
 // WEB SERVICE - ESCUTA O WEBHOOK --- ATUALIZA PAGAMENTO PARA APROVADO --- API PIX RECEBIDO
 routerPagamento.post('/pagamento/webhook/pix', async (req, res) => {
-    
     try{ 
         let codigoPagamento = req.body.payment.id
         console.log("Executar: Atualizar situação de pagamento e reserva para aprovado:",codigoPagamento);
-        let pagamento = await DAOPagamento.atualizarPagamentoParaAprovado(codigoPagamento)
-        // console.log(pagamento);
-        // console.log(pagamento.id);
-        await DAOReserva.atualizaSituacaoParaAprovada((pagamento.id)) // Recuperar Id da reserva para atualizar a situação dela para aprovado
-
+        await DAOPagamento.atualizarPagamentoParaAprovado(codigoPagamento)
+        await DAOReserva.atualizaSituacaoParaAprovada(codigoPagamento) // Recuperar Id da reserva para atualizar a situação dela para aprovado
     }catch(error){
         console.warn(error);
     }finally{
@@ -183,13 +179,10 @@ routerPagamento.get('/pagamento/aprovado/:codigoPagamento', async (req, res) => 
     let {codigoPagamento} = req.params
     try{
         let resposta = await DAOPagamento.verificaPagamento(codigoPagamento)
-        // console.log("Testando resposta ao verificar o pagamento -->",resposta.aprovado);
-        // console.log("Testando resposta dataValues ao verificar o pagamento --> ",resposta.dataValues.aprovado);
         if(resposta.aprovado == true){
             console.log("Pagamento aprovado:",codigoPagamento);
             res.status(200).json({aprovado: true})
         }else{
-            // console.log(codigoPagamento ," --> Aguardando aprovação...");
             res.status(200).json({aprovado: false})
         }
     }catch(erro){

@@ -8,9 +8,13 @@ const Admin = conexao.define('admin', {
         autoIncrement: true
     },
     nome: Sequelize.STRING,
-    email: {
+    cpf: {
         type: Sequelize.STRING,
         primaryKey: true,
+        unique: true,
+    },
+    email: {
+        type: Sequelize.STRING,
         unique: true
     },
     senha: Sequelize.STRING

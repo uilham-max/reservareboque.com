@@ -12,11 +12,11 @@ const Reserva = conexao.define('reserva', {
         // autoIncrement: true
     },
     dataSaida: {
-        type: Sequelize.DATEONLY,
+        type: Sequelize.DATE,
         allowNull: false,
     },
     dataChegada: {
-        type: Sequelize.DATEONLY,
+        type: Sequelize.DATE,
         allowNull: false,
     },
     valorDiaria: {

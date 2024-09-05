@@ -4,9 +4,9 @@ const bcrypt = require('bcryptjs')
 
 class DAOAdmin {
 
-    static async insert(nome, email, senha){
+    static async insert(nome, email, senha, cpf){
         try{
-            await Admin.create({nome: nome, email: email, senha: senha})
+            await Admin.create({nome: nome, email: email, senha: senha, cpf: cpf})
             console.log(nome,'criado como admin...');
             return true
         }

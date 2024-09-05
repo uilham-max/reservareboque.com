@@ -12,7 +12,12 @@ const moment = require('moment-timezone')
 
 // RECURSO PARA ALTERAR A DATA DE UMA RESERVA PELO CLIENTE
 routerCliente.post('/cliente/editarDataReserva', clienteAutorizacao, async (req, res) => {
-    let {idReserva, reboquePlaca, dataInicioAntiga, dataInicioNova, dataFimNova, diarias} = req.body;
+
+    let {idReserva, reboquePlaca, dataInicioAntiga, dataFimAntiga, dataInicioNova, dataFimNova, diarias} = req.body;
+
+    console.log("Iniciando uma alteração de data para a reserva:____", idReserva);
+    console.log("Período antido:____________________________________", dataInicioAntiga, "-", dataFimAntiga);
+    console.log("Período novo:______________________________________", dataInicioNova, "-", dataFimNova);
 
     // CALCULA PERIODO EM HORAS DA RESERVA ANTIGA
     let horasPeriodoAntigo = diarias*24
@@ -47,23 +52,40 @@ routerCliente.post('/cliente/editarDataReserva', clienteAutorizacao, async (req,
     dataInicioNova = dataInicioNova.format('YYYY-MM-DD')
     dataFimNova = dataFimNova.format('YYYY-MM-DD')
     
-    console.log("Data da reserva alterada com sucesso.");
     
     // VERIFICA DISPONIBILIDADE
     let reservas = await DAOReserva.getVerificaDisponibilidade(reboquePlaca, dataInicioNova, dataFimNova); 
+
+    // O PROPRIETÁRIO DA RESERVA PODE ALTERAR UMA DATA DENTRO DO SEU PERIODO
+    let autorizacao = false
     if(reservas.length !== 0){
-        return res.render('erro', {mensagem: 'Não foi possível alterar a data. Erro ao verificar disponibilidade'});
+        // PERCORRE PELAS RESERVAS 
+        reservas.forEach(reserva => {
+            // AUTORIZA AO CLIENTE CRIAR UMA RESERVA NOVA DENTRO DO MESMO PERIODO DA RESERVA ANTIGA
+            if(idReserva === reserva.dataValues.id){
+                console.log("Alteração autorizada para nova data.");
+                autorizacao = true
+            }
+        });
     }
-    
+
+    if(!autorizacao){
+        console.log("Alteração não autorizada.");
+        return res.render('erro', {mensagem: 'Não foi possível alterar a data. Erro ao verificar disponibilidade'}); 
+    }
+
     // ACESSA O BANCO DE DADOS PARA REALIZAR A ALTERAÇÃO DAS DATAS
     let resposta = await DAOReserva.alterarDataReserva(idReserva, dataInicioNova, dataFimNova); 
     if(!resposta){
         return res.render('erro', {mensagem: 'Erro ao alterar a data da reserva'});
     }
+    console.log("Data da reserva alterada com sucesso.");
     
     // RETORNA A RESERVA ALTERADA AO CLIENTE
     let reserva = await DAOReserva.getOne(idReserva); 
     res.render('cliente/reserva-detalhe', {user: clienteNome(req, res), mensagem: '', reserva: reserva});
+
+   
 });
 
 
@@ -77,15 +99,25 @@ routerCliente.get('/cliente/reserva-detalhe/:reservaId?', clienteAutorizacao, as
 
 
 routerCliente.get('/cliente/editar-reserva/:idReserva', clienteAutorizacao,  async (req, res) => {
+    
     let idReserva = req.params.idReserva
+
     let reserva = await DAOReserva.getReserva(idReserva)
     if(!reserva){
         res.render('erro', {mensagem: "Erro ao obter reserva."})
     }
-    DAOReserva.getAtivasPorID(reserva.dataValues.reboquePlaca).then(reservas => {
-        DAOReboque.getOne(reserva.dataValues.reboquePlaca).then(reboque => {
+
+    let reboquePlaca = reserva.dataValues.reboquePlaca
+
+    // NÃO PODE ALTERAR A DATA DE UMA RESERVA EM ANDAMENTO
+    if(reserva.dataValues.situacao == 'ANDAMENTO'){
+        res.render('erro', {mensagem: "Erro. Não pode alterar a data de uma reserva em andamento."})
+    }
+    // console.log(reserva.dataValues.situacao);
+    DAOReserva.getAtivasPorID(reboquePlaca).then(reservas => {
+        DAOReboque.getOne(reboquePlaca).then(reboque => {
             if(reboque){
-                res.render('cliente/editar-reserva', {user: clienteNome(req, res), mensagem: "", reboque: reboque, reservas: reservas, reserva: reserva})
+                res.render('cliente/editar-reserva', {user: clienteNome(req, res), mensagem: "", reboque: reboque, reservas: reservas, reserva: reserva, idReserva: idReserva})
             } else {
                 res.render('erro', {mensagem: "Erro ao mostrar reboque."})
             }

@@ -208,7 +208,7 @@ class DAOReserva {
     // GETONE
     static async getOne(id) {
         try {
-            console.log('ID -->', id);
+            // console.log('ID -->', id);
             let reserva = await Reserva.findByPk(id, {include: [{model: Cliente}, {model: Reboque}, {model: Pagamento}]})
             return reserva
         }
@@ -303,27 +303,38 @@ class DAOReserva {
     // RELATORIO ATIVAS POR ID
     static async getAtivasPorID(reboquePlaca) {
         try {
-            const currentDate = new Date()
+            const currentDate = new Date();
+    
             const reservas = await Reserva.findAll({
                 where: {
+                    reboquePlaca: reboquePlaca,
                     [Op.or]: [
                         { dataSaida: { [Op.gte]: currentDate } },
                         { dataChegada: { [Op.gte]: currentDate } }
                     ],
-                    reboquePlaca: reboquePlaca,
+                    [Op.or]: [
+                        { situacao: 'APROVADO' },
+                        { situacao: 'ANDAMENTO' }
+                    ]
                 },
-                order: ['id'],
-                include: [{ model: Reboque }, { model: Cliente }, {model: Pagamento}]
-            })
-            // testando saida
-            // console.log('Reservas encontradas:', reservas.map(reserva => reserva.toJSON()));
-            return reservas
-        }
-        catch (error) {
-            console.log(error.toString())
-            return undefined
+                order: [['id', 'ASC']],
+                include: [
+                    { model: Reboque }, 
+                    { model: Cliente }, 
+                    { 
+                        model: Pagamento, 
+                        as: 'pagamento'  // Definindo um alias para evitar ambiguidade
+                    }
+                ]
+            });
+    
+            return reservas;
+        } catch (error) {
+            console.log(error.toString());
+            return undefined;
         }
     }
+    
 
 
 

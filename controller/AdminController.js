@@ -88,10 +88,10 @@ routerAdmin.get('/admin/cadastro', autorizacao, (req, res) => {
 
 
 routerAdmin.post('/admin/cadastro/salvar', autorizacao, (req, res) => {
-    let {nome, email, senha} = req.body,
+    let {nome, email, senha, cpf} = req.body,
         salt = bcrypt.genSaltSync(10)
     senha = bcrypt.hashSync(senha, salt)
-    if(DAOAdmin.insert(nome, email, senha)){
+    if(DAOAdmin.insert(nome, email, senha, cpf)){
         res.redirect('/admin/painel')
     } else {
         res.render('erro', {mensagem: "Erro ao tentar incluir usuário."})

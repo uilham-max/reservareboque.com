@@ -10,7 +10,7 @@
 # Onde parei:
 
 * Criar campo 'cancelada' na tabela 'reserva'. Reservas não devem ser excluídas, mas sim canceladas. (cancelamento  lógico, não físico)
-* STATUS RESERVA, CONCLUIDA, CANCELADA, ANDAMENTO, AGUARDANDO_PAGAMENTO, ADIADA
+* STATUS RESERVA, APROVADO, CONCLUIDO, CANCELADO, ANDAMENTO, AGUARDANDO_PAGAMENTO, ADIADO (neste caso a data nao expira e o cliente pode escolher a nova data em qualquer momento)
 * IMPLEMENTAR RECUPERAÇÃO DE SENHA
 * Implementar taxa de cancelamento no estorno de pagamento.
 

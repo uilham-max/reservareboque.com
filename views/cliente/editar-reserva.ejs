@@ -65,6 +65,7 @@
 
                             <input type="hidden" name="diarias" value="<%=reserva.diarias%>" >
                             <input type="hidden" name="dataInicioAntiga" value="<%=reserva.dataSaida%>" >
+                            <input type="hidden" name="dataFimAntiga" value="<%=reserva.dataChegada%>" >
                             <input type="hidden" name="reboquePlaca" value="<%=reboque.placa%>" >
                             <input type="hidden" name="idReserva" value="<%=reserva.id%>" >
                             <br><input class="btn btn-primary" id="botao" type="submit" value="Finalizar">
@@ -87,16 +88,20 @@
                             <div class="alert alert-info">
                                 <h5 class="card-text">Indisponível para estas datas</h5>
                                 <% reservas.forEach(function(reserva) { %>
-                                    <p>
-                                        de <%=reserva.dataSaida.toString().slice(8,10)+'/'+reserva.dataSaida.toString().slice(5,7)+'/'+reserva.dataSaida.toString().slice(0,4)%> 
-                                        à  <%=reserva.dataChegada.toString().slice(8,10)+'/'+reserva.dataChegada.toString().slice(5,7)+'/'+reserva.dataChegada.toString().slice(0,4)%>
-                                    </p>
+
+                                    <!-- Ignora a reserva a ser alterada -->
+                                    <% if(reserva.id !== idReserva){ %>
+                                        <p>
+                                            de <%=reserva.dataSaida.toString().slice(8,10)+'/'+reserva.dataSaida.toString().slice(5,7)+'/'+reserva.dataSaida.toString().slice(0,4)%> 
+                                            à  <%=reserva.dataChegada.toString().slice(8,10)+'/'+reserva.dataChegada.toString().slice(5,7)+'/'+reserva.dataChegada.toString().slice(0,4)%>
+                                        </p>
+                                    <% } %>
     
                                 <%})%>
                             </div>
                         <% } %>  
                     </div>
-                </divc>
+                </div>
 
             </div>
         </div>

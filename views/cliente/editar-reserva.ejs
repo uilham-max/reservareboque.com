@@ -38,7 +38,7 @@
                         <form class="needs-validation" novalidate action="/cliente/editarDataReserva" method="POST">
                             <h5>Alterar Período</h5>
                             <hr>
-                            
+
                             <div class="input-group mb-3">
                                 <span class="input-group-text" >Data de Retirada</span>
                                 <input class="form-control" id="dataInicio" type="date" name="dataInicioNova" required>
@@ -68,7 +68,12 @@
                             <input type="hidden" name="dataFimAntiga" value="<%=reserva.dataChegada%>" >
                             <input type="hidden" name="reboquePlaca" value="<%=reboque.placa%>" >
                             <input type="hidden" name="idReserva" value="<%=reserva.id%>" >
-                            <br><input class="btn btn-primary" id="botao" type="submit" value="Finalizar">
+
+                            <div class="d-md-flex justify-content-center" style="margin: 0.5rem;">
+                                <button style="margin: 0.3rem;" class="btn btn-secondary" type="button" onclick="history.back()">Voltar</button>
+                                <input style="margin: 0.3rem;" class="btn btn-primary" id="botao" type="submit" value="Finalizar">
+
+                            </div>
                             
                             
                             <% if(mensagem){%>
@@ -86,16 +91,13 @@
                     <div class="card card-body">
                         <% if(reservas != '') {%>
                             <div class="alert alert-info">
-                                <h5 class="card-text">Indisponível para estas datas</h5>
+                                <h5 class="card-text">Reservas deste reboque</h5>
                                 <% reservas.forEach(function(reserva) { %>
 
                                     <!-- Ignora a reserva a ser alterada -->
-                                    <% if(reserva.id !== idReserva){ %>
                                         <p>
-                                            de <%=reserva.dataSaida.toString().slice(8,10)+'/'+reserva.dataSaida.toString().slice(5,7)+'/'+reserva.dataSaida.toString().slice(0,4)%> 
-                                            à  <%=reserva.dataChegada.toString().slice(8,10)+'/'+reserva.dataChegada.toString().slice(5,7)+'/'+reserva.dataChegada.toString().slice(0,4)%>
+                                            <h6><b>Período: </b> de <span id="dataSaida"></span> à <span id="dataChegada"></span></h6>
                                         </p>
-                                    <% } %>
     
                                 <%})%>
                             </div>
@@ -106,6 +108,24 @@
             </div>
         </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', ()=>{
+            // Função para formatar data no formato DD/MM/YYYY
+            function formatDate(date) {
+                const data = new Date(date);
+                return data.toLocaleDateString('pt-BR');
+            }
+
+            // Formatando as datas
+            const dataSaidaFormatada = formatDate('<%= reserva.dataSaida %>');
+            const dataChegadaFormatada = formatDate('<%= reserva.dataChegada %>');
+
+            // Inserindo as datas no HTML
+            document.getElementById('dataSaida').innerText = dataSaidaFormatada;
+            document.getElementById('dataChegada').innerText = dataChegadaFormatada;
+        })
+    </script>
 
     <%-include('../partials/footer.ejs')%>
 </body>

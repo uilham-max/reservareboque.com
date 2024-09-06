@@ -163,6 +163,7 @@ class DAOReserva {
         }
     }
 
+
     // Recupera as reservas de um cliente
     static async getMinhasReservas(cpf){
         try {
@@ -174,8 +175,9 @@ class DAOReserva {
                         { dataChegada: { [Op.gte]: currentDate } }
                     ],
                     clienteCpf: cpf,
+                    situacao: 'APROVADO'
                 },
-                order: ['id'],
+                order: [['dataSaida', 'ASC']],
                 include: [{ model: Reboque }, { model: Cliente }, {model: Pagamento}]
             })
             // testando saida

@@ -9,95 +9,145 @@ const DAOReserva = require('../database/DAOReserva')
 const DAOReboque = require('../database/DAOReboque')
 const moment = require('moment-timezone')
 
+// CANCELAMENTO DE RESERVA PELO CLIENTE
+routerCliente.get('/cliente/reserva/adiar/:idReserva?', clienteAutorizacao, async (req, res) => {
 
-// RECURSO PARA ALTERAR A DATA DE UMA RESERVA PELO CLIENTE
+    console.log("Executando adiamento de reserva...");
+
+    let clienteCpf
+    if(req.session.cliente && req.session.cliente.cpf){
+        clienteCpf = req.session.cliente.cpf
+    }
+
+    // Pega a data atual
+    let dataAtual =  moment.tz( new Date(), 'America/Sao_Paulo' )
+
+    // Formata a data de saida da reserva ( necessário para realizar o cálculo )
+    let dataSaida = moment(req.params.dataSaida)
+
+    // Calcula a diferença entre a datas d saída e atual ( horas )
+    var horasRestantes = dataSaida.diff(dataAtual, 'hours')
+
+    let reservas
+
+    // Não será possível cancelar a reserva se houver menos de 24h para a retirada
+    if( horasRestantes < 48 || (dataSaida.format("YYYY-MM-DD") == dataAtual.format("YYYY-MM-DD"))) {
+        reservas = await DAOReserva.getMinhasReservas(clienteCpf)
+        console.error("Não foi possível cancelar a reserva!");
+        res.render('cliente/minhas-reservas', {user: clienteNome(req, res), reservas: reservas, mensagem: "Sua reserva não pode ser cancelada. Faltam menos de 24 horas para retirada."})
+    } else {
+        console.log('Estornando o pagamento...');
+        await estornoPagamento(req.params.codigoPagamento, req.params.valor)
+        // O MESMO QUE REMOVER A RESERVA (DELETE ON CASCADE)
+        console.log('Cancelando a reserva...');
+        // await DAOPagamento.removePeloCodigoPagamento(req.params.codigoPagamento)
+        console.log(req.params.codigoPagamento, "coidgoPagamento");
+
+        await DAOPagamento.atualizaSituacaoParaCancelado(req.params.codigoPagamento)
+        let codigoPagamento = await DAOPagamento.recuperaPeloCodigoPagamento(req.params.codigoPagamento)
+        await DAOReserva.atualizaSituacaoParaCancelada(codigoPagamento)
+
+        reservas = await DAOReserva.getMinhasReservas(clienteCpf)
+        
+        if(reservas == ''){
+            res.render('cliente/minhas-reservas', {user: clienteNome(req, res), reservas: reservas, mensagem: "Sua lista de reservas está vazia."})
+        }
+        res.render('cliente/minhas-reservas', {user: clienteNome(req, res), reservas: reservas, mensagem: ''})
+    }
+    
+})
+
+
+// ENDPOINT PARA ALTERAR A DATA DE UMA RESERVA PELO CLIENTE
 routerCliente.post('/cliente/editarDataReserva', clienteAutorizacao, async (req, res) => {
+    try {
+        let { idReserva, reboquePlaca, dataInicioAntiga, dataFimAntiga, dataInicioNova, dataFimNova, diarias } = req.body;
 
-    let {idReserva, reboquePlaca, dataInicioAntiga, dataFimAntiga, dataInicioNova, dataFimNova, diarias} = req.body;
+        console.log("Iniciando uma alteração de data para a reserva:", idReserva);
+        console.log("Período antigo:", dataInicioAntiga, "-", dataFimAntiga);
+        console.log("Período novo:", dataInicioNova, "-", dataFimNova);
 
-    console.log("Iniciando uma alteração de data para a reserva:____", idReserva);
-    console.log("Período antido:____________________________________", dataInicioAntiga, "-", dataFimAntiga);
-    console.log("Período novo:______________________________________", dataInicioNova, "-", dataFimNova);
+        // CALCULA PERÍODO EM HORAS DA RESERVA ANTIGA
+        let horasPeriodoAntigo = diarias * 24;
 
-    // CALCULA PERIODO EM HORAS DA RESERVA ANTIGA
-    let horasPeriodoAntigo = diarias*24
+        // RECUPERAR A HORA ATUAL DO PEDIDO
+        let dataAtual = moment.tz(new Date(), 'America/Sao_Paulo');
 
-    // RECUPERAR A HORA ATUAL DO PEDIDO
-    let dataAtual = moment.tz(new Date(), 'America/Sao_Paulo');
+        // PARSE PARA OBJETO MOMENT.TZ E CONVERTE PARA UTC
+        dataInicioAntiga = moment.tz(dataInicioAntiga, 'America/Sao_Paulo').utc();
+        dataFimAntiga = moment.tz(dataFimAntiga, 'America/Sao_Paulo').utc();
+        dataInicioNova = moment.tz(dataInicioNova, 'America/Sao_Paulo').utc();
+        dataFimNova = moment.tz(dataFimNova, 'America/Sao_Paulo').utc();
+        
+        // CALCULAR O PERÍODO EM HORAS DA NOVA RESERVA
+        let horasPeriodoNovo = dataFimNova.diff(dataInicioNova, 'hours');
+        
+        // CALCULAR DIFERENÇA EM HORAS DA DATA ATUAL E DATA SOLICITADA PARA A NOVA RESERVA
+        let diferencaEmHorasPrazo = dataInicioAntiga.diff(dataAtual, 'hours');
+        
+        // O PRAZO DEVE SER MAIOR QUE 48 HORAS PARA FAZER A ALTERAÇÃO
+        if (diferencaEmHorasPrazo < 48) {
+            console.log("Tentativa de alteração de data da reserva negada. Menos de 48h.");
+            return res.render('erro', { mensagem: 'Erro. Faltam menos de 48h para a retirada' });
+        }
+        
+        // O PERÍODO NÃO PODE SER MAIOR QUE O ORIGINAL
+        if (horasPeriodoAntigo !== horasPeriodoNovo) {
+            console.log("Tentativa de alteração de data da reserva negada. Período diferente.");
+            return res.render('erro', { mensagem: 'Erro. O período deve ser o mesmo' });
+        }
 
-    // PARSE PARA OBJETO MOMENT.TZ
-    dataInicioAntiga = moment.tz(dataInicioAntiga, 'America/Sao_Paulo'); 
-    
-    // CALCULAR O PERIODO EM HORAS DA NOVA RESERVA
-    dataInicioNova = moment.tz(dataInicioNova, 'America/Sao_Paulo')
-    dataFimNova = moment.tz(dataFimNova, 'America/Sao_Paulo')
-    let horasPeriodoNovo = dataFimNova.diff(dataInicioNova, 'hours')
-    
-    // CALCULAR DIFERENÇA EM HORAS DA DATA ATUAL E DATA SOLICITADA PARA A NOVA RESERVA
-    let diferencaEmHorasPrazo = dataInicioAntiga.diff(dataAtual, 'hours');
-    
-    // O PRAZO DEVE SER MAIOR QUE 48 HORAS PARA FAZER A ALTERAÇÃO
-    if(diferencaEmHorasPrazo < 48){
-        console.log("Tentativa de alteração de data da reserva negada. Menos de 48h.");
-        return res.render('erro', {mensagem: 'Erro. Faltam menos de 48h para retirada'});
-    }
-    
-    // O PERIODO NÃO PODE SER MAIOR QUE O ORIGINAL
-    if(horasPeriodoAntigo != horasPeriodoNovo){
-        console.log("Tentativa de alteração de data da reserva negada. Período diferente.");
-        return res.render('erro', {mensagem: 'Erro. O período deve ser o mesmo'});
-    }
+        // FORMATA AS DATAS PARA STRING
+        dataInicioNova = dataInicioNova.format('YYYY-MM-DDTHH:mm:ss[Z]');
+        dataFimNova = dataFimNova.format('YYYY-MM-DDTHH:mm:ss[Z]');
+        
+        // VERIFICA DISPONIBILIDADE
+        let reservas = await DAOReserva.getVerificaDisponibilidade(reboquePlaca, dataInicioNova, dataFimNova); 
 
-    // FORMATA AS DATAS PRA STRING
-    dataInicioNova = dataInicioNova.format('YYYY-MM-DD')
-    dataFimNova = dataFimNova.format('YYYY-MM-DD')
-    
-    
-    // VERIFICA DISPONIBILIDADE
-    let reservas = await DAOReserva.getVerificaDisponibilidade(reboquePlaca, dataInicioNova, dataFimNova); 
+        // ENCONTROU UMA OU DUAS RESERVAS DENTRO DO PERÍODO ESCOLHIDO PELO CLIENTE
+        if (reservas.length !== 0) {
+            let autorizado = false;
 
-    // O PROPRIETÁRIO DA RESERVA PODE ALTERAR UMA DATA DENTRO DO SEU PERIODO
-    let autorizacao = false
-    if(reservas.length !== 0){
-        // PERCORRE PELAS RESERVAS 
-        reservas.forEach(reserva => {
-            // AUTORIZA AO CLIENTE CRIAR UMA RESERVA NOVA DENTRO DO MESMO PERIODO DA RESERVA ANTIGA
-            if(idReserva === reserva.dataValues.id){
-                console.log("Alteração autorizada para nova data.");
-                autorizacao = true
+            reservas.forEach(reserva => {
+                if (idReserva === reserva.dataValues.id) {
+                    console.log("Alteração autorizada para nova data.");
+                    autorizado = true;
+                }
+            });
+
+            if (!autorizado) {
+                console.log("Alteração não autorizada.");
+                return res.render('erro', { mensagem: 'Não foi possível alterar a data. Erro ao verificar disponibilidade' }); 
             }
-        });
-    }
+        }
 
-    if(!autorizacao){
-        console.log("Alteração não autorizada.");
-        return res.render('erro', {mensagem: 'Não foi possível alterar a data. Erro ao verificar disponibilidade'}); 
-    }
+        // ACESSA O BANCO DE DADOS PARA REALIZAR A ALTERAÇÃO DAS DATAS
+        let resposta = await DAOReserva.alterarDataReserva(idReserva, dataInicioNova, dataFimNova); 
+        if (!resposta) {
+            return res.render('erro', { mensagem: 'Erro ao alterar a data da reserva' });
+        }
+        console.log("Data da reserva alterada com sucesso.");
 
-    // ACESSA O BANCO DE DADOS PARA REALIZAR A ALTERAÇÃO DAS DATAS
-    let resposta = await DAOReserva.alterarDataReserva(idReserva, dataInicioNova, dataFimNova); 
-    if(!resposta){
-        return res.render('erro', {mensagem: 'Erro ao alterar a data da reserva'});
+        // RETORNA A RESERVA ALTERADA AO CLIENTE
+        let reserva = await DAOReserva.getOne(idReserva); 
+        res.render('cliente/reserva-detalhe', { user: clienteNome(req, res), mensagem: '', reserva: reserva });
+    } catch (error) {
+        console.error("Erro ao alterar a data da reserva:", error);
+        res.render('erro', { mensagem: 'Erro interno. Por favor, tente novamente mais tarde' });
     }
-    console.log("Data da reserva alterada com sucesso.");
-    
-    // RETORNA A RESERVA ALTERADA AO CLIENTE
-    let reserva = await DAOReserva.getOne(idReserva); 
-    res.render('cliente/reserva-detalhe', {user: clienteNome(req, res), mensagem: '', reserva: reserva});
-
-   
 });
 
 
-
+// SUJESTÃO: '/cliente/reserva/detalhe'
 routerCliente.get('/cliente/reserva-detalhe/:reservaId?', clienteAutorizacao, async (req, res) => {
     
     let reserva = await DAOReserva.getOne(req.params.reservaId)
+    console.log(reserva.dataValues.dataSaida);
     res.render('cliente/reserva-detalhe', {user: clienteNome(req, res), mensagem: '', reserva: reserva})
 
 })
 
-
+// SUJESTÃO: '/cliente/reserva/edita'
 routerCliente.get('/cliente/editar-reserva/:idReserva', clienteAutorizacao,  async (req, res) => {
     
     let idReserva = req.params.idReserva
@@ -126,7 +176,7 @@ routerCliente.get('/cliente/editar-reserva/:idReserva', clienteAutorizacao,  asy
 })
 
 
-
+// SUJESTÃO: '/cliente/reserva/concluida'
 routerCliente.get('/cliente/minhas-locacoes', clienteAutorizacao, async (req, res) => {
     let clienteCpf
     if(req.session.cliente && req.session.cliente.cpf){
@@ -141,7 +191,7 @@ routerCliente.get('/cliente/minhas-locacoes', clienteAutorizacao, async (req, re
 })
 
 
-
+// SUJESTÃO: '/cliente/reserva/lista'
 routerCliente.get('/cliente/minhas-reservas', clienteAutorizacao, async (req, res) => {
     let clienteCpf
     if(req.session.cliente && req.session.cliente.cpf){
@@ -202,7 +252,7 @@ routerCliente.get('/cliente/existe/:cpf?', (req, res) => {
 } )
 
 
-
+// SUJESTÃO: '/cliente/cadastro'
 routerCliente.post('/cadastro/create', async (req, res) => {
 
     let {nome, email, senha, senhaRepita, cpf, telefone, dataNascimento, cep, 

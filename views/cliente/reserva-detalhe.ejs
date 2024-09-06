@@ -1,76 +1,91 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <%-include('../partials/header.ejs')%>
+    <%- include('../partials/header.ejs') %>
     <script src="/js/validaInputDataPeriodo.js" ></script>
 </head>
-<body  >
-    
-    <%-include('../partials/navbar.ejs')%>
+<body>
+    <%- include('../partials/navbar.ejs') %>
 
-    <div class="conteudo" >
+    <div class="conteudo">
 
-        <!-- Menssagem do topo da página em jumbotron -->
+        <!-- Mensagem do topo da página em jumbotron -->
         <div class="jumbotron jumbotron-fluid">
-            <h1 class="display-4" >Detalhes da Reserva</h1>
+            <h1 class="display-4">Detalhes da Reserva</h1>
             <p class="lead">Clientes cadastrados podem ver seu histórico de locações, gerenciar suas reservas e receber
                 descontos.</p>
         </div>
 
-
-        <div class="container" >
+        <div class="container">
             <form class="needs-validation" novalidate action="/reserva/dados-confirma" method="POST">
                 <div class="lista-reboques">
 
                     <div class="card card-reserva" style="width: 25rem;">
-                        <img src="../../<%=reserva.reboque.foto%>" class="card-img-top" alt="...">
+                        <img src="../../<%= reserva.reboque.foto %>" class="card-img-top" alt="...">
                         <div class="card-body">
-                            <h5 class="card-text"><%=reserva.reboque.descricao%></h5>
+                            <h5 class="card-text"><%= reserva.reboque.descricao %></h5>
                             <hr>
-                            <h5><b>Tipo de Reboque: </b><%=reserva.reboque.modelo%></h5>
-                            <h5><b>Valor da Diária: </b>R$ <%=reserva.reboque.valorDiaria%>,00</h5>
+                            <h5><b>Tipo de Reboque: </b><%= reserva.reboque.modelo %></h5>
+                            <h5><b>Valor da Diária: </b>R$ <%= reserva.reboque.valorDiaria %>,00</h5>
                         </div>
                     </div>
 
                     <div class="card card-reserva" style="width: 25rem;">
                         <div class="card-body">
-                            <h5 class="card-title"> <b>Informaçãoes</b></h5>
+                            <h5 class="card-title"> <b>Informações</b></h5>
                             <hr>
-                            <!-- <h5><b>Placa : </b><%=reserva.reboque.placa%></h5> -->
-                            <h5><b>Valor Pago na Diária: </b>R$ <%=((reserva.valorDiaria).toFixed(2)).replace('.',',')%></h5>
-                            <h5><b>Data da Retirada: </b><%=reserva.dataSaida.toString().slice(8,10)+'/'+reserva.dataSaida.toString().slice(5,7)+'/'+reserva.dataSaida.toString().slice(0,4)%></h5>
-                            <h5><b>Data da Entrega: </b><%=reserva.dataChegada.toString().slice(8,10)+'/'+reserva.dataChegada.toString().slice(5,7)+'/'+reserva.dataChegada.toString().slice(0,4)%></h5>
-                            <h5><b>Quantidade de Dias: </b><%=reserva.diarias%> dia(s)</h5>
-                            <h5><b>Valor Total da Reserva: </b>R$ <%=((reserva.valorDiaria*reserva.diarias).toFixed(2)).replace('.',',')%></h5>
-                            <% if(reserva.pagamento.aprovado == true) { %>
+                            <h5><b>Valor Pago na Diária: </b>R$ <%= ((reserva.valorDiaria).toFixed(2)).replace('.', ',') %></h5>
+
+                            <!-- Formatação da data no front-end com toLocaleDateString -->
+                            <script>
+                                document.addEventListener('DOMContentLoaded', ()=>{
+                                    // Função para formatar data no formato DD/MM/YYYY
+                                    function formatDate(date) {
+                                        const data = new Date(date);
+                                        return data.toLocaleDateString('pt-BR');
+                                    }
+
+                                    // Formatando as datas
+                                    const dataSaidaFormatada = formatDate('<%= reserva.dataSaida %>');
+                                    const dataChegadaFormatada = formatDate('<%= reserva.dataChegada %>');
+
+                                    // Inserindo as datas no HTML
+                                    document.getElementById('dataSaida').innerText = dataSaidaFormatada;
+                                    document.getElementById('dataChegada').innerText = dataChegadaFormatada;
+                                })
+                            </script>
+
+                            <h5><b>Data da Retirada: </b><span id="dataSaida"></span></h5>
+                            <h5><b>Data da Entrega: </b><span id="dataChegada"></span></h5>
+                            <h5><b>Quantidade de Dias: </b><%= reserva.diarias %> dia(s)</h5>
+                            <h5><b>Valor Total da Reserva: </b>R$ <%= ((reserva.valorDiaria * reserva.diarias).toFixed(2)).replace('.', ',') %></h5>
+                            <% if (reserva.pagamento.aprovado) { %>
                             <h5><b>Status do Pagamento: </b>Aprovado</h5>
                             <% } else { %>
                             <h5><b>Status do Pagamento: </b>Pendente</h5>
                             <% } %>
 
-                            <% if(mensagem){%>
-                                <div class="alert alert-danger">
-                                    <strong>Atenção!</strong>
-                                    <%= mensagem %>
-                                </div>
+                            <% if (mensagem) { %>
+                            <div class="alert alert-danger">
+                                <strong>Atenção!</strong> <%= mensagem %>
+                            </div>
                             <% } %>
                         </div>
 
-    
                         <div class="d-md-flex justify-content-center" style="margin: 0.5rem;">
                             <button style="margin: 0.3rem;" class="btn btn-secondary" type="button" onclick="history.back()">Voltar</button>
-                            <a style="margin: 0.3rem;" class="btn btn-primary" href="/cliente/editar-reserva/<%=reserva.id%>" >Alterar reserva</a>
-                            <a style="margin: 0.3rem;" class="btn btn-danger" onclick="return confirm('Confirma o cancelamento?')"  href="/reserva/remover/<%=reserva.pagamento.codigoPagamento%>/<%=reserva.pagamento.valor%>/<%=reserva.dataSaida%>">Cancelar reserva</a>
-                            
+                            <% if(reserva.situacao == 'APROVADO' || reserva.situacao == 'ADIADO') {%>
+                                <a style="margin: 0.3rem;" class="btn btn-primary" href="/cliente/editar-reserva/<%= reserva.id %>">Alterar período</a>
+                                <a style="margin: 0.3rem;" class="btn btn-danger" onclick="return confirm('Está reserva será adiada para quando você quiser usar')" href="/cliente/reserva/adiar/<%=reserva.id%>">Adiar reserva</a>
+                            <% } %>
                         </div>
-
                     </div>
                 </div>
-                <input type="hidden" name="reboquePlaca" value="<%=reserva.reboque.placa%>" >
+                <input type="hidden" name="reboquePlaca" value="<%= reserva.reboque.placa %>">
             </form>
         </div>
     </div>
 
-    <%-include('../partials/footer.ejs')%>
+    <%- include('../partials/footer.ejs') %>
 </body>
 </html>

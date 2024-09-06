@@ -16,15 +16,14 @@
 
 # Versão 1
 
-1. Implementar alteração de data de retirada pelo cliente.
+5. Uma reserva não pode ser alterada, caso o status esteja ANDAMENTO ou CONCLUÍDA
 2. Implementar botão na área admin para informar a SAÍDA e a CHEGADA do reboque.
     21. Implementar o botão na área de admin para informar que o cliente ja entregou o reboque. 
 3. Criar recurso para INATIVAR um reboque (CASO DE MANUTENÇÃO). 
     31. Listar apenas reboques DISPONÍVEIS e ATIVOS. 
 4. IMPLEMENTAR RECUPERAÇÃO DE SENHA
-5. Uma reserva não pode ser alterada, caso o status esteja ANDAMENTO ou CONCLUÍDA
-6. Quando o cliente entregar o reboque, não deve permitir o cliente alterar a reserva na painel através do botão EDITAR. 
-7. Inabilitar o botão editar e o botao cancelar. Permanecer ativo somente o botão voltar.
+8. Criar pasta routes
+9. Padronizar nomes dos endpoints conforme convenção
 
 # Versão 2
 

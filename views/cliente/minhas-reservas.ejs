@@ -31,6 +31,7 @@
                                 </div>
                                 <h3 class="display-4">Lista de Reservas</h3>
                                 <br>
+                                
                                 <div class="table-responsive">
                                     <table class="table table-striped" >
                                         <thead>
@@ -42,10 +43,27 @@
                                         </thead>
                                         <tbody>
                                             <% reservas.forEach(function(reserva){%>
+                                                <script>
+                                                    document.addEventListener('DOMContentLoaded', ()=>{
+                                                        // Função para formatar data no formato DD/MM/YYYY
+                                                        function formatDate(date) {
+                                                            const data = new Date(date);
+                                                            return data.toLocaleDateString('pt-BR');
+                                                        }
+                                    
+                                                        // Formatando as datas
+                                                        const dataSaidaFormatada = formatDate('<%= reserva.dataSaida %>');
+                                                        const dataChegadaFormatada = formatDate('<%= reserva.dataChegada %>');
+                                    
+                                                        // Inserindo as datas no HTML
+                                                        document.getElementById('dataSaida').innerText = dataSaidaFormatada;
+                                                        document.getElementById('dataChegada').innerText = dataChegadaFormatada;
+                                                    })
+                                                </script>
                                                 <tr>
                                                     <td><%=reserva.reboque.placa%></td>
-                                                    <td><%=reserva.dataSaida.toString().slice(8,10)+'/'+reserva.dataSaida.toString().slice(5,7)+'/'+reserva.dataSaida.toString().slice(0,4)%></td>
-                                                    <td><%=reserva.dataChegada.toString().slice(8,10)+'/'+reserva.dataChegada.toString().slice(5,7)+'/'+reserva.dataChegada.toString().slice(0,4)%></td>
+                                                    <td><span id="dataSaida"></span></td>
+                                                    <td><span id="dataChegada"></span></td>
                                                     <td><a href="/cliente/reserva-detalhe/<%=reserva.id%>" class="btn btn-primary">Detalhes</a></td>
                                                    </tr>
                                             <%})%>
@@ -58,6 +76,8 @@
                 </div>
             </div>
 
+
+            
 
         
             

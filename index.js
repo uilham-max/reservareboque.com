@@ -33,17 +33,23 @@ app.use(AdminController)
 app.use(IndexController)
 app.use(pagamentoController)
 
+let hoje = new Date();
+console.log("hoje (UTC): ", hoje.toISOString()); // formato UTC
+console.log("hoje (Local): ", hoje.toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' })); // formato no horário de Brasília
+console.log(moment.tz(hoje, 'America/Sao_Paulo'));
+console.log(hoje);
+
 // TESTENDO MOMENT.TZ
-let hoje = moment.tz(new Date(), 'America/Sao_Paulo')
-let inicio = moment.tz(new Date(), 'America/Sao_Paulo')
-let fim = moment.tz(new Date(), 'America/Sao_Paulo')
-let dia = moment.tz(new Date(), 'America/Sao_Paulo')
+// let hoje = moment.tz(new Date(), 'America/Sao_Paulo')
+// let inicio = moment.tz(new Date(), 'America/Sao_Paulo')
+// let fim = moment.tz(new Date(), 'America/Sao_Paulo')
+// let dia = moment.tz(new Date(), 'America/Sao_Paulo')
 
-inicio.add(10,'days')
-fim.add(12,'days')
-dia.add(11, 'days')
+// inicio.add(10,'days')
+// fim.add(12,'days')
+// dia.add(11, 'days')
 
-console.log("hoje:", hoje);
+// console.log("hoje:", hoje);
 // console.log("inicio:", inicio);
 // console.log("fim:", fim);
 // console.log("dia:", dia);

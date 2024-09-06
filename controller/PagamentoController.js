@@ -37,7 +37,10 @@ routerPagamento.post('/pagamento/qrcode', async (req, res) => {
     let {nome, cpf, telefone, email, cep, logradouro, complemento, 
     localidade, numeroDaCasa, reboquePlaca, dataInicio, dataFim, formaPagamento} = req.body
 
-    
+    // Formata as datas para a hora local
+    dataInicio = moment.tz(dataInicio, 'America/Sao_Paulo').utc()
+    dataFim = moment.tz(dataFim, 'America/Sao_Paulo').utc()
+
     // Criar um identificador único para o formulário
     const formIdentifier = `${reboquePlaca}-${dataInicio}-${dataFim}`;
 

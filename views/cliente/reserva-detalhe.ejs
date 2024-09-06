@@ -37,26 +37,9 @@
                             <h5><b>Valor Pago na Diária: </b>R$ <%= ((reserva.valorDiaria).toFixed(2)).replace('.', ',') %></h5>
 
                             <!-- Formatação da data no front-end com toLocaleDateString -->
-                            <script>
-                                document.addEventListener('DOMContentLoaded', ()=>{
-                                    // Função para formatar data no formato DD/MM/YYYY
-                                    function formatDate(date) {
-                                        const data = new Date(date);
-                                        return data.toLocaleDateString('pt-BR');
-                                    }
 
-                                    // Formatando as datas
-                                    const dataSaidaFormatada = formatDate('<%= reserva.dataSaida %>');
-                                    const dataChegadaFormatada = formatDate('<%= reserva.dataChegada %>');
-
-                                    // Inserindo as datas no HTML
-                                    document.getElementById('dataSaida').innerText = dataSaidaFormatada;
-                                    document.getElementById('dataChegada').innerText = dataChegadaFormatada;
-                                })
-                            </script>
-
-                            <h5><b>Data da Retirada: </b><span id="dataSaida"></span></h5>
-                            <h5><b>Data da Entrega: </b><span id="dataChegada"></span></h5>
+                            <h5><b>Data da Retirada: </b><span id="dataSaida"><%= new Date(reserva.dataSaida).toLocaleDateString('pt-BR') %></span></h5>
+                            <h5><b>Data da Entrega: </b><span id="dataChegada"><%= new Date(reserva.dataChegada).toLocaleDateString('pt-BR') %></span></h5>
                             <h5><b>Quantidade de Dias: </b><%= reserva.diarias %> dia(s)</h5>
                             <h5><b>Valor Total da Reserva: </b>R$ <%= ((reserva.valorDiaria * reserva.diarias).toFixed(2)).replace('.', ',') %></h5>
                             <% if (reserva.pagamento.aprovado) { %>

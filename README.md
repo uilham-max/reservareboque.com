@@ -24,6 +24,8 @@
 4. IMPLEMENTAR RECUPERAÇÃO DE SENHA
 8. Criar pasta routes
 9. Padronizar nomes dos endpoints conforme convenção
+10. Se uma reserva está com situação = 'AGUARDANDO_PAGAMENTO' alguém pode sobrescrever essa reserva?
+
 
 # Versão 2
 

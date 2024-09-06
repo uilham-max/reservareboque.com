@@ -32,8 +32,9 @@ routerAdmin.get('/admin/painel', autorizacao, async (req, res) => {
 
             // ITERA PELAS RESERVAS DE CADA REBOQUE
             for (let j = 0; j < reservas.length; j++) {
-                let dataInicio = parseInt(reservas[j].dataValues.dataSaida.slice(8, 10));
-                let dataFim = parseInt(reservas[j].dataValues.dataChegada.slice(8, 10));
+
+                let dataInicio = parseInt(reservas[j].dataValues.dataSaida.getDate());
+                let dataFim = parseInt(reservas[j].dataValues.dataChegada.getDate());
                 let maxDay = dataAtual.daysInMonth();
                 let valorDiaria = (reservas[j].pagamento.valor / reservas[j].dataValues.diarias).toFixed(2);
 

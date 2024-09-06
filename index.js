@@ -33,11 +33,11 @@ app.use(AdminController)
 app.use(IndexController)
 app.use(pagamentoController)
 
-let hoje = new Date();
-console.log("hoje (UTC): ", hoje.toISOString()); // formato UTC
-console.log("hoje (Local): ", hoje.toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' })); // formato no horário de Brasília
-console.log(moment.tz(hoje, 'America/Sao_Paulo'));
-console.log(hoje);
+// let hoje = new Date();
+// console.log("hoje (UTC): ", hoje.toISOString()); // formato UTC
+// console.log("hoje (Local): ", hoje.toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' })); // formato no horário de Brasília
+// console.log(moment.tz(hoje, 'America/Sao_Paulo'));
+// console.log(hoje);
 
 // TESTENDO MOMENT.TZ
 // let hoje = moment.tz(new Date(), 'America/Sao_Paulo')

@@ -96,7 +96,7 @@
 
                                     <!-- Ignora a reserva a ser alterada -->
                                         <p>
-                                            <h6><b>Período: </b> de <span id="dataSaida"></span> à <span id="dataChegada"></span></h6>
+                                            <h6><b>Período: </b> de <span id="dataSaida"><%= new Date(reserva.dataSaida).toLocaleDateString('pt-BR') %></span> à <span id="dataChegada"><%= new Date(reserva.dataChegada).toLocaleDateString('pt-BR') %></span></h6>
                                         </p>
     
                                 <%})%>
@@ -108,24 +108,6 @@
             </div>
         </div>
     </div>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', ()=>{
-            // Função para formatar data no formato DD/MM/YYYY
-            function formatDate(date) {
-                const data = new Date(date);
-                return data.toLocaleDateString('pt-BR');
-            }
-
-            // Formatando as datas
-            const dataSaidaFormatada = formatDate('<%= reserva.dataSaida %>');
-            const dataChegadaFormatada = formatDate('<%= reserva.dataChegada %>');
-
-            // Inserindo as datas no HTML
-            document.getElementById('dataSaida').innerText = dataSaidaFormatada;
-            document.getElementById('dataChegada').innerText = dataChegadaFormatada;
-        })
-    </script>
 
     <%-include('../partials/footer.ejs')%>
 </body>

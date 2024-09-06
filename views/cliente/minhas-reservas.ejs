@@ -5,22 +5,9 @@
 </head>
 <body>
     <%-include('../partials/navbar.ejs')%>
-    <div class="conteudo" >
+    <div class="conteudo">
 
-        <div class="container-responsive" >
-            
-            <!-- <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                <a class="btn btn-primary me-md-2" href="/">Voltar</a>
-            </div>
-            <br> -->
-
-            <!-- <div class="d-flex justify-content-start">
-                <h3 class="display-4">Reservas</h3>
-            </div>
-            <br> -->
-
-
-
+        <div class="container-responsive">
             <div class="conteudo">
                 <div class="container">
                     <div class="lista-reboques">
@@ -33,7 +20,7 @@
                                 <br>
                                 
                                 <div class="table-responsive">
-                                    <table class="table table-striped" >
+                                    <table class="table table-striped">
                                         <thead>
                                             <tr>
                                                 <th>Reboque</th>
@@ -42,31 +29,14 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <% reservas.forEach(function(reserva){%>
-                                                <script>
-                                                    document.addEventListener('DOMContentLoaded', ()=>{
-                                                        // Função para formatar data no formato DD/MM/YYYY
-                                                        function formatDate(date) {
-                                                            const data = new Date(date);
-                                                            return data.toLocaleDateString('pt-BR');
-                                                        }
-                                    
-                                                        // Formatando as datas
-                                                        const dataSaidaFormatada = formatDate('<%= reserva.dataSaida %>');
-                                                        const dataChegadaFormatada = formatDate('<%= reserva.dataChegada %>');
-                                    
-                                                        // Inserindo as datas no HTML
-                                                        document.getElementById('dataSaida').innerText = dataSaidaFormatada;
-                                                        document.getElementById('dataChegada').innerText = dataChegadaFormatada;
-                                                    })
-                                                </script>
+                                            <% reservas.forEach(function(reserva) { %>
                                                 <tr>
-                                                    <td><%=reserva.reboque.placa%></td>
-                                                    <td><span id="dataSaida"></span></td>
-                                                    <td><span id="dataChegada"></span></td>
-                                                    <td><a href="/cliente/reserva-detalhe/<%=reserva.id%>" class="btn btn-primary">Detalhes</a></td>
-                                                   </tr>
-                                            <%})%>
+                                                    <td><%= reserva.reboque.placa %></td>
+                                                    <td><span id="dataSaida"><%= new Date(reserva.dataSaida).toLocaleDateString('pt-BR') %></span></td>
+                                                    <td><span id="dataChegada"><%= new Date(reserva.dataChegada).toLocaleDateString('pt-BR') %></span></td>
+                                                    <td><a href="/cliente/reserva-detalhe/<%= reserva.id %>" class="btn btn-primary">Detalhes</a></td>
+                                                </tr>
+                                            <% }) %>
                                         </tbody>
                                     </table>
                                 </div>
@@ -76,22 +46,14 @@
                 </div>
             </div>
 
-
-            
-
-        
-            
-
-            <% if(mensagem != ''){ %>
+            <% if(mensagem != '') { %>
                 <div class="alert alert-danger">
                     <strong><%= mensagem %></strong> 
                 </div>
             <% } %>
-
         </div>
     </div>
 
     <%-include('../partials/footer'); %>
-
 </body>
 </html>

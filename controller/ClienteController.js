@@ -46,7 +46,7 @@ routerCliente.get('/cliente/reserva/adiar/:idReserva?', clienteAutorizacao, asyn
         await DAOPagamento.atualizaSituacaoParaCancelado(req.params.codigoPagamento)
         let codigoPagamento = await DAOPagamento.recuperaPeloCodigoPagamento(req.params.codigoPagamento)
         await DAOReserva.atualizaSituacaoParaCancelada(codigoPagamento)
-
+ 
         reservas = await DAOReserva.getMinhasReservas(clienteCpf)
         
         if(reservas == ''){

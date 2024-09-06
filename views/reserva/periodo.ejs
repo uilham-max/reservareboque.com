@@ -111,8 +111,7 @@
                                     <h5 class="card-text">Indisponível para estas datas</h5>
                                     <% reservas.forEach(function(reserva) { %>
                                     <p>
-                                        de <%=reserva.dataSaida.toString().slice(8,10)+'/'+reserva.dataSaida.toString().slice(5,7)+'/'+reserva.dataSaida.toString().slice(0,4)%> 
-                                        à  <%=reserva.dataChegada.toString().slice(8,10)+'/'+reserva.dataChegada.toString().slice(5,7)+'/'+reserva.dataChegada.toString().slice(0,4)%>
+                                        <h6><b>Período: </b> de <span id="dataSaida"><%= new Date(reserva.dataSaida).toLocaleDateString('pt-BR') %></span> à <span id="dataChegada"><%= new Date(reserva.dataChegada).toLocaleDateString('pt-BR') %></span></h6>
                                         <%if(reserva.pagamento.aprovado == false) {%>
                                         | Pagamento pendente
                                         <% } %>

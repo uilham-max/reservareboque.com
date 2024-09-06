@@ -13,80 +13,81 @@ const moment = require('moment-timezone')
 
 
 // REMOVER RESERVA ADMIN
-routerReserva.get('/admin/reserva/remover/:codigoPagamento?/:valor?', autorizacao, async (req, res) => {
+// routerReserva.get('/admin/reserva/remover/:codigoPagamento?/:valor?', autorizacao, async (req, res) => {
 
-    // console.log(req.params.codigoPagamento, "coidgoPagamento");
+//     // console.log(req.params.codigoPagamento, "coidgoPagamento");
 
-    console.log("Removendo a reserva...");
-    console.log('Estornando o pagamento...');
-    await estornoPagamento(req.params.codigoPagamento, req.params.valor)
-    // O MESMO QUE REMOVER A RESERVA (DELETE ON CASCADE)
-    console.log('Cancelando a reserva...');
-    // await DAOPagamento.removePeloCodigoPagamento(req.params.codigoPagamento)
-    await DAOPagamento.atualizaSituacaoParaCancelado(req.params.codigoPagamento)
-    // await DAOReserva.atualizaSituacaoParaCancelada()
+//     console.log("Removendo a reserva...");
+//     console.log('Estornando o pagamento...');
+//     await estornoPagamento(req.params.codigoPagamento, req.params.valor)
+//     // O MESMO QUE REMOVER A RESERVA (DELETE ON CASCADE)
+//     console.log('Cancelando a reserva...');
+//     // await DAOPagamento.removePeloCodigoPagamento(req.params.codigoPagamento)
+//     await DAOPagamento.atualizaSituacaoParaCancelado(req.params.codigoPagamento)
+//     // await DAOReserva.atualizaSituacaoParaCancelada()
 
-    let reservas = await DAOReserva.getAtivas()
+//     let reservas = await DAOReserva.getAtivas()
     
-    if(reservas == ''){
-        res.render('reserva/reserva', {user: adminNome(req, res), reservas: reservas, mensagem: "A lista de reservas está vazia."})
-    }
-    res.render('reserva/reserva', {user: adminNome(req, res), reservas: reservas, mensagem: ''})
+//     if(reservas == ''){
+//         res.render('reserva/reserva', {user: adminNome(req, res), reservas: reservas, mensagem: "A lista de reservas está vazia."})
+//     }
+//     res.render('reserva/reserva', {user: adminNome(req, res), reservas: reservas, mensagem: ''})
     
-})
+// })
 
 
 // CANCELAMENTO DE RESERVA PELO CLIENTE
-routerReserva.get('/reserva/remover/:codigoPagamento?/:valor?/:dataSaida?', clienteAutorizacao, async (req, res) => {
+// routerReserva.get('/reserva/remover/:codigoPagamento?/:valor?/:dataSaida?', clienteAutorizacao, async (req, res) => {
 
-    console.log("Executando o cancelamento da reserva...");
+//     console.log("Executando o cancelamento da reserva...");
 
-    let clienteCpf
-    if(req.session.cliente && req.session.cliente.cpf){
-        clienteCpf = req.session.cliente.cpf
-    }
+//     let clienteCpf
+//     if(req.session.cliente && req.session.cliente.cpf){
+//         clienteCpf = req.session.cliente.cpf
+//     }
 
-    // Pega a data atual
-    let dataAtual =  moment.tz( new Date(), 'America/Sao_Paulo' )
+//     // Pega a data atual
+//     let dataAtual =  moment.tz( new Date(), 'America/Sao_Paulo' )
 
-    // Formata a data de saida da reserva ( necessário para realizar o cálculo )
-    let dataSaida = moment(req.params.dataSaida)
+//     // Formata a data de saida da reserva ( necessário para realizar o cálculo )
+//     let dataSaida = moment(req.params.dataSaida)
 
-    // Calcula a diferença entre a datas d saída e atual ( horas )
-    var horasRestantes = dataSaida.diff(dataAtual, 'hours')
+//     // Calcula a diferença entre a datas d saída e atual ( horas )
+//     var horasRestantes = dataSaida.diff(dataAtual, 'hours')
 
-    let reservas
+//     let reservas
 
-    // Não será possível cancelar a reserva se houver menos de 24h para a retirada
-    if( horasRestantes < 48 || (dataSaida.format("YYYY-MM-DD") == dataAtual.format("YYYY-MM-DD"))) {
-        reservas = await DAOReserva.getMinhasReservas(clienteCpf)
-        console.error("Não foi possível cancelar a reserva!");
-        res.render('cliente/minhas-reservas', {user: clienteNome(req, res), reservas: reservas, mensagem: "Sua reserva não pode ser cancelada. Faltam menos de 24 horas para retirada."})
-    } else {
-        console.log('Estornando o pagamento...');
-        await estornoPagamento(req.params.codigoPagamento, req.params.valor)
-        // O MESMO QUE REMOVER A RESERVA (DELETE ON CASCADE)
-        console.log('Cancelando a reserva...');
-        // await DAOPagamento.removePeloCodigoPagamento(req.params.codigoPagamento)
-        console.log(req.params.codigoPagamento, "coidgoPagamento");
+//     // Não será possível cancelar a reserva se houver menos de 24h para a retirada
+//     if( horasRestantes < 48 || (dataSaida.format("YYYY-MM-DD") == dataAtual.format("YYYY-MM-DD"))) {
+//         reservas = await DAOReserva.getMinhasReservas(clienteCpf)
+//         console.error("Não foi possível cancelar a reserva!");
+//         res.render('cliente/minhas-reservas', {user: clienteNome(req, res), reservas: reservas, mensagem: "Sua reserva não pode ser cancelada. Faltam menos de 24 horas para retirada."})
+//     } else {
+//         console.log('Estornando o pagamento...');
+//         await estornoPagamento(req.params.codigoPagamento, req.params.valor)
+//         // O MESMO QUE REMOVER A RESERVA (DELETE ON CASCADE)
+//         console.log('Cancelando a reserva...');
+//         // await DAOPagamento.removePeloCodigoPagamento(req.params.codigoPagamento)
+//         console.log(req.params.codigoPagamento, "coidgoPagamento");
 
-        await DAOPagamento.atualizaSituacaoParaCancelado(req.params.codigoPagamento)
-        let codigoPagamento = await DAOPagamento.recuperaPeloCodigoPagamento(req.params.codigoPagamento)
-        await DAOReserva.atualizaSituacaoParaCancelada(codigoPagamento)
+//         await DAOPagamento.atualizaSituacaoParaCancelado(req.params.codigoPagamento)
+//         let codigoPagamento = await DAOPagamento.recuperaPeloCodigoPagamento(req.params.codigoPagamento)
+//         await DAOReserva.atualizaSituacaoParaCancelada(codigoPagamento)
 
-        reservas = await DAOReserva.getMinhasReservas(clienteCpf)
+//         reservas = await DAOReserva.getMinhasReservas(clienteCpf)
         
-        if(reservas == ''){
-            res.render('cliente/minhas-reservas', {user: clienteNome(req, res), reservas: reservas, mensagem: "Sua lista de reservas está vazia."})
-        }
-        res.render('cliente/minhas-reservas', {user: clienteNome(req, res), reservas: reservas, mensagem: ''})
-    }
+//         if(reservas == ''){
+//             res.render('cliente/minhas-reservas', {user: clienteNome(req, res), reservas: reservas, mensagem: "Sua lista de reservas está vazia."})
+//         }
+//         res.render('cliente/minhas-reservas', {user: clienteNome(req, res), reservas: reservas, mensagem: ''})
+//     }
     
-})
+// })
 
 
 
 // PERÍODO
+
 routerReserva.get('/reserva/periodo/:reboquePlaca?', (req, res) => {
     let reboquePlaca = req.params.reboquePlaca
     DAOReserva.getAtivasPorID(reboquePlaca).then(reservas => {
@@ -101,7 +102,7 @@ routerReserva.get('/reserva/periodo/:reboquePlaca?', (req, res) => {
 })
 
 
-// INFORMAR DADOS
+// INFORMAR DADOS - CLIENTES NÃO CADASTRADOS
 routerReserva.post('/reserva/dados-informa', (req, res) => {
     let {reboquePlaca, dataInicio, dataFim} =  req.body
 
@@ -131,7 +132,7 @@ routerReserva.post('/reserva/dados-informa', (req, res) => {
 
 
 
-// ROTA PUBLICA
+// ROTA PUBLICA - QUALQUER CLIENTE?
 routerReserva.post('/reserva/dados-confirma', async (req, res) => {
     
     let {nome, cpf, telefone, email, cep, logradouro, complemento, localidade,

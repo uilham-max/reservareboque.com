@@ -28,6 +28,7 @@
 14. Testar datas com consultas diretas no BD para testar os ranges
 15. IMPLEMENTAR RECUPERAÇÃO DE SENHA
 16. Definir situação para CANCELADO reservas com o prazo para pagamento expirado
+17. Mesmo que o cliente seja cadastrado, mas se ele não estiver logado a reserva não deve aparecer nos registros dele.
 
 
 # Versão 2

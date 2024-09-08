@@ -102,8 +102,8 @@ routerReserva.get('/reserva/periodo/:reboquePlaca?', (req, res) => {
 })
 
 
-// INFORMAR DADOS - CLIENTES NÃO CADASTRADOS
-routerReserva.post('/reserva/dados-informa', (req, res) => {
+// FORMULÁRIO PARA CLIENTES NÃO CADASTRADOS
+routerReserva.post('/reserva/formulario', (req, res) => {
     let {reboquePlaca, dataInicio, dataFim} =  req.body
 
     if(dataInicio > dataFim){
@@ -117,7 +117,7 @@ routerReserva.post('/reserva/dados-informa', (req, res) => {
                 let dias = Diaria.calcularDiarias(dataInicio, dataFim)
                 let valorTotalDaReserva = Diaria.calcularValorTotalDaReserva(dias, reboque.valorDiaria)
                 let valorTotalDaReservaComDesconto = Diaria.aplicarDescontoNaDiariaParaCliente(valorTotalDaReserva, dias)
-                res.render('reserva/dados-informa', {user: clienteNome(req, res), dias: dias, reboque: reboque, dataInicio: dataInicio, dataFim: dataFim, valorTotalDaReserva: valorTotalDaReserva,  valorTotalDaReservaComDesconto: valorTotalDaReservaComDesconto,})
+                res.render('reserva/formulario', {user: clienteNome(req, res), dias: dias, reboque: reboque, dataInicio: dataInicio, dataFim: dataFim, valorTotalDaReserva: valorTotalDaReserva,  valorTotalDaReservaComDesconto: valorTotalDaReservaComDesconto,})
 
             } else {
                 
@@ -132,14 +132,14 @@ routerReserva.post('/reserva/dados-informa', (req, res) => {
 
 
 
-// ROTA PUBLICA - QUALQUER CLIENTE?
-routerReserva.post('/reserva/dados-confirma', async (req, res) => {
+// TELA DE CONFIRMAÇÃO DA RESERVA
+routerReserva.post('/reserva/confirmar', async (req, res) => {
     
     let {nome, cpf, telefone, email, cep, logradouro, complemento, localidade,
     numeroDaCasa, reboquePlaca, horaInicio, horaFim, dataInicio, dataFim, formaPagamento} = req.body
 
   
-    // Monta da data de inicio com a hora
+    // Injeta a hora na data de inicio
     dataInicio = moment.tz(dataInicio, 'America/Sao_Paulo').set({
         hour: horaInicio,
         minute: 0,
@@ -148,7 +148,7 @@ routerReserva.post('/reserva/dados-confirma', async (req, res) => {
     });
     dataInicio = dataInicio.format()
 
-    // Monta a data de fim com a hora
+    // Injeta a hora na data de fim
     dataFim = moment.tz(dataFim, 'America/Sao_Paulo').set({
         hour: horaFim,
         minute: 0,
@@ -241,7 +241,7 @@ routerReserva.post('/reserva/dados-confirma', async (req, res) => {
      * Finalmente o servidor retorna a página de confirmação dos dados com os objetos criados
     */
 
-    res.render('reserva/dados-confirma', 
+    res.render('reserva/confirmar', 
         {user: clienteNome(req, res), reboque: reboque, cliente: cliente, reserva: reserva, mensagem: '' 
     })
 

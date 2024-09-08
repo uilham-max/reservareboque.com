@@ -24,9 +24,9 @@
             <!-- <h3>Reboque escolhido</h3> -->
             
              <% if(user == '') {%>
-            <form class="needs-validation" novalidate action="/reserva/dados-informa" method="POST">
+            <form class="needs-validation" novalidate action="/reserva/formulario" method="POST">
             <% } else {%>
-            <form class="needs-validation" novalidate action="/reserva/dados-confirma" method="POST">
+            <form class="needs-validation" novalidate action="/reserva/confirmar" method="POST">
             <% } %>
             
                 <div class="lista-reboques">
@@ -156,8 +156,8 @@
                                     <table class="table table-striped">
                                         <thead>
                                             <tr>
-                                                <th>Início</th>
-                                                <th>Fim</th>
+                                                <th>Início/Hora</th>
+                                                <th>Fim/Hora</th>
                                                 <th>Situação</th>
                                             </tr>
                                         </thead>
@@ -165,8 +165,10 @@
 
                                             <% reservas.forEach(function(reserva) { %>
                                                 <tr>
-                                                    <td><%= new Date(reserva.dataSaida).toLocaleDateString('pt-BR').slice(0, 5) %></td>
-                                                    <td><%= new Date(reserva.dataChegada).toLocaleDateString('pt-BR').slice(0, 5) %></td>
+                                                    <td><%= new Date(reserva.dataSaida).toLocaleDateString('pt-BR').slice(0, 5) %> 
+                                                        <%= new Date(reserva.dataSaida).toString().slice(16,21) %></td>
+                                                    <td><%= new Date(reserva.dataChegada).toLocaleDateString('pt-BR').slice(0, 5) %>
+                                                        <%= new Date(reserva.dataChegada).toString().slice(16,21) %></td>
                                                     <td><%= reserva.situacao.slice(0, 10)%></td>
 
                                                 </tr>

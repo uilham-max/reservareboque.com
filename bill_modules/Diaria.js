@@ -31,7 +31,8 @@ class Diaria {
 	static calcularValorTotalDaReserva(quantidadeDeDias, valorDaDiaria){
 		let valor = quantidadeDeDias*valorDaDiaria
 		if(valor > 600){
-			valor = 600
+			valor = valor // Nova
+			// valor = 600 // Antiga
 		}
 		return valor
 	}
@@ -44,9 +45,9 @@ class Diaria {
 		} else {
 			valor =+ valor * 0.80
 		} 
-		if(valor > 500){
-			valor = 500
-		}
+		// if(valor > 500){
+		// 	valor = 500
+		// }
 		return valor
 	}
 }

@@ -44,16 +44,22 @@ routerPagamento.post('/pagamento/qrcode', async (req, res) => {
     // Criar um identificador único para o formulário
     const formIdentifier = `${reboquePlaca}-${dataInicio}-${dataFim}`;
 
+    /**
+     * Verifica se não foi criada uma cobrança para essa reserva.
+    */
+
     // Verificar se o formulário já foi enviado com base no identificador
     if (req.session.submittedForms && req.session.submittedForms.includes(formIdentifier)) {
         console.log("O formulário está duplicado. Envio cancelado!");
         return res.render('erro', { mensagem: 'Erro. Formulário duplicado!' });
     }
     
+    // Remove caracteres não numéricos para inserir no banco de dados
     cpf = cpf.replace(/\D/g, '')
     telefone = telefone.replace(/\D/g, '')
     cep = cep.replace(/\D/g, '')
 
+    // Inicializa o valor da diária com 0
     let valorDiaria = 0
 
     // BUSCAR REBOQUE NO BD
@@ -63,33 +69,41 @@ routerPagamento.post('/pagamento/qrcode', async (req, res) => {
         return
     }
     
-    // CALCULA VALORES E APLICA DESCONTOS
+    /**
+     * Calcula o valos da diária com desconto para clientes com ou sem cadastro
+    */
+
     let dias = Diaria.calcularDiarias(dataInicio, dataFim)
     let valorTotalDaReserva = Diaria.calcularValorTotalDaReserva(dias, reboque.valorDiaria)
     let valorTotalDaReservaComDesconto = Diaria.aplicarDescontoNaDiariaParaCliente(valorTotalDaReserva, dias)
     
+    /**
+     * Se o cliente estiver cadastrado e logado, será calculado o desconto nas diarias
+     * O cliente que está fazendo a reserva será registrado no banco de dados com status registrado = false
+    */
 
-    // CLIENTE COM LOGIN?
     let cliente = {}
     if(req.session.cliente){
+        // O cliente está logado!
         cliente = await DAOCliente.getOne(req.session.cliente.cpf)
         if(!cliente){
             res.render('erro', {mensagem: "Erro ao buscar cliente"})
             return
         }
+        // Aplica o desconto na reserva
         valorDiaria = valorTotalDaReservaComDesconto/dias
         valorTotalDaReserva = valorTotalDaReservaComDesconto
     } else {
-        // PROCURA CLIENTE
+        // O cliente não está logado!
         cliente = await DAOCliente.verificaSeClienteExiste(cpf)
-        if(!cliente){
-            // INSERT CLIENTE 
+        if(!cliente){ 
             cliente = await DAOCliente.insertClienteQueNaoQuerSeCadastrar(nome, cpf, telefone, email, cep, logradouro, complemento, localidade, numeroDaCasa)
             if(!cliente){
                 res.render('erro', {mensagem: 'erro ao criar cliente'})
                 return
             }  
         }
+        // A diaria não recebe desconto
         valorDiaria = reboque.valorDiaria
     }
 
@@ -100,10 +114,7 @@ routerPagamento.post('/pagamento/qrcode', async (req, res) => {
         let data_vencimento = moment.tz( new Date(), 'America/Sao_Paulo' )
         data_vencimento = data_vencimento.format('YYYY-MM-DD')
 
-        /**
-         * Verificar se não foi criada uma cobrança para essa reserva.
-         * Não pode haver mais de uma cobrança para uma reserva.
-        */
+       
 
         retorno = await criarCobranca(cliente.cpf, cliente.nome, telefone, email, valorTotalDaReserva, data_vencimento, dataInicio, dataFim, reboque.placa, formaPagamento)
     }catch(error){
@@ -162,6 +173,8 @@ routerPagamento.post('/pagamento/qrcode', async (req, res) => {
 
 
 // WEB SERVICE - ESCUTA O WEBHOOK --- ATUALIZA PAGAMENTO PARA APROVADO --- API PIX RECEBIDO
+
+
 routerPagamento.post('/pagamento/webhook/pix', async (req, res) => {
     try{ 
         let codigoPagamento = req.body.payment.id

@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <%- include('../partials/header.ejs') %>
+    <%- include('../../partials/header.ejs') %>
     <script src="/js/validaInputDataPeriodo.js" ></script>
 </head>
 <body>
-    <%- include('../partials/navbar.ejs') %>
+    <%- include('../../partials/navbar.ejs') %>
 
     <div class="conteudo">
 
@@ -21,7 +21,7 @@
                 <div class="lista-reboques">
 
                     <div class="card card-reserva" style="width: 25rem;">
-                        <img src="../../<%= reserva.reboque.foto %>" class="card-img-top" alt="...">
+                        <img src="../../../<%= reserva.reboque.foto %>" class="card-img-top" alt="...">
                         <div class="card-body">
                             <h5 class="card-text"><%= reserva.reboque.descricao %></h5>
                             <hr>
@@ -58,7 +58,7 @@
                         <div class="d-md-flex justify-content-center" style="margin: 0.5rem;">
                             <button style="margin: 0.3rem;" class="btn btn-secondary" type="button" onclick="history.back()">Voltar</button>
                             <% if(reserva.situacao == 'APROVADO' || reserva.situacao == 'ADIADO') {%>
-                                <a style="margin: 0.3rem;" class="btn btn-primary" href="/cliente/editar-reserva/<%= reserva.id %>">Alterar período</a>
+                                <a style="margin: 0.3rem;" class="btn btn-primary" href="/cliente/reserva/editar/<%= reserva.id %>">Alterar período</a>
                                 <a style="margin: 0.3rem;" class="btn btn-danger" onclick="return confirm('Está reserva será adiada para quando você quiser usar')" href="/cliente/reserva/adiar/<%=reserva.id%>">Adiar reserva</a>
                             <% } %>
                         </div>
@@ -69,6 +69,6 @@
         </div>
     </div>
 
-    <%- include('../partials/footer.ejs') %>
+    <%- include('../../partials/footer.ejs') %>
 </body>
 </html>

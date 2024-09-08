@@ -61,7 +61,7 @@ const moment = require('moment-timezone')
 //     if( horasRestantes < 48 || (dataSaida.format("YYYY-MM-DD") == dataAtual.format("YYYY-MM-DD"))) {
 //         reservas = await DAOReserva.getMinhasReservas(clienteCpf)
 //         console.error("Não foi possível cancelar a reserva!");
-//         res.render('cliente/minhas-reservas', {user: clienteNome(req, res), reservas: reservas, mensagem: "Sua reserva não pode ser cancelada. Faltam menos de 24 horas para retirada."})
+//         res.render('cliente/reserva/lista', {user: clienteNome(req, res), reservas: reservas, mensagem: "Sua reserva não pode ser cancelada. Faltam menos de 24 horas para retirada."})
 //     } else {
 //         console.log('Estornando o pagamento...');
 //         await estornoPagamento(req.params.codigoPagamento, req.params.valor)
@@ -77,9 +77,9 @@ const moment = require('moment-timezone')
 //         reservas = await DAOReserva.getMinhasReservas(clienteCpf)
         
 //         if(reservas == ''){
-//             res.render('cliente/minhas-reservas', {user: clienteNome(req, res), reservas: reservas, mensagem: "Sua lista de reservas está vazia."})
+//             res.render('cliente/reserva/lista', {user: clienteNome(req, res), reservas: reservas, mensagem: "Sua lista de reservas está vazia."})
 //         }
-//         res.render('cliente/minhas-reservas', {user: clienteNome(req, res), reservas: reservas, mensagem: ''})
+//         res.render('cliente/reserva/lista', {user: clienteNome(req, res), reservas: reservas, mensagem: ''})
 //     }
     
 // })

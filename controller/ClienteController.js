@@ -34,7 +34,7 @@ routerCliente.get('/cliente/reserva/adiar/:idReserva?', clienteAutorizacao, asyn
     if( horasRestantes < 48 || (dataSaida.format("YYYY-MM-DD") == dataAtual.format("YYYY-MM-DD"))) {
         reservas = await DAOReserva.getMinhasReservas(clienteCpf)
         console.error("Não foi possível cancelar a reserva!");
-        res.render('cliente/minhas-reservas', {user: clienteNome(req, res), reservas: reservas, mensagem: "Sua reserva não pode ser cancelada. Faltam menos de 24 horas para retirada."})
+        res.render('cliente/reserva/lista', {user: clienteNome(req, res), reservas: reservas, mensagem: "Sua reserva não pode ser cancelada. Faltam menos de 24 horas para retirada."})
     } else {
         console.log('Estornando o pagamento...');
         await estornoPagamento(req.params.codigoPagamento, req.params.valor)
@@ -50,9 +50,9 @@ routerCliente.get('/cliente/reserva/adiar/:idReserva?', clienteAutorizacao, asyn
         reservas = await DAOReserva.getMinhasReservas(clienteCpf)
         
         if(reservas == ''){
-            res.render('cliente/minhas-reservas', {user: clienteNome(req, res), reservas: reservas, mensagem: "Sua lista de reservas está vazia."})
+            res.render('cliente/reserva/lista', {user: clienteNome(req, res), reservas: reservas, mensagem: "Sua lista de reservas está vazia."})
         }
-        res.render('cliente/minhas-reservas', {user: clienteNome(req, res), reservas: reservas, mensagem: ''})
+        res.render('cliente/reserva/lista', {user: clienteNome(req, res), reservas: reservas, mensagem: ''})
     }
     
 })
@@ -130,7 +130,7 @@ routerCliente.post('/cliente/editarDataReserva', clienteAutorizacao, async (req,
 
         // RETORNA A RESERVA ALTERADA AO CLIENTE
         let reserva = await DAOReserva.getOne(idReserva); 
-        res.render('cliente/reserva-detalhe', { user: clienteNome(req, res), mensagem: '', reserva: reserva });
+        res.render('cliente/reserva/detalhe', { user: clienteNome(req, res), mensagem: '', reserva: reserva });
     } catch (error) {
         console.error("Erro ao alterar a data da reserva:", error);
         res.render('erro', { mensagem: 'Erro interno. Por favor, tente novamente mais tarde' });
@@ -139,16 +139,16 @@ routerCliente.post('/cliente/editarDataReserva', clienteAutorizacao, async (req,
 
 
 // SUJESTÃO: '/cliente/reserva/detalhe'
-routerCliente.get('/cliente/reserva-detalhe/:reservaId?', clienteAutorizacao, async (req, res) => {
+routerCliente.get('/cliente/reserva/detalhe/:reservaId?', clienteAutorizacao, async (req, res) => {
     
     let reserva = await DAOReserva.getOne(req.params.reservaId)
     console.log(reserva.dataValues.dataSaida);
-    res.render('cliente/reserva-detalhe', {user: clienteNome(req, res), mensagem: '', reserva: reserva})
+    res.render('cliente/reserva/detalhe', {user: clienteNome(req, res), mensagem: '', reserva: reserva})
 
 })
 
 // SUJESTÃO: '/cliente/reserva/edita'
-routerCliente.get('/cliente/editar-reserva/:idReserva', clienteAutorizacao,  async (req, res) => {
+routerCliente.get('/cliente/reserva/editar/:idReserva', clienteAutorizacao,  async (req, res) => {
     
     let idReserva = req.params.idReserva
 
@@ -167,7 +167,7 @@ routerCliente.get('/cliente/editar-reserva/:idReserva', clienteAutorizacao,  asy
     DAOReserva.getAtivasPorID(reboquePlaca).then(reservas => {
         DAOReboque.getOne(reboquePlaca).then(reboque => {
             if(reboque){
-                res.render('cliente/editar-reserva', {user: clienteNome(req, res), mensagem: "", reboque: reboque, reservas: reservas, reserva: reserva, idReserva: idReserva})
+                res.render('cliente/reserva/editar', {user: clienteNome(req, res), mensagem: "", reboque: reboque, reservas: reservas, reserva: reserva, idReserva: idReserva})
             } else {
                 res.render('erro', {mensagem: "Erro ao mostrar reboque."})
             }
@@ -177,7 +177,7 @@ routerCliente.get('/cliente/editar-reserva/:idReserva', clienteAutorizacao,  asy
 
 
 // SUJESTÃO: '/cliente/reserva/concluida'
-routerCliente.get('/cliente/minhas-locacoes', clienteAutorizacao, async (req, res) => {
+routerCliente.get('/cliente/reserva/concluido', clienteAutorizacao, async (req, res) => {
     let clienteCpf
     if(req.session.cliente && req.session.cliente.cpf){
         clienteCpf = req.session.cliente.cpf
@@ -187,21 +187,21 @@ routerCliente.get('/cliente/minhas-locacoes', clienteAutorizacao, async (req, re
     if(!locacoes){
         res.render('erro', {mensagem: "Erro ao obter locações."})
     }
-    res.render('cliente/minhas-locacoes', {user: clienteNome(req, res), mensagem: "", locacoes: locacoes})
+    res.render('cliente/reserva/concluido', {user: clienteNome(req, res), mensagem: "", locacoes: locacoes})
 })
 
 
 // SUJESTÃO: '/cliente/reserva/lista'
-routerCliente.get('/cliente/minhas-reservas', clienteAutorizacao, async (req, res) => {
+routerCliente.get('/cliente/reserva/lista', clienteAutorizacao, async (req, res) => {
     let clienteCpf
     if(req.session.cliente && req.session.cliente.cpf){
         clienteCpf = req.session.cliente.cpf
     }
     let reservas = await DAOReserva.getMinhasReservas(clienteCpf)
     if(reservas == ''){
-        res.render('cliente/minhas-reservas', {user: clienteNome(req, res), reservas: reservas, mensagem: "Sua lista de reservas está vazia."})
+        res.render('cliente/reserva/lista', {user: clienteNome(req, res), reservas: reservas, mensagem: "Sua lista de reservas está vazia."})
     }
-    res.render('cliente/minhas-reservas', {user: clienteNome(req, res), reservas: reservas, mensagem: ''})
+    res.render('cliente/reserva/lista', {user: clienteNome(req, res), reservas: reservas, mensagem: ''})
 })
 
 

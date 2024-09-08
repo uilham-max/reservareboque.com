@@ -2,11 +2,29 @@ const moment = require('moment-timezone')
 
 class Diaria {
 	static calcularDiarias(dataInicial, dataFinal) {
-		if(dataInicial == dataFinal){
-			return 1
-		}
+		
 		dataInicial = moment.tz(dataInicial, 'America/Sao_Paulo')
 		dataFinal = moment.tz(dataFinal, 'America/Sao_Paulo')
+
+		/**
+		 * Deve ser realizado um calculo em horas, pois reserva com 1 dia 1/2 devem ser contabilizadas como 2 dias.
+		 * Neste caso se uma reserva for retirada as 13:00 e for entrege no outro dia as 18:00 deve ser contabilizado 2 diarias,
+		 * ou seja, se o periodo em horas for maior que 29 horas, dever ser retornado 2 diarias
+		*/
+		// console.log('Horas da reserva: ',dataFinal.diff(dataInicial, 'hours'));
+		// console.log('Diárias da reserva: ',dataFinal.diff(dataInicial, 'days'));
+
+
+		if(dataFinal.diff(dataInicial, 'days') < 2){
+			if(dataFinal.diff(dataInicial, 'hours') < 24){
+				return 1
+			}
+			if(dataFinal.diff(dataInicial, 'hours') > 27){
+				return 2
+			}
+		}
+		
+
 		return dataFinal.diff(dataInicial, 'days')
 	}
 

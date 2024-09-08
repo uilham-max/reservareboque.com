@@ -71,12 +71,14 @@
 
                             <div class="input-group mb-3">
                                 <span class="input-group-text" >Data de Retirada</span>
-                                <input class="form-control" id="dataInicio_input" type="text" name="dataInicio_input" value="<%=reserva.dataInicio.toString().slice(8,10)+'/'+reserva.dataInicio.toString().slice(5,7)+'/'+reserva.dataInicio.toString().slice(0,4)%>" disabled>
+                                <input class="form-control" id="dataInicio_input" type="text" name="dataInicio_input" 
+                                value="<%=reserva.dataInicio.toString().slice(8,10)+'/'+reserva.dataInicio.toString().slice(5,7)+'/'+reserva.dataInicio.toString().slice(0,4)%><%=' - ' + reserva.horaInicio + ':00Hs'%>" disabled>
                             </div>
                             
                             <div class="input-group mb-3">
                                 <span class="input-group-text" >Data de Entrega</span>
-                                <input class="form-control" id="dataFim_input" type="text" name="dataFim_input" value="<%=reserva.dataFim.toString().slice(8,10)+'/'+reserva.dataFim.toString().slice(5,7)+'/'+reserva.dataFim.toString().slice(0,4)%>" disabled>
+                                <input class="form-control" id="dataFim_input" type="text" name="dataFim_input" 
+                                value="<%=reserva.dataFim.toString().slice(8,10)+'/'+reserva.dataFim.toString().slice(5,7)+'/'+reserva.dataFim.toString().slice(0,4)%><%=' - ' + reserva.horaFim + ':00Hs'%>" disabled>
                             </div>
 
                             <div class="input-group mb-3">

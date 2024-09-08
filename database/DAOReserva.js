@@ -168,6 +168,7 @@ class DAOReserva {
     static async getMinhasReservas(cpf){
         try {
             const currentDate = new Date()
+            console.log('Teste de data em getMinhasReserva():', currentDate);
             const reservas = await Reserva.findAll({
                 where: {
                     [Op.or]: [
@@ -282,6 +283,8 @@ class DAOReserva {
     static async getAtivas() {
         try {
             const currentDate = new Date()
+            console.log('Teste de data em getAtivas():', currentDate);
+
             const reservas = await Reserva.findAll({
                 where: {
                     [Op.or]: [
@@ -305,7 +308,9 @@ class DAOReserva {
     // RELATORIO ATIVAS POR ID
     static async getAtivasPorID(reboquePlaca) {
         try {
-            const currentDate = new Date();
+            // ACHO QUE É O MESMO QUE currenteDate.toISOString() da bib Date()
+            const currentDate = moment.tz(new Date(), 'America/Sao_Paulo').format() ;
+            console.log('Teste de data em getAtivasPorID():', currentDate);
     
             const reservas = await Reserva.findAll({
                 where: {
@@ -316,7 +321,8 @@ class DAOReserva {
                     ],
                     [Op.or]: [
                         { situacao: 'APROVADO' },
-                        { situacao: 'ANDAMENTO' }
+                        { situacao: 'ANDAMENTO' },
+                        { situacao: 'AGUARDANDO_PAGAMENTO'},
                     ]
                 },
                 order: [['id', 'ASC']],
@@ -329,7 +335,7 @@ class DAOReserva {
                     }
                 ]
             });
-    
+            // console.log(reservas);
             return reservas;
         } catch (error) {
             console.log(error.toString());

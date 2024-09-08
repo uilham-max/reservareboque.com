@@ -2,56 +2,83 @@ document.addEventListener('DOMContentLoaded', () => {
 
   var inputDataInicio = document.getElementById('dataInicio')
   var inputDataFim = document.getElementById('dataFim')
-
-  // var dataAtualT = new Date().toISOString().split('T')[0]; // Problema com fuso horario
+  var inputHoraInicio = document.getElementById('horaInicio')
+  var inputHoraFim = document.getElementById('horaFim')
 
   var data = new Date()
+
+  function obterUltimoDiaMesAtual() {
+      let dataAtual = new Date();
+      let ano = dataAtual.getFullYear();
+      let mes = dataAtual.getMonth();
+
+      let ultimoDiaMesAtual = new Date(ano, mes + 1, 0);
+      return ultimoDiaMesAtual.getDate();
+  }
+
+  let ultimoDia = obterUltimoDiaMesAtual();
 
   var ano = data.getFullYear()
   var mes = data.getMonth() + 1
   var dia = data.getDate()
+  var hora = data.getHours()
 
   mes = mes < 10 ? '0' + mes : mes
   dia = dia < 10 ? '0' + dia : dia
 
   var dataAtual = (`${ano}-${mes}-${dia}`)
 
-  inputDataInicio.value = dataAtual
-  inputDataFim.value = inputDataInicio.value
-  inputDataInicio.setAttribute('min', dataAtual); 
-  inputDataFim.setAttribute('min', inputDataInicio.value);
+  function adicionaUmDia(p1){
+      inicio = new Date(p1)
+      inicio.setDate(inicio.getDate()+1)
+      return inicio.toISOString().slice(0, 10)
+  }
 
-  // tratamento do campo data inicio
+  inputDataInicio.value = dataAtual
+  inputDataFim.value = adicionaUmDia(inputDataInicio.value)
+  inputDataInicio.setAttribute('min', dataAtual); 
+  inputDataFim.setAttribute('min', adicionaUmDia(inputDataInicio.value)); // TESTENDO AQUI
+  inputHoraInicio.value = hora
+  inputHoraFim.value = hora
+
+  // Hora de entrega recebe a hora de inicio
+  inputHoraInicio.addEventListener('change', () => {
+      inputHoraFim.value = inputHoraInicio.value
+  })
+
+
+  // DATA INICIO CHANGE
   inputDataInicio.addEventListener('change',()=>{
 
-    // Não deixa o usuario informar uma data menor que a atual 
-    if(inputDataInicio.value < dataAtual){
-      inputDataInicio.value = dataAtual
-    }
+      // Não deixa o usuario informar uma data menor que a atual 
+      if(inputDataInicio.value < dataAtual){
+          inputDataInicio.value = dataAtual
+      }
 
-    // Quando baixar a data de inicio a de fim nao baixa
-    if((inputDataInicio.value > inputDataFim.value)){
-      inputDataFim.value = inputDataInicio.value
-    }
+      // Quando baixar a data de inicio a de fim nao baixa
+      if((inputDataInicio.value > inputDataFim.value)){
+          inputDataFim.value = adicionaUmDia(inputDataInicio.value)
+      }
 
-    // Não funciona no date picker do iphone
-    inputDataFim.setAttribute('min', inputDataInicio.value);
+      // DATA FIM SEMPRE SERÁ O DIA SEGUINTE
+      inputDataFim.setAttribute('min', adicionaUmDia(inputDataInicio.value));
   })
 
 
   // tratamento campo data fim
   inputDataFim.addEventListener('change',()=>{
 
-    // não deixa informar uma data menor que a data atual
-    if(inputDataFim.value < dataAtual){
-      inputDataFim.value = dataAtual
-    }
+      // não deixa informar uma data menor que a data atual
+      if(inputDataFim.value < dataAtual){
+          inputDataFim.value = dataAtual
+      }
 
-    // Se o fim for memor que o inicio e maior que a data atual, então baixa a data de inicio
-    if(inputDataFim.value < inputDataInicio.value && inputDataFim.value >= dataAtual){
-      inputDataInicio.value = inputDataFim.value
-    }
+      // Se o fim for memor que o inicio e maior que a data atual, então baixa a data de inicio
+      if(inputDataFim.value < inputDataInicio.value && inputDataFim.value >= dataAtual){
+          inputDataInicio.value = inputDataFim.value
+      }
   })
+
 
   'use strict'
 
@@ -60,14 +87,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Loop over them and prevent submission
   Array.from(forms).forEach(form => {
-    form.addEventListener('submit', event => {
-      if (!form.checkValidity()) {
-        event.preventDefault()
-        event.stopPropagation()
-      }
+      form.addEventListener('submit', event => {
+          if (!form.checkValidity()) {
+          event.preventDefault()
+          event.stopPropagation()
+          }
 
-      form.classList.add('was-validated')
-    }, false)
+          form.classList.add('was-validated')
+      }, false)
   })
 
 
@@ -82,9 +109,5 @@ document.addEventListener('DOMContentLoaded', () => {
   //     inputDataInicio.classList.remove('is-invalid')
   //   }
   // })
-    
+
 })
-
-
-  
-  

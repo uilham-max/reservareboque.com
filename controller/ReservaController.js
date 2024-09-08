@@ -136,7 +136,31 @@ routerReserva.post('/reserva/dados-informa', (req, res) => {
 routerReserva.post('/reserva/dados-confirma', async (req, res) => {
     
     let {nome, cpf, telefone, email, cep, logradouro, complemento, localidade,
-    numeroDaCasa, reboquePlaca, dataInicio, dataFim, formaPagamento} = req.body
+    numeroDaCasa, reboquePlaca, horaInicio, horaFim, dataInicio, dataFim, formaPagamento} = req.body
+
+  
+    // Monta da data de inicio com a hora
+    dataInicio = moment.tz(dataInicio, 'America/Sao_Paulo').set({
+        hour: horaInicio,
+        minute: 0,
+        second: 0,
+        millisecond: 0
+    });
+    dataInicio = dataInicio.format()
+
+    // Monta a data de fim com a hora
+    dataFim = moment.tz(dataFim, 'America/Sao_Paulo').set({
+        hour: horaFim,
+        minute: 0,
+        second: 0,
+        millisecond: 0
+    });
+    dataFim = dataFim.format()
+
+
+    /**
+     * Este é um tratamento para caso o cliente tente realizar uma reserva dentro de um periodo de indisponibilidade
+    */
 
     let resposta = await DAOReserva.getVerificaDisponibilidade(reboquePlaca, dataInicio, dataFim)
     if(resposta.length > 0){
@@ -146,8 +170,11 @@ routerReserva.post('/reserva/dados-confirma', async (req, res) => {
         return
     }
 
+    /**
+     * Se o cliente que estiver acessando esta rota estiver for cliente e estiver logado, ele será usado para montar 
+     *  o objeto cliente que será usado para criar uma cobrança
+    */
 
-    // CLIENTE LOGADO
     let clienteLogado = {}
     if(req.session.cliente){
         clienteLogado = await DAOCliente.getOne(req.session.cliente.cpf)
@@ -158,8 +185,13 @@ routerReserva.post('/reserva/dados-confirma', async (req, res) => {
         }
     }
 
+    /**
+     * Será montado um objeto cliente com os dados ou do formulario da reserva ou do cliente cadastrado no banco de dados.
+     * Quando um cliente é cadastrado e está logado ele não precisa preencher o formulario da reserva.
+     * Esse objeto é motado para ser enviado para a tela de confirmação dos dados do cliente e da reserva e posteriormente 
+     * serem usados para inserir no banco de dados
+    */
 
-    // Cria o objeto Cliente 
     cliente = {
         'nome': clienteLogado.nome ? clienteLogado.nome : nome, 
         'cpf':clienteLogado.cpf ? clienteLogado.cpf : cpf, 
@@ -172,25 +204,32 @@ routerReserva.post('/reserva/dados-confirma', async (req, res) => {
         'numeroDaCasa':clienteLogado.numero_da_casa ? clienteLogado.numero_da_casa : numeroDaCasa,
     }
 
+    /**
+     * Realiza a busca do reboque que será reservado para que seus dados como valor de cada diaria 
+     * para realizar calculos de descontos
+    */
 
-    // BUSCA REBOQUE POR ID
     let reboque = await DAOReboque.getOne(reboquePlaca)
     if(!reboque){
         res.render('erro', {mensagem: "Erro ao buscar reboque"})
     }
 
 
-    // CALCULA VALORES E APLICA DESCONTOS
+    // CALCULA VALORES E APLICA DESCONTOS PARA CLIENTES CADASTRADOS E LOGADOS
     let dias = Diaria.calcularDiarias(dataInicio, dataFim)
     let valorTotalDaReserva = Diaria.calcularValorTotalDaReserva(dias, reboque.valorDiaria)
     let valorTotalDaReservaComDesconto = Diaria.aplicarDescontoNaDiariaParaCliente(valorTotalDaReserva, dias)
     
-    
-    // Cria o objeto Reserva
+    /**
+     * É montado um objeto reserva com os dados necessario para inserir no banco de dados
+    */
+
     reserva = {
         'reboquePlaca': reboquePlaca,
         'dataInicio': dataInicio,
         'dataFim': dataFim,
+        'horaInicio': horaInicio,
+        'horaFim': horaFim,
         'valorDiaria': req.session.cliente ? reboque.valorDiaria/dias : reboque.valorDiaria, 
         'dias': dias, 
         'valorTotalDaReserva': req.session.cliente ? valorTotalDaReservaComDesconto : valorTotalDaReserva,
@@ -198,6 +237,9 @@ routerReserva.post('/reserva/dados-confirma', async (req, res) => {
         'formaPagamento': formaPagamento,
     }
 
+    /**
+     * Finalmente o servidor retorna a página de confirmação dos dados com os objetos criados
+    */
 
     res.render('reserva/dados-confirma', 
         {user: clienteNome(req, res), reboque: reboque, cliente: cliente, reserva: reserva, mensagem: '' 

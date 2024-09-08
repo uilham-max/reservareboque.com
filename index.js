@@ -33,6 +33,18 @@ app.use(AdminController)
 app.use(IndexController)
 app.use(pagamentoController)
 
+// let inicio = moment.tz(new Date(), 'America/Sao_Paulo')
+// let fim = moment.tz(new Date(), 'America/Sao_Paulo')
+
+// inicio = '2024-09-07T00:00:00-03:00'
+// fim =    '2024-09-08T00:00:00-03:00'
+// console.log(fim.diff(inicio, 'days'));
+
+
+
+
+
+
 // let hoje = new Date();
 // console.log("hoje (UTC): ", hoje.toISOString()); // formato UTC
 // console.log("hoje (Local): ", hoje.toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' })); // formato no horário de Brasília

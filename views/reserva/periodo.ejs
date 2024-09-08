@@ -55,7 +55,7 @@
                                 <% } %>
                                 
                                 <div class="input-group mb-3 mt-5">
-                                    <span class="input-group-text" >Data de Retirada</span>
+                                    <span class="input-group-text" >Data Retirada</span>
                                     <input class="form-control" id="dataInicio" type="date" name="dataInicio" required>
                                     <div class="valid-feedback">
                                         <!-- Looks good! -->
@@ -66,8 +66,30 @@
                                 
                                 </div>
 
+
+
+                                <div class="input-group">
+                                    <span class="input-group-text">Hora Retirada</span>
+                                    <select class="form-select" id="horaInicio" name="horaInicio" required>
+                                      <!-- Gera opções de 00 a 23 -->
+                                      <% for(let i = 8; i < 20; i++) { %>
+                                        <option value="<%= i %>"><%= i.toString().padStart(2, '0')+':00' %></option>
+                                      <% } %>
+                                    </select>
+                                    <div class="valid-feedback">
+                                        <!-- Looks good! -->
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        <span id="invalidHoraInicio" ></span>
+                                    </div>
+                                </div><br>
+                                  
+
+                        
+
+
                                 <div class="input-group mb-3">
-                                    <span class="input-group-text" >Data de Entrega</span>
+                                    <span class="input-group-text" >Data Entrega</span>
                                     <input class="form-control" id="dataFim" type="date" name="dataFim" required>
                                     <div class="valid-feedback">
                                         <!-- Looks good! -->
@@ -75,8 +97,27 @@
                                     <div class="invalid-feedback">
                                         Verifique a data.
                                     </div>
+                                </div>
+
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text">Hora Entrega</span>
+                                    <select class="form-select" id="horaFim" name="horaFim" required>
+                                      <!-- Gera opções de 00 a 23 -->
+                                      <% for(let i = 8; i < 20; i++) { %>
+                                        <option value="<%= i %>"><%= i.toString().padStart(2, '0')+':00' %></option>
+                                      <% } %>
+                                    </select>
+                                    <div class="valid-feedback">
+                                        <!-- Looks good! -->
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        <span id="invalidHoraFim" ></span>
+                                    </div>
                                 </div><br>
 
+                                
+
+                                
                                 <% if(user != ''){ %>
                                 <div class="form-check input-group">
                                     <input class="form-check-input" type="radio" name="formaPagamento" id="formaPagamento" value="PIX" checked>
@@ -106,19 +147,34 @@
                     <% if(reservas != '') {%>
                         <div class="card card-reserva" style="width: 25rem;">
                             <div class="card-body">
-    
-                                <div class="alert alert-info">
-                                    <h5 class="card-text">Indisponível para estas datas</h5>
-                                    <% reservas.forEach(function(reserva) { %>
-                                    <p>
-                                        <h6><b>Período: </b> de <span id="dataSaida"><%= new Date(reserva.dataSaida).toLocaleDateString('pt-BR') %></span> à <span id="dataChegada"><%= new Date(reserva.dataChegada).toLocaleDateString('pt-BR') %></span></h6>
-                                        <%if(reserva.pagamento.aprovado == false) {%>
-                                        | Pagamento pendente
-                                        <% } %>
-                                    </p>
-        
-                                    <%})%>
+
+                                <h5 class="card-text">Reservas deste reboque</h5>
+
+                                <hr>
+
+                                <div class="table-responsive">
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Início</th>
+                                                <th>Fim</th>
+                                                <th>Situação</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+                                            <% reservas.forEach(function(reserva) { %>
+                                                <tr>
+                                                    <td><%= new Date(reserva.dataSaida).toLocaleDateString('pt-BR').slice(0, 5) %></td>
+                                                    <td><%= new Date(reserva.dataChegada).toLocaleDateString('pt-BR').slice(0, 5) %></td>
+                                                    <td><%= reserva.situacao.slice(0, 10)%></td>
+
+                                                </tr>
+                                            <%})%>
+                                        </tbody>
+                                    </table>
                                 </div>
+
     
                             </div>
                         </div>
@@ -132,6 +188,124 @@
                 <input type="hidden" name="reboquePlaca" value="<%=reboque.placa%>" >
 
             </form>
+
+
+
+<!-- <script>
+    document.addEventListener('DOMContentLoaded', () => {
+
+        var inputDataInicio = document.getElementById('dataInicio')
+        var inputDataFim = document.getElementById('dataFim')
+        var inputHoraInicio = document.getElementById('horaInicio')
+        var inputHoraFim = document.getElementById('horaFim')
+
+        var data = new Date()
+
+        function obterUltimoDiaMesAtual() {
+            let dataAtual = new Date();
+            let ano = dataAtual.getFullYear();
+            let mes = dataAtual.getMonth();
+
+            let ultimoDiaMesAtual = new Date(ano, mes + 1, 0);
+            return ultimoDiaMesAtual.getDate();
+        }
+
+        let ultimoDia = obterUltimoDiaMesAtual();
+
+        var ano = data.getFullYear()
+        var mes = data.getMonth() + 1
+        var dia = data.getDate()
+        var hora = data.getHours()
+
+        mes = mes < 10 ? '0' + mes : mes
+        dia = dia < 10 ? '0' + dia : dia
+
+        var dataAtual = (`${ano}-${mes}-${dia}`)
+
+        function adicionaUmDia(p1){
+            inicio = new Date(p1)
+            inicio.setDate(inicio.getDate()+1)
+            return inicio.toISOString().slice(0, 10)
+        }
+
+        inputDataInicio.value = dataAtual
+        inputDataFim.value = adicionaUmDia(inputDataInicio.value)
+        inputDataInicio.setAttribute('min', dataAtual); 
+        inputDataFim.setAttribute('min', adicionaUmDia(inputDataInicio.value)); // TESTENDO AQUI
+        inputHoraInicio.value = hora
+        inputHoraFim.value = hora
+
+        // Hora de entrega recebe a hora de inicio
+        inputHoraInicio.addEventListener('change', () => {
+            inputHoraFim.value = inputHoraInicio.value
+        })
+
+
+        // DATA INICIO CHANGE
+        inputDataInicio.addEventListener('change',()=>{
+
+            // Não deixa o usuario informar uma data menor que a atual 
+            if(inputDataInicio.value < dataAtual){
+                inputDataInicio.value = dataAtual
+            }
+
+            // Quando baixar a data de inicio a de fim nao baixa
+            if((inputDataInicio.value > inputDataFim.value)){
+                inputDataFim.value = adicionaUmDia(inputDataInicio.value)
+            }
+
+            // DATA FIM SEMPRE SERÁ O DIA SEGUINTE
+            inputDataFim.setAttribute('min', adicionaUmDia(inputDataInicio.value));
+        })
+
+
+        // tratamento campo data fim
+        inputDataFim.addEventListener('change',()=>{
+
+            // não deixa informar uma data menor que a data atual
+            if(inputDataFim.value < dataAtual){
+                inputDataFim.value = dataAtual
+            }
+
+            // Se o fim for memor que o inicio e maior que a data atual, então baixa a data de inicio
+            if(inputDataFim.value < inputDataInicio.value && inputDataFim.value >= dataAtual){
+                inputDataInicio.value = inputDataFim.value
+            }
+        })
+
+
+        'use strict'
+
+        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        const forms = document.querySelectorAll('.needs-validation')
+
+        // Loop over them and prevent submission
+        Array.from(forms).forEach(form => {
+            form.addEventListener('submit', event => {
+                if (!form.checkValidity()) {
+                event.preventDefault()
+                event.stopPropagation()
+                }
+
+                form.classList.add('was-validated')
+            }, false)
+        })
+
+
+        // inputDataFim.addEventListener('blur',()=>{
+        //   if(inputDataFim.value < inputDataInicio.value){
+        //     inputBotao.disabled = true
+        //     inputDataFim.classList.add('is-invalid')
+        //     inputDataInicio.classList.add('is-invalid')
+        //   } else {
+        //     inputBotao.disabled = false
+        //     inputDataFim.classList.remove('is-invalid')
+        //     inputDataInicio.classList.remove('is-invalid')
+        //   }
+        // })
+    
+    })
+</script> -->
 
 
 

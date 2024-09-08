@@ -10,21 +10,24 @@
 # Onde parei:
 
 * Criar campo 'cancelada' na tabela 'reserva'. Reservas não devem ser excluídas, mas sim canceladas. (cancelamento  lógico, não físico)
-* STATUS RESERVA, APROVADO, CONCLUIDO, CANCELADO, ANDAMENTO, AGUARDANDO_PAGAMENTO, ADIADO (neste caso a data nao expira e o cliente pode escolher a nova data em qualquer momento)
-* IMPLEMENTAR RECUPERAÇÃO DE SENHA
+* STATUS RESERVA, MANUTENCAO, APROVADO, CONCLUIDO, CANCELADO, ANDAMENTO, AGUARDANDO_PAGAMENTO, ADIADO (neste caso a data nao expira e o cliente pode escolher a nova data em qualquer momento)
 * Implementar taxa de cancelamento no estorno de pagamento.
 
 # Versão 1
 
 5. Uma reserva não pode ser alterada, caso o status esteja ANDAMENTO ou CONCLUÍDA
 2. Implementar botão na área admin para informar a SAÍDA e a CHEGADA do reboque.
-    21. Implementar o botão na área de admin para informar que o cliente ja entregou o reboque. 
 3. Criar recurso para INATIVAR um reboque (CASO DE MANUTENÇÃO). 
     31. Listar apenas reboques DISPONÍVEIS e ATIVOS. 
 4. IMPLEMENTAR RECUPERAÇÃO DE SENHA
 8. Criar pasta routes
 9. Padronizar nomes dos endpoints conforme convenção
 10. Se uma reserva está com situação = 'AGUARDANDO_PAGAMENTO' alguém pode sobrescrever essa reserva?
+11. Uma reserva que tem situação = 'AGUARDANDO_PAGAMENTO' deve ficar indisponivel para outros clientes
+13. A quantidade de horas de uma reserva não pode ser menor que 3 horas
+14. Testar datas com consultas diretas no BD para testar os ranges
+15. IMPLEMENTAR RECUPERAÇÃO DE SENHA
+16. Definir situação para CANCELADO reservas com o prazo para pagamento expirado
 
 
 # Versão 2

@@ -9,11 +9,6 @@
 
         <div class="container-responsive" >
             
-            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                <a class="btn btn-primary me-md-2" href="/admin/reserva/novo">Nova Reserva</a>
-                <a class="btn btn-success me-md-2" href="/admin/reserva/lucro">Receita</a>
-                <a class="btn btn-info me-md-2" href="/admin/reserva/historico">Histórico</a>
-            </div>
             <br>
 
             <div class="d-flex justify-content-start">
@@ -29,9 +24,9 @@
                             <th>Cliente</th>
                             <th>Reboque</th>
                             <th>Diária</th>
-                            <th>Data saída</th>
-                            <th>Data entrega</th>
-                            <!-- <th>Tempo</th> -->
+                            <th>Início/Hora</th>
+                            <th>Fim/Hora</th>
+                            <th>Situação</th>
                             <th>Total</th>
                         </tr>
                     </thead>
@@ -42,16 +37,18 @@
                                 <td><%=reserva.cliente.nome%></td>
                                 <td><%=reserva.reboque.placa%></td>
                                 <td>R$ <%=((reserva.pagamento.valor/reserva.diarias).toFixed(2)).replace('.',',')%></td>
-                                <td><%=reserva.dataSaida.toString().slice(8,10)+'/'+reserva.dataSaida.toString().slice(5,7)+'/'+reserva.dataSaida.toString().slice(0,4)%></td>
-                                <td><%=reserva.dataChegada.toString().slice(8,10)+'/'+reserva.dataChegada.toString().slice(5,7)+'/'+reserva.dataChegada.toString().slice(0,4)%></td>
-                                <!-- <td><%=reserva.diarias%> dias</td> -->
+                                <td><%= new Date(reserva.dataSaida).toLocaleDateString('pt-BR').slice(0, 5) %> 
+                                    <%= new Date(reserva.dataSaida).toString().slice(16,21) %></td>
+                                <td><%= new Date(reserva.dataChegada).toLocaleDateString('pt-BR').slice(0, 5) %>
+                                    <%= new Date(reserva.dataChegada).toString().slice(16,21) %></td>
+                                <td><%=reserva.situacao%></td>
                                 <td>R$ <%=reserva.pagamento.valor%></td>
                                 <!-- <td>R$ <%=reserva.diarias*reserva.valorDiaria%>,00</td> -->
-                                <td><a href="/admin/reserva/editar/<%=reserva.id%>" class="fas fa-edit" style="color: black;" 
-                                    ata-toggle="tooltip" title="Editar reserva" ></a></td>
-                                <td><a href="/admin/reserva/remover/<%=reserva.pagamento.codigoPagamento%>" class="fas fa-trash" style="color: black;"
-                                    ata-toggle="tooltip" title="Pedir reenbolso"
-                                    onclick="return confirm('Confirma a exclusão?')" ></a></td>
+                                <% if(reserva.situacao == 'APROVADO') { %>
+                                    <td><a href="/admin/reserva/situacao/<%=reserva.id%>/<%='APROVADO'%>" class="btn btn-success">Iniciar reserva</a></td>
+                                <% } else if (reserva.situacao == 'ANDAMENTO') { %>
+                                    <td><a href="/admin/reserva/situacao/<%=reserva.id%>/<%='ANDAMENTO'%>" class="btn btn-danger">Encerrar reserva</a></td>
+                                <% } %>
                                 
                                 <% if(reserva.pagamento.aprovado == false){ %>
                                 <td>

@@ -11,6 +11,38 @@ const DAOPagamento = require('../database/DAOPagamento')
 const clienteAutorizacao = require('../autorizacao/clienteAutorizacao')
 const moment = require('moment-timezone')
 
+routerReserva.get('/admin/reserva/situacao/:idReserva?/:situacao?', autorizacao, async (req, res) => {
+
+    let idReserva = req.params.idReserva
+    let situacao = req.params.situacao
+    let resposta
+    
+    switch (situacao) {
+        case 'APROVADO':
+            resposta = await DAOReserva.atualizaSituacaoParaAndamento(idReserva)
+            break
+        case 'ANDAMENTO':
+            resposta = await DAOReserva.atualizaSituacaoParaConcluido(idReserva)
+            break
+        default:
+            res.render('erro', {mensagem: "Erro ao atualizar situação da reserva"})
+            return
+    }
+
+    if(!resposta){
+        res.render('erro', {mensagem: "Erro ao atualizar situação da reserva"})
+        return
+    }
+
+    DAOReserva.getAtivas().then(reservas => {
+        if (reservas) {
+            res.render('admin/reserva/reserva', {user: adminNome(req, res), reservas: reservas, mensagem: "" })
+        } else {
+            res.render('erro', { mensagem: "Erro na listagem de reservas." })
+        }
+    })
+})
+
 
 // REMOVER RESERVA ADMIN
 // routerReserva.get('/admin/reserva/remover/:codigoPagamento?/:valor?', autorizacao, async (req, res) => {
@@ -108,6 +140,7 @@ routerReserva.post('/reserva/formulario', (req, res) => {
 
     if(dataInicio > dataFim){
         res.render('erro', {mensagem: 'Erro com as datas.'})
+        return
     }
 
     DAOReserva.getVerificaDisponibilidade(reboquePlaca, dataInicio, dataFim).then( resposta => {
@@ -181,7 +214,6 @@ routerReserva.post('/reserva/confirmar', async (req, res) => {
         if(!clienteLogado){
             res.render('erro', {mensagem: "Erro ao buscar cliente"})
             return
-
         }
     }
 
@@ -212,6 +244,7 @@ routerReserva.post('/reserva/confirmar', async (req, res) => {
     let reboque = await DAOReboque.getOne(reboquePlaca)
     if(!reboque){
         res.render('erro', {mensagem: "Erro ao buscar reboque"})
+        return
     }
 
 
@@ -246,85 +279,6 @@ routerReserva.post('/reserva/confirmar', async (req, res) => {
     })
 
 })
-
-
-// // CRIAR GET
-// routerReserva.get('/reserva/novo', autorizacao, (req, res) => {
-//     DAOReboque.getAll().then(reboques => {
-//         DAOCliente.getAll().then(clientes => {
-//             if(reboques.length != 0 && clientes.length != 0){
-//                 res.render('reserva/novo', {user: adminNome(req, res), mensagem: "", reboques: reboques, clientes: clientes})
-//             } else {
-//                 res.render('erro', {mensagem: "Lista de reboques ou clientes vazia."})
-//             }
-//         })
-//     })
-// })
-
-
-
-// CRIAR POST
-// routerReserva.post('/reserva/salvar', autorizacao, (req, res) => {
-//     let {dataSaida, dataChegada, valorDiaria, cliente, reboque } = req.body
-//     DAOReserva.insert(dataSaida, dataChegada, valorDiaria, cliente, reboque).then(inserido => {
-//         DAOReboque.getAll().then(reboques => {
-//             DAOCliente.getAll().then(clientes => {
-//                 if (inserido) {
-//                     res.render('reserva/novo', { mensagem: "Reserva inserido", reboques: reboques, clientes: clientes, inserido: inserido })
-//                 }
-//                 else {
-//                     res.render('reserva/novo', { mensagem: "Veículo indisponível para o período.", reboques: reboques, clientes: clientes, inserido: inserido })
-//                 }
-//             })
-//         })
-//     })
-// })
-
-
-
-// DELETAR 
-// routerReserva.get('/reserva/excluir/:id', autorizacao, (req, res) => {
-//     let id = req.params.id
-//     DAOReserva.delete(id).then(excluido =>{
-//         if(excluido){
-//             res.redirect('/admin/reserva/lista')
-//         } else {
-//             res.render('erro', {mensagem: "Erro ao excluir"})
-//         }
-//     })
-// })
-
-
-
-// ATUALIZAR GET
-// routerReserva.get('/reserva/editar/:id', autorizacao, (req, res) => {
-//     let id = req.params.id
-//     DAOReserva.getOne(id).then(reserva => {
-//         DAOReboque.getAll().then(reboques => {
-//             DAOCliente.getAll().then(clientes => {
-//                 if(reserva){
-//                     res.render('reserva/editar', {user: adminNome(req, res), reserva: reserva, reboques: reboques, clientes: clientes, mensagem: ""})
-//                 } else {
-//                     res.render('erro', {mensagem: "Erro ao editar reserva."})
-//                 }
-//             })
-//         })
-//     })
-// })
-
-
-
-// ATUALIZAR POST
-// routerReserva.post('/reserva/atualizar', autorizacao, (req, res) => {
-//     let {id, dataSaida, dataChegada, valorDiaria, clienteCpf, reboquePlaca} = req.body
-//     DAOReserva.update(id, dataSaida, dataChegada, valorDiaria, clienteCpf, reboquePlaca).then(inserido => {
-//         if(inserido){
-//             res.redirect('/admin/reserva/lista')
-//         } else {
-//             res.render('erro', { mensagem: "Erro ao atualizar." })
-//         }
-//     })
-// })
 
 
 

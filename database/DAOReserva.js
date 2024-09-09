@@ -10,6 +10,38 @@ const moment = require('moment-timezone')
 
 class DAOReserva {
 
+    static async atualizaSituacaoParaConcluido(idReserva){
+        console.log('Atualizando situação da reserva para CONCLUIDO...');
+        try{
+            await Reserva.update(
+                {situacao: 'CONCLUIDO'},
+                {where: {id: idReserva}},
+            )
+            console.log('Situação atualizada para CONCLUIDO com sucesso!');
+            return true
+        } catch(erro) {
+            console.error(`Erro ao atualizar situação da reserva para CONCLUIDO \n ${erro}`);
+            return false
+        }
+    }
+
+
+    static async atualizaSituacaoParaAndamento(idReserva){
+        console.log('Atualizando situação da reserva para ANDAMENTO...');
+        try{
+            await Reserva.update(
+                {situacao: 'ANDAMENTO'},
+                {where: {id: idReserva}},
+            )
+            console.log('Situação atualizada para ANDAMENTO com sucesso!');
+            return true
+        } catch(erro) {
+            console.error(`Erro ao atualizar situação da reserva para ANDAMENTO \n ${erro}`);
+            return false
+        }
+    }
+
+
     static async alterarDataReserva(idReserva, dataIncio, dataFim){
         try{
             await Reserva.update(
@@ -99,7 +131,7 @@ class DAOReserva {
 
 
     static async historicoLocacoes(cpf){
-        let dataAtual = moment.tz(new Date(), 'America/Sao_Paulo')
+        let dataAtual = moment.tz(new Date(), 'America/Sao_Paulo').format()
         try {
             let locacoes = Reserva.findAll({
                 include: [
@@ -167,8 +199,7 @@ class DAOReserva {
     // Recupera as reservas de um cliente
     static async getMinhasReservas(cpf){
         try {
-            const currentDate = new Date()
-            console.log('Teste de data em getMinhasReserva():', currentDate);
+            const currentDate = moment.tz(new Date(), 'America/Sao_Paulo').format()
             const reservas = await Reserva.findAll({
                 where: {
                     [Op.or]: [
@@ -282,8 +313,7 @@ class DAOReserva {
     // RELATORIO ATIVAS
     static async getAtivas() {
         try {
-            const currentDate = new Date()
-            console.log('Teste de data em getAtivas():', currentDate);
+            const currentDate = moment.tz(new Date(), 'America/Sao_Paulo').format()
 
             const reservas = await Reserva.findAll({
                 where: {
@@ -291,6 +321,10 @@ class DAOReserva {
                         { dataSaida: { [Op.gte]: currentDate } },
                         { dataChegada: { [Op.gte]: currentDate } }
                     ],
+                    [Op.or]: [
+                        { situacao: 'APROVADO' },
+                        { situacao: 'ANDAMENTO' },
+                    ]
                 },
                 order: ['id'],
                 include: [{ model: Reboque }, { model: Cliente }, {model: Pagamento}]
@@ -308,9 +342,7 @@ class DAOReserva {
     // RELATORIO ATIVAS POR ID
     static async getAtivasPorID(reboquePlaca) {
         try {
-            // ACHO QUE É O MESMO QUE currenteDate.toISOString() da bib Date()
-            const currentDate = moment.tz(new Date(), 'America/Sao_Paulo').format() ;
-            console.log('Teste de data em getAtivasPorID():', currentDate);
+            const currentDate = moment.tz(new Date(), 'America/Sao_Paulo').format();
     
             const reservas = await Reserva.findAll({
                 where: {

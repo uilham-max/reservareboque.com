@@ -33,23 +33,9 @@ app.use(AdminController)
 app.use(IndexController)
 app.use(pagamentoController)
 
-// let inicio = moment.tz(new Date(), 'America/Sao_Paulo')
-// let fim = moment.tz(new Date(), 'America/Sao_Paulo')
+// let horaAtual = moment.tz(new Date(), 'America/Sao_Paulo').format()
+// console.log(horaAtual);
 
-// inicio = '2024-09-07T00:00:00-03:00'
-// fim =    '2024-09-08T00:00:00-03:00'
-// console.log(fim.diff(inicio, 'days'));
-
-
-
-
-
-
-// let hoje = new Date();
-// console.log("hoje (UTC): ", hoje.toISOString()); // formato UTC
-// console.log("hoje (Local): ", hoje.toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' })); // formato no horário de Brasília
-// console.log(moment.tz(hoje, 'America/Sao_Paulo'));
-// console.log(hoje);
 
 // TESTENDO MOMENT.TZ
 // let hoje = moment.tz(new Date(), 'America/Sao_Paulo')
@@ -66,13 +52,6 @@ app.use(pagamentoController)
 // console.log("fim:", fim);
 // console.log("dia:", dia);
 
-
-// if(dia > inicio && dia < fim){
-//     console.log("entre");
-// }
-
-
-// console.log(hoje.add(-9,'days'));
 
 // Como o render não fica mais de 1 minuto no ar, isso remove pagamenos quando ele sobe.
 try{

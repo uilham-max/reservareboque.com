@@ -13,7 +13,7 @@ routerReboque.get('/reboque/novo', autorizacao, (req, res) => {
 
 
 
-routerReboque.post('/reboque/salvar/', autorizacao, upload.single("foto"), (req, res) => {
+routerReboque.post('/reboque/salvar', autorizacao, upload.single("foto"), (req, res) => {
     let {modelo, placa, valorDiaria, cor, pesoBruto, comprimento, largura, altura, quantidadeDeEixos, anoFabricacao, ativo, descricao} = req.body
     let foto = `img/${req.file.filename}` 
     DAOReboque.insert(modelo, placa, valorDiaria, cor, foto, pesoBruto, comprimento, largura, altura, quantidadeDeEixos, anoFabricacao, ativo, descricao).then(inserido => {
@@ -27,7 +27,7 @@ routerReboque.post('/reboque/salvar/', autorizacao, upload.single("foto"), (req,
 
 
 
-routerReboque.get('/reboque/lista/', autorizacao, (req, res) => {
+routerReboque.get('/reboque/lista', autorizacao, (req, res) => {
     DAOReboque.getAll().then(reboques => {
         if(reboques){
             res.render('reboque/reboque', {user: adminNome(req, res), reboques: reboques, mensagem: ""})

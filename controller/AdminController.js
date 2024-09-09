@@ -129,7 +129,7 @@ routerAdmin.post('/admin/login/salvar', (req, res) => {
 
 
 
-routerAdmin.get("/logout", function (req, res) {
+routerAdmin.get("/admin/logout", function (req, res) {
     req.session.admin = undefined
     res.redirect("/")
 });

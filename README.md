@@ -29,6 +29,7 @@
 15. IMPLEMENTAR RECUPERAÇÃO DE SENHA
 16. Definir situação para CANCELADO reservas com o prazo para pagamento expirado
 17. Mesmo que o cliente seja cadastrado, mas se ele não estiver logado a reserva não deve aparecer nos registros dele.
+18. Quando o admin iniciar uma reserva, tanto a data inicio quanto a fim deve ser ajustada????  Já quando o admin encerrar uma reserva, somente a data fim dever ser inserida no banco de dados
 
 
 # Versão 2

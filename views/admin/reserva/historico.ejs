@@ -1,22 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <%-include('../partials/header.ejs')%>
+    <%-include('../../partials/header.ejs')%>
 </head>
 <body>
-    <%-include('../partials/navbaradmin.ejs')%>
-    <div class="conteudo">
+    <%-include('../../partials/navbaradmin.ejs')%>
+    <div class="conteudo" >
         
-        <div class="container">
+        <div class="container" >
             <br>
             <div class="d-flex justify-content-start">
-                <h3 class="display-4">Relatório Receita</h3>
+                <h3 class="display-4">Relatório Histórico</h3>
             </div>
-        
-            <form action="/reserva/filtrar" method="POST">
+            
+            <form action="/admin/reserva/filtrarHistorico" method="POST">
 
                 <div class="row g-3">
-
                         <input class="btn btn-primary d-flex" type="submit" value="Filtrar">
                     <div class="col">
                         <span class="input-group-text" >Data de início</span>
@@ -26,13 +25,9 @@
                         <span class="input-group-text" >Data de fim</span>
                         <input class="form-control" id="dataFim" type="date" name="dataFim" required>
                     </div>
-                    <div class="col">
-                        <span class="input-group-text" >Receita</span>
-                        <input class="form-control" id="total" type="numeric" name="total" value="R$ <%=lucroTotal%>,00" required>
-                    </div>
-
+                    
                 </div>
-               
+            
             </form><br>
         
             <div class="table-responsive">
@@ -40,20 +35,29 @@
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th>Placa</th>
-                            <th>Modelo</th>
-                            <th>Cor</th>
+                            <th>Cliente</th>
+                            <th>Reboque</th>
+                            <th>Diária</th>
+                            <th>Data Saída</th>
+                            <th>Data Chegada</th>
+                            <th>Tempo</th>
                             <th>Total</th>
                         </tr>
                     </thead>
                     <tbody>
                         <% reservas.forEach(function(reserva){%>
                             <tr>
+                                <td><%=reserva.id%></td>
+                                <td><%=reserva.cliente.nome%></td>
                                 <td><%=reserva.reboque.placa%></td>
-                                <td><%=reserva.reboque.placa%></td>
-                                <td><%=reserva.reboque.modelo%></td>
-                                <td><%=reserva.reboque.cor%></td>
+                                <td>R$ <%=reserva.valorDiaria%>,00</td>
+                                <td><%=reserva.dataSaida.toString().slice(8,10)+'/'+reserva.dataSaida.toString().slice(5,7)+'/'+reserva.dataSaida.toString().slice(0,4)%></td>
+                                <td><%=reserva.dataChegada.toString().slice(8,10)+'/'+reserva.dataChegada.toString().slice(5,7)+'/'+reserva.dataChegada.toString().slice(0,4)%></td>
+                                <td><%=reserva.diarias%> dias</td>
                                 <td>R$ <%=reserva.valorTotal%>,00</td>
+                                <td><a href="/admin/reserva/excluir/<%=reserva.id%>" class="fas fa-trash" style="color: black;"
+                                    ata-toggle="tooltip" title="Excluir reserva"
+                                    onclick="return confirm('Confirma a exclusão?')" ></a></td>
                             </tr>
                         <%})%>
                     </tbody>
@@ -62,13 +66,9 @@
             </div>
 
         </div>
-
         
     </div>
-        
-
-    <%-include('../partials/footer'); %>
-
+    <%-include('../../partials/footer'); %>
     <script>
         const inputDateInicio = document.getElementById('dataInicio');
         const inputDateFim = document.getElementById('dataFim');
@@ -84,6 +84,5 @@
         inputDateInicio.value = dataFormatadaInicio;
         inputDateFim.value = dataFormatadaFim;
     </script>
-
 </body>
 </html>

@@ -2,17 +2,17 @@
 <html lang="en">
 
 <head>
-    <%-include('../partials/header.ejs')%>
+    <%-include('../../partials/header.ejs')%>
 </head>
 
 <body>
     <div class="container">
-        <%-include('../partials/navbaradmin.ejs')%>
+        <%-include('../../partials/navbaradmin.ejs')%>
         <div class="conteudo" style="margin-top: 9rem;" >
             <div class="card">
                 <div class="card-body">
                     <h3>Criar Reserva</h3>
-                    <form action="/reserva/atualizar" method="POST">
+                    <form action="/admin/reserva/atualizar" method="POST">
 
 
                         <div class="form-group">
@@ -61,7 +61,7 @@
                         </div>
                         <input type="hidden" name="id" value="<%=reserva.id%>">
                         <input class="btn btn-primary" type="submit" value="Atualizar">
-                        <a href="/reserva/lista" class="btn btn-warning">Lista de reservas</a>
+                        <a href="/admin/reserva/lista" class="btn btn-warning">Lista de reservas</a>
                     </form>
                 </div>
 
@@ -75,7 +75,7 @@
                 </div>
                 <% }%>
     </div>
-    <%-include('../partials/footer.ejs')%>
+    <%-include('../../partials/footer.ejs')%>
 </body>
 
 </html>

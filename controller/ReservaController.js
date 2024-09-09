@@ -287,7 +287,7 @@ routerReserva.post('/reserva/confirmar', async (req, res) => {
 //     let id = req.params.id
 //     DAOReserva.delete(id).then(excluido =>{
 //         if(excluido){
-//             res.redirect('/reserva/lista')
+//             res.redirect('/admin/reserva/lista')
 //         } else {
 //             res.render('erro', {mensagem: "Erro ao excluir"})
 //         }
@@ -319,7 +319,7 @@ routerReserva.post('/reserva/confirmar', async (req, res) => {
 //     let {id, dataSaida, dataChegada, valorDiaria, clienteCpf, reboquePlaca} = req.body
 //     DAOReserva.update(id, dataSaida, dataChegada, valorDiaria, clienteCpf, reboquePlaca).then(inserido => {
 //         if(inserido){
-//             res.redirect('/reserva/lista')
+//             res.redirect('/admin/reserva/lista')
 //         } else {
 //             res.render('erro', { mensagem: "Erro ao atualizar." })
 //         }
@@ -331,10 +331,10 @@ routerReserva.post('/reserva/confirmar', async (req, res) => {
 /** CONTROLADORES ENCARREGADOS DA PARTE DOS RELATÓRIOS */
 
 // LISTAR GET
-routerReserva.get('/reserva/lista', autorizacao, (req, res) => {
+routerReserva.get('/admin/reserva/lista', autorizacao, (req, res) => {
     DAOReserva.getAtivas().then(reservas => {
         if (reservas) {
-            res.render('reserva/reserva', {user: adminNome(req, res), reservas: reservas, mensagem: "" })
+            res.render('admin/reserva/reserva', {user: adminNome(req, res), reservas: reservas, mensagem: "" })
         } else {
             res.render('erro', { mensagem: "Erro na listagem de reservas." })
         }
@@ -344,10 +344,10 @@ routerReserva.get('/reserva/lista', autorizacao, (req, res) => {
 
 
 // RELATORIO HISTORICO GET
-routerReserva.get('/reserva/historico', autorizacao, (req, res) => {
+routerReserva.get('/admin/reserva/historico', autorizacao, (req, res) => {
     DAOReserva.getRelatorioHistorico().then(reservas => {
         if (reservas) {
-            res.render('reserva/historico', {user: adminNome(req, res), reservas: reservas, mensagem: "" })
+            res.render('admin/reserva/historico', {user: adminNome(req, res), reservas: reservas, mensagem: "" })
         } else {
             res.render('erro', { mensagem: "Erro na listagem do historico." })
         }
@@ -357,11 +357,11 @@ routerReserva.get('/reserva/historico', autorizacao, (req, res) => {
 
 
 // RELATORIO HISTORICO POST
-routerReserva.post('/reserva/filtrarHistorico', autorizacao, (req, res) => {
+routerReserva.post('/admin/reserva/filtrarHistorico', autorizacao, (req, res) => {
     let {dataInicio, dataFim} = req.body
     DAOReserva.getRelatorioHistorico(dataInicio, dataFim).then(reservas => {
         if(reservas){
-            res.render('reserva/historico', {user: adminNome(req, res), reservas: reservas})
+            res.render('admin/reserva/historico', {user: adminNome(req, res), reservas: reservas})
         } else {
             res.render('erro', {mensagem: "Erro ao filtrar."})
         }
@@ -371,11 +371,11 @@ routerReserva.post('/reserva/filtrarHistorico', autorizacao, (req, res) => {
 
 
 // RELATORIO LUCRO GET
-routerReserva.get('/reserva/lucro', autorizacao, async (req, res) => {
+routerReserva.get('/admin/reserva/lucro', autorizacao, async (req, res) => {
     let reservas = await DAOReserva.getRelatorioLucro()
     if(reservas){
         let lucroTotal = await DAOReserva.getLucroTotal()
-        res.render('reserva/lucro', {user: adminNome(req, res), lucroTotal: lucroTotal, reservas: reservas, mensagem: ""})
+        res.render('admin/reserva/lucro', {user: adminNome(req, res), lucroTotal: lucroTotal, reservas: reservas, mensagem: ""})
     } else {
         res.render('erro', {mensagem: "Erro ao listar lucros."})
     }
@@ -383,13 +383,13 @@ routerReserva.get('/reserva/lucro', autorizacao, async (req, res) => {
 
 
 
-routerReserva.post('/reserva/filtrar', autorizacao, async (req, res) => {
+routerReserva.post('/admin/reserva/filtrar', autorizacao, async (req, res) => {
     let {dataInicio, dataFim} = req.body
     let reservas = await DAOReserva.getRelatorioLucro(dataInicio, dataFim)
     // console.log("Reservas relatorio lucro: ", reservas.map(reserva => reserva.toJSON()));
     if(reservas){
         let lucroTotal = await DAOReserva.getLucroTotal(dataInicio, dataFim)
-        res.render('reserva/lucro', {user: adminNome(req, res), lucroTotal: lucroTotal, reservas: reservas})
+        res.render('admin/reserva/lucro', {user: adminNome(req, res), lucroTotal: lucroTotal, reservas: reservas})
     } else {
         res.render('erro', {mensagem: "Erro ao filtrar lucros."})
     }

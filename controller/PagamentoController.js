@@ -27,7 +27,7 @@ routerPagamento.post('/pagamento/recebeEmDinheiro', autorizacao, async (req, res
         res.render('erro', {mensagem: 'Erro ao acessar recurso'})
     }
     
-    res.redirect('/reserva/lista')
+    res.redirect('/admin/reserva/lista')
 
 })
 

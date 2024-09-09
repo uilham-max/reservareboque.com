@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <%-include('../partials/header.ejs')%>
+    <%-include('../../partials/header.ejs')%>
 </head>
 <body>
-    <%-include('../partials/navbaradmin.ejs')%>
+    <%-include('../../partials/navbaradmin.ejs')%>
     <div class="conteudo" >
 
         <div class="container-responsive" >
             
             <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                <a class="btn btn-primary me-md-2" href="/reserva/novo">Nova Reserva</a>
-                <a class="btn btn-success me-md-2" href="/reserva/lucro">Receita</a>
-                <a class="btn btn-info me-md-2" href="/reserva/historico">Histórico</a>
+                <a class="btn btn-primary me-md-2" href="/admin/reserva/novo">Nova Reserva</a>
+                <a class="btn btn-success me-md-2" href="/admin/reserva/lucro">Receita</a>
+                <a class="btn btn-info me-md-2" href="/admin/reserva/historico">Histórico</a>
             </div>
             <br>
 
@@ -47,7 +47,7 @@
                                 <!-- <td><%=reserva.diarias%> dias</td> -->
                                 <td>R$ <%=reserva.pagamento.valor%></td>
                                 <!-- <td>R$ <%=reserva.diarias*reserva.valorDiaria%>,00</td> -->
-                                <td><a href="/reserva/editar/<%=reserva.id%>" class="fas fa-edit" style="color: black;" 
+                                <td><a href="/admin/reserva/editar/<%=reserva.id%>" class="fas fa-edit" style="color: black;" 
                                     ata-toggle="tooltip" title="Editar reserva" ></a></td>
                                 <td><a href="/admin/reserva/remover/<%=reserva.pagamento.codigoPagamento%>" class="fas fa-trash" style="color: black;"
                                     ata-toggle="tooltip" title="Pedir reenbolso"
@@ -83,7 +83,7 @@
         </div>
     </div>
 
-    <%-include('../partials/footer'); %>
+    <%-include('../../partials/footer'); %>
 
 </body>
 </html>

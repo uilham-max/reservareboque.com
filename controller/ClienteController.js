@@ -303,10 +303,10 @@ routerCliente.post('/cadastro/create', async (req, res) => {
 
 
 // DEVO TESTAR ESSA MENSAGEM PASSADA POR PARAMENTRO, POIS AINDA NÃO SEI COMO ELA FUNCIONA
-routerCliente.get('/cliente/lista/:mensagem?', autorizacao, (req, res) => {
+routerCliente.get('/admin/cliente/lista/:mensagem?', autorizacao, (req, res) => {
     DAOCliente.getAll().then(clientes => {
         if(clientes){
-            res.render('cliente/cliente', {user: adminNome(req, res), clientes: clientes, mensagem: req.params.mensagem? 
+            res.render('admin/cliente/cliente', {user: adminNome(req, res), clientes: clientes, mensagem: req.params.mensagem? 
                 "Não é possivel excluir um cliente já refereciado por uma locação":""})
         } else {
             res.render('erro', {mensagem: "Erro na listagem de clientes."})
@@ -315,11 +315,11 @@ routerCliente.get('/cliente/lista/:mensagem?', autorizacao, (req, res) => {
 })
 
 
-routerCliente.get('/cliente/editar/:cpf', autorizacao, (req, res) => {
+routerCliente.get('/admin/cliente/editar/:cpf', autorizacao, (req, res) => {
     let id = req.params.cpf
     DAOCliente.getOne(id).then(cliente => {
         if(cliente){
-            res.render('cliente/editar', {user: adminNome(req, res), cliente: cliente} )
+            res.render('admin/cliente/editar', {user: adminNome(req, res), cliente: cliente} )
         } else {
             res.render('erro', {mensagem: "Erro na tentativa de edição de cliente"})
         }
@@ -328,11 +328,11 @@ routerCliente.get('/cliente/editar/:cpf', autorizacao, (req, res) => {
 
 
 
-routerCliente.post('/cliente/atualizar', autorizacao,  (req,res) => {
+routerCliente.post('/admin/cliente/atualizar', autorizacao,  (req,res) => {
     let {nome, cpf, telefone, endereco} = req.body
     DAOCliente.update(nome, cpf, telefone, endereco).then(cliente => {
         if(cliente){
-            res.redirect('/cliente/lista')
+            res.redirect('/admin/cliente/lista')
         } else {
             res.render('erro', {user: adminNome(req, res), mensagem: "Não foi possível atualizar o cliente."})
         }

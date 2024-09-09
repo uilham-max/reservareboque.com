@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <%-include('../partials/header.ejs')%>
+    <%-include('../../partials/header.ejs')%>
 </head>
 <body>
-    <%-include('../partials/navbaradmin.ejs')%>
+    <%-include('../../partials/navbaradmin.ejs')%>
     <div class="conteudo" >
 
         <div class="container" >
             
             <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                <a class="btn btn-primary me-md-2" href="#">Novo Cliente</a>
+                <a class="btn btn-primary me-md-2" href="/admin/cliente/novo">Novo Cliente</a>
             </div>
             <br>
 
@@ -38,9 +38,9 @@
                                 <td><%=cliente.cpf%></td>
                                 <td><%=cliente.telefone%></td>
                                 <td><%=cliente.endereco%></td>
-                                <td><a href="/cliente/editar/<%=cliente.cpf%>" class="fas fa-edit" style="color: black;" 
+                                <td><a href="/admin/cliente/editar/<%=cliente.cpf%>" class="fas fa-edit" style="color: black;" 
                                     ata-toggle="tooltip" title="Editar cliente" ></a></td>
-                                <td><a href="/cliente/excluir/<%=cliente.cpf%>" class="fas fa-trash" style="color: black;"
+                                <td><a href="/admin/cliente/excluir/<%=cliente.cpf%>" class="fas fa-trash" style="color: black;"
                                     ata-toggle="tooltip" title="Excluir cliente"
                                     onclick="return confirm('Confirma a exclusão?')" ></a></td>
                             </tr>
@@ -59,7 +59,7 @@
         </div>
     </div>
 
-    <%-include('../partials/footer'); %>
+    <%-include('../../partials/footer'); %>
 
 </body>
 </html>

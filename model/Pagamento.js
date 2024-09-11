@@ -13,7 +13,7 @@ const Pagamento = conexao.define('pagamento', {
         unique: true,
     },
     valor: Sequelize.DOUBLE,
-    descricao: Sequelize.STRING,
+    forma: Sequelize.STRING,
     aprovado: Sequelize.BOOLEAN,
     dataExpiracao: Sequelize.DATE,
     situacao: Sequelize.STRING,

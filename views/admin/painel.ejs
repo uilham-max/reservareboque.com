@@ -6,28 +6,148 @@
 </head>
 <body  >
     <%-include('../partials/navbaradmin.ejs')%>
-    
-    <div class="conteudo">
-        <div class="container" >
-            <!-- <h3>Reboques Cadastrados</h3> -->
-            <div class="lista-reboques">
+    <div class="container-responsive">
+        <div class="conteudo">
+            <div class="container">
+                <div class="lista-reboques">
                 
-                <div class="jumbotron jumbotron-fluid">
-                    <div class="container">
-                      <h1 class="display-4">Bem-vido ao Painel do Administrador</h1>
-                      <p class="lead">Escolha uma opção para gerenciar.</p>
+                    <!-- Gráficos      -->
+                    <div class="jumbotron jumbotron-fluid">
+                        <div class="container">
+                        <h1 class="display-4">Bem-vido ao Painel do Administrador</h1>
+                        <p class="lead">Escolha uma opção para gerenciar.</p>
+                        </div>
                     </div>
-                </div>
 
-                <div class="card card-reserva" style="width: 45rem;">
-                    <canvas id="myChart"></canvas>
-                </div>
-                <input type="hidden" id="dataJSON" value="<%=dataJSON%>">
+                    <div class="card card-reserva" style="width: 45rem;">
+                        <canvas id="myChart"></canvas>
+                    </div>
+                    <input type="hidden" id="dataJSON" value="<%=dataJSON%>">
 
+                    <%if(useragent.isMobile) {%>
+
+                    <!-- Listagem das reserva -->
+                    <div class="card card-reserva" style="width: 40rem;">
+                        <div class="card-body">
+
+                            <div class="table-responsive">
+                                <table class="table table-striped" >
+                                    <thead>
+                                        <tr>
+                                            <th>Cliente</th>
+                                            <th>Reboque</th>
+                                            <th>Início</th>
+                                            <th>Fim</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <% reservas.forEach(function(reserva){%>
+                                            <tr>
+                                                <td><%=(reserva.cliente.nome).split(' ')[0]%></td>
+                                                <td><%=(reserva.reboque.placa).split('-')[0]%></td>
+                                                <td><%= new Date(reserva.dataSaida).toLocaleDateString('pt-BR').slice(0, 5) %> 
+                                                    <%= new Date(reserva.dataSaida).toString().slice(16,18)+'h' %></td>
+                                                <td><%= new Date(reserva.dataChegada).toLocaleDateString('pt-BR').slice(0, 5) %>
+                                                    <%= new Date(reserva.dataChegada).toString().slice(16,18)+'h' %></td>
+                                                <% if(reserva.situacaoReserva == 'APROVADO') { %>
+                                                    <td><a href="/admin/reserva/situacao/<%=reserva.id%>/<%='APROVADO'%>" class="btn btn-success">Iniciar</a></td>
+                                                <% } else if (reserva.situacaoReserva == 'ANDAMENTO') { %>
+                                                    <td><a href="/admin/reserva/situacao/<%=reserva.id%>/<%='ANDAMENTO'%>" class="btn btn-danger">Encerrar</a></td>
+                                                <% } %>
+                                                
+                                                <% if(reserva.pagamento.aprovado == false){ %>
+                                                <td>
+                                                    <form action="/pagamento/recebeEmDinheiro" method="POST">
+                                                        <input type="hidden" id="codigoPagamento" name="codigoPagamento" value="<%=reserva.pagamento.codigoPagamento%>">
+                                                        <input type="hidden" id="valor" name="valor" value="<%=reserva.pagamento.valor%>">
+                                                        <input type="submit" class="btn btn-info" value="Receber">
+                                                    </form>
+                                                </td>
+                                                <% } %>
+                                                
+                                            </tr>
+                                        <%})%>
+                                    </tbody>
+                
+                                </table>
+                            </div>
+                            
+                            <% if(mensagem != '') { %>
+                                <div class="alert alert-danger">
+                                    <strong><%= mensagem %></strong> 
+                                </div>
+                            <% } %>
+                        </div>
+                    </div>
+
+                    <%} else {%>
+
+                    <!-- Listagem das reserva -->
+                    <div class="card card-reserva" style="width: 45rem;">
+                        <div class="card-body">
+
+                            <div class="table-responsive">
+                                <table class="table table-striped" >
+                                    <thead>
+                                        <tr>
+                                            <th>Cliente</th>
+                                            <th>Reboque</th>
+                                            <th>Diária</th>
+                                            <th>Início/Hora</th>
+                                            <th>Fim/Hora</th>
+                                            <th>Situação</th>
+                                            <th>Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <% reservas.forEach(function(reserva){%>
+                                            <tr>
+                                                <td><%=(reserva.cliente.nome).split(' ')[0]%></td>
+                                                <td><%=(reserva.reboque.placa).split('-')[0]%></td>
+                                                <td>R$ <%=((reserva.pagamento.valor/reserva.diarias).toFixed(2)).replace('.',',')%></td>
+                                                <td><%= new Date(reserva.dataSaida).toLocaleDateString('pt-BR').slice(0, 5) %> 
+                                                    <%= new Date(reserva.dataSaida).toString().slice(16,21) %></td>
+                                                <td><%= new Date(reserva.dataChegada).toLocaleDateString('pt-BR').slice(0, 5) %>
+                                                    <%= new Date(reserva.dataChegada).toString().slice(16,21) %></td>
+                                                <td><%=reserva.situacaoReserva%></td>
+                                                <td>R$ <%=reserva.pagamento.valor%></td>
+                                                <% if(reserva.situacaoReserva == 'APROVADO') { %>
+                                                    <td><a href="/admin/reserva/situacao/<%=reserva.id%>/<%='APROVADO'%>" class="btn btn-success">Iniciar reserva</a></td>
+                                                <% } else if (reserva.situacaoReserva == 'ANDAMENTO') { %>
+                                                    <td><a href="/admin/reserva/situacao/<%=reserva.id%>/<%='ANDAMENTO'%>" class="btn btn-danger">Encerrar reserva</a></td>
+                                                <% } %>
+                                                
+                                                <% if(reserva.pagamento.aprovado == false){ %>
+                                                <td>
+                                                    <form action="/pagamento/recebeEmDinheiro" method="POST">
+                                                        <input type="hidden" id="codigoPagamento" name="codigoPagamento" value="<%=reserva.pagamento.codigoPagamento%>">
+                                                        <input type="hidden" id="valor" name="valor" value="<%=reserva.pagamento.valor%>">
+                                                        <input type="submit" class="btn btn-info" value="Receber">
+                                                    </form>
+                                                </td>
+                                                <% } %>
+                                                
+                                            </tr>
+                                        <%})%>
+                                    </tbody>
+                
+                                </table>
+                            </div>
+                            
+                            <% if(mensagem != '') { %>
+                                <div class="alert alert-danger">
+                                    <strong><%= mensagem %></strong> 
+                                </div>
+                            <% } %>
+                        </div>
+                    </div>
+                    <%}%>
+                </div>
             </div>
         </div>
+
+        
     </div>
-    <%-include('../partials/footer.ejs')%>
 
     <script>
         const ctx = document.getElementById('myChart');
@@ -47,6 +167,7 @@
             }
         });
     </script>
+    <%-include('../partials/footer.ejs')%>
 
 </body>
 </html>

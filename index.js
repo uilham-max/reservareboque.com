@@ -2,7 +2,10 @@ const conexao = require('./database/conexao.js')
 const express = require('express')
 const session = require('express-session')
 const bodyParser = require('body-parser')
-const moment = require('moment-timezone')
+const useragent = require('express-useragent')
+
+
+
 
 const port = 3000
 const app = express()
@@ -15,12 +18,14 @@ const IndexController = require('./controller/IndexController');
 const pagamentoController = require('./controller/PagamentoController');
 var { removerPagamentosAPI } = require('./helpers/removerPagamentosNaoAprovados.js')
 
+
 // Para Express 4.16 ou superior
 app.use(express.json())
 app.use(express.static('public'));
 app.use(express.urlencoded({ extended: false }));
 app.set('view engine', 'ejs');
 app.use(session({secret: 'udjs93ka0', resave: true, saveUninitialized: true}));
+app.use(useragent.express())
 
 // Para versões anteriores ao Express 4.16
 app.use(bodyParser.urlencoded({ extended: true }))
@@ -32,6 +37,12 @@ app.use(ReservaController)
 app.use(AdminController)
 app.use(IndexController)
 app.use(pagamentoController)
+
+
+// Mon Sep 30 2024 15:00:00 GMT-0300 (Horário Padrão de Brasília)
+// let dataInicioAntiga = 'Mon Sep 30 2024 15:00:00 GMT-0300 (Horário Padrão de Brasília)'
+// dataInicioAntiga = moment.tz(new Date(dataInicioAntiga),'America/Sao_Paulo')
+// console.log(dataInicioAntiga);
 
 // let horaAtual = moment.tz(new Date(), 'America/Sao_Paulo').format()
 // console.log(horaAtual);

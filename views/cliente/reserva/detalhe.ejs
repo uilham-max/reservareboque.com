@@ -12,12 +12,12 @@
         <!-- Mensagem do topo da página em jumbotron -->
         <div class="jumbotron jumbotron-fluid">
             <h1 class="display-4">Detalhes da Reserva</h1>
-            <p class="lead">Clientes cadastrados podem ver seu histórico de locações, gerenciar suas reservas e receber
-                descontos.</p>
+            <!-- <p class="lead">Clientes cadastrados podem ver seu histórico de locações, gerenciar suas reservas e receber -->
+                <!-- descontos.</p> -->
         </div>
 
         <div class="container">
-            <form class="needs-validation" novalidate action="/reserva/confirmar" method="POST">
+            <!-- <form class="needs-validation" novalidate action="/reserva/confirmar" method="POST"> -->
                 <div class="lista-reboques">
 
                     <div class="card card-reserva" style="width: 25rem;">
@@ -57,15 +57,18 @@
 
                         <div class="d-md-flex justify-content-center" style="margin: 0.5rem;">
                             <button style="margin: 0.3rem;" class="btn btn-secondary" type="button" onclick="history.back()">Voltar</button>
-                            <% if(reserva.situacao == 'APROVADO' || reserva.situacao == 'ADIADO') {%>
+                            <% if(reserva.situacaoReserva == 'APROVADO' || reserva.situacaoReservaReserva == 'ADIADO') {%>
                                 <a style="margin: 0.3rem;" class="btn btn-primary" href="/cliente/reserva/editar/<%= reserva.id %>">Alterar período</a>
-                                <a style="margin: 0.3rem;" class="btn btn-danger" onclick="return confirm('Está reserva será adiada para quando você quiser usar')" href="/cliente/reserva/adiar/<%=reserva.id%>">Adiar reserva</a>
+                                <a style="margin: 0.3rem;" class="btn btn-danger" 
+                                    onclick="return confirm('Este recurso está indisponível no momento')" 
+                                    href="#">Guardar
+                                </a>
                             <% } %>
                         </div>
                     </div>
                 </div>
-                <input type="hidden" name="reboquePlaca" value="<%= reserva.reboque.placa %>">
-            </form>
+                <!-- <input type="hidden" name="reboquePlaca" value="<%= reserva.reboque.placa %>"> -->
+            <!-- </form> -->
         </div>
     </div>
 

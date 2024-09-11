@@ -1,6 +1,13 @@
 const moment = require('moment-timezone')
 
 class Diaria {
+
+	static calcularQuantidadeHoras(dataInicial, dataFinal){
+		dataInicial = moment.tz(dataInicial, 'America/Sao_Paulo')
+		dataFinal = moment.tz(dataFinal, 'America/Sao_Paulo')
+		return dataFinal.diff(dataInicial, 'hours')
+	}
+
 	static calcularDiarias(dataInicial, dataFinal) {
 		
 		dataInicial = moment.tz(dataInicial, 'America/Sao_Paulo')

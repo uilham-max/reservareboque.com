@@ -8,98 +8,103 @@ const clienteAutorizacao = require('../autorizacao/clienteAutorizacao')
 const DAOReserva = require('../database/DAOReserva')
 const DAOReboque = require('../database/DAOReboque')
 const moment = require('moment-timezone')
+const Diaria = require('../bill_modules/Diaria')
 
 // CANCELAMENTO DE RESERVA PELO CLIENTE
-routerCliente.get('/cliente/reserva/adiar/:idReserva?', clienteAutorizacao, async (req, res) => {
+routerCliente.get('/cliente/reserva/guardar/:idReserva?', clienteAutorizacao, async (req, res) => {
 
     console.log("Executando adiamento de reserva...");
 
-    let clienteCpf
-    if(req.session.cliente && req.session.cliente.cpf){
-        clienteCpf = req.session.cliente.cpf
-    }
+    const reserva = await DAOReserva.getOne(req.params.idReserva)
 
-    // Pega a data atual
+    let dataInicio = moment(reserva.dataSaida)
+    let dataChegada = moment(reserva.dataChegada)
     let dataAtual =  moment.tz( new Date(), 'America/Sao_Paulo' )
 
-    // Formata a data de saida da reserva ( necessário para realizar o cálculo )
-    let dataSaida = moment(req.params.dataSaida)
-
-    // Calcula a diferença entre a datas d saída e atual ( horas )
-    var horasRestantes = dataSaida.diff(dataAtual, 'hours')
-
-    let reservas
-
-    // Não será possível cancelar a reserva se houver menos de 24h para a retirada
-    if( horasRestantes < 48 || (dataSaida.format("YYYY-MM-DD") == dataAtual.format("YYYY-MM-DD"))) {
-        reservas = await DAOReserva.getMinhasReservas(clienteCpf)
-        console.error("Não foi possível cancelar a reserva!");
-        res.render('cliente/reserva/lista', {user: clienteNome(req, res), reservas: reservas, mensagem: "Sua reserva não pode ser cancelada. Faltam menos de 24 horas para retirada."})
-    } else {
-        console.log('Estornando o pagamento...');
-        await estornoPagamento(req.params.codigoPagamento, req.params.valor)
-        // O MESMO QUE REMOVER A RESERVA (DELETE ON CASCADE)
-        console.log('Cancelando a reserva...');
-        // await DAOPagamento.removePeloCodigoPagamento(req.params.codigoPagamento)
-        console.log(req.params.codigoPagamento, "coidgoPagamento");
-
-        await DAOPagamento.atualizaSituacaoParaCancelado(req.params.codigoPagamento)
-        let codigoPagamento = await DAOPagamento.recuperaPeloCodigoPagamento(req.params.codigoPagamento)
-        await DAOReserva.atualizaSituacaoParaCancelada(codigoPagamento)
- 
-        reservas = await DAOReserva.getMinhasReservas(clienteCpf)
-        
-        if(reservas == ''){
-            res.render('cliente/reserva/lista', {user: clienteNome(req, res), reservas: reservas, mensagem: "Sua lista de reservas está vazia."})
-        }
-        res.render('cliente/reserva/lista', {user: clienteNome(req, res), reservas: reservas, mensagem: ''})
+    if (dataInicio.diff(moment.tz(new Date(), 'America/Sao_Paulo'), 'hours') < 48) {
+        console.log("Tentativa de alteração de data da reserva negada. Menos de 48h.");
+        return res.render('erro', { mensagem: 'Erro. Faltam menos de 48h para a retirada' });
     }
+
+    
+
     
 })
 
 
+// SUJESTÃO: '/cliente/reserva/edita'
+routerCliente.get('/cliente/reserva/editar/:idReserva', clienteAutorizacao,  async (req, res) => {
+    
+    let idReserva = req.params.idReserva
+
+    let reserva = await DAOReserva.getReserva(idReserva)
+    if(!reserva){
+        return res.render('erro', {mensagem: "Erro ao obter reserva."})
+    }
+
+    let reboquePlaca = reserva.dataValues.reboquePlaca
+
+    // NÃO PODE ALTERAR A DATA DE UMA RESERVA EM ANDAMENTO
+    if(reserva.dataValues.situacaoReserva == 'ANDAMENTO'){
+        return res.render('erro', {mensagem: "Erro. Não pode alterar a data de uma reserva em andamento."})
+    }
+    // console.log(reserva.dataValues.situacaoReserva);
+    DAOReserva.getAtivasPorID(reboquePlaca).then(reservas => {
+        DAOReboque.getOne(reboquePlaca).then(reboque => {
+            if(reboque){
+                res.render('cliente/reserva/editar', {user: clienteNome(req, res), mensagem: "", reboque: reboque, reservas: reservas, reserva: reserva, idReserva: idReserva})
+            } else {
+                res.render('erro', {mensagem: "Erro ao mostrar reboque."})
+            }
+        })
+    })
+})
+
+
 // ENDPOINT PARA ALTERAR A DATA DE UMA RESERVA PELO CLIENTE
-routerCliente.post('/cliente/editarDataReserva', clienteAutorizacao, async (req, res) => {
+routerCliente.post('/cliente/reserva/editar', clienteAutorizacao, async (req, res) => {
     try {
-        let { idReserva, reboquePlaca, dataInicioAntiga, dataFimAntiga, dataInicioNova, dataFimNova, diarias } = req.body;
+        let { idReserva, reboquePlaca, dataInicioAntiga, dataFimAntiga, dataInicioNova, dataFimNova, diarias, horaInicio, horaFim } = req.body;
 
-        console.log("Iniciando uma alteração de data para a reserva:", idReserva);
-        console.log("Período antigo:", dataInicioAntiga, "-", dataFimAntiga);
-        console.log("Período novo:", dataInicioNova, "-", dataFimNova);
-
-        // CALCULA PERÍODO EM HORAS DA RESERVA ANTIGA
-        let horasPeriodoAntigo = diarias * 24;
-
-        // RECUPERAR A HORA ATUAL DO PEDIDO
-        let dataAtual = moment.tz(new Date(), 'America/Sao_Paulo');
 
         // PARSE PARA OBJETO MOMENT.TZ E CONVERTE PARA UTC
-        dataInicioAntiga = moment.tz(dataInicioAntiga, 'America/Sao_Paulo').utc();
-        dataFimAntiga = moment.tz(dataFimAntiga, 'America/Sao_Paulo').utc();
-        dataInicioNova = moment.tz(dataInicioNova, 'America/Sao_Paulo').utc();
-        dataFimNova = moment.tz(dataFimNova, 'America/Sao_Paulo').utc();
+        dataInicioAntiga = moment.tz(new Date(dataInicioAntiga), 'America/Sao_Paulo');
+        dataFimAntiga = moment.tz( new Date(dataFimAntiga), 'America/Sao_Paulo');
+        dataInicioNova = moment.tz(dataInicioNova, 'America/Sao_Paulo');
+        dataFimNova = moment.tz(dataFimNova, 'America/Sao_Paulo');
+
+        // Injeta a hora na data de inicio
+        dataInicioNova = moment.tz(dataInicioNova, 'America/Sao_Paulo').set({
+            hour: horaInicio,
+            minute: 0,
+            second: 0,
+            millisecond: 0
+        });
+
+        // Injeta a hora na data de fim
+        dataFimNova = moment.tz(dataFimNova, 'America/Sao_Paulo').set({
+            hour: horaFim,
+            minute: 0,
+            second: 0,
+            millisecond: 0
+        });
+
         
-        // CALCULAR O PERÍODO EM HORAS DA NOVA RESERVA
-        let horasPeriodoNovo = dataFimNova.diff(dataInicioNova, 'hours');
-        
-        // CALCULAR DIFERENÇA EM HORAS DA DATA ATUAL E DATA SOLICITADA PARA A NOVA RESERVA
-        let diferencaEmHorasPrazo = dataInicioAntiga.diff(dataAtual, 'hours');
-        
-        // O PRAZO DEVE SER MAIOR QUE 48 HORAS PARA FAZER A ALTERAÇÃO
-        if (diferencaEmHorasPrazo < 48) {
+        // O MOMENTO DO PEDIDO DEVE SER MAIOR QUE 48 HORAS PARA FAZER A ALTERAÇÃO DA DATA DA RESERVA
+        if (dataInicioAntiga.diff(moment.tz(new Date(), 'America/Sao_Paulo'), 'hours') < 48) {
             console.log("Tentativa de alteração de data da reserva negada. Menos de 48h.");
             return res.render('erro', { mensagem: 'Erro. Faltam menos de 48h para a retirada' });
         }
-        
-        // O PERÍODO NÃO PODE SER MAIOR QUE O ORIGINAL
-        if (horasPeriodoAntigo !== horasPeriodoNovo) {
+
+        // O PERÍODO NOVO NÃO PODE SER MAIOR QUE O ANTIGO
+        if ((diarias * 24) !== dataFimNova.diff(dataInicioNova, 'hours')) {
             console.log("Tentativa de alteração de data da reserva negada. Período diferente.");
             return res.render('erro', { mensagem: 'Erro. O período deve ser o mesmo' });
         }
 
-        // FORMATA AS DATAS PARA STRING
-        dataInicioNova = dataInicioNova.format('YYYY-MM-DDTHH:mm:ss[Z]');
-        dataFimNova = dataFimNova.format('YYYY-MM-DDTHH:mm:ss[Z]');
+        // FORMATA AS DATAS PARA STRING PARA INSERIR NO BD
+        dataInicioNova = dataInicioNova.format();
+        dataFimNova = dataFimNova.format();
         
         // VERIFICA DISPONIBILIDADE
         let reservas = await DAOReserva.getVerificaDisponibilidade(reboquePlaca, dataInicioNova, dataFimNova); 
@@ -143,37 +148,11 @@ routerCliente.get('/cliente/reserva/detalhe/:reservaId?', clienteAutorizacao, as
     
     let reserva = await DAOReserva.getOne(req.params.reservaId)
     console.log(reserva.dataValues.dataSaida);
-    res.render('cliente/reserva/detalhe', {user: clienteNome(req, res), mensagem: '', reserva: reserva})
+    return res.render('cliente/reserva/detalhe', {user: clienteNome(req, res), mensagem: '', reserva: reserva})
 
 })
 
-// SUJESTÃO: '/cliente/reserva/edita'
-routerCliente.get('/cliente/reserva/editar/:idReserva', clienteAutorizacao,  async (req, res) => {
-    
-    let idReserva = req.params.idReserva
 
-    let reserva = await DAOReserva.getReserva(idReserva)
-    if(!reserva){
-        res.render('erro', {mensagem: "Erro ao obter reserva."})
-    }
-
-    let reboquePlaca = reserva.dataValues.reboquePlaca
-
-    // NÃO PODE ALTERAR A DATA DE UMA RESERVA EM ANDAMENTO
-    if(reserva.dataValues.situacao == 'ANDAMENTO'){
-        res.render('erro', {mensagem: "Erro. Não pode alterar a data de uma reserva em andamento."})
-    }
-    // console.log(reserva.dataValues.situacao);
-    DAOReserva.getAtivasPorID(reboquePlaca).then(reservas => {
-        DAOReboque.getOne(reboquePlaca).then(reboque => {
-            if(reboque){
-                res.render('cliente/reserva/editar', {user: clienteNome(req, res), mensagem: "", reboque: reboque, reservas: reservas, reserva: reserva, idReserva: idReserva})
-            } else {
-                res.render('erro', {mensagem: "Erro ao mostrar reboque."})
-            }
-        })
-    })
-})
 
 
 // SUJESTÃO: '/cliente/reserva/concluida'
@@ -185,9 +164,9 @@ routerCliente.get('/cliente/reserva/concluido', clienteAutorizacao, async (req, 
     let locacoes = await DAOReserva.historicoLocacoes(clienteCpf)
     console.log('Reservas erro:',locacoes);
     if(!locacoes){
-        res.render('erro', {mensagem: "Erro ao obter locações."})
+        return res.render('erro', {mensagem: "Erro ao obter locações."})
     }
-    res.render('cliente/reserva/concluido', {user: clienteNome(req, res), mensagem: "", locacoes: locacoes})
+    return res.render('cliente/reserva/concluido', {user: clienteNome(req, res), mensagem: "", locacoes: locacoes})
 })
 
 
@@ -199,9 +178,9 @@ routerCliente.get('/cliente/reserva/lista', clienteAutorizacao, async (req, res)
     }
     let reservas = await DAOReserva.getMinhasReservas(clienteCpf)
     if(reservas == ''){
-        res.render('cliente/reserva/lista', {user: clienteNome(req, res), reservas: reservas, mensagem: "Sua lista de reservas está vazia."})
+        return res.render('cliente/reserva/lista', {user: clienteNome(req, res), reservas: reservas, mensagem: "Sua lista de reservas está vazia."})
     }
-    res.render('cliente/reserva/lista', {user: clienteNome(req, res), reservas: reservas, mensagem: ''})
+    return res.render('cliente/reserva/lista', {user: clienteNome(req, res), reservas: reservas, mensagem: ''})
 })
 
 
@@ -219,10 +198,10 @@ routerCliente.post('/login/entrar', async (req, res) => {
                 res.redirect('/')
             } else {
                 
-                res.render('login', {user: clienteNome(req, res), mensagem: 'Usuário ou senha inválidos.'})
+                return res.render('login', {user: clienteNome(req, res), mensagem: 'Usuário ou senha inválidos.'})
             }
         } else {
-            res.render('login', {user: clienteNome(req, res), mensagem: 'Usuário ou senha inválidos.'})
+            return res.render('login', {user: clienteNome(req, res), mensagem: 'Usuário ou senha inválidos.'})
         }
     })
 
@@ -263,11 +242,11 @@ routerCliente.post('/cadastro/create', async (req, res) => {
     cep = cep.replace(/\D/g, '')
 
     if(senha.length < 8){
-        res.render('erro', {mensagem: "Erro. Senha com menos de 8 dígitos."})
+        return res.render('erro', {mensagem: "Erro. Senha com menos de 8 dígitos."})
     }
     
     if(senha !== senhaRepita){
-        res.render('erro', {mensagem: 'Erro. Senhas diferentes.'})
+        return res.render('erro', {mensagem: 'Erro. Senhas diferentes.'})
     }
     
     // Logica para criptografar a senha que será inserida no banco de dados
@@ -283,21 +262,21 @@ routerCliente.post('/cadastro/create', async (req, res) => {
     if(cliente){
         cliente = await DAOCliente.updateClienteComReservaMasNaoEraCadastrado(nome, email, senha, cpf, telefone, dataNascimento, cep, logradouro, complemento, bairro, localidade, uf, numeroDaCasa)
         if(!cliente){
-            res.render('erro', {mensagem: 'Erro ao inserir cliente'})
+            return res.render('erro', {mensagem: 'Erro ao inserir cliente'})
         }
     } else {
         cliente = await DAOCliente.insert(nome, email, senha, cpf, telefone, dataNascimento, cep, logradouro, complemento, bairro, localidade, uf, numeroDaCasa)
         if(!cliente){
-            res.render('erro', {mensagem: 'Erro ao inserir cliente'})
+            return res.render('erro', {mensagem: 'Erro ao inserir cliente'})
         }
     }
 
     if(cliente){
         req.session.cliente = {cpf: cliente.cpf, nome: cliente.nome, email: cliente.email}
         console.log(cliente.nome,"criado...");
-        res.redirect('/')
+        return res.redirect('/')
     } else {
-        res.render('erro', {mensagem: 'Erro ao inserir cliente'})
+        return res.render('erro', {mensagem: 'Erro ao inserir cliente'})
     }
 })
 
@@ -306,39 +285,13 @@ routerCliente.post('/cadastro/create', async (req, res) => {
 routerCliente.get('/admin/cliente/lista/:mensagem?', autorizacao, (req, res) => {
     DAOCliente.getAll().then(clientes => {
         if(clientes){
-            res.render('admin/cliente/cliente', {user: adminNome(req, res), clientes: clientes, mensagem: req.params.mensagem? 
+            return res.render('admin/cliente/cliente', {user: adminNome(req, res), clientes: clientes, mensagem: req.params.mensagem? 
                 "Não é possivel excluir um cliente já refereciado por uma locação":""})
         } else {
-            res.render('erro', {mensagem: "Erro na listagem de clientes."})
+            return res.render('erro', {mensagem: "Erro na listagem de clientes."})
         }
     })
 })
-
-
-routerCliente.get('/admin/cliente/editar/:cpf', autorizacao, (req, res) => {
-    let id = req.params.cpf
-    DAOCliente.getOne(id).then(cliente => {
-        if(cliente){
-            res.render('admin/cliente/editar', {user: adminNome(req, res), cliente: cliente} )
-        } else {
-            res.render('erro', {mensagem: "Erro na tentativa de edição de cliente"})
-        }
-    })
-})
-
-
-
-routerCliente.post('/admin/cliente/atualizar', autorizacao,  (req,res) => {
-    let {nome, cpf, telefone, endereco} = req.body
-    DAOCliente.update(nome, cpf, telefone, endereco).then(cliente => {
-        if(cliente){
-            res.redirect('/admin/cliente/lista')
-        } else {
-            res.render('erro', {user: adminNome(req, res), mensagem: "Não foi possível atualizar o cliente."})
-        }
-    })
-})
-
 
 
 module.exports = routerCliente

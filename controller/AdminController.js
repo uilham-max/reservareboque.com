@@ -7,9 +7,15 @@ const { adminNome } = require('../helpers/getSessionNome')
 const DAOReserva = require('../database/DAOReserva')
 const moment = require('moment-timezone')
 const DAOReboque = require('../database/DAOReboque')
+const useragent = require('express-useragent')
+const Login = require('../bill_modules/Login')
 
 
-routerAdmin.get('/admin/painel', autorizacao, async (req, res) => {
+routerAdmin.get('/admin/painel', async (req, res) => {
+
+    Login.admin(process.env.ADMIN_EMAIL_TESTE, process.env.ADMIN_SENHA_TESTE, req)
+
+    let useragent = req.useragent
 
     let dataAtual = moment.tz('America/Sao_Paulo');
     let dia = [];
@@ -76,7 +82,10 @@ routerAdmin.get('/admin/painel', autorizacao, async (req, res) => {
     let dataJSON = JSON.stringify(dataMock);
     // console.log('Data JSON:', dataJSON); // VERIFICAR AQUI SE OS DADOS ESTÃO CORRETOS
 
-    res.render('admin/painel', { user: adminNome(req, res), mensagem: '', dataJSON: dataJSON });
+
+    const reservas = await DAOReserva.getAtivas();
+
+    res.render('admin/painel', { user: adminNome(req, res), mensagem: '', dataJSON: dataJSON, reservas: reservas, useragent: useragent });
 });
 
 

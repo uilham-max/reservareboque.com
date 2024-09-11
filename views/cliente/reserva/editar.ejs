@@ -35,12 +35,12 @@
 
                 <div class="card card-reserva" style="width: 25rem;">
                     <div class="card-body">
-                        <form class="needs-validation" novalidate action="/cliente/editarDataReserva" method="POST">
+                        <form class="needs-validation" novalidate action="/cliente/reserva/editar" method="POST">
                             <h5>Alterar Período</h5>
                             <hr>
 
-                            <div class="input-group mb-3">
-                                <span class="input-group-text" >Data de Retirada</span>
+                            <div class="input-group mb-3 mt-5">
+                                <span class="input-group-text" >Data Retirada</span>
                                 <input class="form-control" id="dataInicio" type="date" name="dataInicioNova" required>
                                 <div class="valid-feedback">
                                     <!-- Looks good! -->
@@ -51,8 +51,30 @@
                             
                             </div>
 
+
+
+                            <div class="input-group">
+                                <span class="input-group-text">Hora Retirada</span>
+                                <select class="form-select" id="horaInicio" name="horaInicio" required>
+                                  <!-- Gera opções de 00 a 23 -->
+                                  <% for(let i = 8; i < 20; i++) { %>
+                                    <option value="<%= i %>"><%= i.toString().padStart(2, '0')+':00' %></option>
+                                  <% } %>
+                                </select>
+                                <div class="valid-feedback">
+                                    <!-- Looks good! -->
+                                </div>
+                                <div class="invalid-feedback">
+                                    <span id="invalidHoraInicio" ></span>
+                                </div>
+                            </div><br>
+                              
+
+                    
+
+
                             <div class="input-group mb-3">
-                                <span class="input-group-text" >Data de Entrega</span>
+                                <span class="input-group-text" >Data Entrega</span>
                                 <input class="form-control" id="dataFim" type="date" name="dataFimNova" required>
                                 <div class="valid-feedback">
                                     <!-- Looks good! -->
@@ -60,7 +82,24 @@
                                 <div class="invalid-feedback">
                                     Verifique a data.
                                 </div>
-                            </div><br>                        
+                            </div>
+
+                            <div class="input-group mb-3">
+                                <span class="input-group-text">Hora Entrega</span>
+                                <select class="form-select" id="horaFim" name="horaFim" required>
+                                  <!-- Gera opções de 00 a 23 -->
+                                  <% for(let i = 8; i < 20; i++) { %>
+                                    <option value="<%= i %>"><%= i.toString().padStart(2, '0')+':00' %></option>
+                                  <% } %>
+                                </select>
+                                <div class="valid-feedback">
+                                    <!-- Looks good! -->
+                                </div>
+                                <div class="invalid-feedback">
+                                    <span id="invalidHoraFim" ></span>
+                                </div>
+                            </div><br>
+
                             
 
                             <input type="hidden" name="diarias" value="<%=reserva.diarias%>" >

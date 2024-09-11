@@ -30,6 +30,11 @@
 16. Definir situação para CANCELADO reservas com o prazo para pagamento expirado
 17. Mesmo que o cliente seja cadastrado, mas se ele não estiver logado a reserva não deve aparecer nos registros dele.
 18. Quando o admin iniciar uma reserva, tanto a data inicio quanto a fim deve ser ajustada????  Já quando o admin encerrar uma reserva, somente a data fim dever ser inserida no banco de dados
+19. Na tela de periodo, manter o cliente informado sobre quantos dias tem o periodo que ele escolheu nas datas, ou seja, calcular a diferença em 
+horas e em diarias.
+20. Na tela de aterar a data da reserva pelo cliente, tentar injetar a data da reserva nos campos de inicio e fim do periodo.
+21. Erro ,na linha 77 de clienteController, com as datas do moment.tz
+22. Uma reserva que foi criada hoje, pode ser adiada hoje
 
 
 # Versão 2

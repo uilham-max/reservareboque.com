@@ -41,12 +41,12 @@
                                     <%= new Date(reserva.dataSaida).toString().slice(16,21) %></td>
                                 <td><%= new Date(reserva.dataChegada).toLocaleDateString('pt-BR').slice(0, 5) %>
                                     <%= new Date(reserva.dataChegada).toString().slice(16,21) %></td>
-                                <td><%=reserva.situacao%></td>
+                                <td><%=reserva.situacaoReserva%></td>
                                 <td>R$ <%=reserva.pagamento.valor%></td>
                                 <!-- <td>R$ <%=reserva.diarias*reserva.valorDiaria%>,00</td> -->
-                                <% if(reserva.situacao == 'APROVADO') { %>
+                                <% if(reserva.situacaoReserva == 'APROVADO') { %>
                                     <td><a href="/admin/reserva/situacao/<%=reserva.id%>/<%='APROVADO'%>" class="btn btn-success">Iniciar reserva</a></td>
-                                <% } else if (reserva.situacao == 'ANDAMENTO') { %>
+                                <% } else if (reserva.situacaoReserva == 'ANDAMENTO') { %>
                                     <td><a href="/admin/reserva/situacao/<%=reserva.id%>/<%='ANDAMENTO'%>" class="btn btn-danger">Encerrar reserva</a></td>
                                 <% } %>
                                 
@@ -56,10 +56,7 @@
                                         <input type="hidden" id="codigoPagamento" name="codigoPagamento" value="<%=reserva.pagamento.codigoPagamento%>">
                                         <input type="hidden" id="valor" name="valor" value="<%=reserva.pagamento.valor%>">
                                         <!-- <input  class="btn btn-success" type="submit" value="Receber"> -->
-                                        <button type="submit" class="btn btn-outline-success"
-                                            style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
-                                            Receber
-                                        </button>
+                                        <input type="submit" class="btn btn-info" value="Receber">
                                     </form>
                                 </td>
                                 <% } %>

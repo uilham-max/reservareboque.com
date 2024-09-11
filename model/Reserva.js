@@ -35,7 +35,7 @@ const Reserva = conexao.define('reserva', {
             key: 'placa'
         }
     },
-    situacao: {
+    situacaoReserva: {
         // APROVADO, CONCLUIDO, CANCELADO, ANDAMENTO, AGUARDANDO_PAGAMENTO, ADIADO
         type: Sequelize.STRING
     }

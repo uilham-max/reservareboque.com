@@ -10,11 +10,15 @@ const moment = require('moment-timezone')
 
 class DAOReserva {
 
+    static async atualizasituacaoParaGuardado(idReserva){
+
+    }
+
     static async atualizaSituacaoParaConcluido(idReserva){
         console.log('Atualizando situação da reserva para CONCLUIDO...');
         try{
             await Reserva.update(
-                {situacao: 'CONCLUIDO'},
+                {situacaoReserva: 'CONCLUIDO'},
                 {where: {id: idReserva}},
             )
             console.log('Situação atualizada para CONCLUIDO com sucesso!');
@@ -30,7 +34,7 @@ class DAOReserva {
         console.log('Atualizando situação da reserva para ANDAMENTO...');
         try{
             await Reserva.update(
-                {situacao: 'ANDAMENTO'},
+                {situacaoReserva: 'ANDAMENTO'},
                 {where: {id: idReserva}},
             )
             console.log('Situação atualizada para ANDAMENTO com sucesso!');
@@ -60,7 +64,7 @@ class DAOReserva {
     static async atualizaSituacaoParaAprovada(codigoPagamento){
         try{
             await Reserva.update(
-                {situacao: "APROVADO"},
+                {situacaoReserva: "APROVADO"},
                 {where: {pagamentoCodigoPagamento: codigoPagamento}}
             )
             console.log('Atualizando a situação da reserva para "APROVADO"...');
@@ -78,7 +82,7 @@ class DAOReserva {
     static async atualizaSituacaoParaCancelada(codigoPagamento){
         try{
             await Reserva.update(
-                {situacao: "CANCELADO"},
+                {situacaoReserva: "CANCELADO"},
                 {where: {pagamentoCodigoPagamento: codigoPagamento}},
             )
             console.log('Atualizando a situação da reserva para CANCELADO...');
@@ -207,7 +211,7 @@ class DAOReserva {
                         { dataChegada: { [Op.gte]: currentDate } }
                     ],
                     clienteCpf: cpf,
-                    situacao: 'APROVADO'
+                    situacaoReserva: 'APROVADO'
                 },
                 order: [['dataSaida', 'ASC']],
                 include: [{ model: Reboque }, { model: Cliente }, {model: Pagamento}]
@@ -227,7 +231,7 @@ class DAOReserva {
     // INSERT - Cria uma reserva com situação igual a aguardando pagamento
     static async insert(dataInicio, dataFim, valorDiaria, dias, valorTotal, clienteCpf, reboquePlaca, codigoPagamento) {
         try {
-            let reserva = await Reserva.create({id: reboquePlaca+"_"+codigoPagamento, dataSaida: dataInicio, dataChegada: dataFim, valorDiaria: valorDiaria, diarias: dias, valorTotal: valorTotal, clienteCpf: clienteCpf, reboquePlaca: reboquePlaca, pagamentoCodigoPagamento: codigoPagamento, situacao: "AGUARDANDO_PAGAMENTO" })
+            let reserva = await Reserva.create({id: reboquePlaca+"_"+codigoPagamento, dataSaida: dataInicio, dataChegada: dataFim, valorDiaria: valorDiaria, diarias: dias, valorTotal: valorTotal, clienteCpf: clienteCpf, reboquePlaca: reboquePlaca, pagamentoCodigoPagamento: codigoPagamento, situacaoReserva: "AGUARDANDO_PAGAMENTO" })
             console.log('Reserva criada! aguardando pagamento...');
             return reserva
         }
@@ -322,8 +326,9 @@ class DAOReserva {
                         { dataChegada: { [Op.gte]: currentDate } }
                     ],
                     [Op.or]: [
-                        { situacao: 'APROVADO' },
-                        { situacao: 'ANDAMENTO' },
+                        { situacaoReserva: 'APROVADO' },
+                        { situacaoReserva: 'ANDAMENTO' },
+                        { situacaoReserva: 'AGUARDANDO_PAGAMENTO' },
                     ]
                 },
                 order: ['id'],
@@ -352,9 +357,9 @@ class DAOReserva {
                         { dataChegada: { [Op.gte]: currentDate } }
                     ],
                     [Op.or]: [
-                        { situacao: 'APROVADO' },
-                        { situacao: 'ANDAMENTO' },
-                        { situacao: 'AGUARDANDO_PAGAMENTO'},
+                        { situacaoReserva: 'APROVADO' },
+                        { situacaoReserva: 'ANDAMENTO' },
+                        { situacaoReserva: 'AGUARDANDO_PAGAMENTO'},
                     ]
                 },
                 order: [['id', 'ASC']],

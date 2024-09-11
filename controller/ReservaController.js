@@ -288,7 +288,7 @@ routerReserva.post('/reserva/confirmar', async (req, res) => {
 routerReserva.get('/admin/reserva/lista', autorizacao, (req, res) => {
     DAOReserva.getAtivas().then(reservas => {
         if (reservas) {
-            res.render('admin/reserva/reserva', {user: adminNome(req, res), reservas: reservas, mensagem: "" })
+            res.render('admin/reserva/lista', {user: adminNome(req, res), reservas: reservas, mensagem: "" })
         } else {
             res.render('erro', { mensagem: "Erro na listagem de reservas." })
         }

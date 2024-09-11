@@ -169,7 +169,7 @@
                                                         <%= new Date(reserva.dataSaida).toString().slice(16,21) %></td>
                                                     <td><%= new Date(reserva.dataChegada).toLocaleDateString('pt-BR').slice(0, 5) %>
                                                         <%= new Date(reserva.dataChegada).toString().slice(16,21) %></td>
-                                                    <td><%= reserva.situacao.slice(0, 10)%></td>
+                                                    <td><%= reserva.situacaoReserva.slice(0, 10)%></td>
 
                                                 </tr>
                                             <%})%>

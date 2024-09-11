@@ -26,7 +26,7 @@
 
                     <%if(useragent.isMobile) {%>
 
-                    <!-- Listagem das reserva -->
+                    <!-- Listagem das reserva para MOBILE -->
                     <div class="card card-reserva" style="width: 40rem;">
                         <div class="card-body">
 
@@ -57,10 +57,10 @@
                                                 
                                                 <% if(reserva.pagamento.aprovado == false){ %>
                                                 <td>
-                                                    <form action="/pagamento/recebeEmDinheiro" method="POST">
+                                                    <form action="/admin/reserva/pagamento/dinheiro" method="POST">
                                                         <input type="hidden" id="codigoPagamento" name="codigoPagamento" value="<%=reserva.pagamento.codigoPagamento%>">
                                                         <input type="hidden" id="valor" name="valor" value="<%=reserva.pagamento.valor%>">
-                                                        <input type="submit" class="btn btn-info" value="Receber">
+                                                        <input type="submit" class="btn btn-info" value="Recebido">
                                                     </form>
                                                 </td>
                                                 <% } %>
@@ -82,7 +82,7 @@
 
                     <%} else {%>
 
-                    <!-- Listagem das reserva -->
+                    <!-- Listagem das reservas para DESKTOP -->
                     <div class="card card-reserva" style="width: 45rem;">
                         <div class="card-body">
 
@@ -95,8 +95,8 @@
                                             <th>Diária</th>
                                             <th>Início/Hora</th>
                                             <th>Fim/Hora</th>
-                                            <th>Situação</th>
                                             <th>Total</th>
+                                            <th>Ação</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -109,20 +109,19 @@
                                                     <%= new Date(reserva.dataSaida).toString().slice(16,21) %></td>
                                                 <td><%= new Date(reserva.dataChegada).toLocaleDateString('pt-BR').slice(0, 5) %>
                                                     <%= new Date(reserva.dataChegada).toString().slice(16,21) %></td>
-                                                <td><%=reserva.situacaoReserva%></td>
                                                 <td>R$ <%=reserva.pagamento.valor%></td>
                                                 <% if(reserva.situacaoReserva == 'APROVADO') { %>
-                                                    <td><a href="/admin/reserva/situacao/<%=reserva.id%>/<%='APROVADO'%>" class="btn btn-success">Iniciar reserva</a></td>
+                                                    <td><a href="/admin/reserva/situacao/<%=reserva.id%>/<%='APROVADO'%>" class="btn btn-info">Iniciar</a></td>
                                                 <% } else if (reserva.situacaoReserva == 'ANDAMENTO') { %>
-                                                    <td><a href="/admin/reserva/situacao/<%=reserva.id%>/<%='ANDAMENTO'%>" class="btn btn-danger">Encerrar reserva</a></td>
+                                                    <td><a href="/admin/reserva/situacao/<%=reserva.id%>/<%='ANDAMENTO'%>" class="btn btn-danger">Encerrar</a></td>
                                                 <% } %>
                                                 
                                                 <% if(reserva.pagamento.aprovado == false){ %>
                                                 <td>
-                                                    <form action="/pagamento/recebeEmDinheiro" method="POST">
+                                                    <form action="/admin/reserva/pagamento/dinheiro" method="POST">
                                                         <input type="hidden" id="codigoPagamento" name="codigoPagamento" value="<%=reserva.pagamento.codigoPagamento%>">
                                                         <input type="hidden" id="valor" name="valor" value="<%=reserva.pagamento.valor%>">
-                                                        <input type="submit" class="btn btn-info" value="Receber">
+                                                        <input type="submit" class="btn btn-success" value="Recebido">
                                                     </form>
                                                 </td>
                                                 <% } %>

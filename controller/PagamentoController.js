@@ -1,186 +1,16 @@
 const express = require('express')
 const routerPagamento = express.Router()
 const DAOPagamento = require('../database/DAOPagamento')
-const DAOCliente = require('../database/DAOCliente')
 const DAOReserva = require('../database/DAOReserva')
-const { clienteNome, adminNome } = require('../helpers/getSessionNome')
-const { criarCobranca, receiveInCash } = require('../helpers/API_Pagamentos')
-const moment = require('moment-timezone')
-const DAOReboque = require('../database/DAOReboque')
-const Diaria = require('../bill_modules/Diaria')
-const emailPagamentoAprovado = require('../helpers/emailPagamentoAprovado')
-const emailPagamentoCriado = require('../helpers/emailPagamentoCriado')
-const autorizacao = require('../autorizacao/autorizacao')
-
-
-
-routerPagamento.post('/pagamento/recebeEmDinheiro', autorizacao, async (req, res)=>{
-
-    let {codigoPagamento, valor} = req.body
-
-    let data_pagamento = moment.tz( new Date(), 'America/Sao_Paulo' )
-    data_pagamento = data_pagamento.format('YYYY-MM-DD')
-    
-    let response = await receiveInCash(codigoPagamento, valor, data_pagamento)
-    
-    if(!response){
-        res.render('erro', {mensagem: 'Erro ao acessar recurso'})
-    }
-    
-    res.redirect('/admin/reserva/lista')
-
-})
-
-
-routerPagamento.post('/pagamento/qrcode', async (req, res) => {
-    
-    let {nome, cpf, telefone, email, cep, logradouro, complemento, 
-    localidade, numeroDaCasa, reboquePlaca, dataInicio, dataFim, formaPagamento} = req.body
-
-    // Formata as datas para a hora local
-    // dataInicio = moment.tz(dataInicio, 'America/Sao_Paulo').utc()
-    // dataFim = moment.tz(dataFim, 'America/Sao_Paulo').utc()
-
-    // Criar um identificador único para o formulário
-    const formIdentifier = `${reboquePlaca}-${dataInicio}-${dataFim}`;
-
-    /**
-     * Verifica se não foi criada uma cobrança para essa reserva.
-    */
-
-    // Verificar se o formulário já foi enviado com base no identificador
-    if (req.session.submittedForms && req.session.submittedForms.includes(formIdentifier)) {
-        console.log("O formulário está duplicado. Envio cancelado!");
-        return res.render('erro', { mensagem: 'Erro. Formulário duplicado!' });
-    }
-    
-    // Remove caracteres não numéricos para inserir no banco de dados
-    cpf = cpf.replace(/\D/g, '')
-    telefone = telefone.replace(/\D/g, '')
-    cep = cep.replace(/\D/g, '')
-
-    // Inicializa o valor da diária com 0
-    let valorDiaria = 0
-
-    // BUSCAR REBOQUE NO BD
-    let reboque = await DAOReboque.getOne(reboquePlaca)
-    if(!reboque){
-        res.render('erro', {mensagem: 'erro ao buscar reboque'})
-        return
-    }
-    
-    /**
-     * Calcula o valos da diária com desconto para clientes com ou sem cadastro
-    */
-
-    let dias = Diaria.calcularDiarias(dataInicio, dataFim)
-    let valorTotalDaReserva = Diaria.calcularValorTotalDaReserva(dias, reboque.valorDiaria)
-    let valorTotalDaReservaComDesconto = Diaria.aplicarDescontoNaDiariaParaCliente(valorTotalDaReserva, dias)
-    
-    /**
-     * Se o cliente estiver cadastrado e logado, será calculado o desconto nas diarias
-     * O cliente que está fazendo a reserva será registrado no banco de dados com status registrado = false
-    */
-
-    let cliente = {}
-    if(req.session.cliente){
-        // O cliente está logado!
-        cliente = await DAOCliente.getOne(req.session.cliente.cpf)
-        if(!cliente){
-            res.render('erro', {mensagem: "Erro ao buscar cliente"})
-            return
-        }
-        // Aplica o desconto na reserva
-        valorDiaria = valorTotalDaReservaComDesconto/dias
-        valorTotalDaReserva = valorTotalDaReservaComDesconto
-    } else {
-        // O cliente não está logado!
-        cliente = await DAOCliente.verificaSeClienteExiste(cpf)
-        if(!cliente){ 
-            cliente = await DAOCliente.insertClienteQueNaoQuerSeCadastrar(nome, cpf, telefone, email, cep, logradouro, complemento, localidade, numeroDaCasa)
-            if(!cliente){
-                res.render('erro', {mensagem: 'erro ao criar cliente'})
-                return
-            }  
-        }
-        // A diaria não recebe desconto
-        valorDiaria = reboque.valorDiaria
-    }
-
-
-    // CHAMA A API DO SISTEMA DE PAGAMENTO
-    let retorno;
-    try{
-        let data_vencimento = moment.tz( new Date(), 'America/Sao_Paulo' )
-        data_vencimento = data_vencimento.format('YYYY-MM-DD')
-
-       
-
-        retorno = await criarCobranca(cliente.cpf, cliente.nome, telefone, email, valorTotalDaReserva, data_vencimento, dataInicio, dataFim, reboque.placa, formaPagamento)
-    }catch(error){
-        res.render('erro', { mensagem: "Erro ao criar cobrança PIX."})
-        return
-    }finally{
-
-        // Adiciona 60 minutos como tempo de expiração da reservas caso não seja paga
-        var dataExpiracao = moment.tz(new Date(), 'America/Sao_Paulo')
-        dataExpiracao.add(60, 'minutes')
-
-        // PAGAMENTO INSERT
-        const codigoPagamento = await DAOPagamento.insert(retorno.id_cobranca, retorno.netValue, retorno.billingType, dataExpiracao)
-        if(!codigoPagamento){
-        res.render('erro', { mensagem: "Erro ao criar pagamento."})
-        }
-
-
-        // RESERVA INSERT
-        const reserva = await DAOReserva.insert(dataInicio, dataFim, valorDiaria, dias, retorno.netValue, cliente.cpf, reboquePlaca, codigoPagamento)
-        if(!reserva){
-            res.render('erro', {mensagem: 'Erro ao criar reserva.'})
-        } else {
-
-            // Marcar o formulário específico como enviado
-            console.log("Marcando formulário como enviado...");
-            req.session.submittedForms = req.session.submittedForms || [];
-            req.session.submittedForms.push(formIdentifier);
-
-            if(formaPagamento == 'PIX'){
-                res.render('pagamento/qrcode', {user: clienteNome(req, res), formaPagamento: formaPagamento, id_cobranca: retorno.id_cobranca, image: retorno.encodedImage, PIXCopiaECola: retorno.PIXCopiaECola, mensagem: ''})
-            } else {
-                res.render('pagamento/sucesso', {user: clienteNome(req, res), formaPagamento: formaPagamento, mensagem: ""})
-            }
-            //res.redirect(`${retorno.invoiceUrl}`)
-        }
-
-    }
-
-})
-
-
-// WEB SERVICE - API PIX CRIADO
-// routerPagamento.post('/pagamento/webhook/pixCriado', async (req, res) => {
-//     let destino = "uilhamgoncalves@gmail.com"
-//     try{
-//         console.log(req.body.event, "Enviar email para o admin.");
-//         emailPagamentoCriado(destino)
-//     }catch(error){
-//         console.warn(error);
-//     }finally{
-//         res.sendStatus(200) ;
-//     }
-    
-// })
 
 
 // WEB SERVICE - ESCUTA O WEBHOOK --- ATUALIZA PAGAMENTO PARA APROVADO --- API PIX RECEBIDO
-
-
 routerPagamento.post('/pagamento/webhook/pix', async (req, res) => {
     try{ 
         let codigoPagamento = req.body.payment.id
         console.log("Executar: Atualizar situação de pagamento e reserva para aprovado:",codigoPagamento);
         await DAOPagamento.atualizarPagamentoParaAprovado(codigoPagamento)
-        await DAOReserva.atualizaSituacaoParaAprovada(codigoPagamento) // Recuperar Id da reserva para atualizar a situação dela para aprovado
+        await DAOReserva.atualizaSituacaoParaAprovado(codigoPagamento) // Recuperar Id da reserva para atualizar a situação dela para aprovado
     }catch(error){
         console.warn(error);
     }finally{
@@ -205,15 +35,6 @@ routerPagamento.get('/pagamento/aprovado/:codigoPagamento', async (req, res) => 
         console.log(codigoPagamento ," --> Erro ao processar pagamento!");
         console.error(erro);
     }
-})
-
-
-// ROTA PUBLICA
-routerPagamento.get('/pagamento/realizado/:formaPagamento?', async (req, res) => {
-    if(req.session.cliente){
-        emailPagamentoAprovado(req.session.cliente.email)
-    }
-    res.render('pagamento/sucesso', {user: clienteNome(req, res), formaPagamento: req.params.formaPagamento, mensagem: ""})
 })
 
 

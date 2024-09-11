@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <%-include('../partials/header.ejs')%>
+    <%-include('../../partials/header.ejs')%>
 </head>
 <body  >
     
-    <%-include('../partials/navbar.ejs')%>
+    <%-include('../../partials/navbar.ejs')%>
 
     <div class="conteudo" >
 
@@ -18,14 +18,14 @@
 
         <div class="container" >
             <!-- <h3>Reboque escolhido</h3> -->
-            <form action="/pagamento/qrcode" method="POST">
+            <form action="/cliente/reserva/qrcode" method="POST">
                 <div class="lista-reboques">
                 
 
                     <!-- Card do reboque -->
                     <div class="card card-reserva" style="width: 25rem;">
 
-                        <img src="../../<%=reboque.foto%>" class="card-img-top" alt="...">
+                        <img src="../../../<%=reboque.foto%>" class="card-img-top" alt="...">
 
                         <div class="alert alert-info mt-3">
                             <strong>Atenção!</strong>
@@ -175,6 +175,6 @@
 
 
 
-    <%-include('../partials/footer.ejs')%>
+    <%-include('../../partials/footer.ejs')%>
 </body>
 </html>

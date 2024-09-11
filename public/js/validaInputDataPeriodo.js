@@ -38,8 +38,8 @@ document.addEventListener('DOMContentLoaded', () => {
   inputDataFim.value = adicionaUmDia(inputDataInicio.value)
   inputDataInicio.setAttribute('min', dataAtual); 
   inputDataFim.setAttribute('min', adicionaUmDia(inputDataInicio.value)); // TESTENDO AQUI
-  inputHoraInicio.value = hora
-  inputHoraFim.value = hora
+//   inputHoraInicio.value = hora
+//   inputHoraFim.value = hora
 
   // Hora de entrega recebe a hora de inicio
   inputHoraInicio.addEventListener('change', () => {

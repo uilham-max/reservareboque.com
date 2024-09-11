@@ -6,126 +6,19 @@ const DAOReboque = require('../database/DAOReboque')
 var {clienteNome, adminNome} = require('../helpers/getSessionNome')
 const autorizacao = require('../autorizacao/autorizacao')
 const Diaria = require('../bill_modules/Diaria')
-const { estornoPagamento } = require('../helpers/API_Pagamentos')
+const { estornoPagamento, receiveInCash, criarCobranca } = require('../helpers/API_Pagamentos')
 const DAOPagamento = require('../database/DAOPagamento')
 const clienteAutorizacao = require('../autorizacao/clienteAutorizacao')
 const moment = require('moment-timezone')
+const Grafico = require('../bill_modules/Grafico')
+const emailPagamentoAprovado = require('../helpers/emailPagamentoAprovado')
 
-routerReserva.get('/admin/reserva/situacao/:idReserva?/:situacao?', autorizacao, async (req, res) => {
-
-    let idReserva = req.params.idReserva
-    let situacao = req.params.situacao
-    let resposta
-    
-    switch (situacao) {
-        case 'APROVADO':
-            resposta = await DAOReserva.atualizaSituacaoParaAndamento(idReserva)
-            break
-        case 'ANDAMENTO':
-            resposta = await DAOReserva.atualizaSituacaoParaConcluido(idReserva)
-            break
-        default:
-            res.render('erro', {mensagem: "Erro ao atualizar situação da reserva"})
-            return
-    }
-
-    if(!resposta){
-        res.render('erro', {mensagem: "Erro ao atualizar situação da reserva"})
-        return
-    }
-
-    DAOReserva.getAtivas().then(reservas => {
-        if (reservas) {
-            res.render('admin/reserva/reserva', {user: adminNome(req, res), reservas: reservas, mensagem: "" })
-        } else {
-            res.render('erro', { mensagem: "Erro na listagem de reservas." })
-        }
-    })
-})
-
-
-// REMOVER RESERVA ADMIN
-// routerReserva.get('/admin/reserva/remover/:codigoPagamento?/:valor?', autorizacao, async (req, res) => {
-
-//     // console.log(req.params.codigoPagamento, "coidgoPagamento");
-
-//     console.log("Removendo a reserva...");
-//     console.log('Estornando o pagamento...');
-//     await estornoPagamento(req.params.codigoPagamento, req.params.valor)
-//     // O MESMO QUE REMOVER A RESERVA (DELETE ON CASCADE)
-//     console.log('Cancelando a reserva...');
-//     // await DAOPagamento.removePeloCodigoPagamento(req.params.codigoPagamento)
-//     await DAOPagamento.atualizaSituacaoParaCancelado(req.params.codigoPagamento)
-//     // await DAOReserva.atualizaSituacaoParaCancelada()
-
-//     let reservas = await DAOReserva.getAtivas()
-    
-//     if(reservas == ''){
-//         res.render('reserva/reserva', {user: adminNome(req, res), reservas: reservas, mensagem: "A lista de reservas está vazia."})
-//     }
-//     res.render('reserva/reserva', {user: adminNome(req, res), reservas: reservas, mensagem: ''})
-    
-// })
-
-
-// CANCELAMENTO DE RESERVA PELO CLIENTE
-// routerReserva.get('/reserva/remover/:codigoPagamento?/:valor?/:dataSaida?', clienteAutorizacao, async (req, res) => {
-
-//     console.log("Executando o cancelamento da reserva...");
-
-//     let clienteCpf
-//     if(req.session.cliente && req.session.cliente.cpf){
-//         clienteCpf = req.session.cliente.cpf
-//     }
-
-//     // Pega a data atual
-//     let dataAtual =  moment.tz( new Date(), 'America/Sao_Paulo' )
-
-//     // Formata a data de saida da reserva ( necessário para realizar o cálculo )
-//     let dataSaida = moment(req.params.dataSaida)
-
-//     // Calcula a diferença entre a datas d saída e atual ( horas )
-//     var horasRestantes = dataSaida.diff(dataAtual, 'hours')
-
-//     let reservas
-
-//     // Não será possível cancelar a reserva se houver menos de 24h para a retirada
-//     if( horasRestantes < 48 || (dataSaida.format("YYYY-MM-DD") == dataAtual.format("YYYY-MM-DD"))) {
-//         reservas = await DAOReserva.getMinhasReservas(clienteCpf)
-//         console.error("Não foi possível cancelar a reserva!");
-//         res.render('cliente/reserva/lista', {user: clienteNome(req, res), reservas: reservas, mensagem: "Sua reserva não pode ser cancelada. Faltam menos de 24 horas para retirada."})
-//     } else {
-//         console.log('Estornando o pagamento...');
-//         await estornoPagamento(req.params.codigoPagamento, req.params.valor)
-//         // O MESMO QUE REMOVER A RESERVA (DELETE ON CASCADE)
-//         console.log('Cancelando a reserva...');
-//         // await DAOPagamento.removePeloCodigoPagamento(req.params.codigoPagamento)
-//         console.log(req.params.codigoPagamento, "coidgoPagamento");
-
-//         await DAOPagamento.atualizaSituacaoParaCancelado(req.params.codigoPagamento)
-//         let codigoPagamento = await DAOPagamento.recuperaPeloCodigoPagamento(req.params.codigoPagamento)
-//         await DAOReserva.atualizaSituacaoParaCancelada(codigoPagamento)
-
-//         reservas = await DAOReserva.getMinhasReservas(clienteCpf)
-        
-//         if(reservas == ''){
-//             res.render('cliente/reserva/lista', {user: clienteNome(req, res), reservas: reservas, mensagem: "Sua lista de reservas está vazia."})
-//         }
-//         res.render('cliente/reserva/lista', {user: clienteNome(req, res), reservas: reservas, mensagem: ''})
-//     }
-    
-// })
-
-
-
-// PERÍODO
-
-routerReserva.get('/reserva/periodo/:reboquePlaca?', (req, res) => {
+routerReserva.get('/cliente/reserva/periodo/:reboquePlaca?', (req, res) => {
     let reboquePlaca = req.params.reboquePlaca
     DAOReserva.getAtivasPorID(reboquePlaca).then(reservas => {
         DAOReboque.getOne(reboquePlaca).then(reboque => {
             if(reboque){
-                res.render('reserva/periodo', {user: clienteNome(req, res), mensagem: "", reboque: reboque, reservas: reservas})
+                res.render('cliente/reserva/periodo', {user: clienteNome(req, res), mensagem: "", reboque: reboque, reservas: reservas})
             } else {
                 res.render('erro', {mensagem: "Erro ao mostrar reboque."})
             }
@@ -133,9 +26,7 @@ routerReserva.get('/reserva/periodo/:reboquePlaca?', (req, res) => {
     })
 })
 
-
-// FORMULÁRIO PARA CLIENTES NÃO CADASTRADOS
-routerReserva.post('/reserva/formulario', (req, res) => {
+routerReserva.post('/cliente/reserva/formulario', (req, res) => {
     let {reboquePlaca, dataInicio, dataFim} =  req.body
 
     if(dataInicio > dataFim){
@@ -150,12 +41,12 @@ routerReserva.post('/reserva/formulario', (req, res) => {
                 let dias = Diaria.calcularDiarias(dataInicio, dataFim)
                 let valorTotalDaReserva = Diaria.calcularValorTotalDaReserva(dias, reboque.valorDiaria)
                 let valorTotalDaReservaComDesconto = Diaria.aplicarDescontoNaDiariaParaCliente(valorTotalDaReserva, dias)
-                res.render('reserva/formulario', {user: clienteNome(req, res), dias: dias, reboque: reboque, dataInicio: dataInicio, dataFim: dataFim, valorTotalDaReserva: valorTotalDaReserva,  valorTotalDaReservaComDesconto: valorTotalDaReservaComDesconto,})
+                res.render('cliente/reserva/formulario', {user: clienteNome(req, res), dias: dias, reboque: reboque, dataInicio: dataInicio, dataFim: dataFim, valorTotalDaReserva: valorTotalDaReserva,  valorTotalDaReservaComDesconto: valorTotalDaReservaComDesconto,})
 
             } else {
                 
                 DAOReserva.getAtivasPorID(reboquePlaca).then(reservas => {
-                    res.render('reserva/periodo', {user: clienteNome(req, res), reboque: reboque, reservas: reservas, mensagem: "Indisponível para esta data."})
+                    res.render('cliente/reserva/periodo', {user: clienteNome(req, res), reboque: reboque, reservas: reservas, mensagem: "Indisponível para esta data."})
                 })
                 
             }
@@ -163,10 +54,7 @@ routerReserva.post('/reserva/formulario', (req, res) => {
     } )
 })
 
-
-
-// TELA DE CONFIRMAÇÃO DA RESERVA
-routerReserva.post('/reserva/confirmar', async (req, res) => {
+routerReserva.post('/cliente/reserva/confirmar', async (req, res) => {
     
     let {nome, cpf, telefone, email, cep, logradouro, complemento, localidade,
     numeroDaCasa, reboquePlaca, horaInicio, horaFim, dataInicio, dataFim, formaPagamento} = req.body
@@ -199,7 +87,7 @@ routerReserva.post('/reserva/confirmar', async (req, res) => {
     if(resposta.length > 0){
         let reboque = await DAOReboque.getOne(reboquePlaca)
         let reservas = await DAOReserva.getAtivasPorID(reboquePlaca)
-        res.render('reserva/periodo', {user: clienteNome(req, res), reboque: reboque, reservas: reservas, mensagem: "Indisponível para esta data."})
+        res.render('cliente/reserva/periodo', {user: clienteNome(req, res), reboque: reboque, reservas: reservas, mensagem: "Indisponível para esta data."})
         return
     }
 
@@ -274,17 +162,187 @@ routerReserva.post('/reserva/confirmar', async (req, res) => {
      * Finalmente o servidor retorna a página de confirmação dos dados com os objetos criados
     */
 
-    res.render('reserva/confirmar', 
+    res.render('cliente/reserva/confirmar', 
         {user: clienteNome(req, res), reboque: reboque, cliente: cliente, reserva: reserva, mensagem: '' 
     })
 
 })
 
+routerReserva.get('/cliente/reserva/realizado/:formaPagamento?', async (req, res) => {
+    if(req.session.cliente){
+        emailPagamentoAprovado(req.session.cliente.email)
+    }
+    return res.render('cliente/reserva/sucesso', {user: clienteNome(req, res), formaPagamento: req.params.formaPagamento, mensagem: ""})
+})
+
+routerReserva.post('/cliente/reserva/qrcode', async (req, res) => {
+    
+    let {nome, cpf, telefone, email, cep, logradouro, complemento, 
+    localidade, numeroDaCasa, reboquePlaca, dataInicio, dataFim, formaPagamento} = req.body
+
+    // Criar um identificador único para o formulário
+    const formIdentifier = `${reboquePlaca}-${dataInicio}-${dataFim}`;
+
+    /**
+     * Verifica se não foi criada uma cobrança para essa reserva.
+    */
+
+    // Verificar se o formulário já foi enviado com base no identificador
+    if (req.session.submittedForms && req.session.submittedForms.includes(formIdentifier)) {
+        console.log("O formulário está duplicado. Envio cancelado!");
+        return res.render('erro', { mensagem: 'Erro. Formulário duplicado!' });
+    }
+    
+    // Remove caracteres não numéricos para inserir no banco de dados
+    cpf = cpf.replace(/\D/g, '')
+    telefone = telefone.replace(/\D/g, '')
+    cep = cep.replace(/\D/g, '')
+
+    // Inicializa o valor da diária com 0
+    let valorDiaria = 0
+
+    // BUSCAR REBOQUE NO BD
+    let reboque = await DAOReboque.getOne(reboquePlaca)
+    if(!reboque){
+        return res.render('erro', {mensagem: 'erro ao buscar reboque'})
+    }
+    
+    /**
+     * Calcula o valos da diária com desconto para clientes com ou sem cadastro
+    */
+
+    let dias = Diaria.calcularDiarias(dataInicio, dataFim)
+    let valorTotalDaReserva = Diaria.calcularValorTotalDaReserva(dias, reboque.valorDiaria)
+    let valorTotalDaReservaComDesconto = Diaria.aplicarDescontoNaDiariaParaCliente(valorTotalDaReserva, dias)
+    
+    /**
+     * Se o cliente estiver cadastrado e logado, será calculado o desconto nas diarias
+     * O cliente que está fazendo a reserva será registrado no banco de dados com status registrado = false
+    */
+
+    let cliente = {}
+    if(req.session.cliente){
+        // O cliente está logado!
+        cliente = await DAOCliente.getOne(req.session.cliente.cpf)
+        if(!cliente){
+            return res.render('erro', {mensagem: "Erro ao buscar cliente"})
+        }
+        // Aplica o desconto na reserva
+        valorDiaria = valorTotalDaReservaComDesconto/dias
+        valorTotalDaReserva = valorTotalDaReservaComDesconto
+    } else {
+        // O cliente não está logado!
+        cliente = await DAOCliente.verificaSeClienteExiste(cpf)
+        if(!cliente){ 
+            cliente = await DAOCliente.insertClienteQueNaoQuerSeCadastrar(nome, cpf, telefone, email, cep, logradouro, complemento, localidade, numeroDaCasa)
+            if(!cliente){
+                return res.render('erro', {mensagem: 'erro ao criar cliente'})
+            }  
+        }
+        // A diaria não recebe desconto
+        valorDiaria = reboque.valorDiaria
+    }
 
 
-/** CONTROLADORES ENCARREGADOS DA PARTE DOS RELATÓRIOS */
+    // CHAMA A API DO SISTEMA DE PAGAMENTO
+    let retorno;
+    try{
+        let data_vencimento = moment.tz( new Date(), 'America/Sao_Paulo' )
+        data_vencimento = data_vencimento.format('YYYY-MM-DD')
 
-// LISTAR GET
+       
+
+        retorno = await criarCobranca(cliente.cpf, cliente.nome, telefone, email, valorTotalDaReserva, data_vencimento, dataInicio, dataFim, reboque.placa, formaPagamento)
+    }catch(error){
+        return res.render('erro', { mensagem: "Erro ao criar cobrança PIX."})
+    }finally{
+
+        // Adiciona 60 minutos como tempo de expiração da reservas caso não seja paga
+        var dataExpiracao = moment.tz(new Date(), 'America/Sao_Paulo')
+        dataExpiracao.add(60, 'minutes')
+
+        // PAGAMENTO INSERT
+        const codigoPagamento = await DAOPagamento.insert(retorno.id_cobranca, retorno.netValue, retorno.billingType, dataExpiracao)
+        if(!codigoPagamento){
+            return res.render('erro', { mensagem: "Erro ao criar pagamento."})
+        }
+
+        let situacaoReserva = 'AGUARDANDO_PAGAMENTO'
+        if(formaPagamento == 'DINHEIRO'){
+            situacaoReserva == 'AGUARDANDO_ACEITACAO'
+        }
+
+
+        // RESERVA INSERT
+        const reserva = await DAOReserva.insert(dataInicio, dataFim, valorDiaria, dias, retorno.netValue, cliente.cpf, reboquePlaca, codigoPagamento, situacaoReserva)
+        if(!reserva){
+            return res.render('erro', {mensagem: 'Erro ao criar reserva.'})
+        } else {
+
+            // Marcar o formulário específico como enviado
+            console.log("Marcando formulário como enviado...");
+            req.session.submittedForms = req.session.submittedForms || [];
+            req.session.submittedForms.push(formIdentifier);
+
+            if(formaPagamento == 'PIX'){
+                return res.render('cliente/reserva/qrcode', {user: clienteNome(req, res), formaPagamento: formaPagamento, id_cobranca: retorno.id_cobranca, image: retorno.encodedImage, PIXCopiaECola: retorno.PIXCopiaECola, mensagem: ''})
+            } else {
+                return res.render('cliente/reserva/sucesso', {user: clienteNome(req, res), formaPagamento: formaPagamento, mensagem: ""})
+            }
+            //res.redirect(`${retorno.invoiceUrl}`)
+        }
+
+    }
+
+})
+
+routerReserva.post('/admin/reserva/pagamento/dinheiro', autorizacao, async (req, res)=>{
+
+    let {codigoPagamento, valor} = req.body
+
+    let data_pagamento = moment.tz( new Date(), 'America/Sao_Paulo' )
+    data_pagamento = data_pagamento.format('YYYY-MM-DD')
+    
+    let response = await receiveInCash(codigoPagamento, valor, data_pagamento)
+    await DAOReserva.atualizaSituacaoParaAprovado(codigoPagamento)
+    
+    if(!response){
+        return res.render('erro', {mensagem: 'Erro ao acessar recurso'})
+    }
+    
+    return res.redirect('/admin/painel')
+
+})
+
+routerReserva.get('/admin/reserva/situacao/:idReserva?/:situacao?', autorizacao, async (req, res) => {
+
+    let idReserva = req.params.idReserva
+    let situacao = req.params.situacao
+    let resposta
+    
+    switch (situacao) {
+        case 'APROVADO':
+            resposta = await DAOReserva.atualizaSituacaoParaAndamento(idReserva)
+            break
+        case 'ANDAMENTO':
+            resposta = await DAOReserva.atualizaSituacaoParaConcluido(idReserva)
+            break
+        default:
+            return res.render('erro', {mensagem: "Erro ao atualizar situação da reserva"})
+    }
+
+    if(!resposta){
+        return res.render('erro', {mensagem: "Erro ao atualizar situação da reserva"})
+    }
+
+    const reservas = await DAOReserva.getAtivas()
+    if (!reservas) {
+        return res.render('erro', { mensagem: "Erro na listagem de reservas." })
+    }
+    res.render('admin/painel', {user: adminNome(req, res), reservas: reservas, mensagem: "", dataJSON: await Grafico.reservas() })
+
+})
+
 routerReserva.get('/admin/reserva/lista', autorizacao, (req, res) => {
     DAOReserva.getAtivas().then(reservas => {
         if (reservas) {
@@ -295,9 +353,6 @@ routerReserva.get('/admin/reserva/lista', autorizacao, (req, res) => {
     })
 })
 
-
-
-// RELATORIO HISTORICO GET
 routerReserva.get('/admin/reserva/historico', autorizacao, (req, res) => {
     DAOReserva.getRelatorioHistorico().then(reservas => {
         if (reservas) {
@@ -308,9 +363,6 @@ routerReserva.get('/admin/reserva/historico', autorizacao, (req, res) => {
     })
 })
 
-
-
-// RELATORIO HISTORICO POST
 routerReserva.post('/admin/reserva/filtrarHistorico', autorizacao, (req, res) => {
     let {dataInicio, dataFim} = req.body
     DAOReserva.getRelatorioHistorico(dataInicio, dataFim).then(reservas => {
@@ -322,9 +374,6 @@ routerReserva.post('/admin/reserva/filtrarHistorico', autorizacao, (req, res) =>
     })
 })
 
-
-
-// RELATORIO LUCRO GET
 routerReserva.get('/admin/reserva/lucro', autorizacao, async (req, res) => {
     let reservas = await DAOReserva.getRelatorioLucro()
     if(reservas){
@@ -334,8 +383,6 @@ routerReserva.get('/admin/reserva/lucro', autorizacao, async (req, res) => {
         res.render('erro', {mensagem: "Erro ao listar lucros."})
     }
 })
-
-
 
 routerReserva.post('/admin/reserva/filtrar', autorizacao, async (req, res) => {
     let {dataInicio, dataFim} = req.body

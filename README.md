@@ -10,7 +10,7 @@
 # Onde parei:
 
 * Criar campo 'cancelada' na tabela 'reserva'. Reservas não devem ser excluídas, mas sim canceladas. (cancelamento  lógico, não físico)
-* STATUS RESERVA, MANUTENCAO, APROVADO, CONCLUIDO, CANCELADO, ANDAMENTO, AGUARDANDO_PAGAMENTO, ADIADO (neste caso a data nao expira e o cliente pode escolher a nova data em qualquer momento)
+* STATUS RESERVA, MANUTENCAO, APROVADO, CONCLUIDO, CANCELADO, ANDAMENTO, AGUARDANDO_PAGAMENTO, AGUARDANDO_ACEITACAO, ADIADO (neste caso a data nao expira e o cliente pode escolher a nova data em qualquer momento)
 * Implementar taxa de cancelamento no estorno de pagamento.
 
 # Versão 1
@@ -35,6 +35,7 @@ horas e em diarias.
 20. Na tela de aterar a data da reserva pelo cliente, tentar injetar a data da reserva nos campos de inicio e fim do periodo.
 21. Erro ,na linha 77 de clienteController, com as datas do moment.tz
 22. Uma reserva que foi criada hoje, pode ser adiada hoje
+23. Há uma duplicação ocasional em admin/painel dos botoes iniciar e recebido
 
 
 # Versão 2

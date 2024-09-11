@@ -25,13 +25,15 @@
                         <div class="card-body">
                             <h5 class="card-text"><%= reserva.reboque.descricao %></h5>
                             <hr>
+
+                            <div class="form-group">
+                                <label for="cep_input">Modelo</label>
+                                <input class="form-control" id="inputModelo" type="text" name="inputModelo"value="<%=reserva.reboque.modelo%>" disabled>
+                            </div>
+
                             <h5><b>Tipo de Reboque: </b><%= reserva.reboque.modelo %></h5>
                             <h5><b>Valor da Diária: </b>R$ <%= reserva.reboque.valorDiaria %>,00</h5>
-                        </div>
-                    </div>
 
-                    <div class="card card-reserva" style="width: 25rem;">
-                        <div class="card-body">
                             <h5 class="card-title"> <b>Informações</b></h5>
                             <hr>
                             <h5><b>Valor Pago na Diária: </b>R$ <%= ((reserva.valorDiaria).toFixed(2)).replace('.', ',') %></h5>
@@ -42,28 +44,31 @@
                             <h5><b>Data da Entrega: </b><span id="dataChegada"><%= new Date(reserva.dataChegada).toLocaleDateString('pt-BR') %></span></h5>
                             <h5><b>Quantidade de Dias: </b><%= reserva.diarias %> dia(s)</h5>
                             <h5><b>Valor Total da Reserva: </b>R$ <%= ((reserva.valorDiaria * reserva.diarias).toFixed(2)).replace('.', ',') %></h5>
+                            <h5><b>Situação: </b><%= reserva.situacaoReserva %></h5>
                             <% if (reserva.pagamento.aprovado) { %>
-                            <h5><b>Status do Pagamento: </b>Aprovado</h5>
+                                <h5><b>Pagamento: </b>Aprovado</h5>
                             <% } else { %>
-                            <h5><b>Status do Pagamento: </b>Pendente</h5>
+                                <h5><b>Pagamento: </b>Pendente</h5>
                             <% } %>
 
                             <% if (mensagem) { %>
-                            <div class="alert alert-danger">
-                                <strong>Atenção!</strong> <%= mensagem %>
-                            </div>
+                                <div class="alert alert-danger">
+                                    <strong>Atenção!</strong> <%= mensagem %>
+                                </div>
                             <% } %>
-                        </div>
 
-                        <div class="d-md-flex justify-content-center" style="margin: 0.5rem;">
-                            <button style="margin: 0.3rem;" class="btn btn-secondary" type="button" onclick="history.back()">Voltar</button>
-                            <% if(reserva.situacaoReserva == 'APROVADO' || reserva.situacaoReservaReserva == 'ADIADO') {%>
-                                <a style="margin: 0.3rem;" class="btn btn-primary" href="/cliente/reserva/editar/<%= reserva.id %>">Alterar período</a>
-                                <a style="margin: 0.3rem;" class="btn btn-danger" 
-                                    onclick="return confirm('Este recurso está indisponível no momento')" 
-                                    href="#">Guardar
-                                </a>
-                            <% } %>
+                            <div class="d-md-flex justify-content-center" style="margin: 0.5rem;">
+                                <button style="margin: 0.3rem;" class="btn btn-secondary" type="button" onclick="history.back()">Voltar</button>
+                                <% if(reserva.situacaoReserva == 'APROVADO' || reserva.situacaoReservaReserva == 'ADIADO') {%>
+                                    <a style="margin: 0.3rem;" class="btn btn-primary" href="/cliente/reserva/editar/<%= reserva.id %>">Alterar período</a>
+                                    <a style="margin: 0.3rem;" class="btn btn-danger" 
+                                        onclick="return confirm('Este recurso está indisponível no momento')" 
+                                        href="#">Guardar
+                                    </a>
+                                <% } %>
+                            </div>
+
+                            
                         </div>
                     </div>
                 </div>

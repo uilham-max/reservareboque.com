@@ -10,7 +10,20 @@ const moment = require('moment-timezone')
 
 class DAOReserva {
 
-    static async atualizasituacaoParaGuardado(idReserva){
+
+    // Atualiza situação de uma reserva para aprovado
+    static async atualizaSituacaoParaAprovado(codigoPagamento){
+        try{
+            await Reserva.update(
+                {situacaoReserva: "APROVADO"},
+                {where: {pagamentoCodigoPagamento: codigoPagamento}}
+            )
+            console.log('Atualizando a situação da reserva para "APROVADO"...');
+            return true
+        }catch(erro){
+            console.log(erro.toString());
+            return false
+        }
 
     }
 
@@ -57,23 +70,6 @@ class DAOReserva {
             console.log("Erro ao alterar data da reserva", erro);
             return false
         }
-    }
-
-
-    // Atualiza situação de uma reserva para aprovado
-    static async atualizaSituacaoParaAprovada(codigoPagamento){
-        try{
-            await Reserva.update(
-                {situacaoReserva: "APROVADO"},
-                {where: {pagamentoCodigoPagamento: codigoPagamento}}
-            )
-            console.log('Atualizando a situação da reserva para "APROVADO"...');
-            return true
-        }catch(erro){
-            console.log(erro.toString());
-            return false
-        }
-
     }
 
 
@@ -211,7 +207,11 @@ class DAOReserva {
                         { dataChegada: { [Op.gte]: currentDate } }
                     ],
                     clienteCpf: cpf,
-                    situacaoReserva: 'APROVADO'
+                    [Op.or]: [
+                        {situacaoReserva: 'APROVADO'},
+                        {situacaoReserva: 'ANDAMENTO'}
+                    ]
+                    
                 },
                 order: [['dataSaida', 'ASC']],
                 include: [{ model: Reboque }, { model: Cliente }, {model: Pagamento}]
@@ -229,9 +229,9 @@ class DAOReserva {
 
 
     // INSERT - Cria uma reserva com situação igual a aguardando pagamento
-    static async insert(dataInicio, dataFim, valorDiaria, dias, valorTotal, clienteCpf, reboquePlaca, codigoPagamento) {
+    static async insert(dataInicio, dataFim, valorDiaria, dias, valorTotal, clienteCpf, reboquePlaca, codigoPagamento, situacaoReserva) {
         try {
-            let reserva = await Reserva.create({id: reboquePlaca+"_"+codigoPagamento, dataSaida: dataInicio, dataChegada: dataFim, valorDiaria: valorDiaria, diarias: dias, valorTotal: valorTotal, clienteCpf: clienteCpf, reboquePlaca: reboquePlaca, pagamentoCodigoPagamento: codigoPagamento, situacaoReserva: "AGUARDANDO_PAGAMENTO" })
+            let reserva = await Reserva.create({id: reboquePlaca+"_"+codigoPagamento, dataSaida: dataInicio, dataChegada: dataFim, valorDiaria: valorDiaria, diarias: dias, valorTotal: valorTotal, clienteCpf: clienteCpf, reboquePlaca: reboquePlaca, pagamentoCodigoPagamento: codigoPagamento, situacaoReserva: situacaoReserva })
             console.log('Reserva criada! aguardando pagamento...');
             return reserva
         }

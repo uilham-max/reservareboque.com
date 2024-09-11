@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <%-include('../partials/header.ejs')%>
+    <%-include('../../partials/header.ejs')%>
     <script src="/js/validaInputDataPeriodo.js" ></script>
 </head>
 <body  >
     
-    <%-include('../partials/navbar.ejs')%>
+    <%-include('../../partials/navbar.ejs')%>
 
     <div class="conteudo" >
 
@@ -24,15 +24,15 @@
             <!-- <h3>Reboque escolhido</h3> -->
             
              <% if(user == '') {%>
-            <form class="needs-validation" novalidate action="/reserva/formulario" method="POST">
+            <form class="needs-validation" novalidate action="/cliente/reserva/formulario" method="POST">
             <% } else {%>
-            <form class="needs-validation" novalidate action="/reserva/confirmar" method="POST">
+            <form class="needs-validation" novalidate action="/cliente/reserva/confirmar" method="POST">
             <% } %>
             
                 <div class="lista-reboques">
 
                     <div class="card card-reserva" style="width: 25rem;">
-                        <img src="../../<%=reboque.foto%>" class="card-img-top" alt="...">
+                        <img src="../../../<%=reboque.foto%>" class="card-img-top" alt="...">
                         <div class="card-body">
                         <h5 class="card-title"> Tipo: <%=reboque.modelo%></h5>
                         <h5 class="card-text">Diária R$: <%=reboque.valorDiaria%>,00</h5>
@@ -314,6 +314,6 @@
         </div>
     </div>
 
-    <%-include('../partials/footer.ejs')%>
+    <%-include('../../partials/footer.ejs')%>
 </body>
 </html>

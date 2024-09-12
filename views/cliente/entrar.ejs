@@ -27,7 +27,7 @@
 
                         <h3 class="card-title">Autenticação do usuário</h3>
                         <hr>
-                        <form action="/cliente/login/entrar" method="POST">
+                        <form action="/cliente/entrar" method="POST">
                             <div class="form-group">
                                 <label for="login">Login</label>
                                 <input class="form-control" id="email" type="text" name="email" required>
@@ -47,8 +47,8 @@
                             <!-- <a href="/" class="btn btn-secondary">Voltar</a>
                             <input class="btn btn-success" type="submit" value="Login"><br> -->
     
-                            <a href="/cliente/cadastro" class="btn-link">Quero me cadastrar.</a>
-                            <a href="/admin/login" class="btn-link">Sou admin.</a>
+                            <a href="/cliente/novo" class="btn-link">Quero me cadastrar.</a>
+                            <a href="/admin/entrar" class="btn-link">Sou admin.</a>
                             <% if(mensagem){ %>
                                 <div class="alert alert-danger">
                                     <strong>Alerta!</strong>

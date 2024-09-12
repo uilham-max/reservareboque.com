@@ -30,6 +30,7 @@ horas e em diarias.
 25. Mostra a hora de inicio e fim na tela da lista das reservas do cliente
 26. Realizar testes na alteração de data da reserva pelo cliente. verificar diarias e horas dos periodos
 27. O cliente deseja alterar o reboque de sua reserva
+28. Analizar métodos de inserção e atualização de imagens de reboques
 
 
 # Versão 2

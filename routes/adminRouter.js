@@ -1,13 +1,13 @@
 const express = require('express')
 const router = express.Router()
-
-const AdminController = require('../controller/AdminController')
 const autorizacao = require('../autorizacao/autorizacao')
 
-router.get('/cadastro', autorizacao, AdminController.getCadastro)
-router.post('/cadastro', autorizacao, AdminController.postCadastro)
-router.get('/login', AdminController.getLogin)
-router.post('/login', AdminController.postLogin)
-router.get('/logout', autorizacao, AdminController.getLogout)
+const AdminController = require('../controller/AdminController')
+
+router.get('/novo', autorizacao, AdminController.getNovo)
+router.post('/novo', autorizacao, AdminController.postNovo)
+router.get('/entrar', AdminController.getEntrar)
+router.post('/entrar', AdminController.postEntrar)
+router.get('/sair', autorizacao, AdminController.getSair)
 
 module.exports = router

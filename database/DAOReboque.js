@@ -26,16 +26,16 @@ class DAOReboque {
         }
     }
 
-    // static async delete(placa){
-    //     try{
-    //         await Reboque.destroy({where: {placa: placa}})
-    //         return true
-    //     }
-    //     catch(error){
-    //         console.log(error.toString())
-    //         return false
-    //     }
-    // }
+    static async delete(placa){
+        try{
+            await Reboque.destroy({where: {placa: placa}})
+            return true
+        }
+        catch(error){
+            console.log(error.toString())
+            return false
+        }
+    }
 
     static async getOne(placa){
         try{

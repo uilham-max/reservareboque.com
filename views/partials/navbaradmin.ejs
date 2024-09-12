@@ -42,7 +42,7 @@
               <!-- <i class="fa fa-user fs-3"></i> -->
               <!-- <i class="bi-alarm"></i> -->
               <i class="bi bi-box-arrow-in-right fs-4" ></i>
-              <a href="/login">Entrar</a>
+              <a href="/admin/entrar">Entrar</a>
             </li>
           <%}%>
           
@@ -50,12 +50,12 @@
           <% if(user != ''){ %>
             <li class="dropdown-item ">   
               <i class="bi bi-arrow-left-right  fs-4"></i>  
-              <a href="/admin/login">Trocar usuário</a>
+              <a href="/admin/entrar">Trocar admin</a>
             </li>
           <% }else{ %>
             <li class="dropdown-item">
               <i class="bi bi-person-fill-add  fs-4"></i>
-              <a  href="/admin/cadastro">Criar conta</a>
+              <a  href="/admin/novo">Novo admin</a>
             </li>
           <% } %>
           
@@ -64,7 +64,7 @@
             <hr>
             <li class="dropdown-item">   
               <i class="bi bi-box-arrow-in-left   fs-4" ></i> 
-              <a href="/admin/logout">Sair</a>   
+              <a href="/admin/sair">Sair</a>   
             </li>
           <% } %>
 
@@ -106,7 +106,7 @@
             <a class="nav-link" href="/reboque/lista">Lista de Reboques</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/admin/cliente/lista">Lista de Clientes</a>
+            <a class="nav-link" href="/cliente/lista">Lista de Clientes</a>
           </li>
         </ul>
         <form class="d-flex mt-3" role="search">

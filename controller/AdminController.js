@@ -23,14 +23,9 @@ routerAdmin.get('/admin/painel', async (req, res) => {
     res.render('admin/painel', { user: adminNome(req, res), mensagem: '', dataJSON: await Grafico.reservas(), reservas: reservas, useragent: useragent });
 });
 
-
-
-// ROTAS DO CADASTRO
 routerAdmin.get('/admin/cadastro', autorizacao, (req, res) => {
     res.render('admin/cadastro', {user: adminNome(req, res), mensagem: ''})
 })
-
-
 
 routerAdmin.post('/admin/cadastro/salvar', autorizacao, (req, res) => {
     let {nome, email, senha, cpf} = req.body,
@@ -43,16 +38,9 @@ routerAdmin.post('/admin/cadastro/salvar', autorizacao, (req, res) => {
     }
 })
 
-
-
-
-//ROTAS DO LOGIN
 routerAdmin.get('/admin/login', (req, res) => {
     res.render('admin/login', {user: adminNome(req, res), mensagem: ""})
 })
-
-
-
 
 routerAdmin.post('/admin/login/salvar', (req, res) => {
     let {email, senha} = req.body
@@ -70,13 +58,9 @@ routerAdmin.post('/admin/login/salvar', (req, res) => {
     })
 })
 
-
-
-
 routerAdmin.get("/admin/logout", function (req, res) {
     req.session.admin = undefined
     res.redirect("/")
 });
-
 
 module.exports = routerAdmin

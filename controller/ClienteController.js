@@ -10,7 +10,6 @@ const DAOReboque = require('../database/DAOReboque')
 const moment = require('moment-timezone')
 const Diaria = require('../bill_modules/Diaria')
 
-// CANCELAMENTO DE RESERVA PELO CLIENTE
 routerCliente.get('/cliente/reserva/guardar/:idReserva?', clienteAutorizacao, async (req, res) => {
 
     console.log("Executando adiamento de reserva...");
@@ -31,8 +30,6 @@ routerCliente.get('/cliente/reserva/guardar/:idReserva?', clienteAutorizacao, as
     
 })
 
-
-// SUJESTÃO: '/cliente/reserva/edita'
 routerCliente.get('/cliente/reserva/editar/:idReserva', clienteAutorizacao,  async (req, res) => {
     
     let idReserva = req.params.idReserva
@@ -60,8 +57,6 @@ routerCliente.get('/cliente/reserva/editar/:idReserva', clienteAutorizacao,  asy
     })
 })
 
-
-// ENDPOINT PARA ALTERAR A DATA DE UMA RESERVA PELO CLIENTE
 routerCliente.post('/cliente/reserva/editar', clienteAutorizacao, async (req, res) => {
     try {
         let { idReserva, reboquePlaca, dataInicioAntiga, dataFimAntiga, dataInicioNova, dataFimNova, diarias, horaInicio, horaFim } = req.body;
@@ -142,8 +137,6 @@ routerCliente.post('/cliente/reserva/editar', clienteAutorizacao, async (req, re
     }
 });
 
-
-// SUJESTÃO: '/cliente/reserva/detalhe'
 routerCliente.get('/cliente/reserva/detalhe/:reservaId?', clienteAutorizacao, async (req, res) => {
     
     let reserva = await DAOReserva.getOne(req.params.reservaId)
@@ -152,10 +145,6 @@ routerCliente.get('/cliente/reserva/detalhe/:reservaId?', clienteAutorizacao, as
 
 })
 
-
-
-
-// SUJESTÃO: '/cliente/reserva/concluida'
 routerCliente.get('/cliente/reserva/concluido', clienteAutorizacao, async (req, res) => {
     let clienteCpf
     if(req.session.cliente && req.session.cliente.cpf){
@@ -169,8 +158,6 @@ routerCliente.get('/cliente/reserva/concluido', clienteAutorizacao, async (req, 
     return res.render('cliente/reserva/concluido', {user: clienteNome(req, res), mensagem: "", locacoes: locacoes})
 })
 
-
-// SUJESTÃO: '/cliente/reserva/lista'
 routerCliente.get('/cliente/reserva/lista', clienteAutorizacao, async (req, res) => {
     let clienteCpf
     if(req.session.cliente && req.session.cliente.cpf){
@@ -183,11 +170,6 @@ routerCliente.get('/cliente/reserva/lista', clienteAutorizacao, async (req, res)
     return res.render('cliente/reserva/lista', {user: clienteNome(req, res), reservas: reservas, mensagem: ''})
 })
 
-
-
-
-
-// criado em 29/03/2024
 routerCliente.post('/login/entrar', async (req, res) => {
     let {email, senha} = req.body
     DAOCliente.login(email, senha).then( cliente => {
@@ -207,15 +189,12 @@ routerCliente.post('/login/entrar', async (req, res) => {
 
 })
 
-
 routerCliente.get('/cliente/logout', (req, res) => {
     console.log(req.session.cliente.nome,'fez logout...');
     req.session.cliente = undefined
     res.redirect('/')
 })
 
-
-// Data da criação 28/03/2024
 routerCliente.get('/cliente/existe/:cpf?', (req, res) => {
     /**
      * USADO PARA CONSULTAR PELO CPF DO CLIENTE QUE SERÁ CRIADO E SE ELE EXISTIR PREENCHER 
@@ -230,8 +209,6 @@ routerCliente.get('/cliente/existe/:cpf?', (req, res) => {
     })
 } )
 
-
-// SUJESTÃO: '/cliente/cadastro'
 routerCliente.post('/cadastro/create', async (req, res) => {
 
     let {nome, email, senha, senhaRepita, cpf, telefone, dataNascimento, cep, 
@@ -280,8 +257,6 @@ routerCliente.post('/cadastro/create', async (req, res) => {
     }
 })
 
-
-// DEVO TESTAR ESSA MENSAGEM PASSADA POR PARAMENTRO, POIS AINDA NÃO SEI COMO ELA FUNCIONA
 routerCliente.get('/admin/cliente/lista/:mensagem?', autorizacao, (req, res) => {
     DAOCliente.getAll().then(clientes => {
         if(clientes){

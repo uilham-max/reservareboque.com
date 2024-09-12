@@ -6,12 +6,9 @@ const { upload } = require('../helpers/uploadFoto');
 const {adminNome} = require('../helpers/getSessionNome')
 
 
-
 routerReboque.get('/reboque/novo', autorizacao, (req, res) => {
     res.render('reboque/novo', {user: adminNome(req, res), mensagem: ""})
 })
-
-
 
 routerReboque.post('/reboque/salvar', autorizacao, upload.single("foto"), (req, res) => {
     let {modelo, placa, valorDiaria, cor, pesoBruto, comprimento, largura, altura, quantidadeDeEixos, anoFabricacao, ativo, descricao} = req.body
@@ -25,8 +22,6 @@ routerReboque.post('/reboque/salvar', autorizacao, upload.single("foto"), (req, 
     })
 })  
 
-
-
 routerReboque.get('/reboque/lista', autorizacao, (req, res) => {
     DAOReboque.getAll().then(reboques => {
         if(reboques){
@@ -36,8 +31,6 @@ routerReboque.get('/reboque/lista', autorizacao, (req, res) => {
         }
     })
 })
-
-
 
 routerReboque.get('/reboque/editar/:placa', autorizacao, (req,res) => {
     let placa = req.params.placa
@@ -49,8 +42,6 @@ routerReboque.get('/reboque/editar/:placa', autorizacao, (req,res) => {
         }
     })
 })
-
-
 
 routerReboque.post('/reboque/atualizar', autorizacao, upload.single("foto"), (req,res) => {
     let {modelo, placa, valorDiaria, cor} = req.body
@@ -66,8 +57,6 @@ routerReboque.post('/reboque/atualizar', autorizacao, upload.single("foto"), (re
     })
 })
 
-
-
 routerReboque.get('/reboque/excluir/:reboquePlaca', autorizacao, (req, res) => {
     let reboquePlaca = req.params.reboquePlaca
     DAOReboque.delete(reboquePlaca).then(excluido =>{
@@ -78,7 +67,5 @@ routerReboque.get('/reboque/excluir/:reboquePlaca', autorizacao, (req, res) => {
         }
     })
 })
-
-
 
 module.exports = routerReboque

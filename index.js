@@ -10,11 +10,14 @@ const useragent = require('express-useragent')
 const port = 3000
 const app = express()
 
+const indexRouter = require('./routes/indexRouter')
+const adminRouter = require('./routes/adminRouter')
+
 const ClienteController = require('./controller/ClienteController')
 const ReboqueController = require('./controller/ReboqueController')
 const ReservaController = require('./controller/ReservaController')
-const AdminController = require('./controller/AdminController')
-const IndexController = require('./controller/IndexController');
+// const AdminController = require('./controller/AdminController')
+// const IndexController = require('./controller/IndexController');
 const pagamentoController = require('./controller/PagamentoController');
 var { removerPagamentosAPI } = require('./helpers/removerPagamentosNaoAprovados.js')
 
@@ -31,11 +34,14 @@ app.use(useragent.express())
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 
+app.use('/', indexRouter)
+app.use('/admin', adminRouter)
+
 app.use(ClienteController)
 app.use(ReboqueController)
 app.use(ReservaController)
-app.use(AdminController)
-app.use(IndexController)
+// app.use(AdminController)
+// app.use(IndexController)
 app.use(pagamentoController)
 
 

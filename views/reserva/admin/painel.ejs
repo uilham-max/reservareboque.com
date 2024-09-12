@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <%-include('../partials/header.ejs')%>
+    <%-include('../../partials/header.ejs')%>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body  >
-    <%-include('../partials/navbaradmin.ejs')%>
+    <%-include('../../partials/navbaradmin.ejs')%>
     <div class="container-responsive">
         <div class="conteudo">
             <div class="container">
@@ -50,14 +50,14 @@
                                                 <td><%= new Date(reserva.dataChegada).toLocaleDateString('pt-BR').slice(0, 5) %>
                                                     <%= new Date(reserva.dataChegada).toString().slice(16,18)+'h' %></td>
                                                 <% if(reserva.situacaoReserva == 'APROVADO') { %>
-                                                    <td><a href="/admin/reserva/situacao/<%=reserva.id%>/<%='APROVADO'%>" class="btn btn-success">Iniciar</a></td>
+                                                    <td><a href="/reserva/admin/situacao/<%=reserva.id%>/<%='APROVADO'%>" class="btn btn-success">Iniciar</a></td>
                                                 <% } else if (reserva.situacaoReserva == 'ANDAMENTO') { %>
-                                                    <td><a href="/admin/reserva/situacao/<%=reserva.id%>/<%='ANDAMENTO'%>" class="btn btn-danger">Encerrar</a></td>
+                                                    <td><a href="/reserva/admin/situacao/<%=reserva.id%>/<%='ANDAMENTO'%>" class="btn btn-danger">Encerrar</a></td>
                                                 <% } %>
                                                 
                                                 <% if(reserva.pagamento.aprovado == false){ %>
                                                 <td>
-                                                    <form action="/admin/reserva/pagamento/dinheiro" method="POST">
+                                                    <form action="/reserva/admin/pagamento/dinheiro" method="POST">
                                                         <input type="hidden" id="codigoPagamento" name="codigoPagamento" value="<%=reserva.pagamento.codigoPagamento%>">
                                                         <input type="hidden" id="valor" name="valor" value="<%=reserva.pagamento.valor%>">
                                                         <input type="submit" class="btn btn-info" value="Recebido">
@@ -111,17 +111,17 @@
                                                     <%= new Date(reserva.dataChegada).toString().slice(16,21) %></td>
                                                 <td>R$ <%=reserva.pagamento.valor%></td>
                                                 <% if(reserva.situacaoReserva == 'APROVADO') { %>
-                                                    <td><a href="/admin/reserva/situacao/<%=reserva.id%>/<%='APROVADO'%>" class="btn btn-info">Iniciar</a></td>
+                                                    <td><a href="/reserva/admin/situacao/<%=reserva.id%>/<%='APROVADO'%>" class="btn btn-info">Iniciar</a></td>
                                                 <% } else if (reserva.situacaoReserva == 'ANDAMENTO') { %>
-                                                    <td><a href="/admin/reserva/situacao/<%=reserva.id%>/<%='ANDAMENTO'%>" class="btn btn-danger">Encerrar</a></td>
+                                                    <td><a href="/reserva/admin/situacao/<%=reserva.id%>/<%='ANDAMENTO'%>" class="btn btn-danger">Encerrar</a></td>
                                                 <% } %>
                                                 
                                                 <% if(reserva.pagamento.aprovado == false){ %>
                                                 <td>
-                                                    <form action="/admin/reserva/pagamento/dinheiro" method="POST">
+                                                    <form action="/reserva/admin/pagamento/dinheiro" method="POST">
                                                         <input type="hidden" id="codigoPagamento" name="codigoPagamento" value="<%=reserva.pagamento.codigoPagamento%>">
                                                         <input type="hidden" id="valor" name="valor" value="<%=reserva.pagamento.valor%>">
-                                                        <input type="submit" class="btn btn-success" value="Recebido">
+                                                        <input type="submit" class="btn btn-success" value="Aprovar">
                                                     </form>
                                                 </td>
                                                 <% } %>
@@ -166,7 +166,7 @@
             }
         });
     </script>
-    <%-include('../partials/footer.ejs')%>
+    <%-include('../../partials/footer.ejs')%>
 
 </body>
 </html>

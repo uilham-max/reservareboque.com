@@ -13,7 +13,7 @@
                 <h3 class="display-4">Relatório Histórico</h3>
             </div>
             
-            <form action="/admin/reserva/filtrarHistorico" method="POST">
+            <form action="/reserva/admin/filtrarHistorico" method="POST">
 
                 <div class="row g-3">
                         <input class="btn btn-primary d-flex" type="submit" value="Filtrar">
@@ -55,7 +55,7 @@
                                 <td><%=reserva.dataChegada.toString().slice(8,10)+'/'+reserva.dataChegada.toString().slice(5,7)+'/'+reserva.dataChegada.toString().slice(0,4)%></td>
                                 <td><%=reserva.diarias%> dias</td>
                                 <td>R$ <%=reserva.valorTotal%>,00</td>
-                                <td><a href="/admin/reserva/excluir/<%=reserva.id%>" class="fas fa-trash" style="color: black;"
+                                <td><a href="/reserva/admin/excluir/<%=reserva.id%>" class="fas fa-trash" style="color: black;"
                                     ata-toggle="tooltip" title="Excluir reserva"
                                     onclick="return confirm('Confirma a exclusão?')" ></a></td>
                             </tr>

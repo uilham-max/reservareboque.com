@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <%-include('./partials/header.ejs')%>
+    <%-include('../partials/header.ejs')%>
     <!-- <script src="/js/validaCPF.js" ></script> -->
     <script src="/js/consome_viacep.js" ></script>
     <!-- <script src="/js/validar_senha.js" ></script> -->
@@ -9,7 +9,7 @@
 </head>
 <body  >
     
-    <%-include('./partials/navbar.ejs')%>
+    <%-include('../partials/navbar.ejs')%>
     
     <div class="conteudo" >
         <div class="jumbotron junbotron-fluid">
@@ -18,7 +18,7 @@
         <div class="container" >
             <!-- <h3>Reboque escolhido</h3> -->
             <!--  -->
-            <form action="/cadastro/create" method="POST">
+            <form action="/cliente/cadastro/create" method="POST">
                 <div class="lista-reboques">
 
 
@@ -212,7 +212,7 @@
         </div>
     </div>
 
-    <%-include('./partials/footer.ejs')%>
+    <%-include('../partials/footer.ejs')%>
 
 </body>
 </html>

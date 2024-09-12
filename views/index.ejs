@@ -15,7 +15,7 @@
         <div class="jumbotron jumbotron-fluid">
             <h1 class="display-4" >Cadastre-se para receber descontos!</h1>
             <p class="lead">Receba descontos e acompanhe suas reservas se cadastrando</p>
-            <h4>Clique em <a href="/login"> entrar </a> ou <a href="/cadastro">cadastrar-se</a> para criar uma conta.</h4>
+            <h4>Clique em <a href="/cliente/login"> entrar </a> ou <a href="/cliente/cadastro">cadastrar-se</a> para criar uma conta.</h4>
 
             <!-- <p class="lead">Clientes cadastrados podem ver seu histórico de locações, gerenciar suas reservas e receber -->
                 <!-- descontos.</p> -->
@@ -34,7 +34,7 @@
             <div class="lista-reboques">
                 <% reboques.forEach(function(reboque){ %>
                     <div class="card card-index" style="width: 18rem;">
-                        <a href="/cliente/reserva/periodo/<%=reboque.placa%>">
+                        <a href="/reserva/cliente/periodo/<%=reboque.placa%>">
                             <img class="card-img-top" src="<%=reboque.foto%>" alt="Reboque 1">
                         </a>
                         <div class="card-body">
@@ -42,7 +42,7 @@
                           <h6 class="">Tamanho: <%=reboque.comprimento%>cm x <%=reboque.largura%>cm x <%=reboque.altura%>cm</h6>
                           <h6 class="">Peso bruto suportado: <%=reboque.pesoBruto%> Kg</h6>
                           <hr>
-                          <a href="/cliente/reserva/periodo/<%=reboque.placa%>" class="btn btn-primary d-grid">Reserve agora</a>
+                          <a href="/reserva/cliente/periodo/<%=reboque.placa%>" class="btn btn-primary d-grid">Reserve agora</a>
                         </div>
                     </div>
                 <% }) %>

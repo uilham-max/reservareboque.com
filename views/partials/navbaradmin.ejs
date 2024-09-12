@@ -9,7 +9,7 @@
 
     
     <!-- <a class="navbar-brand" href="#">Offcanvas navbar</a> -->
-    <a href="/admin/painel">
+    <a href="/reserva/admin/painel">
       <img src="/img/logoimage.png" alt="Logo" width="160" height="25" class="d-inline-block align-text-center">
     </a>  
 
@@ -35,7 +35,7 @@
           <% if(user != ''){ %>
             <li class="dropdown-item">  
               <i class="bi bi-person-fill  fs-4"></i>  
-              <a href="/cliente/reserva/lista"><%=user.email%></a>
+              <a href="/reserva/cliente/lista"><%=user.email%></a>
             </li>
           <% }else{%>
             <li class="dropdown-item" >
@@ -50,12 +50,12 @@
           <% if(user != ''){ %>
             <li class="dropdown-item ">   
               <i class="bi bi-arrow-left-right  fs-4"></i>  
-              <a href="/login">Trocar usuário</a>
+              <a href="/admin/login">Trocar usuário</a>
             </li>
           <% }else{ %>
             <li class="dropdown-item">
               <i class="bi bi-person-fill-add  fs-4"></i>
-              <a  href="/cadastro">Criar conta</a>
+              <a  href="/admin/cadastro">Criar conta</a>
             </li>
           <% } %>
           

@@ -27,6 +27,9 @@ horas e em diarias.
 22. Uma reserva que foi criada hoje, pode ser adiada hoje
 23. Há uma duplicação ocasional em admin/painel dos botoes iniciar e recebido
 24. O valor da diaria na tabela da reserva esta com numero extenso
+25. Mostra a hora de inicio e fim na tela da lista das reservas do cliente
+26. Realizar testes na alteração de data da reserva pelo cliente. verificar diarias e horas dos periodos
+27. O cliente deseja alterar o reboque de sua reserva
 
 
 # Versão 2

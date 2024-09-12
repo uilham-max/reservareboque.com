@@ -35,14 +35,14 @@
           <% if(user != ''){ %>
             <li class="dropdown-item">  
               <i class="bi bi-person-fill  fs-4"></i>  
-              <a href="/cliente/reserva/lista"><%=user.email%></a>
+              <a href="/reserva/cliente/lista"><%=user.email%></a>
             </li>
           <% }else{%>
             <li class="dropdown-item" >
               <!-- <i class="fa fa-user fs-3"></i> -->
               <!-- <i class="bi-alarm"></i> -->
               <i class="bi bi-box-arrow-in-right fs-4" ></i>
-              <a href="/login">Entrar</a>
+              <a href="/cliente/login">Entrar</a>
             </li>
           <%}%>
           
@@ -50,12 +50,12 @@
           <% if(user != ''){ %>
             <li class="dropdown-item ">   
               <i class="bi bi-arrow-left-right  fs-4"></i>  
-              <a href="/login">Trocar usuário</a>
+              <a href="/cliente/login">Trocar usuário</a>
             </li>
           <% }else{ %>
             <li class="dropdown-item">
               <i class="bi bi-person-fill-add  fs-4"></i>
-              <a  href="/cadastro">Criar conta</a>
+              <a  href="/cliente/cadastro">Criar conta</a>
             </li>
           <% } %>
           
@@ -70,7 +70,7 @@
 
           <li class="dropdown-item">
             <i class="bi bi-box-arrow-in-right   fs-4" ></i> 
-            <a href="/admin/painel">Painel</a>
+            <a href="/reserva/admin/painel">Painel</a>
           </li>
 
         </ul>
@@ -94,10 +94,10 @@
             <a class="nav-link active" aria-current="page" href="/">Ir para Início</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/cliente/reserva/lista">Minhas Reservas</a>
+            <a class="nav-link" href="/reserva/cliente/lista">Minhas Reservas</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/cliente/reserva/concluido">Minhas Locações</a>
+            <a class="nav-link" href="#">Minhas Locações</a>
           </li>
         </ul>
         <!-- <form class="d-flex mt-3" role="search">

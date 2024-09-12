@@ -34,7 +34,7 @@
                                                     <td><%= reserva.reboque.placa %></td>
                                                     <td><span id="dataSaida"><%= new Date(reserva.dataSaida).toLocaleDateString('pt-BR') %></span></td>
                                                     <td><span id="dataChegada"><%= new Date(reserva.dataChegada).toLocaleDateString('pt-BR') %></span></td>
-                                                    <td><a href="/cliente/reserva/detalhe/<%= reserva.id %>" class="btn btn-primary">Detalhes</a></td>
+                                                    <td><a href="/reserva/cliente/detalhe/<%= reserva.id %>" class="btn btn-primary">Detalhes</a></td>
                                                 </tr>
                                             <% }) %>
                                         </tbody>

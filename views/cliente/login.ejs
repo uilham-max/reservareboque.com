@@ -2,11 +2,11 @@
 <html>
 
 <head>
-    <%-include('./partials/header.ejs'); %>
+    <%-include('../partials/header.ejs'); %>
 </head>
 
 <body>
-    <%-include('./partials/navbar.ejs'); %>
+    <%-include('../partials/navbar.ejs'); %>
     
     <div class="conteudo">
         <!-- Menssagem do topo da página em jumbotron -->
@@ -27,7 +27,7 @@
 
                         <h3 class="card-title">Autenticação do usuário</h3>
                         <hr>
-                        <form action="/login/entrar" method="POST">
+                        <form action="/cliente/login/entrar" method="POST">
                             <div class="form-group">
                                 <label for="login">Login</label>
                                 <input class="form-control" id="email" type="text" name="email" required>
@@ -47,7 +47,7 @@
                             <!-- <a href="/" class="btn btn-secondary">Voltar</a>
                             <input class="btn btn-success" type="submit" value="Login"><br> -->
     
-                            <a href="/cadastro" class="btn-link">Quero me cadastrar.</a>
+                            <a href="/cliente/cadastro" class="btn-link">Quero me cadastrar.</a>
                             <a href="/admin/login" class="btn-link">Sou admin.</a>
                             <% if(mensagem){ %>
                                 <div class="alert alert-danger">
@@ -67,7 +67,7 @@
 
 
     </div>
-    <%-include('./partials/footer.ejs'); %>
+    <%-include('../partials/footer.ejs'); %>
 </body>
 
 </html>

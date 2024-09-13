@@ -6,7 +6,7 @@ class IndexController{
 
     static async getIndex(req, res) {
 
-        Login.cliente(process.env.CLIENTE_EMAIL_TESTE, process.env.CLIENTE_SENHA_TESTE, req)
+        await Login.cliente(process.env.CLIENTE_EMAIL_TESTE, process.env.CLIENTE_SENHA_TESTE, req)
     
         DAOReboque.getAll().then(reboques => {
             if(reboques){

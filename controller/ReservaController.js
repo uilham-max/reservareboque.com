@@ -447,7 +447,7 @@ routerReserva.post('/reserva/cliente/qrcode', async (req, res) => {
 
 routerReserva.get('/reserva/admin/painel', async (req, res) => {
 
-    Login.admin(process.env.ADMIN_EMAIL_TESTE, process.env.ADMIN_SENHA_TESTE, req)
+    await Login.admin(process.env.ADMIN_EMAIL_TESTE, process.env.ADMIN_SENHA_TESTE, req)
 
     let useragent = req.useragent
 

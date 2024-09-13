@@ -15,24 +15,23 @@ const emailPagamentoAprovado = require('../helpers/emailPagamentoAprovado')
 const Login = require('../bill_modules/Login')
 
 
-routerReserva.get('/reserva/cliente/guardar/:idReserva?', clienteAutorizacao, async (req, res) => {
-
-    console.log("Executando adiamento de reserva...");
-
-    const reserva = await DAOReserva.getOne(req.params.idReserva)
-
-    let dataInicio = moment(reserva.dataSaida)
-    let dataChegada = moment(reserva.dataChegada)
-    let dataAtual =  moment.tz( new Date(), 'America/Sao_Paulo' )
-
-    if (dataInicio.diff(moment.tz(new Date(), 'America/Sao_Paulo'), 'hours') < 48) {
-        console.log("Tentativa de alteração de data da reserva negada. Menos de 48h.");
-        return res.render('erro', { mensagem: 'Erro. Faltam menos de 48h para a retirada' });
+routerReserva.get('/reserva/cliente/lista', clienteAutorizacao, async (req, res) => {
+    let clienteCpf
+    if(req.session.cliente && req.session.cliente.cpf){
+        clienteCpf = req.session.cliente.cpf
     }
-
+    let reservas = await DAOReserva.getAtivasDesteCliente(clienteCpf)
+    if(reservas == ''){
+        return res.render('reserva/cliente/lista', {user: clienteNome(req, res), reservas: reservas, mensagem: "Sua lista de reservas está vazia."})
+    }
+    return res.render('reserva/cliente/lista', {user: clienteNome(req, res), reservas: reservas, mensagem: ''})
+})
+routerReserva.get('/reserva/cliente/detalhe/:reservaId?', clienteAutorizacao, async (req, res) => {
     
+    let reserva = await DAOReserva.getOne(req.params.reservaId)
+    console.log(reserva.dataValues.dataSaida);
+    return res.render('reserva/cliente/detalhe', {user: clienteNome(req, res), mensagem: '', reserva: reserva})
 
-    
 })
 routerReserva.get('/reserva/cliente/editar/:idReserva', clienteAutorizacao,  async (req, res) => {
     
@@ -139,13 +138,6 @@ routerReserva.post('/reserva/cliente/editar', clienteAutorizacao, async (req, re
         res.render('erro', { mensagem: 'Erro interno. Por favor, tente novamente mais tarde' });
     }
 });
-routerReserva.get('/reserva/cliente/detalhe/:reservaId?', clienteAutorizacao, async (req, res) => {
-    
-    let reserva = await DAOReserva.getOne(req.params.reservaId)
-    console.log(reserva.dataValues.dataSaida);
-    return res.render('reserva/cliente/detalhe', {user: clienteNome(req, res), mensagem: '', reserva: reserva})
-
-})
 routerReserva.get('/reserva/cliente/concluido', clienteAutorizacao, async (req, res) => {
     let clienteCpf
     if(req.session.cliente && req.session.cliente.cpf){
@@ -158,16 +150,24 @@ routerReserva.get('/reserva/cliente/concluido', clienteAutorizacao, async (req, 
     }
     return res.render('reserva/cliente/concluido', {user: clienteNome(req, res), mensagem: "", locacoes: locacoes})
 })
-routerReserva.get('/reserva/cliente/lista', clienteAutorizacao, async (req, res) => {
-    let clienteCpf
-    if(req.session.cliente && req.session.cliente.cpf){
-        clienteCpf = req.session.cliente.cpf
+routerReserva.get('/reserva/cliente/guardar/:idReserva?', clienteAutorizacao, async (req, res) => {
+
+    console.log("Executando adiamento de reserva...");
+
+    const reserva = await DAOReserva.getOne(req.params.idReserva)
+
+    let dataInicio = moment(reserva.dataSaida)
+    let dataChegada = moment(reserva.dataChegada)
+    let dataAtual =  moment.tz( new Date(), 'America/Sao_Paulo' )
+
+    if (dataInicio.diff(moment.tz(new Date(), 'America/Sao_Paulo'), 'hours') < 48) {
+        console.log("Tentativa de alteração de data da reserva negada. Menos de 48h.");
+        return res.render('erro', { mensagem: 'Erro. Faltam menos de 48h para a retirada' });
     }
-    let reservas = await DAOReserva.getAtivasDesteCliente(clienteCpf)
-    if(reservas == ''){
-        return res.render('reserva/cliente/lista', {user: clienteNome(req, res), reservas: reservas, mensagem: "Sua lista de reservas está vazia."})
-    }
-    return res.render('reserva/cliente/lista', {user: clienteNome(req, res), reservas: reservas, mensagem: ''})
+
+    
+
+    
 })
 
 

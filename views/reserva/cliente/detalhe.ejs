@@ -2,60 +2,69 @@
 <html lang="en">
 <head>
     <%- include('../../partials/header.ejs') %>
-    <script src="/js/validaInputDataPeriodo.js" ></script>
 </head>
 <body>
     <%- include('../../partials/navbar.ejs') %>
 
     <div class="conteudo">
 
-        <!-- Mensagem do topo da página em jumbotron -->
         <div class="jumbotron jumbotron-fluid">
             <h1 class="display-4">Detalhes da Reserva</h1>
-            <!-- <p class="lead">Clientes cadastrados podem ver seu histórico de locações, gerenciar suas reservas e receber -->
-                <!-- descontos.</p> -->
         </div>
 
         <div class="container">
-            <!-- <form class="needs-validation" novalidate action="/reserva/confirmar" method="POST"> -->
                 <div class="lista-reboques">
 
                     <div class="card card-reserva" style="width: 25rem;">
                         <img src="../../../<%= reserva.reboque.foto %>" class="card-img-top" alt="...">
                         <div class="card-body">
-                            <h5 class="card-text"><%= reserva.reboque.descricao %></h5>
                             <hr>
+                            <h5 class="card-text"><%= reserva.reboque.descricao %></h5>
+                        </div>
+                    </div>
 
-                            <div class="form-group">
-                                <label for="cep_input">Modelo</label>
-                                <input class="form-control" id="inputModelo" type="text" name="inputModelo"value="<%=reserva.reboque.modelo%>" disabled>
-                            </div>
 
-                            <h5><b>Tipo de Reboque: </b><%= reserva.reboque.modelo %></h5>
-                            <h5><b>Valor da Diária: </b>R$ <%= reserva.reboque.valorDiaria %>,00</h5>
+                    <div class="card card-reserva" style="width: 25rem;">
+                        <div class="card-body">
 
                             <h5 class="card-title"> <b>Informações</b></h5>
                             <hr>
-                            <h5><b>Valor Pago na Diária: </b>R$ <%= ((reserva.valorDiaria).toFixed(2)).replace('.', ',') %></h5>
 
-                            <!-- Formatação da data no front-end com toLocaleDateString -->
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" >Modelo</span>
+                                <input class="form-control" id="inputModelo" type="text" name="inputModelo" value="<%=reserva.reboque.modelo%>" disabled>
+                            </div>
 
-                            <h5><b>Data da Retirada: </b><span id="dataSaida"><%= new Date(reserva.dataSaida).toLocaleDateString('pt-BR') %></span></h5>
-                            <h5><b>Data da Entrega: </b><span id="dataChegada"><%= new Date(reserva.dataChegada).toLocaleDateString('pt-BR') %></span></h5>
-                            <h5><b>Quantidade de Dias: </b><%= reserva.diarias %> dia(s)</h5>
-                            <h5><b>Valor Total da Reserva: </b>R$ <%= ((reserva.valorDiaria * reserva.diarias).toFixed(2)).replace('.', ',') %></h5>
-                            <h5><b>Situação: </b><%= reserva.situacaoReserva %></h5>
-                            <% if (reserva.pagamento.aprovado) { %>
-                                <h5><b>Pagamento: </b>Aprovado</h5>
-                            <% } else { %>
-                                <h5><b>Pagamento: </b>Pendente</h5>
-                            <% } %>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" >Valor pago na diária</span>
+                                <input class="form-control" id="inputValorPagoDiaria" type="text" name="inputValorPagoDiaria" value="R$ <%= ((reserva.valorDiaria).toFixed(2)).replace('.', ',') %>" disabled>
+                            </div>
 
-                            <% if (mensagem) { %>
-                                <div class="alert alert-danger">
-                                    <strong>Atenção!</strong> <%= mensagem %>
-                                </div>
-                            <% } %>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" >Início</span>
+                                <input class="form-control" id="inputDataInicio" type="text" name="inputDataInicio" value="<%= new Date(reserva.dataSaida).toLocaleDateString('pt-BR') %>" disabled>
+                                <span class="input-group-text" >Hora</span>
+                                <input class="form-control" id="inputHoraInicio" type="text" name="inputHoraInicio" value="<%= new Date(reserva.dataSaida).toString().slice(16,21) %>" disabled>
+                            
+                            </div>
+
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" >Fim</span>
+                                <input class="form-control" id="inputDataFim" type="text" name="inputDataFim" value="<%= new Date(reserva.dataChegada).toLocaleDateString('pt-BR') %>" disabled>
+                                <span class="input-group-text" >Hora</span>
+                                <input class="form-control" id="inputHoraInicio" type="text" name="inputHoraInicio" value="<%= new Date(reserva.dataChegada).toString().slice(16,21) %>" disabled>
+                            
+                            </div>
+
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" >Período</span>
+                                <input class="form-control" id="inputQuantidadeDias" type="text" name="inputQuantidadeDias" value="<%= reserva.diarias %> dias" disabled>
+                            </div>
+
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" >Valor total da reserva</span>
+                                <input class="form-control" id="inputQuantidadeDias" type="text" name="inputQuantidadeDias" value="R$ <%= ((reserva.valorDiaria * reserva.diarias).toFixed(2)).replace('.', ',') %>" disabled>
+                            </div>
 
                             <div class="d-md-flex justify-content-center" style="margin: 0.5rem;">
                                 <button style="margin: 0.3rem;" class="btn btn-secondary" type="button" onclick="history.back()">Voltar</button>
@@ -67,13 +76,12 @@
                                     </a>
                                 <% } %>
                             </div>
-
                             
                         </div>
                     </div>
+
+                    
                 </div>
-                <!-- <input type="hidden" name="reboquePlaca" value="<%= reserva.reboque.placa %>"> -->
-            <!-- </form> -->
         </div>
     </div>
 

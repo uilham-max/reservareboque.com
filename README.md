@@ -31,6 +31,8 @@ horas e em diarias.
 26. Realizar testes na alteração de data da reserva pelo cliente. verificar diarias e horas dos periodos
 27. O cliente deseja alterar o reboque de sua reserva
 28. Analizar métodos de inserção e atualização de imagens de reboques
+29. Se uma reserva não for iniciada pelo admin o que acontece? 1. Sistema inicia automaticamento? 2. Dispara uma aviso para o admin?
+30. O admin só pode iniciar a uma reserva se a data coincidir com a data de inicio da reserva
 
 
 # Versão 2

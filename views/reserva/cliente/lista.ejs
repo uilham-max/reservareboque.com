@@ -24,16 +24,18 @@
                                         <thead>
                                             <tr>
                                                 <th>Reboque</th>
-                                                <th>Início</th>
-                                                <th>Fim</th>
+                                                <th>Início/Hora</th>
+                                                <th>Fim/Hora</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <% reservas.forEach(function(reserva) { %>
                                                 <tr>
                                                     <td><%= reserva.reboque.placa %></td>
-                                                    <td><span id="dataSaida"><%= new Date(reserva.dataSaida).toLocaleDateString('pt-BR') %></span></td>
-                                                    <td><span id="dataChegada"><%= new Date(reserva.dataChegada).toLocaleDateString('pt-BR') %></span></td>
+                                                    <td><span id="dataSaida"><%= new Date(reserva.dataSaida).toLocaleDateString('pt-BR').slice(0, 5) %> -
+                                                        <%= new Date(reserva.dataSaida).toString().slice(16,18)+'h' %></span></td>
+                                                    <td><span id="dataChegada"><%= new Date(reserva.dataChegada).toLocaleDateString('pt-BR').slice(0, 5) %> -
+                                                        <%= new Date(reserva.dataChegada).toString().slice(16,18)+'h' %></span></td>
                                                     <td><a href="/reserva/cliente/detalhe/<%= reserva.id %>" class="btn btn-primary">Detalhes</a></td>
                                                 </tr>
                                             <% }) %>

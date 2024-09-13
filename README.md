@@ -35,6 +35,7 @@ horas e em diarias.
 30. O admin só pode iniciar a uma reserva se a data coincidir com a data de inicio da reserva
 
 
+
 # Versão 2
 
 * Implementar hora de retirada e de entrega

@@ -110,6 +110,22 @@ class DAOReserva {
             return undefined
         }
     }
+    static async getOneByPagamentoCodigoPagamento(codigoPagamento){
+        try {
+            const reserva = Reserva.findAll({
+                include: [
+                  { model: Cliente, required: true },
+                  { model: Pagamento, required: true },
+                  { model: Reboque, required: true }
+                ],
+                where: { pagamentoCodigoPagamento: codigoPagamento }
+            })
+            return reserva
+        } catch(erro){
+            console.log(erro.toString());
+            return undefined
+        }
+    }
 
 
     static async getTodasDesteCliente(cpf){

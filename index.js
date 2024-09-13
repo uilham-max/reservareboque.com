@@ -13,8 +13,9 @@ const adminRouter = require('./routes/adminRouter')
 const clienteRouter = require('./routes/clienteRouter')
 const reboqueRouter = require('./routes/reboqueRouter')
 const pagamentoRouter = require('./routes/pagamentoRouter')
-
-const ReservaController = require('./controller/ReservaController')
+const reservaRouter = require('./routes/reservaRouter')
+const DAOReserva = require('./database/DAOReserva.js')
+const emailPagamentoAprovado = require('./helpers/enviarEmailParaClienteComDadosDaReserva.js')
 
 // Para Express 4.16 ou superior
 app.use(express.json())
@@ -33,8 +34,7 @@ app.use('/admin', adminRouter)
 app.use('/cliente', clienteRouter)
 app.use('/reboque', reboqueRouter)
 app.use ('/pagamento', pagamentoRouter)
-
-app.use(ReservaController)
+app.use('/reserva', reservaRouter)
 
 // Como o render não fica mais de 1 minuto no ar, isso remove pagamenos quando ele sobe.
 try{

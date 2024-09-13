@@ -3,8 +3,8 @@ const router = express.Router()
 
 const PagamentoController = require('../controller/PagamentoController')
 
-router.post('/webhook/pix', PagamentoController.postAprovarPagamento)
-router.get('/aprovado/:codigoPagamento', PagamentoController.getPagamentoAprovado)
+router.post('/webhook/pix', PagamentoController.postWebHookPixRecebido)
+router.get('/aprovado/:codigoPagamento', PagamentoController.getPagamentoVerificaStatus)
 
 
 module.exports = router

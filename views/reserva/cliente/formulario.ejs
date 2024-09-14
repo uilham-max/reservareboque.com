@@ -164,13 +164,24 @@
                             <hr>
 
                             <div class="input-group mb-3">
-                                <span class="input-group-text" >Data de Retirada</span>
-                                <input class="form-control" id="dataInicio_input" type="text" name="dataInicio_input" value="<%=dataInicio.toString().slice(8,10)+'/'+dataInicio.toString().slice(5,7)+'/'+dataInicio.toString().slice(0,4)%>" disabled>
+                                <span class="input-group-text" >Retirar</span>
+                                <input class="form-control" id="dataInicio_input" type="text" name="dataInicio_input" value="<%= new Date(dataInicio).toLocaleDateString('pt-BR').slice(0, 5) %>" disabled>
+                                <span class="input-group-text" >Hora</span>
+                                <input class="form-control" id="horaInicio_input" type="text" name="horaInicio_input" value="<%= new Date(dataInicio).toString().slice(16, 21) + 'hs' %>" disabled>
+                            
                             </div>
 
                             <div class="input-group mb-3">
-                                <span class="input-group-text" >Data de Entrega</span>
-                                <input class="form-control" id="dataFim_input" type="text" name="dataFim_input" value="<%=dataFim.toString().slice(8,10)+'/'+dataFim.toString().slice(5,7)+'/'+dataFim.toString().slice(0,4)%>" disabled>
+                                <span class="input-group-text" >Entregar</span>
+                                <input class="form-control" id="dataFim_input" type="text" name="dataFim_input" value="<%= new Date(dataFim).toLocaleDateString('pt-BR').slice(0, 5) %>" disabled>
+                                <span class="input-group-text" >Hora</span>
+                                <input class="form-control" id="horaFim_input" type="text" name="horaFim_input" value="<%= new Date(dataFim).toString().slice(16, 21) + 'hs' %>" disabled>
+                            
+                            </div>
+
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" >Diárias</span>
+                                <input class="form-control" id="diarias_input" type="text" name="diarias_input" value="<%= dias %> dias" disabled>
                             </div>
 
                             <div class="input-group mb-3">

@@ -1,15 +1,13 @@
 const DAOReserva = require('../database/DAOReserva')
 const DAOCliente = require('../database/DAOCliente')
 const DAOReboque = require('../database/DAOReboque')
-var {clienteNome, adminNome} = require('../helpers/getSessionNome')
-const Diaria = require('../bill_modules/Diaria')
-const { estornoPagamento, receiveInCash, criarCobranca } = require('../helpers/API_Pagamentos')
 const DAOPagamento = require('../database/DAOPagamento')
-const moment = require('moment-timezone')
+const Diaria = require('../bill_modules/Diaria')
 const Grafico = require('../bill_modules/Grafico')
-const emailPagamentoAprovado = require('../helpers/enviarEmailParaClienteComDadosDaReserva')
 const Login = require('../bill_modules/Login')
-const formatarDadosDoClienteParaEmail = require('../helpers/formatarDadosDoClienteParaEmail');
+var {clienteNome, adminNome} = require('../helpers/getSessionNome')
+const { estornoPagamento, receiveInCash, criarCobranca } = require('../helpers/API_Pagamentos')
+const moment = require('moment-timezone')
 
 
 class ReservaController {
@@ -28,7 +26,25 @@ class ReservaController {
         return res.render('reserva/cliente/periodo', {user: clienteNome(req, res), mensagem: "", reboque: reboque, reservas: reservas})
     }
     static async postClienteFormularioReserva(req, res){
-        let {reboquePlaca, dataInicio, dataFim} =  req.body
+        let {reboquePlaca, dataInicio, dataFim, horaInicio, horaFim} =  req.body
+
+        // Injeta a hora na data de inicio
+        dataInicio = moment.tz(dataInicio, 'America/Sao_Paulo').set({
+            hour: horaInicio,
+            minute: 0,
+            second: 0,
+            millisecond: 0
+        });
+        dataInicio = dataInicio.format()
+    
+        // Injeta a hora na data de fim
+        dataFim = moment.tz(dataFim, 'America/Sao_Paulo').set({
+            hour: horaFim,
+            minute: 0,
+            second: 0,
+            millisecond: 0
+        });
+        dataFim = dataFim.format()
 
         if(dataInicio > dataFim){
             return res.render('erro', {mensagem: 'Erro com as datas.'})
@@ -41,7 +57,7 @@ class ReservaController {
                     let dias = Diaria.calcularDiarias(dataInicio, dataFim)
                     let valorTotalDaReserva = Diaria.calcularValorTotalDaReserva(dias, reboque.valorDiaria)
                     let valorTotalDaReservaComDesconto = Diaria.aplicarDescontoNaDiariaParaCliente(valorTotalDaReserva, dias)
-                    return res.render('reserva/cliente/formulario', {user: clienteNome(req, res), dias: dias, reboque: reboque, dataInicio: dataInicio, dataFim: dataFim, valorTotalDaReserva: valorTotalDaReserva,  valorTotalDaReservaComDesconto: valorTotalDaReservaComDesconto,})
+                    return res.render('reserva/cliente/formulario', {user: clienteNome(req, res), dias: dias, reboque: reboque, dataInicio: dataInicio, horaInicio: horaInicio, dataFim: dataFim, horaFim: horaFim, valorTotalDaReserva: valorTotalDaReserva,  valorTotalDaReservaComDesconto: valorTotalDaReservaComDesconto,})
     
                 } else {
                     
@@ -58,7 +74,6 @@ class ReservaController {
         let {nome, cpf, telefone, email, cep, logradouro, complemento, localidade,
         numeroDaCasa, reboquePlaca, horaInicio, horaFim, dataInicio, dataFim, formaPagamento} = req.body
     
-      
         // Injeta a hora na data de inicio
         dataInicio = moment.tz(dataInicio, 'America/Sao_Paulo').set({
             hour: horaInicio,
@@ -83,6 +98,7 @@ class ReservaController {
         */
     
         let resposta = await DAOReserva.getVerificaDisponibilidade(reboquePlaca, dataInicio, dataFim)
+        console.log('Resposta:',resposta);
         if(resposta.length > 0){
             let reboque = await DAOReboque.getOne(reboquePlaca)
             let reservas = await DAOReserva.getAtivasDesteReboque(reboquePlaca)
@@ -160,7 +176,7 @@ class ReservaController {
         */
     
         return res.render('reserva/cliente/confirmar', {user: clienteNome(req, res), reboque: reboque, cliente: cliente, reserva: reserva, mensagem: '' })
-    
+
     }
     static async postGerarQRCode(req, res){
         
@@ -246,7 +262,7 @@ class ReservaController {
     
             // Adiciona 60 minutos como tempo de expiração da reservas caso não seja paga
             var dataExpiracao = moment.tz(new Date(), 'America/Sao_Paulo')
-            dataExpiracao.add(60, 'minutes')
+            dataExpiracao.add(2, 'minutes')
     
             // PAGAMENTO INSERT
             const codigoPagamento = await DAOPagamento.insert(retorno.id_cobranca, retorno.netValue, retorno.billingType, dataExpiracao)
@@ -258,6 +274,7 @@ class ReservaController {
             if(formaPagamento == 'DINHEIRO'){
                 situacaoReserva == 'AGUARDANDO_ACEITACAO'
             }
+            console.log(situacaoReserva);
     
     
             // RESERVA INSERT
@@ -279,7 +296,7 @@ class ReservaController {
             }
     
         }
-        
+    
     }
     static async getDirecionaClienteParaSucesso(req, res){
         return res.render('reserva/cliente/sucesso', {user: clienteNome(req, res), formaPagamento: req.params.formaPagamento, mensagem: ""})    
@@ -479,38 +496,38 @@ class ReservaController {
     static async getHistoricoReserva(req, res){
         DAOReserva.getRelatorioHistorico().then(reservas => {
             if (reservas) {
-                res.render('admin/reserva/historico', {user: adminNome(req, res), reservas: reservas, mensagem: "" })
+                res.render('reserva/admin/historico', {user: adminNome(req, res), reservas: reservas, mensagem: "" })
             } else {
                 res.render('erro', { mensagem: "Erro na listagem do historico." })
             }
         })
     }
-    static async postFiltrarHistoricoDasReservas(req, res){
+    static async postHistoricoReservas(req, res){
         let {dataInicio, dataFim} = req.body
         DAOReserva.getRelatorioHistorico(dataInicio, dataFim).then(reservas => {
             if(reservas){
-                res.render('admin/reserva/historico', {user: adminNome(req, res), reservas: reservas})
+                res.render('reserva/admin/historico', {user: adminNome(req, res), reservas: reservas})
             } else {
                 res.render('erro', {mensagem: "Erro ao filtrar."})
             }
         })
     }
-    static async getRelatorioLucroPeriodo(req, res){
+    static async getReceitaPeriodo(req, res){
         let reservas = await DAOReserva.getRelatorioLucro()
         if(reservas){
             let lucroTotal = await DAOReserva.getLucroTotal()
-            res.render('admin/reserva/lucro', {user: adminNome(req, res), lucroTotal: lucroTotal, reservas: reservas, mensagem: ""})
+            res.render('reserva/admin/lucro', {user: adminNome(req, res), lucroTotal: lucroTotal, reservas: reservas, mensagem: ""})
         } else {
             res.render('erro', {mensagem: "Erro ao listar lucros."})
         }
     }
-    static async postRelatorioLucroPeriodo(req, res){
+    static async postReceitaPeriodo(req, res){
         let {dataInicio, dataFim} = req.body
         let reservas = await DAOReserva.getRelatorioLucro(dataInicio, dataFim)
         // console.log("Reservas relatorio lucro: ", reservas.map(reserva => reserva.toJSON()));
         if(reservas){
             let lucroTotal = await DAOReserva.getLucroTotal(dataInicio, dataFim)
-            res.render('admin/reserva/lucro', {user: adminNome(req, res), lucroTotal: lucroTotal, reservas: reservas})
+            res.render('reserva/admin/lucro', {user: adminNome(req, res), lucroTotal: lucroTotal, reservas: reservas})
         } else {
             res.render('erro', {mensagem: "Erro ao filtrar lucros."})
         }

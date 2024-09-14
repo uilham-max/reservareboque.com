@@ -20,7 +20,7 @@ class Grafico {
         // ITERA POR CADA REBOQUE
         for (let i = 0; i < reboques.length; i++) {
             // RETORNA RESERVAS DE CADA REBOQUE
-            let reservas = await DAOReserva.getTodasDesteReboque(reboques[i].placa);
+            let reservas = await DAOReserva.getAtivasDesteReboqueGrafico(reboques[i].placa);
 
             if (reservas) {
                 let datasArray = [];

@@ -3,7 +3,6 @@ const axios = require('axios');
 const ACCESS_TOKEN = process.env.ACCESS_TOKEN
 const URL_BASE = process.env.URL_BASE
 
-
 async function estornoPagamento(codigoPagamento, valor){
     let url = `${URL_BASE}/payments/${codigoPagamento}/refund`
     let options = {
@@ -25,7 +24,6 @@ async function estornoPagamento(codigoPagamento, valor){
     }
 }
 
-// REMOVE A COBRANÇA DO SISTEMA DE PAGAMENTO
 async function deleteCobranca(codigoPagamento){
     let url = `${URL_BASE}/payments/${codigoPagamento}`
     let options = {
@@ -42,7 +40,6 @@ async function deleteCobranca(codigoPagamento){
         throw err
     }
 }
-
 
 async function receiveInCash(idCobranca, value, paymentDate){
     let url = `${URL_BASE}/payments/${idCobranca}/receiveInCash`
@@ -68,8 +65,6 @@ async function receiveInCash(idCobranca, value, paymentDate){
         return undefined
     }
 }
-
-
 
 async function notificacoesAtualizaBatch(notifications){
     let url = `${URL_BASE}/notifications/batch`
@@ -114,7 +109,6 @@ async function notificacoesAtualizaBatch(notifications){
     }
 }
 
-
 async function recuperaNotificacao(customerID){
     let url = `${URL_BASE}/customers/${customerID}/notifications` 
     let options = {
@@ -131,8 +125,6 @@ async function recuperaNotificacao(customerID){
         throw err;
     }
 }
-
-
 
 async function listar_clientes(filtro_cpfCnpj) {
     if (filtro_cpfCnpj) {
@@ -171,7 +163,6 @@ async function listar_clientes(filtro_cpfCnpj) {
     }
 }
 
-//Funcao verifica cliente recebe um cpf ou cnpj e retorna true ou false
 async function verificaCadastro(cpfCnpj) {
     try{
         let retorno = await listar_clientes(cpfCnpj);
@@ -264,7 +255,6 @@ async function gerarQRCode(id_cobranca){
             throw err;
         }
 }
-
 
 async function criarCobranca(cpfCnpj, nome, telefone, email, valor, data_vencimento, dataInicio, dataFim, placa, formaPagamento){
     

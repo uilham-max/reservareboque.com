@@ -58,7 +58,7 @@ class DAOReserva {
                 {situacaoReserva: "CANCELADO"},
                 {where: {pagamentoCodigoPagamento: codigoPagamento}},
             )
-            console.log('Atualizando a situação da reserva para CANCELADO...');
+            console.log(`${codigoPagamento} --> Reserva atualizada para CACELADO`);
             return true
         }catch(erro){
             console.log("Erro ao atualizar reserva para CANCELADO\n",erro.toString());
@@ -208,6 +208,7 @@ class DAOReserva {
                     [Op.and]: [
                         sequelize.literal(`("dataSaida", "dataChegada") OVERLAPS (:inicioDoPeriodo, :fimDoPeriodo)`),
                         {reboquePlaca: reboquePlaca},
+                        { situacaoReserva: { [Op.ne]: 'CANCELADO' } } // Modificado para mostrar as reservas canceladas na tela de periodo da reserva
                     ],
                 },
                 replacements: {inicioDoPeriodo, fimDoPeriodo},
@@ -248,6 +249,38 @@ class DAOReserva {
                         { situacaoReserva: 'APROVADO' },
                         { situacaoReserva: 'ANDAMENTO' },
                         { situacaoReserva: 'AGUARDANDO_PAGAMENTO'},
+                    ]
+                },
+                order: [['id', 'ASC']],
+                include: [
+                    { model: Reboque }, 
+                    { model: Cliente }, 
+                    { model: Pagamento },
+                ]
+            });
+            // console.log(reservas);
+            return reservas;
+        } catch (error) {
+            console.log(error.toString());
+            return undefined;
+        }
+    }
+    static async getAtivasDesteReboqueGrafico(reboquePlaca) {
+        try {
+            const currentDate = moment.tz(new Date(), 'America/Sao_Paulo').format();
+    
+            const reservas = await Reserva.findAll({
+                where: {
+                    reboquePlaca: reboquePlaca,
+                    [Op.or]: [
+                        { dataSaida: { [Op.gte]: currentDate } },
+                        { dataChegada: { [Op.gte]: currentDate } }
+                    ],
+                    [Op.or]: [
+                        { situacaoReserva: 'APROVADO' },
+                        { situacaoReserva: 'ANDAMENTO' },
+                        { situacaoReserva: 'AGUARDANDO_PAGAMENTO'},
+                        { situacaoReserva: 'CONCLUIDO'},
                     ]
                 },
                 order: [['id', 'ASC']],

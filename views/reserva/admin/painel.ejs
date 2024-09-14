@@ -144,7 +144,124 @@
         
     </div>
 
+
+
     <script>
+        const ctx = document.getElementById('myChart');
+        
+        let dataJSON = document.getElementById('dataJSON');
+        let dataArray = JSON.parse(dataJSON.value);
+    
+        new Chart(ctx, {
+            type: 'line', // Gráfico de linha
+            data: {
+                datasets: dataArray.datasets.map((dataset, index) => ({
+                    ...dataset,
+                    backgroundColor: `rgba(${(index * 60) % 255}, ${(index * 120) % 255}, 200, 0.2)`, // Cores suaves
+                    borderColor: `rgba(${(index * 60) % 255}, ${(index * 120) % 255}, 200, 1)`, // Bordas mais vivas
+                    borderWidth: 2,
+                    fill: true,
+                    tension: 0.3,
+                })),
+            },
+            options: {
+                responsive: true, // Torna o gráfico responsivo
+                maintainAspectRatio: false, // Permite que o gráfico se ajuste ao container
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top',
+                        labels: {
+                            color: '#333',
+                            font: {
+                                size: 14,
+                            },
+                        },
+                    },
+                    title: {
+                        display: true,
+                        text: 'Reservas Diárias por Reboque',
+                        color: '#333',
+                        font: {
+                            size: 20,
+                            weight: 'bold',
+                        },
+                        padding: {
+                            top: 20,
+                            bottom: 30,
+                        },
+                    },
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false,
+                        callbacks: {
+                            label: function (context) {
+                                let label = context.dataset.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                label += parseFloat(context.raw.y).toFixed(2); // Mostra o valor formatado
+                                return label;
+                            },
+                        },
+                    },
+                },
+                interaction: {
+                    mode: 'index',
+                    intersect: false,
+                },
+                scales: {
+                    x: {
+                        type: 'linear',
+                        title: {
+                            display: true,
+                            text: 'Dias do Mês',
+                            color: '#333',
+                            font: {
+                                size: 16,
+                            },
+                        },
+                        ticks: {
+                            color: '#555',
+                        },
+                        grid: {
+                            color: 'rgba(200, 200, 200, 0.3)',
+                        },
+                    },
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Valor da Reserva (R$)',
+                            color: '#333',
+                            font: {
+                                size: 16,
+                            },
+                        },
+                        ticks: {
+                            color: '#555',
+                        },
+                        grid: {
+                            color: 'rgba(200, 200, 200, 0.3)',
+                        },
+                    },
+                },
+                animation: {
+                    duration: 1000,
+                    easing: 'easeOutBounce',
+                },
+            },
+        });
+    </script>
+    
+
+
+
+
+
+
+
+    <!-- <script>
         const ctx = document.getElementById('myChart');
         
         let dataJSON = document.getElementById('dataJSON')
@@ -161,7 +278,7 @@
                 }
             }
         });
-    </script>
+    </script> -->
     <%-include('../../partials/footer.ejs')%>
 
 </body>

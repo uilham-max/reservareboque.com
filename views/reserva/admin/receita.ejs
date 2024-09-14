@@ -13,7 +13,7 @@
                 <h3 class="display-4">Relatório Receita</h3>
             </div>
         
-            <form action="/admin/reserva/filtrar" method="POST">
+            <form action="/reserva/admin/receita" method="POST">
 
                 <div class="row g-3">
 
@@ -53,7 +53,7 @@
                                 <td><%=reserva.reboque.placa%></td>
                                 <td><%=reserva.reboque.modelo%></td>
                                 <td><%=reserva.reboque.cor%></td>
-                                <td>R$ <%=reserva.valorTotal%>,00</td>
+                                
                             </tr>
                         <%})%>
                     </tbody>

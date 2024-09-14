@@ -1,6 +1,6 @@
 const DAOPagamento = require('../database/DAOPagamento')
 const DAOReserva = require('../database/DAOReserva')
-const emailPagamentoAprovado = require('../helpers/enviarEmailParaClienteComDadosDaReserva');
+const enviarEmailParaClienteComDadosDaReserva = require('../helpers/enviarEmailParaClienteComDadosDaReserva');
 const formatarDadosDoClienteParaEmail = require('../helpers/formatarDadosDoClienteParaEmail');
 
 class PagamentoController {

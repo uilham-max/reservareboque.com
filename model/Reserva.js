@@ -41,12 +41,12 @@ const Reserva = conexao.define('reserva', {
     }
 }, {
     timestamps: false,
-    indexes: [
-        {
-            unique: true,
-            fields: ['dataSaida', 'dataChegada', 'reboquePlaca']
-        }
-    ]
+    // indexes: [
+    //     {
+    //         unique: true,
+    //         fields: ['dataSaida', 'dataChegada', 'reboquePlaca']
+    //     }
+    // ]
 });
 
 // Relações do modelo

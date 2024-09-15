@@ -25,10 +25,14 @@ class DAOReserva {
 
     }
     static async atualizaSituacaoParaConcluido(idReserva){
+        const currentDate = moment.tz(new Date(), 'America/Sao_Paulo').format();
         console.log('Atualizando situação da reserva para CONCLUIDO...');
         try{
             await Reserva.update(
-                {situacaoReserva: 'CONCLUIDO'},
+                {
+                    situacaoReserva: 'CONCLUIDO', 
+                    dataChegada: currentDate
+                },
                 {where: {id: idReserva}},
             )
             console.log('Situação atualizada para CONCLUIDO com sucesso!');
@@ -58,7 +62,7 @@ class DAOReserva {
                 {situacaoReserva: "CANCELADO"},
                 {where: {pagamentoCodigoPagamento: codigoPagamento}},
             )
-            console.log(`${codigoPagamento} --> Reserva atualizada para CACELADO`);
+            console.log(`${codigoPagamento} --> Reserva "CANCELADA"`);
             return true
         }catch(erro){
             console.log("Erro ao atualizar reserva para CANCELADO\n",erro.toString());
@@ -81,7 +85,7 @@ class DAOReserva {
 
     static async insert(dataInicio, dataFim, valorDiaria, dias, valorTotal, clienteCpf, reboquePlaca, codigoPagamento, situacaoReserva) {
         try {
-            let reserva = await Reserva.create({id: reboquePlaca+"_"+codigoPagamento, dataSaida: dataInicio, dataChegada: dataFim, valorDiaria: valorDiaria, diarias: dias, valorTotal: valorTotal, clienteCpf: clienteCpf, reboquePlaca: reboquePlaca, pagamentoCodigoPagamento: codigoPagamento, situacaoReserva: situacaoReserva })
+            let reserva = await Reserva.create({id: reboquePlaca+"_"+codigoPagamento, dataSaida: dataInicio, dataChegada: dataFim, valorDiaria: valorDiaria.toFixed(0), diarias: dias, valorTotal: valorTotal, clienteCpf: clienteCpf, reboquePlaca: reboquePlaca, pagamentoCodigoPagamento: codigoPagamento, situacaoReserva: situacaoReserva })
             console.log('Reserva criada! aguardando pagamento...');
             return reserva
         }
@@ -187,6 +191,7 @@ class DAOReserva {
                         { situacaoReserva: 'APROVADO' },
                         { situacaoReserva: 'ANDAMENTO' },
                         { situacaoReserva: 'AGUARDANDO_PAGAMENTO' },
+                        { situacaoReserva: 'AGUARDANDO_ACEITACAO' },
                     ]
                 },
                 order: ['dataSaida'],
@@ -249,6 +254,7 @@ class DAOReserva {
                         { situacaoReserva: 'APROVADO' },
                         { situacaoReserva: 'ANDAMENTO' },
                         { situacaoReserva: 'AGUARDANDO_PAGAMENTO'},
+                        { situacaoReserva: 'AGUARDANDO_ACEITACAO'},
                     ]
                 },
                 order: [['id', 'ASC']],
@@ -281,9 +287,12 @@ class DAOReserva {
                         { situacaoReserva: 'ANDAMENTO' },
                         { situacaoReserva: 'AGUARDANDO_PAGAMENTO'},
                         { situacaoReserva: 'CONCLUIDO'},
+                        { situacaoReserva: 'AGUARDANDO_ACEITACAO'},
                     ]
                 },
-                order: [['id', 'ASC']],
+                order: [
+                    ['id', 'ASC'],
+                ],
                 include: [
                     { model: Reboque }, 
                     { model: Cliente }, 
@@ -313,7 +322,7 @@ class DAOReserva {
                     `("dataSaida", "dataChegada") OVERLAPS (:inicioDoPeriodo, :fimDoPeriodo)`
                 ),
                 order: [['id', 'ASC']],
-                include: [{ model: Reboque }, { model: Cliente }],
+                include: [{ model: Reboque }, { model: Cliente }, {model: Pagamento}],
                 replacements: {
                     inicioDoPeriodo,
                     fimDoPeriodo,

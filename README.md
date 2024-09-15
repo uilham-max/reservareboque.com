@@ -34,6 +34,7 @@ horas e em diarias.
 29. Se uma reserva não for iniciada pelo admin o que acontece? 1. Sistema inicia automaticamento? 2. Dispara uma aviso para o admin?
 30. O admin só pode iniciar a uma reserva se a data coincidir com a data de inicio da reserva
 31. Hora undefined na tela de confirmação pra cliente anonimo
+32. Adicionar meu email na lista para receber quando uma reserva for criada
 
 
 # Versão 2

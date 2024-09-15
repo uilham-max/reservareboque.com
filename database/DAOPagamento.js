@@ -21,7 +21,7 @@ class DAOPagamento {
         try {
             let cancelado = await Pagamento.update({situacao: "CANCELADO"},{where: {codigoPagamento: codigoPagamento}})
             if(cancelado){
-                console.log(codigoPagamento ," --> Pagamento atualizado para CANCELADO");
+                console.log(`${codigoPagamento}" --> Pagamento "CANCELADO"`);
             } else {
                 console.log("Sem pagamentos expirados!");
             }
@@ -101,7 +101,7 @@ class DAOPagamento {
     // Recebe o valor da reserva e um código do sistema de pagamento
     static async insert(codigoPagamento, valorTotalDaReserva, billingType, dataExpiracao){
         try{
-            const pagamento = await Pagamento.create({valor: valorTotalDaReserva, codigoPagamento: codigoPagamento, forma: billingType, aprovado: false, dataExpiracao: dataExpiracao, situacao: "AGUARDANDO_PAGAMENTO"})
+            const pagamento = await Pagamento.create({valor: valorTotalDaReserva.toFixed(2), codigoPagamento: codigoPagamento, forma: billingType, aprovado: false, dataExpiracao: dataExpiracao, situacao: "AGUARDANDO_PAGAMENTO"})
             console.log('A cobrança criada expira em: ',dataExpiracao.format('YYYY-MM-DD HH:mm:ss'));
             return pagamento.codigoPagamento
 

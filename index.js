@@ -38,7 +38,7 @@ app.use('/reserva', reservaRouter)
 
 // Como o render não fica mais de 1 minuto no ar, isso remove pagamenos quando ele sobe.
 try{
-    console.log("Removendo pagamentos com data vencida...");
+    console.log("Removendo pagamentos com prazo expirado...");
     removerPagamentosAPI()
 }catch(erro){
     console.error(erro);
@@ -46,7 +46,7 @@ try{
 
 conexao.authenticate().then(()=>{
     app.listen(port,()=>{
-        console.log(`Conexão com BD foi estabelecida com sucesso!`)
+        console.log(`Servidor rodando!!!`)
     })
 }).catch((erro) => {
     console.error(`Erro. Banco de dados não iniciado.\n ${erro}`)

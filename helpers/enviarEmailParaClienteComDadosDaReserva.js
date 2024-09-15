@@ -84,7 +84,7 @@ async function enviarEmailParaClienteComDadosDaReserva(dadosReserva){
                         <div class="logo-container">
                             <img src="cid:logo" alt="Logo da Empresa" class="logo"/>
                         </div>
-                        <h2>Confirmação de Reserva do Reboque</h2>
+                        <h2>Confirmação de Reserva</h2>
                         <p class="details">
                             Prezado cliente,<br><br>
                             Agradecemos por escolher nossos serviços. Aqui estão os detalhes da sua reserva:<br><br>

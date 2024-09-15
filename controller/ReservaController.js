@@ -28,6 +28,10 @@ class ReservaController {
     static async postClienteFormularioReserva(req, res){
         let {reboquePlaca, dataInicio, dataFim, horaInicio, horaFim} =  req.body
 
+        if(new Date().getDay() == dataInicio && horaInicio < new Date().getHours()){
+            return res.render('erro', {mensagem: "A hora de início não pode ser menor que a hora atual."})
+        }
+
         // Injeta a hora na data de inicio
         dataInicio = moment.tz(dataInicio, 'America/Sao_Paulo').set({
             hour: horaInicio,
@@ -73,7 +77,10 @@ class ReservaController {
             
         let {nome, cpf, telefone, email, cep, logradouro, complemento, localidade,
         numeroDaCasa, reboquePlaca, horaInicio, horaFim, dataInicio, dataFim, formaPagamento} = req.body
-    
+
+        if(new Date().getDay() == dataInicio && horaInicio < new Date().getHours()){
+            return res.render('erro', {mensagem: "A hora de início não pode ser menor que a hora atual."})
+        }
         // Injeta a hora na data de inicio
         dataInicio = moment.tz(dataInicio, 'America/Sao_Paulo').set({
             hour: horaInicio,
@@ -262,7 +269,7 @@ class ReservaController {
     
             // Adiciona 60 minutos como tempo de expiração da reservas caso não seja paga
             var dataExpiracao = moment.tz(new Date(), 'America/Sao_Paulo')
-            dataExpiracao.add(2, 'minutes')
+            dataExpiracao.add(60, 'minutes')
     
             // PAGAMENTO INSERT
             const codigoPagamento = await DAOPagamento.insert(retorno.id_cobranca, retorno.netValue, retorno.billingType, dataExpiracao)
@@ -272,10 +279,8 @@ class ReservaController {
     
             let situacaoReserva = 'AGUARDANDO_PAGAMENTO'
             if(formaPagamento == 'DINHEIRO'){
-                situacaoReserva == 'AGUARDANDO_ACEITACAO'
+                situacaoReserva = 'AGUARDANDO_ACEITACAO'
             }
-            console.log(situacaoReserva);
-    
     
             // RESERVA INSERT
             const reserva = await DAOReserva.insert(dataInicio, dataFim, valorDiaria, dias, retorno.netValue, cliente.cpf, reboquePlaca, codigoPagamento, situacaoReserva)
@@ -439,7 +444,7 @@ class ReservaController {
 
     static async getAdminPainel(req, res){
 
-        await Login.admin(process.env.ADMIN_EMAIL_TESTE, process.env.ADMIN_SENHA_TESTE, req)
+        // await Login.admin(process.env.ADMIN_EMAIL_TESTE, process.env.ADMIN_SENHA_TESTE, req)
 
         let useragent = req.useragent
 

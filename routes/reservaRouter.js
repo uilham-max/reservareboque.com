@@ -13,7 +13,7 @@ router.post('/cliente/qrcode', ReservaController.postGerarQRCode)
 router.get('/cliente/sucesso', ReservaController.getDirecionaClienteParaSucesso)
 
 
-router.get('/admin/painel', ReservaController.getAdminPainel);
+router.get('/admin/painel', autorizacao, ReservaController.getAdminPainel);
 router.post('/admin/pagamento/dinheiro', autorizacao, ReservaController.postAdminAprovaPagamentoEmDinheiro)
 router.get('/admin/situacao/:idReserva?/:situacao?', autorizacao, ReservaController.getAdminSituacaoReserva)
 

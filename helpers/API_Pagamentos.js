@@ -34,7 +34,7 @@ async function deleteCobranca(codigoPagamento){
     }
     try{
         let resposta = await axios.delete(url, options)
-        console.log(codigoPagamento ," --> Pagamento removido do Sistema de Pagamentos!");
+        console.log(`${codigoPagamento} --> Pagamento removido do Sistema de Pagamentos!`);
     } catch (err){
         console.error(err.toString());
         throw err

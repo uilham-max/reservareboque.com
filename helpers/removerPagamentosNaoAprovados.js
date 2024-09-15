@@ -22,8 +22,8 @@ const removerPagamentosAPI = async () => {
 }
 
 // Agendar a execução da função a cada 30 minutos
-cron.schedule('*/1 * * * *', async () => {
-    console.log("Removendo reservas que não foram pagas...", /*moment.tz(new Date(), 'America/Sao_Paulo')*/);
+cron.schedule('*/60 * * * *', async () => {
+    console.log(`[${new Date().toLocaleTimeString()}] Removendo reservas não pagas...` /*moment.tz(new Date(), 'America/Sao_Paulo')*/);
     await removerPagamentosAPI()
 });
 

@@ -5,7 +5,12 @@ document.addEventListener('DOMContentLoaded', () => {
   var inputHoraInicio = document.getElementById('horaInicio')
   var inputHoraFim = document.getElementById('horaFim')
 
+  invalidHoraInicio = document.getElementById('invalidHoraInicio');
+
+
   var data = new Date()
+
+  console.log(data);
 
   function obterUltimoDiaMesAtual() {
       let dataAtual = new Date();
@@ -38,8 +43,8 @@ document.addEventListener('DOMContentLoaded', () => {
   inputDataFim.value = adicionaUmDia(inputDataInicio.value)
   inputDataInicio.setAttribute('min', dataAtual); 
   inputDataFim.setAttribute('min', adicionaUmDia(inputDataInicio.value)); // TESTENDO AQUI
-//   inputHoraInicio.value = hora
-//   inputHoraFim.value = hora
+  inputHoraInicio.value = hora
+  inputHoraFim.value = inputHoraInicio.value
 
   // Hora de entrega recebe a hora de inicio
   inputHoraInicio.addEventListener('change', () => {
@@ -50,18 +55,25 @@ document.addEventListener('DOMContentLoaded', () => {
   // DATA INICIO CHANGE
   inputDataInicio.addEventListener('change',()=>{
 
-      // Não deixa o usuario informar uma data menor que a atual 
-      if(inputDataInicio.value < dataAtual){
-          inputDataInicio.value = dataAtual
-      }
+    if(inputDataInicio.value != dataAtual){
+        inputHoraInicio.value = 8
+        inputHoraInicio.classList.remove('is-invalid')
+        inputHoraInicio.setCustomValidity('')
+        invalidHoraInicio.textContent = '';
+    }
 
-      // Quando baixar a data de inicio a de fim nao baixa
-      if((inputDataInicio.value > inputDataFim.value)){
-          inputDataFim.value = adicionaUmDia(inputDataInicio.value)
-      }
+    // Não deixa o usuario informar uma data menor que a atual 
+    if(inputDataInicio.value < dataAtual){
+        inputDataInicio.value = dataAtual
+    }
 
-      // DATA FIM SEMPRE SERÁ O DIA SEGUINTE
-      inputDataFim.setAttribute('min', adicionaUmDia(inputDataInicio.value));
+    // Quando baixar a data de inicio a de fim nao baixa
+    if((inputDataInicio.value > inputDataFim.value)){
+        inputDataFim.value = adicionaUmDia(inputDataInicio.value)
+    }
+
+    // DATA FIM SEMPRE SERÁ O DIA SEGUINTE
+    inputDataFim.setAttribute('min', adicionaUmDia(inputDataInicio.value));
   })
 
 
@@ -78,6 +90,21 @@ document.addEventListener('DOMContentLoaded', () => {
           inputDataInicio.value = inputDataFim.value
       }
   })
+
+  inputHoraInicio.addEventListener('change', () => {
+        // Verifica se tem onze dígitos
+        if (inputDataInicio.value == dataAtual && inputHoraInicio.value < hora ) {
+            inputHoraInicio.classList.add('is-invalid')
+            inputHoraInicio.setCustomValidity('mensagem')
+            invalidHoraInicio.textContent = `A partir das ${hora}:00hs`;
+            return;
+        } else {
+            inputHoraInicio.classList.remove('is-invalid')
+            inputHoraInicio.setCustomValidity('')
+            invalidHoraInicio.textContent = '';
+        }
+
+    })
 
 
   'use strict'

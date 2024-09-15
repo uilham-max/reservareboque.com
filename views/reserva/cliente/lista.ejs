@@ -26,6 +26,7 @@
                                                 <th>Reboque</th>
                                                 <th>Início/Hora</th>
                                                 <th>Fim/Hora</th>
+                                                <th>Status</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -36,6 +37,7 @@
                                                         <%= new Date(reserva.dataSaida).toString().slice(16,18)+'h' %></span></td>
                                                     <td><span id="dataChegada"><%= new Date(reserva.dataChegada).toLocaleDateString('pt-BR').slice(0, 5) %> -
                                                         <%= new Date(reserva.dataChegada).toString().slice(16,18)+'h' %></span></td>
+                                                    <td><%= reserva.situacaoReserva %></td>
                                                     <td><a href="/reserva/cliente/detalhe/<%= reserva.id %>" class="btn btn-primary">Detalhes</a></td>
                                                 </tr>
                                             <% }) %>

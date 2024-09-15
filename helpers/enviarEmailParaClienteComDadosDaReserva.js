@@ -124,7 +124,7 @@ async function enviarEmailParaClienteComDadosDaReserva(dadosReserva){
         console.log(`Erro ao definir um destinatário!`);
         return;
     }
-    
+
     const transporter = nodemailer.createTransport({
         service: "gmail",
         auth: {
@@ -134,23 +134,28 @@ async function enviarEmailParaClienteComDadosDaReserva(dadosReserva){
     });
 
     try {
+        const destinatarios = [dadosReserva.clienteEmail, process.env.MAIL_USER].filter(Boolean); // Remove valores nulos ou indefinidos
+    
         await transporter.sendMail({
-            from: process.env.MAIL_USER, // sender address
-            to: dadosReserva.clienteEmail, // list of receivers
-            subject: "Reserva do Reboque", // Subject line
-            html: htmlResposta, // html body
+            from: process.env.MAIL_USER, // Endereço do remetente
+            to: destinatarios, // Lista de destinatários
+            subject: "Reserva do Reboque", // Assunto do email
+            html: htmlResposta, // Corpo do email em HTML
             attachments: [
                 {
                     filename: 'logoimage.png',
-                    path: path.join(__dirname, '../public/img/logoimage.png'), // Caminho do arquivo da logo
+                    path: path.join(__dirname, '../public/img/logoimage.png'), // Caminho da imagem
                     cid: 'logo' // Content-ID usado no HTML para referenciar a imagem
                 }
             ]
         });
-        console.log("E-mail enviado com sucesso para %s", dadosReserva.clienteEmail);
+    
+        console.log("E-mail enviado com sucesso para %s", destinatarios.join(', '));
+    
     } catch (erro) {
-        console.error(erro.toString());
-    } 
+        console.error("Erro ao enviar o email: ", erro.toString());
+    }
+     
 }
 
 module.exports = enviarEmailParaClienteComDadosDaReserva;

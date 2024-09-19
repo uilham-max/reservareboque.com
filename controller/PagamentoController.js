@@ -1,7 +1,7 @@
 const DAOPagamento = require('../database/DAOPagamento')
 const DAOReserva = require('../database/DAOReserva')
-const enviarEmailParaClienteComDadosDaReserva = require('../helpers/enviarEmailParaClienteComDadosDaReserva');
-const formatarDadosDoClienteParaEmail = require('../helpers/formatarDadosDoClienteParaEmail');
+const ServiceEmail = require('../modules/ServiceEmail')
+
 
 class PagamentoController {
 
@@ -11,7 +11,7 @@ class PagamentoController {
             console.log("Executar: Atualizar situação de pagamento e reserva para aprovado:",codigoPagamento);
             await DAOPagamento.atualizarPagamentoParaAprovado(codigoPagamento)
             await DAOReserva.atualizaSituacaoParaAprovado(codigoPagamento) // Recuperar Id da reserva para atualizar a situação dela para aprovado
-            enviarEmailParaClienteComDadosDaReserva(await formatarDadosDoClienteParaEmail((await DAOReserva.getOneByPagamentoCodigoPagamento(codigoPagamento))[0]))
+            await ServiceEmail.enviarEmailParaClienteComDadosDaReserva(await ServiceEmail.formatarDadosDoClienteParaEmail((await DAOReserva.getOneByPagamentoCodigoPagamento(codigoPagamento))[0]))
         }catch(error){
             console.warn(error);
         }finally{

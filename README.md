@@ -14,13 +14,13 @@
 # Versão 1
 
 3. Criar recurso para INATIVAR um reboque (CASO DE MANUTENÇÃO). 
-4. IMPLEMENTAR RECUPERAÇÃO DE SENHA
 22. Uma reserva que foi criada hoje, pode ser adiada hoje?
 27. O cliente deseja alterar o reboque de sua reserva
 28. Analizar métodos de inserção e atualização de imagens de reboques
 29. Se uma reserva não for iniciada pelo admin o que acontece? 1. Sistema inicia automaticamento? 2. Dispara uma aviso para o admin?
 30. O cliente deseja atualizar os dados cadastrais dele
-31. Melhorar informações dos cards dos reboques na tela inicial
+32. Adicionar icone do whatsapp em cada card na tela de inicio
+33. Mudar icones das dimensões, peso...
 
 * Teste no fluxo da reserva 
 

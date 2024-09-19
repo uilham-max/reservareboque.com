@@ -14,8 +14,6 @@ const clienteRouter = require('./routes/clienteRouter')
 const reboqueRouter = require('./routes/reboqueRouter')
 const pagamentoRouter = require('./routes/pagamentoRouter')
 const reservaRouter = require('./routes/reservaRouter')
-const DAOReserva = require('./database/DAOReserva.js')
-const emailPagamentoAprovado = require('./helpers/enviarEmailParaClienteComDadosDaReserva.js')
 
 // Para Express 4.16 ou superior
 app.use(express.json())

@@ -88,10 +88,11 @@ async function enviarEmailParaClienteComDadosDaReserva(dadosReserva){
                         <p class="details">
                             Prezado cliente,<br><br>
                             Agradecemos por escolher nossos serviços. Aqui estão os detalhes da sua reserva:<br><br>
+                            <strong>Cliente:</strong> ${dadosReserva.clienteNome}<br>
                             <strong>Placa do Reboque:</strong> ${dadosReserva.reboquePlaca}<br>
                             <strong>Modelo do Reboque:</strong> ${dadosReserva.reboqueModelo}<br>
-                            <strong>Data de Início:</strong> ${dadosReserva.dataInicio} às ${dadosReserva.horaInicio}<br>
-                            <strong>Data de Fim:</strong> ${dadosReserva.dataFim} às ${dadosReserva.horaFim}<br><br>
+                            <strong>Data de Início:</strong> ${dadosReserva.dataInicio} às ${dadosReserva.horaInicio}hs<br>
+                            <strong>Data de Fim:</strong> ${dadosReserva.dataFim} às ${dadosReserva.horaFim}hs<br><br>
                             Para qualquer dúvida ou alteração, entre em contato conosco.
                         </p>
                         
@@ -134,7 +135,7 @@ async function enviarEmailParaClienteComDadosDaReserva(dadosReserva){
     });
 
     try {
-        const destinatarios = [dadosReserva.clienteEmail, process.env.MAIL_USER].filter(Boolean); // Remove valores nulos ou indefinidos
+        const destinatarios = [dadosReserva.clienteEmail, "uilhamgoncalves@gmail.com"].filter(Boolean); // Remove valores nulos ou indefinidos
     
         await transporter.sendMail({
             from: process.env.MAIL_USER, // Endereço do remetente

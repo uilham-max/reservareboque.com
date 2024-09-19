@@ -4,6 +4,7 @@ const formatarDadosDoClienteParaEmail = async (reserva) => {
     console.log(`Formatando dados da reserva para enviar por email...`);
 
     const dadosReserva = {
+        'clienteNome': reserva.cliente.nome,
         'reboquePlaca': reserva.reboque.placa,
         'reboqueModelo': reserva.reboque.modelo,
         'dataInicio': new Date(reserva.dataSaida).toLocaleDateString('pt-BR'),

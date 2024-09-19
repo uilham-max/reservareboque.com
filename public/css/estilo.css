@@ -37,7 +37,113 @@ body {
     margin-top: 2rem;
 }
 
+.ano {
+    font-size: 12px;
+    margin-bottom: 5px;
+    color: #516067;
+    font-weight: 400;
+}
+
+.titulo{
+    color: #1f1f1f;
+    text-transform: uppercase;
+}
+
+.card-index .titulo h3 a{
+    color: #1f1f1f;
+    text-decoration: none;
+}
+
+.btn,
+a {
+ transition-duration:.2s
+}
+a, button {
+    outline:0!important;
+    color:#2aae2a
+}
+*,
+a {
+ transition-duration:.3s;
+}
+
+
+.primeiro-nome:hover{
+    color: #2aae2a;
+}
+
+.ultimo-nome:hover{
+    color: #2aae2a;
+}
+
+.primeiro-nome{
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.ultimo-nome{
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.h3 {
+    font-weight: 600;
+    color: #252c2f;
+    font-size: 18px;
+}
+
+.trucate{
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.price2-col{
+    min-height: auto;
+    max-height: none;
+}
+
+.info-cost2{
+    font-size: 22px;
+    font-weight: 600;
+    color: #2aae2a;
+    letter-spacing: -1px;
+}
+
+
+.vitrine-favoritos {
+    padding: 0;
+    position: absolute;
+    right: 10px;
+    bottom: 50px;
+    z-index: 9;
+    background-color: #fff;
+    transition-duration: .2s;
+}
+
+.opicionais {
+    padding: 0 10px;
+    margin: 10px 0;
+    color: #516067;
+    font-weight: 500;
+    font-size: 13px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.box-opicionais-home {
+    text-transform: uppercase;
+    font-size: 11px;
+    display: flex;
+    gap: 3px;
+}
+
+.dark-fill {
+    fill: #111 !important;
+}
+
 .card-index {
+    width: 25rem;
     border: 1px solid #ddd;
     border-radius: 5px;
     margin: 0.5rem;
@@ -62,10 +168,10 @@ body {
     /* Cor do texto */
 }
 
-.card-index p {
+/* .card-index p {
     margin: 2px 0;
     color: #666;
-}
+} */
 
 .card-reserva {
     /* border: 1px solid #ddd; */
@@ -113,14 +219,15 @@ body {
 
 @import url('https://fonts.googleapis.com/css?family=Rubik&display=swap');
 
-p {
+
+/* p {
     font-size: calc(12px + (14 - 12) * ((100vw - 360px) / (1600 - 360))) !important;
     display: fkex;
-}
+} */
 
-h3 {
+/* h3 {
     font-size: calc(24px + (30 - 24) * ((100vw - 360px) / (1600 - 360))) !important;
-}
+} */
 
 .social {
     font-size: 21px !important;

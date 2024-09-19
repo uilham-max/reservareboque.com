@@ -160,22 +160,22 @@
                     <!-- Dados de RESERVA -->
                     <div class="card card-reserva" style="width: 25rem;">
                         <div class="card-body">
-                            <h3 class="card-title">Informações do Período</h3>
+                            <h3 class="card-title">Período</h3>
                             <hr>
 
                             <div class="input-group mb-3">
-                                <span class="input-group-text" >Retirar</span>
-                                <input class="form-control" id="dataInicio_input" type="text" name="dataInicio_input" value="<%= new Date(dataInicio).toLocaleDateString('pt-BR').slice(0, 5) %>" disabled>
-                                <span class="input-group-text" >Hora</span>
-                                <input class="form-control" id="horaInicio_input" type="text" name="horaInicio_input" value="<%= new Date(dataInicio).toString().slice(16, 21) + 'hs' %>" disabled>
-                            
+                                <span class="input-group-text" >Início</span>
+                                <input class="form-control" id="dataInicio_input" type="text" name="dataInicio_input" value="<%= new Date(dataInicio).toLocaleDateString('pt-BR').slice(0, 10) %>" disabled>
+                                <!-- <input class="form-control" id="horaInicio_input" type="text" name="horaInicio_input" value="<%= new Date(dataInicio).toString().slice(16, 21) + 'hs' %>" disabled> -->
+                                <span class="input-group-text" id="horaInicio_input" name="horaInicio_input"><%= new Date(dataInicio).toString().slice(16, 21) + 'hs' %></span>
+                                
                             </div>
 
                             <div class="input-group mb-3">
-                                <span class="input-group-text" >Entregar</span>
-                                <input class="form-control" id="dataFim_input" type="text" name="dataFim_input" value="<%= new Date(dataFim).toLocaleDateString('pt-BR').slice(0, 5) %>" disabled>
-                                <span class="input-group-text" >Hora</span>
-                                <input class="form-control" id="horaFim_input" type="text" name="horaFim_input" value="<%= new Date(dataFim).toString().slice(16, 21) + 'hs' %>" disabled>
+                                <span class="input-group-text" >Fim</span>
+                                <input class="form-control" id="dataFim_input" type="text" name="dataFim_input" value="<%= new Date(dataFim).toLocaleDateString('pt-BR').slice(0, 10) %>" disabled>
+                                <!-- <input class="form-control" id="horaFim_input" type="text" name="horaFim_input" value="<%= new Date(dataFim).toString().slice(16, 21) + 'hs' %>" disabled> -->
+                                <span class="input-group-text" id="horaFim_input" name="horaFim_input"><%= new Date(dataFim).toString().slice(16, 21) + 'hs' %></span>
                             
                             </div>
 

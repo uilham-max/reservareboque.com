@@ -28,7 +28,9 @@ const Cliente = conexao.define('cliente', {
     uf: Sequelize.STRING,
     numero_da_casa: Sequelize.INTEGER,
     ativo: Sequelize.BOOLEAN,
-    cadastrado: Sequelize.BOOLEAN
+    cadastrado: Sequelize.BOOLEAN,
+    resetPasswordToken: Sequelize.STRING,
+    resetPasswordExpires: Sequelize.DATE,
 },
 {
     timestamps: false,

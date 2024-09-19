@@ -1,10 +1,11 @@
 const Cliente = require('../model/Cliente.js')
 const bcrypt = require('bcryptjs')
+const { Op } = require('sequelize')
+
 
 
 class DAOCliente{
 
-    // Criado em 29/03/2024
     static async login(email, senha){
         let cliente = await Cliente.findOne({where: {email: email}})
         try{
@@ -19,8 +20,6 @@ class DAOCliente{
         }
         
     }
-
-    // Data da criação 28/03/2024
     static async updateClienteComReservaMasNaoEraCadastrado(nome, email, senha, cpf, telefone, data_nascimento, cep, logradouro, complemento, bairro, localidade, uf, numero_da_casa) {
         try {
             let [numLinhasAtualizadas, clientesAtualizados] = await Cliente.update({
@@ -50,9 +49,6 @@ class DAOCliente{
             return false;
         }
     }
-    
-
-    // Data da criação 28/03/2024
     static async verificaSeClienteExiste(cpf){
         try{
             const cliente = await Cliente.findOne(
@@ -69,8 +65,6 @@ class DAOCliente{
             throw error
         }
     }
-
-    // Criado em 20/03/2024
     static async insertClienteQueNaoQuerSeCadastrar(nome, cpf, telefone, email, cep, logradouro, complemento, bairro, localidade, uf, numero_da_casa){
         try{
             const cliente = await Cliente.create({nome, email: email, cpf, telefone, data_nascimento: null, cep, logradouro, complemento, bairro, localidade, uf, numero_da_casa, ativo: true, cadastrado: false})
@@ -82,8 +76,6 @@ class DAOCliente{
             return undefined
         }
     }
-
-
     static async insert(nome, email, senha, cpf, telefone, data_nascimento, cep, logradouro, complemento, bairro, localidade, uf, numero_da_casa){
         try{
             let cliente = await Cliente.create({nome, email, senha, cpf, telefone, data_nascimento, cep, logradouro, complemento, bairro, localidade, uf, numero_da_casa, ativo: true, cadastrado: true})
@@ -95,9 +87,6 @@ class DAOCliente{
             return false
         }
     }
-
-
-
     static async update(id, nome, cpf, telefone, endereco){
         try{
             await Cliente.update({nome: nome, cpf: cpf, telefone: telefone, endereco: endereco},{where: {id: id}})
@@ -108,9 +97,6 @@ class DAOCliente{
             return false
         }
     }
-
-
-
     // static async delete(id){
     //     try{
     //         await Cliente.destroy({where: {id: id}})
@@ -121,7 +107,6 @@ class DAOCliente{
     //         return false
     //     }
     // }
-
     static async getOne(cpf){
         try{
             let cliente = await Cliente.findByPk(cpf)
@@ -132,7 +117,6 @@ class DAOCliente{
             return undefined
         }
     }
-
     static async getAll(){
         try{
             let clientes = await Cliente.findAll({order: ['nome']})
@@ -141,6 +125,39 @@ class DAOCliente{
         catch(error){
             console.log(error.toString())
             return undefined
+        }
+    }
+    static async getOneByEmail(email){
+        try{
+            let cliente = await Cliente.findOne({where: {email: email}})
+            return cliente
+        }
+        catch(error){
+            console.log(error.toString())
+            return false
+        }
+    }
+    static async save(cliente){
+        try{
+            await cliente.save()
+            return true
+        }catch(erro){
+            console.log(`Erro ao salvar cliente: ${erro}`);
+            return false
+        }
+    }
+    static async getOneByToken(token) {
+        try{
+            const cliente = await Cliente.findOne({
+                where: {
+                    resetPasswordToken: token,
+                    resetPasswordExpires: {[Op.gt]: Date.now()}
+                }
+            })
+            return cliente
+        } catch (erro) {
+            console.log(`Erro ao consultar cliente: ${erro}`);
+            return false
         }
     }
 

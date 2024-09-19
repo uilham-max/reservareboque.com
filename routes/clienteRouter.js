@@ -12,5 +12,9 @@ router.post('/entrar', ClienteController.postEntrar)
 router.get('/sair', clienteAutorizacao, ClienteController.getSair)
 router.get('/existe/:cpf?', ClienteController.getExiste)
 router.get('/lista', autorizacao, ClienteController.getLista)
+router.get('/recupera-senha', ClienteController.getRecuperaSenha)
+router.post('/recupera-senha', ClienteController.postRecuperaSenha)
+router.get('/redefine-senha/:token', ClienteController.getRedefineSenha)
+router.post('/redefine-senha', ClienteController.postRedefineSenha)
 
 module.exports = router

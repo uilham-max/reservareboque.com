@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%-include('../partials/header.ejs')%>
+    <script src="/js/recuperaSenha.js" ></script>
+</head>
+<body  >
+    
+    <%-include('../partials/navbar.ejs')%>
+    
+    <div class="conteudo" >
+        <div class="jumbotron junbotron-fluid">
+            <h1 class="display-4" >Redefinição de senha</h1>
+        </div>
+        <div class="container" >
+            <!-- <h3>Reboque escolhido</h3> -->
+            <!--  -->
+            <form action="/cliente/redefine-senha" method="POST">
+                <div class="lista-reboques">
+
+
+                    <!-- Dados do login -->
+                    <div class="card card-reserva" style="width: 25rem;">
+                        <div class="card-body">
+
+
+                            <% if(mensagem){ %>
+                                <div class="alert alert-info">
+                                    <strong>Mensagem: </strong>
+                                    <%= mensagem %>
+                                </div>
+                                <div class="d-flex mt-3 justify-content-center" style="margin: 0.5rem;">
+                                    <a class="btn btn-primary" href="/cliente/entrar">Entrar</a>
+                                </div>
+                            <% } else { %>
+                                <h3 class="card-title">Informe a nova senha</h3>
+                                <hr>
+                                
+    
+                                <div class="form-group">
+                                    <label for="senha">Senha</label>
+                                    <span class="text-danger"> * </span>
+                                    <input class="form-control" id="senha" type="password" name="senha" >
+                                    <small class="form-text text-muted">No mínimo 8 dígitos.</small>
+                                    <div class="valid-feedback">
+                                        <!-- Looks good! -->
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        <span id="invalidSenha"></span>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="senhaRepita">Repita a Senha</label>
+                                    <span class="text-danger"> * </span>
+                                    <input class="form-control" id="senhaRepita" type="password" name="senhaRepita" >
+                                    <div class="valid-feedback">
+                                        <!-- Looks good! -->
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        <span id="invalidSenhaRepita"></span>
+                                    </div>
+                                </div>
+    
+                                <div class="d-flex justify-content-center mt-3" style="margin: 0.5rem;">
+                                    <input class="btn btn-primary" id="botao" type="submit" value="Redefinir">
+                                </div>
+
+
+
+                            <% } %>
+
+
+
+
+
+                            
+                           
+                        </div>
+                    </div>
+
+                </div>
+                <input id="token" name="token" type="hidden" value="<%=token%>">
+            </form>
+            <!--  -->
+        </div>
+    </div>
+
+    <%-include('../partials/footer.ejs')%>
+
+</body>
+</html>

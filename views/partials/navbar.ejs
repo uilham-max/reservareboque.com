@@ -13,9 +13,14 @@
       <img src="/img/logoimage.png" alt="Logo" width="160" height="25" class="d-inline-block align-text-center">
     </a>  
 
+    <div>
 
+      <% if(user == '') {%>
+        <a href="/cliente/entrar"><button type="button" class="btn btn-outline-light">Entrar</button></a>
+      <% } %>
+      
 
-    <!-- Icone do usuario -->
+      <!-- Icone do usuario -->
     <div class="btn-group dropstart">
       <div class="dropdown">
         
@@ -25,6 +30,7 @@
           <span ><%= user.nome.slice(0,2) %></span>
         <% } else { %>
           <span class="bi bi-person-fill fs-3" aria-hidden="true"></span>
+          
         <% } %>
         </button>
         
@@ -79,6 +85,12 @@
       </div>
 
     </div>
+
+    </div>
+
+
+
+    
 
 
 

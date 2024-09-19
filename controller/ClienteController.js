@@ -138,7 +138,8 @@ class ClienteController {
         await DAOCliente.save(cliente)
 
         // Enviar o email para o usuário com o link de redefinição de senha
-        const resetUrl = `https://7bfb-179-105-28-196.ngrok-free.app/cliente/redefine-senha/${token}`;
+        // const resetUrl = `https://8e47-179-105-21-7.ngrok-free.app/cliente/redefine-senha/${token}`;
+        const resetUrl = `https://www.reboquesoliveira.com/cliente/redefine-senha/${token}`;
         const dadosEmail = {
             'clienteEmail': email,
             'resetUrl': resetUrl

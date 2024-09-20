@@ -333,6 +333,7 @@ class ReservaController {
             return res.render('erro', {mensagem: "Erro ao obter detalhes da reserva."})
         }
 
+        
         if(!reserva){
             return res.render('erro', {mensagem: "Erro ao obter reserva."})
         }

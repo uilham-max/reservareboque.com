@@ -25,107 +25,114 @@
             </div>
         <% } %>
     </div>
-        <div class="container" >
 
-            <!-- Conteúdo de cada card -->
-            <div class="lista-reboques">
-                <% reboques.forEach(function(reboque){ %>
-                    <div class="card card-index">
-                        <a href="/reserva/cliente/periodo/<%=reboque.placa%>">
-                            <img class="card-img-top" src="<%=reboque.foto%>" alt="Reboque 1">
-                        </a>
-                        <div class="card-body">
+    
+    <div class="container" >
+
+        <!-- Conteúdo de cada card -->
+        <div class="lista-reboques">
+            <% reboques.forEach(function(reboque){ %>
+                <div class="card card-index">
+
+                    <a href="/reserva/cliente/periodo/<%=reboque.placa%>">
+                        <img class="card-img-top" src="<%=reboque.foto%>" alt="Reboque 1">
+                    </a>
 
 
-                            <div class="titulo">
-                                <h3>
-                                    <a href="/reserva/cliente/periodo/<%=reboque.placa%>">
-                                        <div class="ano"><%=reboque.anoFabricacao%></div>
-                                        <div class="primeiro-nome"><%=reboque.modelo%></div>
-                                        <div  class="ultimo-nome">Carga</div>
-                                    </a>
-                                </h3>
+                    <div class="card-body">
+
+                        <div class="titulo">
+                            <h3>
+                                <a href="/reserva/cliente/periodo/<%=reboque.placa%>">
+                                    <div class="ano"><%=reboque.anoFabricacao%></div>
+                                    <div class="primeiro-nome"><%=reboque.modelo%></div>
+                                    <div  class="ultimo-nome">Carga</div>
+                                </a>
+                            </h3>
+                        </div>
+
+
+
+
+
+                        <div class="row justify-content-between">
+
+                            <div class="col-6">
+                                <div class="truncate float-start">
+                                    <p class="info-cost2 lato-black"><%='R$ '+reboque.valorDiaria%>,00</p>
+                                </div>
                             </div>
 
 
-
-                            <div class="row justify-content-between">
-                                <div class="col-6">
-                                    <div class="truncate float-start">
-                                        <p class="info-cost2 lato-black"><%='R$ '+reboque.valorDiaria%>,00</p>
-                                    </div>
-                                </div>
-
-
-                                <div class="col-6">
-                                    <div class="truncate float-end">
-
-
-                                        <div class="row justify-content-evenly">
-                                            
-                                            <div class="col-4">
-                                                <div class=" float-start">
-                                                    <a  href="https://wa.me/5553997032373"><img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" width="30" height="30"></a> <!-- Coloque seu número de WhatsApp -->
-                                                </div>
+                            <div class="col-6">
+                                <div class="truncate float-end">
+                                    <div class="row justify-content-evenly">
+                                        
+                                        <div class="col-4">
+                                            <div class=" float-start">
+                                                <a  href="https://wa.me/5553997032373"><img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" width="30" height="30"></a> <!-- Coloque seu número de WhatsApp -->
                                             </div>
-            
-                                            <div class="col-4">
-                                                <div class=" ms-3 float-end">
-                                                    <a  href="https://maps.app.goo.gl/bM2d9YG7UpkvGRBQ7" ><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-geo-alt" viewBox="0 0 16 16">
-                                                        <path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A32 32 0 0 1 8 14.58a32 32 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10"/>
-                                                        <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4m0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>
-                                                      </svg></a>
-                                                </div>
+                                        </div>
+        
+                                        <div class="col-4">
+                                            <div class=" ms-3 float-end">
+                                                <a  href="https://maps.app.goo.gl/bM2d9YG7UpkvGRBQ7" ><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-geo-alt" viewBox="0 0 16 16">
+                                                    <path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A32 32 0 0 1 8 14.58a32 32 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10"/>
+                                                    <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4m0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>
+                                                    </svg></a>
                                             </div>
-
                                         </div>
 
-
                                     </div>
                                 </div>
-
-                                
-                            </div>
-
-                            
-
-                            <div class="opicionais">
-                                
-                                <div class="box-opicionais-home">
-                                    <div>
-                                        <img class="icon-card-index" src="/img/icons/icon-trailer-medidas.png" width="22" height="22">
-                                    </div>
-                                    <div class="text-none grey-text10 mt-1 ms-1">
-                                        <%=reboque.comprimento%> X <%=reboque.largura%> X <%=reboque.altura%>
-                                    </div>
-                                </div>
-                                
-                                <div class="box-opicionais-home">
-                                    <div>
-                                        <img class="icon-card-index" src="/img/icons/icon-trailer-peso.png" width="20" height="20" >
-                                    </div>
-                                    <div class="text-none grey-text10 mt-1 ms-1">
-                                        <%=reboque.pesoBruto%> Kg
-                                    </div>
-                                </div>
-                                
-                                <div class="box-opicionais-home">
-                                    <div>
-                                        <img class="icon-card-index" src="/img/icons/icon-trailer-open.png" width="22" height="22" >
-                                    </div>
-                                    <div class="text-none grey-text10 mt-1 ms-1">
-                                        Aberto
-                                    </div>
-                                </div>
-
                             </div>
 
                         </div>
-                    </div>
-                <% }) %>
-            </div>
 
+                        
+
+                        <div class="opicionais">
+                            
+                            <div class="box-opicionais-home">
+                                <div>
+                                    <img class="icon-card-index" src="/img/icons/icon-trailer-medidas.png" width="22" height="22">
+                                </div>
+                                <div class="text-none grey-text10 mt-1 ms-1">
+                                    <%=reboque.comprimento%> X <%=reboque.largura%> X <%=reboque.altura%>
+                                </div>
+                            </div>
+                            
+                            <div class="box-opicionais-home">
+                                <div>
+                                    <img class="icon-card-index" src="/img/icons/icon-trailer-peso.png" width="20" height="20" >
+                                </div>
+                                <div class="text-none grey-text10 mt-1 ms-1">
+                                    <%=reboque.pesoBruto%> Kg
+                                </div>
+                            </div>
+                            
+                            <div class="box-opicionais-home">
+                                <div>
+                                    <img class="icon-card-index" src="/img/icons/icon-trailer-open.png" width="22" height="22" >
+                                </div>
+                                <div class="text-none grey-text10 mt-1 ms-1">
+                                    Aberto
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+
+
+                    
+                </div>
+            <% }) %>
         </div>
+
+    </div>
 
     
     <%-include('./partials/footer.ejs')%>

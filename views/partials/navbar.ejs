@@ -1,6 +1,6 @@
 <nav class="navbar bg-body-tertiary fixed-top" data-bs-theme="dark">
   <div class="container-fluid">
-    
+      
     <!-- Icone do menu -->
     <button style="border-width: 0;" class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
       <!-- <span class="navbar-toggler-icon fs-6"></span> -->
@@ -14,85 +14,69 @@
     </a>  
 
     <div>
-
-      <!-- <% if(user == '') {%>
-        <a href="/cliente/entrar"><button type="button" class="btn btn-outline-light">Entrar</button></a>
-      <% } %> -->
+      <!-- Icone do usuario -->
+      <div class="btn-group dropstart">
+        <div class="dropdown">
+          
+          <!-- mostra botão ou nome do usuário logado -->
+          <button style="border-width: 0;" class="navbar-toggler" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+          <% if(user && (user != 'User')) { %>
+            <span ><%= user.nome.slice(0,2) %></span>
+          <% } else { %>
+            <span class="bi bi-person-fill fs-3" aria-hidden="true"></span>
+            
+          <% } %>
+          </button>
       
 
-      <!-- Icone do usuario -->
-    <div class="btn-group dropstart">
-      <div class="dropdown">
-        
-        <!-- mostra botão ou nome do usuário logado -->
-        <button style="border-width: 0;" class="navbar-toggler" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-        <% if(user && (user != 'User')) { %>
-          <span ><%= user.nome.slice(0,2) %></span>
-        <% } else { %>
-          <span class="bi bi-person-fill fs-3" aria-hidden="true"></span>
-          
-        <% } %>
-        </button>
-        
+          <ul class="dropdown-menu">
 
+            <% if(user != ''){ %>
+              <li class="dropdown-item">  
+                <i class="bi bi-person-fill  fs-4"></i>  
+                <a href="/reserva/cliente/lista"><%=user.email%></a>
+              </li>
+            <% }else{%>
+              <li class="dropdown-item" >
+                <!-- <i class="fa fa-user fs-3"></i> -->
+                <!-- <i class="bi-alarm"></i> -->
+                <i class="bi bi-box-arrow-in-right fs-4" ></i>
+                <a href="/cliente/entrar">Entrar</a>
+              </li>
+            <%}%>
+            
 
-        <ul class="dropdown-menu">
+            <% if(user != ''){ %>
+              <li class="dropdown-item ">   
+                <i class="bi bi-arrow-left-right  fs-4"></i>  
+                <a href="/cliente/entrar">Trocar usuário</a>
+              </li>
+            <% }else{ %>
+              <li class="dropdown-item">
+                <i class="bi bi-person-fill-add  fs-4"></i>
+                <a  href="/cliente/novo">Criar conta</a>
+              </li>
+            <% } %>
+            
 
-          <% if(user != ''){ %>
-            <li class="dropdown-item">  
-              <i class="bi bi-person-fill  fs-4"></i>  
-              <a href="/reserva/cliente/lista"><%=user.email%></a>
-            </li>
-          <% }else{%>
-            <li class="dropdown-item" >
-              <!-- <i class="fa fa-user fs-3"></i> -->
-              <!-- <i class="bi-alarm"></i> -->
-              <i class="bi bi-box-arrow-in-right fs-4" ></i>
-              <a href="/cliente/entrar">Entrar</a>
-            </li>
-          <%}%>
-          
+            <% if(user != ''){ %>
+              <hr>
+              <li class="dropdown-item">   
+                <i class="bi bi-box-arrow-in-left   fs-4" ></i> 
+                <a href="/cliente/sair">Sair</a>   
+              </li>
+            <% } %>
 
-          <% if(user != ''){ %>
-            <li class="dropdown-item ">   
-              <i class="bi bi-arrow-left-right  fs-4"></i>  
-              <a href="/cliente/entrar">Trocar usuário</a>
-            </li>
-          <% }else{ %>
-            <li class="dropdown-item">
-              <i class="bi bi-person-fill-add  fs-4"></i>
-              <a  href="/cliente/novo">Criar conta</a>
-            </li>
-          <% } %>
-          
+            <!-- <li class="dropdown-item">
+              <i class="bi bi-box-arrow-in-right   fs-4" ></i> 
+              <a href="/reserva/admin/painel">Painel</a>
+            </li> -->
 
-          <% if(user != ''){ %>
-            <hr>
-            <li class="dropdown-item">   
-              <i class="bi bi-box-arrow-in-left   fs-4" ></i> 
-              <a href="/cliente/sair">Sair</a>   
-            </li>
-          <% } %>
+          </ul>
 
-          <!-- <li class="dropdown-item">
-            <i class="bi bi-box-arrow-in-right   fs-4" ></i> 
-            <a href="/reserva/admin/painel">Painel</a>
-          </li> -->
-
-        </ul>
-
-
+        </div>
       </div>
-
     </div>
-
-    </div>
-
-
-
-    
-
-
 
     <!-- Icone do menu -->
     <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
@@ -118,8 +102,6 @@
         </form> -->
       </div>
     </div>
-
-
 
   </div>
 </nav>

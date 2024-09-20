@@ -105,7 +105,6 @@ class ReservaController {
         */
     
         let resposta = await DAOReserva.getVerificaDisponibilidade(reboquePlaca, dataInicio, dataFim)
-        console.log('Resposta:',resposta);
         if(resposta.length > 0){
             let reboque = await DAOReboque.getOne(reboquePlaca)
             let reservas = await DAOReserva.getAtivasDesteReboque(reboquePlaca)

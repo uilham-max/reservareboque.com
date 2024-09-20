@@ -325,7 +325,14 @@ class ReservaController {
     static async getClienteEditarReserva(req, res){
         let idReserva = req.params.idReserva
 
-        let reserva = await DAOReserva.getOne(idReserva)
+        const reserva = await DAOReserva.getOne(idReserva)
+
+        console.log(`Situação da reserva: ${reserva.situacaoReserva}`);
+
+        if (reserva.situacaoReserva == 'ANDAMENTO' || reserva.situacaoReserva == 'FINALIZADO' || reserva.situacaoReserva == 'CANCELADO') {
+            return res.render('erro', {mensagem: "Erro ao obter detalhes da reserva."})
+        }
+
         if(!reserva){
             return res.render('erro', {mensagem: "Erro ao obter reserva."})
         }
@@ -376,7 +383,7 @@ class ReservaController {
     
             
             // O MOMENTO DO PEDIDO DEVE SER MAIOR QUE 48 HORAS PARA FAZER A ALTERAÇÃO DA DATA DA RESERVA
-            if (dataInicioAntiga.diff(moment.tz(new Date(), 'America/Sao_Paulo'), 'hours') < 48) {
+            if (dataInicioAntiga.diff(moment.tz(new Date(), 'America/Sao_Paulo'), 'hours') < 0) {
                 console.log("Tentativa de alteração de data da reserva negada. Menos de 48h.");
                 return res.render('erro', { mensagem: 'Erro. Faltam menos de 48h para a retirada' });
             }

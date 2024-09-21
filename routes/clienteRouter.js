@@ -16,5 +16,7 @@ router.get('/recupera-senha', ClienteController.getRecuperaSenha)
 router.post('/recupera-senha', ClienteController.postRecuperaSenha)
 router.get('/redefine-senha/:token', ClienteController.getRedefineSenha)
 router.post('/redefine-senha', ClienteController.postRedefineSenha)
+router.get('/editar', ClienteController.getEditar)
+router.post('/editar', ClienteController.postEditar)
 
 module.exports = router

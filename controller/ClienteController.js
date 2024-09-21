@@ -16,7 +16,7 @@ class ClienteController {
         DAOCliente.login(email, senha).then(cliente => {
             if (cliente) {
                 if (bcrypt.compareSync(senha, cliente.senha)) {
-                    req.session.cliente = { cpf: cliente.cpf, nome: cliente.nome, email: cliente.email }
+                    req.session.cliente = { cpf: cliente.cpf, nome: cliente.nome, email: cliente.email, senha: senha }
                     console.log(req.session.cliente.nome, "fez login...");
                     res.redirect('/')
                 } else {
@@ -189,6 +189,61 @@ class ClienteController {
 
         return res.render('cliente/redefineSenha', { user: clienteNome(req, res), mensagem: "Senha redefinida com sucesso!", token: '' })
         // return res.render('cliente/recuperaSenha', { user: clienteNome(req, res), mensagem: "Senha redefinida com sucesso", token: '' })
+    }
+
+    static async getEditar(req, res) {
+        if(req.session.cliente && req.session.cliente.cpf && req.session.cliente.senha){
+            const cpf = req.session.cliente.cpf
+            const senha = req.session.cliente.senha
+            const cliente = await DAOCliente.getOne(cpf)
+            return res.render('cliente/editar', { user: clienteNome(req, res), mensagem: "", cliente: cliente, senha: senha })
+        }
+        return res.render('erro', {mensagem: "ERRO: não foi possível encontrar o cliente da sessão"})
+        
+    }
+
+    static async postEditar(req, res) {
+
+        let { nome, email, senha, novaSenha, senhaRepita, cpf, telefone, dataNascimento, cep,
+        logradouro, complemento, bairro, localidade, uf, numeroDaCasa } = req.body
+
+        console.log(cpf);
+        cpf = cpf.replace(/\D/g, '')
+        telefone = telefone.replace(/\D/g, '')
+        cep = cep.replace(/\D/g, '')
+
+        if (novaSenha.length != 0) {
+            if (novaSenha.length < 8) {
+                return res.render('erro', { mensagem: "Erro. novaSenha com menos de 8 dígitos." })
+            }
+
+            if (novaSenha !== senhaRepita) {
+                return res.render('erro', { mensagem: 'Erro. Senhas diferentes.' })
+            }
+
+            let salt = bcrypt.genSaltSync(10)
+            novaSenha = bcrypt.hashSync(novaSenha, salt)
+
+            cliente.senha = novaSenha
+        }
+
+        const cliente = await DAOCliente.getOne(cpf)
+        cliente.nome = nome
+        cliente.email = email
+        cliente.telefone = telefone
+        cliente.data_nascimento 
+        cliente.cep = cep
+        cliente.logradouro = logradouro
+        cliente.complemento = complemento
+        cliente.bairro = bairro
+        cliente.localidade = localidade
+        cliente.uf = uf
+        cliente.numero_da_casa
+
+        if (!await DAOCliente.save(cliente)) {
+            return res.render('erro', { mensagem: 'Erro ao atualizar dados do cliente.' })
+        }
+        return res.redirect('/')
     }
 
 }

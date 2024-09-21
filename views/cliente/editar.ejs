@@ -5,7 +5,7 @@
     <!-- <script src="/js/validaCPF.js" ></script> -->
     <script src="/js/consome_viacep.js" ></script>
     <!-- <script src="/js/validar_senha.js" ></script> -->
-    <script src="/js/validaDadosFormularioCadastro.js" ></script>
+    <script src="/js/validaFormularioEditar.js" ></script>
 </head>
 <body  >
     
@@ -13,12 +13,12 @@
     
     <div class="conteudo" >
         <div class="jumbotron junbotron-fluid">
-            <h1 class="display-4" >Página de cadastro</h1>
+            <h1 class="display-4" >Página de editar dados</h1>
         </div>
         <div class="container" >
             <!-- <h3>Reboque escolhido</h3> -->
             <!--  -->
-            <form action="/cliente/novo" method="POST">
+            <form action="/cliente/editar" method="POST">
                 <div class="lista-reboques">
 
 
@@ -30,8 +30,8 @@
                                 
                             <div class="form-group">
                                 <label for="nome">Nome completo</label>
-                                <span class="text-danger"> * </span>
-                                <input class="form-control" id="nome" type="text" name="nome" minlength="5" maxlength="50" required>
+                                
+                                <input class="form-control" id="nome" type="text" name="nome" minlength="5" maxlength="50" value="<%=cliente.nome%>">
                                 <div class="valid-feedback">
                                     <!-- Looks good! -->
                                 </div>
@@ -44,8 +44,9 @@
                                          
                             <div class="form-group">
                                 <label for="cpf">CPF</label>
-                                <span class="text-danger"> * </span>
-                                <input class="form-control" id="cpf" type="text" name="cpf" minlength="14" maxlength="14" required>
+                                
+                                <input class="form-control" type="text"value="<%=cliente.cpf%>" disabled>
+                                <input type="hidden" id="cpf" name="cpf" value="<%=cliente.cpf%>">
                                 <div class="valid-feedback">
                                     <!-- Looks good! -->
                                 </div>
@@ -57,8 +58,8 @@
                             
                             <div class="form-group">
                                 <label for="telefone">Telefone</label>
-                                <span class="text-danger"> * </span>
-                                <input class="form-control" id="telefone" type="text" name="telefone" maxlength="15" placeholder="Ex.: 53997032373" required>
+                                
+                                <input class="form-control" id="telefone" type="text" name="telefone" maxlength="15" value="<%=cliente.telefone%>">
                                 <div class="valid-feedback">
                                     <!-- Looks good! -->
                                 </div>
@@ -69,8 +70,8 @@
 
                             <div class="form-group">
                                 <label for="cep">Nascimento</label>
-                                <span class="text-danger"> * </span>
-                                <input class="form-control" id="dataNascimento" type="date" name="dataNascimento" required >
+                                
+                                <input class="form-control" id="dataNascimento" type="date" name="dataNascimento" value="<%=cliente.data_nascimento%>">
                                 <div class="valid-feedback">
                                     <!-- Looks good! -->
                                 </div>
@@ -92,8 +93,7 @@
                             <div class="row g-3">
                                 <div class="form-group col">
                                     <label for="cep">CEP</label>
-                                    <span class="text-danger"> * </span>
-                                    <input class="form-control" id="cep" type="text" name="cep" minlength="9" maxlength="9" placeholder="Ex.: 96408560" required>
+                                    <input class="form-control" id="cep" type="text" name="cep" minlength="9" maxlength="9" value="<%=cliente.cep%>">
                                     <div class="valid-feedback">
                                         <!-- Looks good! -->
                                     </div>
@@ -103,8 +103,8 @@
                                 </div>
                                 <div class="form-group col">
                                     <label for="numeroDaCasa">Nº da casa</label>
-                                    <span class="text-danger"> * </span>
-                                    <input class="form-control" id="numeroDaCasa" type="text" name="numeroDaCasa" maxlength="5" required >
+                                    
+                                    <input class="form-control" id="numeroDaCasa" type="text" name="numeroDaCasa" maxlength="5" value="<%=cliente.numero_da_casa%>">
                                     <div class="valid-feedback">
                                         <!-- Looks good! -->
                                     </div>
@@ -117,8 +117,7 @@
 
                             <div class="form-group">
                                 <label for="logradouro">Rua</label>
-                                <span class="text-danger"> * </span>
-                                <input class="form-control" id="logradouro" type="text" name="logradouro" placeholder="Ex.: Waltter Dias da Costa" minlength="2" maxlength="100" required>
+                                <input class="form-control" id="logradouro" type="text" name="logradouro" placeholder="Ex.: Waltter Dias da Costa" minlength="2" maxlength="100" value="<%=cliente.logradouro%>">
                                 <div class="valid-feedback">
                                     <!-- Looks good! -->
                                 </div>
@@ -129,7 +128,7 @@
 
                             <div class="form-group">
                                 <label for="complemento">Complemento</label>
-                                <input class="form-control" id="complemento" type="text" name="complemento" maxlength="200">
+                                <input class="form-control" id="complemento" type="text" name="complemento" maxlength="200" value="<%=cliente.complemento%>">
                                 <div class="invalid-feedback">
                                     <span id="invalidComplento"></span>
                                 </div>
@@ -137,8 +136,7 @@
                           
                             <div class="form-group">
                                 <label for="localidade">Cidade</label>
-                                <span class="text-danger"> * </span>
-                                <input class="form-control" id="localidade" type="text" minlength="3" name="localidade" maxlength="50" required>
+                                <input class="form-control" id="localidade" type="text" minlength="3" name="localidade" maxlength="50" value="<%=cliente.localidade%>">
                                 <div class="valid-feedback">
                                     <!-- Looks good! -->
                                 </div>
@@ -157,9 +155,8 @@
                             <hr>
                             <div class="form-group">
                                 <label for="email">Login</label>
-                                <span class="text-danger"> * </span>
-                                <input class="form-control" id="email" type="email" name="email" >
-                                <small class="form-text text-muted">Informe o seu e-mail como login.</small>
+                                
+                                <input class="form-control" id="email" type="email" name="email" value="<%=cliente.email%>">
                                 <div class="valid-feedback">
                                     <!-- Looks good! -->
                                 </div>
@@ -170,8 +167,20 @@
 
                             <div class="form-group">
                                 <label for="senha">Senha</label>
-                                <span class="text-danger"> * </span>
-                                <input class="form-control" id="senha" type="password" name="senha" >
+                                
+                                <input class="form-control" id="senha" type="password" name="senha" value="<%=senha%>">
+                                <div class="valid-feedback">
+                                    <!-- Looks good! -->
+                                </div>
+                                <div class="invalid-feedback">
+                                    <span id="invalidSenha"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="novaSenha">Nova senha</label>
+                                
+                                <input class="form-control" id="novaSenha" type="password" name="novaSenha" >
                                 <small class="form-text text-muted">No mínimo 8 dígitos.</small>
                                 <div class="valid-feedback">
                                     <!-- Looks good! -->
@@ -183,7 +192,7 @@
                             
                             <div class="form-group">
                                 <label for="senhaRepita">Repita a Senha</label>
-                                <span class="text-danger"> * </span>
+                                
                                 <input class="form-control" id="senhaRepita" type="password" name="senhaRepita" >
                                 <div class="valid-feedback">
                                     <!-- Looks good! -->

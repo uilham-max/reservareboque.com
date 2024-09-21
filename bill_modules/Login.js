@@ -19,7 +19,7 @@ class Login{
         await DAOCliente.login(email, senha).then(cliente => {
             if(cliente){
                 if(bcrypt.compareSync(senha, cliente.senha)){
-                    req.session.cliente = {cpf: cliente.cpf, nome: cliente.nome, email: cliente.email}
+                    req.session.cliente = {cpf: cliente.cpf, nome: cliente.nome, email: cliente.email, senha: senha}
                     console.log(req.session.cliente.nome, "fez login...");
                 }
             }

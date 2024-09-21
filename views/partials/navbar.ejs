@@ -44,6 +44,14 @@
                 <a href="/cliente/entrar">Entrar</a>
               </li>
             <%}%>
+
+
+            <% if(user != ''){ %>
+              <li class="dropdown-item">  
+                <i class="bi bi-pencil"></i> 
+                <a href="/cliente/editar">Editar Dados</a>
+              </li>
+            <% }%>
             
 
             <% if(user != ''){ %>

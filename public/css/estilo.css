@@ -15,6 +15,7 @@ body {
     /* Ajuste esta margem conforme necessário para evitar que o conteúdo seja ocultado sob a navbar */
 }
 
+
 /* Estilo para os links de navegação */
 .navbar a {
     color: white;
@@ -268,5 +269,43 @@ li {
     background-color: #28323C !important;
 }
 
+
+/* .flatpickr-calendar {
+    display: flex;
+    flex-wrap: wrap;
+} */
+
+.event {
+    position: absolute;
+    width: 25px;
+    height: 25px;
+    border-radius: 150px;
+    bottom: 3px;
+    left: 6px;
+    top: 8px;
+    content: " ";
+    /* display: block; */
+    background: #ffb5b5;
+    opacity: 15%;
+}
+
+.event.busy {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background-color: red; /* Cor do marcador */
+    border-radius: 50%;
+    margin-left: 5px;
+}
+
+
+.calendario {
+    height: 60px;
+}
+
+.flatpickr-calendar {
+    width: 100%;
+    max-width: 100%;
+}
 
 

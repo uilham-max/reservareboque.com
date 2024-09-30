@@ -3,274 +3,281 @@
 <head>
     <%-include('../../partials/header.ejs')%>
     <script src="/js/validaInputDataPeriodo.js" ></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
 </head>
 <body  >
     
     <%-include('../../partials/navbar.ejs')%>
 
-    <div class="conteudo" >
+    <div  class="conteudo"></div>
 
-        <% if (user == '') { %>
-            <!-- Menssagem do topo da página em jumbotron -->
-            <div class="jumbotron jumbotron-fluid">
-                <h1 class="display-4" >Cadastre-se para receber descontos!</h1>
-                <p class="lead">Clientes cadastrados podem ver seu histórico de locações, gerenciar suas reservas e receber
-                    descontos.</p>
-            </div>
+    <div class="container" >
+        <% if(user == '') {%>
+        <form class="needs-validation" novalidate action="/reserva/cliente/formulario" method="POST">
+        <% } else {%>
+        <form class="needs-validation" novalidate action="/reserva/cliente/confirmar" method="POST">
         <% } %>
-    </div>
+        
+            <div class="lista-reboques">
+                <!-- Datas em que este reboque está indisponível -->
+                <input type="hidden" id="reservas" value="<%= JSON.stringify(reservas) %>">
 
+                <!-- testando o flatpickr -->
+                <div class="card card-reserva">
+                    <div class="card-body">
+                        <h5>Informe o periodo</h5>
+                        <hr>
 
-        <div class="container" >
-            <!-- <h3>Reboque escolhido</h3> -->
-            
-             <% if(user == '') {%>
-            <form class="needs-validation" novalidate action="/reserva/cliente/formulario" method="POST">
-            <% } else {%>
-            <form class="needs-validation" novalidate action="/reserva/cliente/confirmar" method="POST">
-            <% } %>
-            
-                <div class="lista-reboques">
+                        
+                        
+                        <div class="input-group" >
+                            <span class="input-group-text">Período</span>
+                            <input class="calendario" id="dataIntervalo" type="text">
+                        </div><br>
 
-                    <!-- Reboque indisponível nas datas -->
-                    <% if(reservas != '') {%>
-                        <div class="card card-reserva">
-                            <div class="card-body">
-                                
-                                <div class="alert alert-danger">
-                                    <strong><h5 class="card-text">Reboque indisponível nestas datas</h5></strong>
-
-                                </div>
-
-
-                                <hr>
-
-                                <div class="table-responsive">
-                                    <table class="table table-striped">
-                                        <thead>
-                                            <tr>
-                                                <th>Início/Hora</th>
-                                                <th>Fim/Hora</th>
-                                                <th>Situação</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-
-                                            <% reservas.forEach(function(reserva) { %>
-                                                <tr>
-                                                    <td><%= new Date(reserva.dataSaida).toLocaleDateString('pt-BR').slice(0, 5) %> 
-                                                        <%= new Date(reserva.dataSaida).toString().slice(16,21) %></td>
-                                                    <td><%= new Date(reserva.dataChegada).toLocaleDateString('pt-BR').slice(0, 5) %>
-                                                        <%= new Date(reserva.dataChegada).toString().slice(16,21) %></td>
-                                                    <td><%= reserva.situacaoReserva.slice(0, 10)%></td>
-
-                                                </tr>
-                                            <%})%>
-                                        </tbody>
-                                    </table>
-                                </div>
-
-    
+                        <div class="input-group">
+                            <span class="input-group-text">Hora Retirada</span>
+                            <select class="form-select  calendario" id="horaInicio" name="horaInicio" required>
+                              <!-- Gera opções de 00 a 23 -->
+                              <% for(let i = 8; i < 20; i++) { %>
+                                <option value="<%= i %>"><%= i.toString().padStart(2, '0')+':00' %></option>
+                              <% } %>
+                            </select>
+                            <div class="valid-feedback">
+                                <!-- Looks good! -->
                             </div>
-                        </div>
-                    <% } %>
+                            <div class="invalid-feedback">
+                                <span id="invalidHoraInicio" ></span>
+                            </div>
+                        </div><br>
 
-                    <!-- Card da imagem -->
-                    <div class="card card-reserva">
-                        <img src="../../../<%=reboque.foto%>" class="card-img-top" alt="...">
-                        <div class="card-body">
 
-                            <div class="titulo">
-                                <h3>
-                                    <a href="/reserva/cliente/periodo/<%=reboque.placa%>">
-                                        <div class="ano"><%=reboque.anoFabricacao%></div>
-                                        <div class="primeiro-nome"><%=reboque.modelo%></div>
-                                        <div  class="ultimo-nome">Carga</div>
-                                    </a>
-                                </h3>
+                        <div class="input-group">
+                            <span class="input-group-text">Hora Entrega</span>
+                            <select class="form-select  calendario" id="horaFim" name="horaFim" required>
+                              <!-- Gera opções de 00 a 23 -->
+                              <% for(let i = 8; i < 20; i++) { %>
+                                <option value="<%= i %>"><%= i.toString().padStart(2, '0')+':00' %></option>
+                              <% } %>
+                            </select>
+                            <div class="valid-feedback">
+                                <!-- Looks good! -->
                             </div>
-    
-    
-    
-    
-    
-                            <div class="row justify-content-between">
-    
-                                <div class="col-6">
-                                    <div class="truncate float-start">
-                                        <p class="info-cost2 lato-black"><%='R$ '+reboque.valorDiaria%>,00</p>
-                                    </div>
-                                </div>
-    
-    
-                                <div class="col-6">
-                                    <div class="truncate float-end">
-                                        <div class="row justify-content-evenly">
-                                            
-                                            <div class="col-4">
-                                                <div class=" float-start">
-                                                    <a  href="https://wa.me/5553997032373"><img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" width="30" height="30"></a> <!-- Coloque seu número de WhatsApp -->
-                                                </div>
-                                            </div>
-            
-                                            <div class="col-4">
-                                                <div class=" ms-3 float-end">
-                                                    <a  href="https://maps.app.goo.gl/bM2d9YG7UpkvGRBQ7" ><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-geo-alt" viewBox="0 0 16 16">
-                                                        <path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A32 32 0 0 1 8 14.58a32 32 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10"/>
-                                                        <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4m0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>
-                                                        </svg></a>
-                                                </div>
-                                            </div>
-    
-                                        </div>
-                                    </div>
-                                </div>
-    
+                            <div class="invalid-feedback">
+                                <span id="invalidHoraFim" ></span>
                             </div>
-    
-                            
-    
-                            <div class="opicionais">
-                                
-                                <div class="box-opicionais-home">
-                                    <div>
-                                        <img class="icon-card-index" src="/img/icons/icon-trailer-medidas.png" width="22" height="22">
-                                    </div>
-                                    <div class="text-none grey-text10 mt-1 ms-1">
-                                        <%=reboque.comprimento%> X <%=reboque.largura%> X <%=reboque.altura%>
-                                    </div>
-                                </div>
-                                
-                                <div class="box-opicionais-home">
-                                    <div>
-                                        <img class="icon-card-index" src="/img/icons/icon-trailer-peso.png" width="20" height="20" >
-                                    </div>
-                                    <div class="text-none grey-text10 mt-1 ms-1">
-                                        <%=reboque.pesoBruto%> Kg
-                                    </div>
-                                </div>
-                                
-                                <div class="box-opicionais-home">
-                                    <div>
-                                        <img class="icon-card-index" src="/img/icons/icon-trailer-open.png" width="22" height="22" >
-                                    </div>
-                                    <div class="text-none grey-text10 mt-1 ms-1">
-                                        Aberto
-                                    </div>
-                                </div>
-    
+                        </div><br>
+
+                        <% if(user != ''){ %>
+                            <div class="form-check input-group">
+                                <input class="form-check-input" type="radio" name="formaPagamento" id="formaPagamento" value="PIX" checked>
+                                Pagar com PIX
                             </div>
-    
-                        </div>
+                            <br>
+                            <div class="form-check input-group">
+                                <input class="form-check-input" type="radio" name="formaPagamento" id="formaPagamento" value="DINHEIRO">
+                                Pagar com Dinheiro
+                            </div>
+                        <% } %>
+
+                        
                     </div>
+                    <div class="d-flex justify-content-center" style="margin: 0.5rem;">
+                        <button class="btn btn-secondary me-3" type="button" onclick="history.back()">Voltar</button>
+                        <input class="btn btn-primary" id="botao" type="submit" value="Próximo">
+                    </div>
+                </div>
 
-                    <!-- Card das datas -->
-                    <div class="card card-reserva">
-                        <div class="card-body">
+                <!-- Card da imagem reboque -->
+                <div class="card card-reserva">
+                    <img src="../../../<%=reboque.foto%>" class="card-img-top" alt="...">
+                    <div class="card-body">
 
-                                <h5>Informe o periodo</h5>
-                                <hr>
+                        <div class="titulo">
+                            <h3>
+                                <a href="/reserva/cliente/periodo/<%=reboque.placa%>">
+                                    <div class="ano"><%=reboque.anoFabricacao%></div>
+                                    <div class="primeiro-nome"><%=reboque.modelo%></div>
+                                    <div  class="ultimo-nome">Carga</div>
+                                </a>
+                            </h3>
+                        </div>
 
-                                <% if(mensagem){%>
-                                    <div class="alert alert-danger">
-                                        <strong>Atenção!</strong>
-                                        <%= mensagem %>
-                                    </div>
-                                <% } %>
-                                
-                                <div class="input-group mb-3 mt-5">
-                                    <span class="input-group-text" >Data Retirada</span>
-                                    <input class="form-control" id="dataInicio" type="date" name="dataInicio" required>
-                                    <div class="valid-feedback">
-                                        <!-- Looks good! -->
-                                    </div>
-                                    <div class="invalid-feedback">
-                                        Verifique a data.
-                                    </div>
-                                
+
+
+
+
+                        <div class="row justify-content-between">
+
+                            <div class="col-6">
+                                <div class="truncate float-start">
+                                    <p class="info-cost2 lato-black"><%='R$ '+reboque.valorDiaria%>,00</p>
                                 </div>
+                            </div>
 
 
+                            <div class="col-6">
+                                <div class="truncate float-end">
+                                    <div class="row justify-content-evenly">
+                                        
+                                        <div class="col-4">
+                                            <div class=" float-start">
+                                                <a  href="https://wa.me/5553997032373"><img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" width="30" height="30"></a> <!-- Coloque seu número de WhatsApp -->
+                                            </div>
+                                        </div>
+        
+                                        <div class="col-4">
+                                            <div class=" ms-3 float-end">
+                                                <a  href="https://maps.app.goo.gl/bM2d9YG7UpkvGRBQ7" ><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-geo-alt" viewBox="0 0 16 16">
+                                                    <path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A32 32 0 0 1 8 14.58a32 32 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10"/>
+                                                    <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4m0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>
+                                                    </svg></a>
+                                            </div>
+                                        </div>
 
-                                <div class="input-group">
-                                    <span class="input-group-text">Hora Retirada</span>
-                                    <select class="form-select" id="horaInicio" name="horaInicio" required>
-                                      <!-- Gera opções de 00 a 23 -->
-                                      <% for(let i = 8; i < 20; i++) { %>
-                                        <option value="<%= i %>"><%= i.toString().padStart(2, '0')+':00' %></option>
-                                      <% } %>
-                                    </select>
-                                    <div class="valid-feedback">
-                                        <!-- Looks good! -->
                                     </div>
-                                    <div class="invalid-feedback">
-                                        <span id="invalidHoraInicio" ></span>
-                                    </div>
-                                </div><br>
-                                  
+                                </div>
+                            </div>
+
+                        </div>
 
                         
 
-
-                                <div class="input-group mb-3">
-                                    <span class="input-group-text" >Data Entrega</span>
-                                    <input class="form-control" id="dataFim" type="date" name="dataFim" required>
-                                    <div class="valid-feedback">
-                                        <!-- Looks good! -->
-                                    </div>
-                                    <div class="invalid-feedback">
-                                        Verifique a data.
-                                    </div>
-                                </div>
-
-                                <div class="input-group mb-3">
-                                    <span class="input-group-text">Hora Entrega</span>
-                                    <select class="form-select" id="horaFim" name="horaFim" required>
-                                      <!-- Gera opções de 00 a 23 -->
-                                      <% for(let i = 8; i < 20; i++) { %>
-                                        <option value="<%= i %>"><%= i.toString().padStart(2, '0')+':00' %></option>
-                                      <% } %>
-                                    </select>
-                                    <div class="valid-feedback">
-                                        <!-- Looks good! -->
-                                    </div>
-                                    <div class="invalid-feedback">
-                                        <span id="invalidHoraFim" ></span>
-                                    </div>
-                                </div><br>
-
-                                
-
-                                
-                                <% if(user != ''){ %>
-                                <div class="form-check input-group">
-                                    <input class="form-check-input" type="radio" name="formaPagamento" id="formaPagamento" value="PIX" checked>
-                                    Pagar com PIX
-                                </div>
-                                <br>
-                                <div class="form-check input-group">
-                                    <input class="form-check-input" type="radio" name="formaPagamento" id="formaPagamento" value="DINHEIRO">
-                                    Pagar com Dinheiro
-                                </div>
-                                <% } %>
-                                
-                                
+                        <div class="opicionais">
                             
+                            <div class="box-opicionais-home">
+                                <div>
+                                    <img class="icon-card-index" src="/img/icons/icon-trailer-medidas.png" width="22" height="22">
+                                </div>
+                                <div class="text-none grey-text10 mt-1 ms-1">
+                                    <%=reboque.comprimento%> X <%=reboque.largura%> X <%=reboque.altura%>
+                                </div>
+                            </div>
+                            
+                            <div class="box-opicionais-home">
+                                <div>
+                                    <img class="icon-card-index" src="/img/icons/icon-trailer-peso.png" width="20" height="20" >
+                                </div>
+                                <div class="text-none grey-text10 mt-1 ms-1">
+                                    <%=reboque.pesoBruto%> Kg
+                                </div>
+                            </div>
+                            
+                            <div class="box-opicionais-home">
+                                <div>
+                                    <img class="icon-card-index" src="/img/icons/icon-trailer-open.png" width="22" height="22" >
+                                </div>
+                                <div class="text-none grey-text10 mt-1 ms-1">
+                                    Aberto
+                                </div>
+                            </div>
 
-                        </div>
-
-    
-                        <div class="d-flex justify-content-center" style="margin: 0.5rem;">
-                            <button class="btn btn-secondary me-3" type="button" onclick="history.back()">Voltar</button>
-                            <input class="btn btn-primary" id="botao" type="submit" value="Próximo">
                         </div>
 
                     </div>
-
                 </div>
-                <input type="hidden" name="reboquePlaca" value="<%=reboque.placa%>" >
-            </form>
-        </div>
+
+            </div>
+
+            <input type="hidden" name="reboquePlaca" value="<%=reboque.placa%>" >
+            <input type="hidden" id="dataInicio" name="dataInicio">
+            <input type="hidden" id="dataFim" name="dataFim">
+
+        </form>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/pt.js"></script>
+
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+
+            // Obtendo o valor do elemento oculto e convertendo de JSON para objeto
+            const reservasJson = document.getElementById('reservas').value;
+            const reservas = JSON.parse(reservasJson); // Converte para objeto
+
+            // Função para criar um array com os dia indisponíveis
+            const disabledDates = [];
+            reservas.forEach(function(reserva) { 
+                const startDate = new Date(new Date(reserva.dataSaida).getFullYear(), new Date(reserva.dataSaida).getMonth(), new Date(reserva.dataSaida).getDate());
+                const endDate = new Date(new Date(reserva.dataChegada).getFullYear(), new Date(reserva.dataChegada).getMonth(), new Date(reserva.dataChegada).getDate());
+                disabledDates.push({
+                    from: startDate,
+                    to: endDate
+                });
+            }); 
+
+
+            // Função para marcar com circulo vermelho os dias indisponíveis
+            function isDateDisabled(date, disabledDates) {
+                // Itera sobre as datas desabilitadas
+                for (let i = 0; i < disabledDates.length; i++) {
+                    const disabled = disabledDates[i];
+
+                    // Verifica se a data é um intervalo
+                    if (disabled.from && disabled.to) {
+                        if (date >= disabled.from && date <= disabled.to) {
+                            return true; // Data está no intervalo desabilitado
+                        }
+                    } else if (disabled instanceof Date) {
+                        // Verifica se a data é uma única data
+                        if (date.toDateString() === disabled.toDateString()) {
+                            return true; // Data está desabilitada
+                        }
+                    }
+                }
+                return false; // Data não está desabilitada
+            }
+
+            let hoje = new Date()
+            let amanha = new Date()
+            amanha.setDate(hoje.getDate() +1)
+
+            flatpickr("#dataIntervalo", {
+                mode: "range",
+                altInput: true,
+                altFormat: "d/m/Y",
+                dateFormat: "Y-m-d", // Formato da data
+                minDate: "today", // Bloqueia dias anteriores à data atual
+                defaultDate: [hoje, amanha],
+                // showMonths: 1, // Exibe todos os 12 meses do ano
+                // inline: true, // Faz o calendário ficar fixo
+                disable: disabledDates,
+                locale: "pt",
+                onReady: function(selectedDates, dateStr, instance) {
+                    // instance.open(); // Abre o calendário automaticamente
+                },
+                onDayCreate: function(dObj, dStr, fp, dayElem){
+                    // Utilize dayElem.dateObj, which is the corresponding Date
+
+                    // dummy logic - Marca com um circulo vermelho os dias indisponíveis
+                    if (isDateDisabled(dayElem.dateObj, disabledDates))
+                        dayElem.innerHTML += "<span class='event'></span>";
+                },
+                onChange: function(selectedDates, dateStr, instance) {
+                    if (selectedDates.length === 2) {
+                        // Quando o intervalo estiver completo (2 datas selecionadas)
+                        document.getElementById('dataInicio').value = selectedDates[0];
+                        document.getElementById('dataFim').value = selectedDates[1];
+                    }
+                },
+                
+            });
+            
+            
+        });
+    </script>
+    
+    
+
+    
+    
+
+    
+
+
     <%-include('../../partials/footer.ejs')%>
 </body>
 </html>

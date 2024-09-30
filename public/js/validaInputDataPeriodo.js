@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   var data = new Date()
 
-  console.log(data);
+//   console.log(data);
 
   function obterUltimoDiaMesAtual() {
       let dataAtual = new Date();

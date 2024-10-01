@@ -16,7 +16,7 @@
 
             <!-- Menssagem do topo da página em jumbotron -->
             <div class="jumbotron jumbotron-fluid">
-                <h1 class="display-4" >Informações do Cliente</h1>
+                <h1 class="display-4" >Formulário da reserva</h1>
                 <!-- <p class="lead">Clientes cadastrados podem ver seu histórico de locações, gerenciar suas reservas e receber descontos.</p> -->
             </div>
 
@@ -34,7 +34,7 @@
                     <!-- Dados pessoais -->
                     <div class="card card-reserva">
                         <div class="card-body">
-                            <h3 class="card-title">Informações Pessoais</h3>
+                            <h3 class="card-title">Cliente</h3>
                             <hr>
 
                             <div class="form-group">
@@ -89,7 +89,7 @@
                     <!-- Dados de endereço -->
                     <div class="card card-reserva" style="width: 25rem;">
                         <div class="card-body">
-                            <h3 class="card-title">Informções de Endereço</h3>
+                            <h3 class="card-title">Endereço</h3>
                             <hr>
                             
                             
@@ -193,7 +193,7 @@
                     <div class="card card-reserva" style="width: 25rem;">
                         <div class="card-body">
                             
-                            <h3 class="card-title">Informações do Pagamento</h3>
+                            <h3 class="card-title">Pagamento</h3>
                             <hr>
 
 
@@ -239,7 +239,9 @@
 
                     <input type="hidden" id="reboquePlaca" name="reboquePlaca" value="<%=reboque.placa%>">
                     <input type="hidden" id="dataInicio" name="dataInicio" value="<%=dataInicio%>">
+                    <input type="hidden" id="horaInicio" name="horaInicio" value="<%=(new Date(dataInicio)).getHours()%>">
                     <input type="hidden" id="dataFim" name="dataFim" value="<%=dataFim%>">
+                    <input type="hidden" id="horaFim" name="horaFim" value="<%=(new Date(dataFim)).getHours()%>">
                     <input type="hidden" id="valorDiaria" name="valorDiaria" value="<%=reboque.valorDiaria%>">
                     <input type="hidden" id="dias" name="dias" value="<%=dias%>">
                     <input type="hidden" id="valorTotalDaReserva" name="valorTotalDaReserva" value="<%=valorTotalDaReserva%>">

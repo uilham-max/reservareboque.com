@@ -43,8 +43,6 @@ try{
 }
 
 
-
-
 conexao.authenticate().then(()=>{
     app.listen(port,()=>{
         console.log(`Servidor rodando!!!`)

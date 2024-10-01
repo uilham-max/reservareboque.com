@@ -2,8 +2,9 @@
 <html lang="en">
 <head>
     <%-include('../../partials/header.ejs')%>
-    <script src="/js/validaInputDataPeriodo.js" ></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <!-- <script src="/js/validaInputDataPeriodo.js" ></script> -->
+    <script src="/js/flatpickr_periodo.js" ></script>
+    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"> -->
 
 </head>
 <body  >
@@ -187,11 +188,11 @@
         </form>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/pt.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/pt.js"></script> -->
 
     
-    <script>
+    <!-- <script>
         document.addEventListener('DOMContentLoaded', function() {
 
             // Obtendo o valor do elemento oculto e convertendo de JSON para objeto
@@ -238,8 +239,8 @@
             flatpickr("#dataIntervalo", {
                 mode: "range",
                 altInput: true,
-                altFormat: "d/m/Y",
-                dateFormat: "Y-m-d", // Formato da data
+                altFormat: "d/m",
+                // dateFormat: "Y-m-d", // Formato da data
                 minDate: "today", // Bloqueia dias anteriores à data atual
                 defaultDate: [hoje, amanha],
                 // showMonths: 1, // Exibe todos os 12 meses do ano
@@ -268,7 +269,7 @@
             
             
         });
-    </script>
+    </script> -->
     
     
 

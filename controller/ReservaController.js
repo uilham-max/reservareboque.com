@@ -32,23 +32,10 @@ class ReservaController {
             return res.render('erro', {mensagem: "A hora de início não pode ser menor que a hora atual."})
         }
 
-        // Injeta a hora na data de inicio
-        dataInicio = moment.tz(dataInicio, 'America/Sao_Paulo').set({
-            hour: horaInicio,
-            minute: 0,
-            second: 0,
-            millisecond: 0
-        });
-        dataInicio = dataInicio.format()
-    
-        // Injeta a hora na data de fim
-        dataFim = moment.tz(dataFim, 'America/Sao_Paulo').set({
-            hour: horaFim,
-            minute: 0,
-            second: 0,
-            millisecond: 0
-        });
-        dataFim = dataFim.format()
+        dataInicio = new Date(dataInicio)
+        dataFim = new Date(dataFim)
+        dataInicio.setHours(horaInicio)
+        dataFim.setHours(horaFim)
 
         if(dataInicio > dataFim){
             return res.render('erro', {mensagem: 'Erro com as datas.'})
@@ -77,29 +64,16 @@ class ReservaController {
             
         let {nome, cpf, telefone, email, cep, logradouro, complemento, localidade,
         numeroDaCasa, reboquePlaca, horaInicio, horaFim, dataInicio, dataFim, formaPagamento} = req.body
-
+        
         if(new Date().getDay() == dataInicio && horaInicio < new Date().getHours()){
             return res.render('erro', {mensagem: "A hora de início não pode ser menor que a hora atual."})
         }
-        // Injeta a hora na data de inicio
-        dataInicio = moment.tz(dataInicio, 'America/Sao_Paulo').set({
-            hour: horaInicio,
-            minute: 0,
-            second: 0,
-            millisecond: 0
-        });
-        dataInicio = dataInicio.format()
-    
-        // Injeta a hora na data de fim
-        dataFim = moment.tz(dataFim, 'America/Sao_Paulo').set({
-            hour: horaFim,
-            minute: 0,
-            second: 0,
-            millisecond: 0
-        });
-        dataFim = dataFim.format()
-    
-    
+
+        dataInicio = new Date(dataInicio)
+        dataFim = new Date(dataFim)
+        dataInicio.setHours(horaInicio, 0, 0)
+        dataFim.setHours(horaFim, 0, 0)
+
         /**
          * Este é um tratamento para caso o cliente tente realizar uma reserva dentro de um periodo de indisponibilidade
         */

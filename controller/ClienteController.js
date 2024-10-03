@@ -3,6 +3,8 @@ const { adminNome, clienteNome } = require('../helpers/getSessionNome')
 const bcrypt = require('bcryptjs')
 const crypto = require('crypto')
 const ServiceEmail = require('../modules/ServiceEmail')
+const Login = require('../bill_modules/Login')
+const { isAdulto } = require('../js/valida_data_nascimento')
 
 
 class ClienteController {
@@ -37,7 +39,12 @@ class ClienteController {
     static async postNovo(req, res) {
 
         let { nome, email, senha, senhaRepita, cpf, telefone, dataNascimento, cep,
-            logradouro, complemento, bairro, localidade, uf, numeroDaCasa } = req.body
+        logradouro, complemento, bairro, localidade, uf, numeroDaCasa } = req.body
+
+        // dataNascimento = new Date(dataNascimento)
+        if (!isAdulto(dataNascimento)) {
+            return res.render('erro', { mensagem: "Idade insuficiente para cadastro." })
+        }
 
         cpf = cpf.replace(/\D/g, '')
         telefone = telefone.replace(/\D/g, '')
@@ -53,7 +60,7 @@ class ClienteController {
 
         // Logica para criptografar a senha que será inserida no banco de dados
         let salt = bcrypt.genSaltSync(10)
-        senha = bcrypt.hashSync(senha, salt)
+        let senhaHash = bcrypt.hashSync(senha, salt)
 
         /**
          * Se o cliente já existe é feito um update em seus dados para ele se tornar cadastrado
@@ -62,19 +69,20 @@ class ClienteController {
 
         let cliente = await DAOCliente.verificaSeClienteExiste(cpf)
         if (cliente) {
-            cliente = await DAOCliente.updateClienteComReservaMasNaoEraCadastrado(nome, email, senha, cpf, telefone, dataNascimento, cep, logradouro, complemento, bairro, localidade, uf, numeroDaCasa)
+            cliente = await DAOCliente.updateClienteComReservaMasNaoEraCadastrado(nome, email, senhaHash, cpf, telefone, dataNascimento, cep, logradouro, complemento, bairro, localidade, uf, numeroDaCasa)
             if (!cliente) {
                 return res.render('erro', { mensagem: 'Erro ao inserir cliente' })
             }
         } else {
-            cliente = await DAOCliente.insert(nome, email, senha, cpf, telefone, dataNascimento, cep, logradouro, complemento, bairro, localidade, uf, numeroDaCasa)
+            cliente = await DAOCliente.insert(nome, email, senhaHash, cpf, telefone, dataNascimento, cep, logradouro, complemento, bairro, localidade, uf, numeroDaCasa)
             if (!cliente) {
                 return res.render('erro', { mensagem: 'Erro ao inserir cliente' })
             }
         }
 
         if (cliente) {
-            req.session.cliente = { cpf: cliente.cpf, nome: cliente.nome, email: cliente.email }
+            await Login.cliente(email, senha, req)
+            // req.session.cliente = { cpf: cliente.cpf, nome: cliente.nome, email: cliente.email }
             console.log(cliente.nome, "criado...");
             return res.redirect('/')
         } else {
@@ -192,13 +200,14 @@ class ClienteController {
     }
 
     static async getEditar(req, res) {
+        // console.log(req.session.cliente);
         if(req.session.cliente && req.session.cliente.cpf && req.session.cliente.senha){
             const cpf = req.session.cliente.cpf
             const senha = req.session.cliente.senha
             const cliente = await DAOCliente.getOne(cpf)
             return res.render('cliente/editar', { user: clienteNome(req, res), mensagem: "", cliente: cliente, senha: senha })
         }
-        return res.render('erro', {mensagem: "ERRO: não foi possível encontrar o cliente da sessão"})
+        return res.render('erro', {mensagem: "Não foi possível encontrar o cliente da sessão"})
         
     }
 
@@ -207,7 +216,10 @@ class ClienteController {
         let { nome, email, senha, novaSenha, senhaRepita, cpf, telefone, dataNascimento, cep,
         logradouro, complemento, bairro, localidade, uf, numeroDaCasa } = req.body
 
-        console.log(cpf);
+        if (!isAdulto(dataNascimento)) {
+            return res.render('erro', { mensagem: "Idade insuficiente para cadastro." })
+        }
+
         cpf = cpf.replace(/\D/g, '')
         telefone = telefone.replace(/\D/g, '')
         cep = cep.replace(/\D/g, '')
@@ -222,27 +234,28 @@ class ClienteController {
             }
 
             let salt = bcrypt.genSaltSync(10)
-            novaSenha = bcrypt.hashSync(novaSenha, salt)
+            let novaSenhaHash = bcrypt.hashSync(novaSenha, salt)
 
-            cliente.senha = novaSenha
+            cliente.senha = novaSenhaHash
         }
 
         const cliente = await DAOCliente.getOne(cpf)
         cliente.nome = nome
         cliente.email = email
         cliente.telefone = telefone
-        cliente.data_nascimento 
+        cliente.data_nascimento = dataNascimento
         cliente.cep = cep
         cliente.logradouro = logradouro
         cliente.complemento = complemento
         cliente.bairro = bairro
         cliente.localidade = localidade
         cliente.uf = uf
-        cliente.numero_da_casa
+        cliente.numero_da_casa = numeroDaCasa
 
         if (!await DAOCliente.save(cliente)) {
             return res.render('erro', { mensagem: 'Erro ao atualizar dados do cliente.' })
         }
+        await Login.cliente(email, senha , req) 
         return res.redirect('/')
     }
 

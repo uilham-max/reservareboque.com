@@ -2,10 +2,9 @@
 <html lang="en">
 <head>
     <%-include('../partials/header.ejs')%>
-    <!-- <script src="/js/validaCPF.js" ></script> -->
     <script src="/js/consome_viacep.js" ></script>
-    <!-- <script src="/js/validar_senha.js" ></script> -->
     <script src="/js/validaDadosFormularioCadastro.js" ></script>
+    <script src="/js/flatpickr_data_nascimento.js"></script>
 </head>
 <body  >
     
@@ -70,7 +69,7 @@
                             <div class="form-group">
                                 <label for="cep">Nascimento</label>
                                 <span class="text-danger"> * </span>
-                                <input class="form-control" id="dataNascimento" type="date" name="dataNascimento" required >
+                                <input class="form-control" id="dataNascimento" type="text" name="dataNascimento" required >
                                 <div class="valid-feedback">
                                     <!-- Looks good! -->
                                 </div>
@@ -82,6 +81,7 @@
                         </div>
                     </div>
 
+                    
 
                     <!-- Dados de endereço -->
                     <div class="card card-reserva" style="width: 25rem;">

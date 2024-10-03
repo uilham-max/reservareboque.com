@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     inputNome = document.getElementById('nome')
     inputCPF = document.getElementById('cpf')
     inputTelefone = document.getElementById('telefone')
-    inputDataNascimento = document.getElementById('dataNascimento')
+    // inputDataNascimento = document.getElementById('dataNascimento')
     inputEmail = document.getElementById('email')
     inputNovaSenha = document.getElementById('novaSenha')
     inputSenhaRepita = document.getElementById('senhaRepita')
@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
     invalidNome = document.getElementById('invalidNome');
     invalidCPF = document.getElementById('invalidCPF')
     invalidTelefone = document.getElementById('invalidTelefone');
-    invalidDataNascimento = document.getElementById('invalidDataNascimento')
+    // invalidDataNascimento = document.getElementById('invalidDataNascimento')
     invalidEmail = document.getElementById('invalidEmail')
     invalidSenha = document.getElementById('invalidSenha')
     invalidSenhaRepita = document.getElementById('invalidSenhaRepita')
@@ -25,9 +25,6 @@ document.addEventListener('DOMContentLoaded', () => {
     invalidNumeroDaCasa = document.getElementById('invalidNumeroDaCasa')
     invalidComplemento = document.getElementById('invalidComplemento')
     invalidLocalidade = document.getElementById('invalidLocalidade')
-
-
-
 
 
     // FORMATA CPF
@@ -265,33 +262,6 @@ document.addEventListener('DOMContentLoaded', () => {
     })
 
 
-    // IDADE ENTRE 18 E 100 ANOS
-    inputDataNascimento.addEventListener('blur', () => {
-
-        // Obter o valor do input
-        const dataNascimento = new Date(inputDataNascimento.value);
-        const hoje = new Date();
-
-        // Calcular a idade
-        let idade = hoje.getFullYear() - dataNascimento.getFullYear();
-        const mes = hoje.getMonth() - dataNascimento.getMonth();
-        if (mes < 0 || (mes === 0 && hoje.getDate() < dataNascimento.getDate())) {
-            idade--;
-        }
-
-        // Validar se é maior de 18 anos
-        if (idade < 18 || idade > 100  ) {
-            inputDataNascimento.classList.add('is-invalid')
-            inputDataNascimento.setCustomValidity('mensagem')
-            invalidDataNascimento.textContent = 'Deve estar entre 18 e 100 anos.';
-            return
-        } else {
-            inputDataNascimento.classList.remove('is-invalid')
-            inputDataNascimento.setCustomValidity('')
-            invalidDataNascimento.textContent = '';
-        }
-    })
-
 
     // VALIDA CEP
     inputCep.addEventListener('blur', () => {
@@ -354,6 +324,35 @@ document.addEventListener('DOMContentLoaded', () => {
             invalidLocalidade.textContent = ''
         }
     })
+
+    // // IDADE ENTRE 18 E 100 ANOS
+    // inputDataNascimento.addEventListener('blur', () => {
+
+    //     // Obter o valor do input
+
+    //     const dataNascimento = new Date(inputDiaNascimento.value, inputMesNascimento.value, inputAnoNascimento.value);
+    //     console.log('>>>><<<<', dataNascimento);
+    //     const hoje = new Date();
+
+    //     // Calcular a idade
+    //     let idade = hoje.getFullYear() - dataNascimento.getFullYear();
+    //     const mes = hoje.getMonth() - dataNascimento.getMonth();
+    //     if (mes < 0 || (mes === 0 && hoje.getDate() < dataNascimento.getDate())) {
+    //         idade--;
+    //     }
+
+    //     // Validar se é maior de 18 anos
+    //     if (idade < 18 || idade > 100  ) {
+    //         inputDataNascimento.classList.add('is-invalid')
+    //         inputDataNascimento.setCustomValidity('mensagem')
+    //         invalidDataNascimento.textContent = 'Deve estar entre 18 e 100 anos.';
+    //         return
+    //     } else {
+    //         inputDataNascimento.classList.remove('is-invalid')
+    //         inputDataNascimento.setCustomValidity('')
+    //         invalidDataNascimento.textContent = '';
+    //     }
+    // })
 
 
     'use strict'

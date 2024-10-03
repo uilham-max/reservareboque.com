@@ -71,15 +71,25 @@
                         </div><br>
 
                         <% if(user != ''){ %>
-                            <div class="form-check input-group">
-                                <input class="form-check-input" type="radio" name="formaPagamento" id="formaPagamento" value="PIX" checked>
-                                Pagar com PIX
-                            </div>
-                            <br>
-                            <div class="form-check input-group">
-                                <input class="form-check-input" type="radio" name="formaPagamento" id="formaPagamento" value="DINHEIRO">
-                                Pagar com Dinheiro
-                            </div>
+                            <p>Pagagar com</p>
+                            <fieldset class="row mb-1">
+                                <!-- <legend class="col-form-label col-sm-2 pt-0">Radios</legend> -->
+                                <div class="col-sm-10">
+                                  <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="formaPagamento" id="formaPagamento" value="PIX" checked>
+                                    <label class="form-check-label" for="gridRadios1">
+                                      Pix
+                                    </label>
+                                  </div>
+                                  <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="formaPagamento" id="formaPagamento" value="DINHEIRO">
+                                    <label class="form-check-label" for="gridRadios2">
+                                      Dinheiro
+                                    </label>
+                                  </div>
+                                </div>
+                            </fieldset>
+
                         <% } %>
 
                         

@@ -1,227 +1,290 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <%-include('../partials/header.ejs')%>
-    <!-- <script src="/js/validaCPF.js" ></script> -->
-    <script src="/js/consome_viacep.js" ></script>
-    <!-- <script src="/js/validar_senha.js" ></script> -->
-    <script src="/js/validaFormularioEditar.js" ></script>
+        <script src="/js/consome_viacep.js"></script>
+        <script src="/js/validaFormularioEditar.js"></script>
+        <script src="/js/flatpickr_data_nascimento.js"></script>
 </head>
-<body  >
-    
+
+<body>
+
     <%-include('../partials/navbar.ejs')%>
-    
-    <div class="conteudo" >
-        <div class="jumbotron junbotron-fluid">
-            <h1 class="display-4" >Página de editar dados</h1>
-        </div>
-        <div class="container" >
-            <!-- <h3>Reboque escolhido</h3> -->
-            <!--  -->
-            <form action="/cliente/editar" method="POST">
-                <div class="lista-reboques">
+
+        <div class="conteudo">
+            <div class="jumbotron junbotron-fluid">
+                <h1 class="display-4">Página de editar dados</h1>
+            </div>
+            <div class="container">
+                <!-- <h3>Reboque escolhido</h3> -->
+                <!--  -->
+                <form class="needs-validation" novalidate action="/cliente/editar" method="POST">
+                    <div class="lista-reboques">
 
 
-                    <!-- Dados pessoais -->
-                    <div class="card card-reserva" style="width: 25rem;">
-                        <div class="card-body">
-                            <h3 class="card-title">Informações Pessoais</h3>
-                            <hr>
-                                
-                            <div class="form-group">
-                                <label for="nome">Nome completo</label>
-                                
-                                <input class="form-control" id="nome" type="text" name="nome" minlength="5" maxlength="50" value="<%=cliente.nome%>">
-                                <div class="valid-feedback">
-                                    <!-- Looks good! -->
-                                </div>
-                                <div class="invalid-feedback">
-                                    <span id="invalidNome" ></span>
-                                </div>
-                                
-                            </div>
+                        <!-- Dados pessoais -->
+                        <div class="card card-reserva" style="width: 25rem;">
+                            <div class="card-body">
+                                <h3 class="card-title">Informações Pessoais</h3>
+                                <hr>
 
-                                         
-                            <div class="form-group">
-                                <label for="cpf">CPF</label>
-                                
-                                <input class="form-control" type="text"value="<%=cliente.cpf%>" disabled>
-                                <input type="hidden" id="cpf" name="cpf" value="<%=cliente.cpf%>">
-                                <div class="valid-feedback">
-                                    <!-- Looks good! -->
-                                </div>
-                                <div class="invalid-feedback">
-                                    <span id="invalidCPF" ></span>
-                                </div>
-                            </div>
+                                <div class="form-group">
+                                    <label for="nome">Nome completo</label>
 
-                            
-                            <div class="form-group">
-                                <label for="telefone">Telefone</label>
-                                
-                                <input class="form-control" id="telefone" type="text" name="telefone" maxlength="15" value="<%=cliente.telefone%>">
-                                <div class="valid-feedback">
-                                    <!-- Looks good! -->
-                                </div>
-                                <div class="invalid-feedback">
-                                    <span id="invalidTelefone" ></span>
-                                </div>
-                            </div> 
-
-                            <div class="form-group">
-                                <label for="cep">Nascimento</label>
-                                
-                                <input class="form-control" id="dataNascimento" type="date" name="dataNascimento" value="<%=cliente.data_nascimento%>">
-                                <div class="valid-feedback">
-                                    <!-- Looks good! -->
-                                </div>
-                                <div class="invalid-feedback">
-                                    <span id="invalidDataNascimento" ></span>
-                                </div>
-                            </div> 
-
-                        </div>
-                    </div>
-
-
-                    <!-- Dados de endereço -->
-                    <div class="card card-reserva" style="width: 25rem;">
-                        <div class="card-body">
-                            <h3 class="card-title">Informações de Endereço</h3>
-                            <hr>
-
-                            <div class="row g-3">
-                                <div class="form-group col">
-                                    <label for="cep">CEP</label>
-                                    <input class="form-control" id="cep" type="text" name="cep" minlength="9" maxlength="9" value="<%=cliente.cep%>">
+                                    <input class="form-control" id="nome" type="text" name="nome" minlength="5"
+                                        maxlength="50" value="<%=cliente.nome%>">
                                     <div class="valid-feedback">
                                         <!-- Looks good! -->
                                     </div>
                                     <div class="invalid-feedback">
-                                        <span id="invalidCep"></span>
+                                        <span id="invalidNome"></span>
+                                    </div>
+
+                                </div>
+
+
+                                <div class="form-group">
+                                    <label for="cpf">CPF</label>
+
+                                    <input class="form-control" type="text" value="<%=cliente.cpf%>" disabled>
+                                    <input type="hidden" id="cpf" name="cpf" value="<%=cliente.cpf%>">
+                                    <div class="valid-feedback">
+                                        <!-- Looks good! -->
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        <span id="invalidCPF"></span>
                                     </div>
                                 </div>
-                                <div class="form-group col">
-                                    <label for="numeroDaCasa">Nº da casa</label>
+
+
+                                <div class="form-group">
+                                    <label for="telefone">Telefone</label>
+
+                                    <input class="form-control" id="telefone" type="text" name="telefone" maxlength="15"
+                                        value="<%=cliente.telefone%>">
+                                    <div class="valid-feedback">
+                                        <!-- Looks good! -->
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        <span id="invalidTelefone"></span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="dataNascimento">Data de nascimento</label>
+
+                                    <input class="form-control" id="dataNascimento" type="text" name="dataNascimento"
+                                        value="<%=cliente.data_nascimento%>">
+                                    <div class="valid-feedback">
+                                        <!-- Looks good! -->
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        <span id="invalidDataNascimento"></span>
+                                    </div>
+                                </div>
+
+
+                                <!-- <script>
+                                    document.addEventListener('DOMContentLoaded', function () {
                                     
-                                    <input class="form-control" id="numeroDaCasa" type="text" name="numeroDaCasa" maxlength="5" value="<%=cliente.numero_da_casa%>">
+                                        let inputDataNascimento = document.getElementById('dataNascimento');
+                                        let invalidDataNascimento = document.getElementById('invalidDataNascimento');
+                                    
+                                        flatpickr("#dataNascimento", {
+                                            altInput: true,
+                                            altFormat: "d/m/Y",
+                                            locale: "pt",
+                                            dateFormat: "Y-m-d",  // Defina um formato consistente para trabalhar com o valor
+                                            onClose: function (selectedDates, dateStr, instance) {
+                                    
+                                                if (selectedDates.length === 0) return;
+                                    
+                                                // Capturar a data selecionada diretamente
+                                                const dataNascimento = selectedDates[0];
+                                                const hoje = new Date();
+                                    
+                                                // Calcular a idade
+                                                let idade = hoje.getFullYear() - dataNascimento.getFullYear();
+                                                const mes = hoje.getMonth() - dataNascimento.getMonth();
+                                                if (mes < 0 || (mes === 0 && hoje.getDate() < dataNascimento.getDate())) {
+                                                    idade--;
+                                                }
+                                    
+                                                // Validar se é maior de 18 anos e menor que 100 anos
+                                                if (idade < 18 || idade > 100) {
+                                                    inputDataNascimento.classList.add('is-invalid');
+                                                    inputDataNascimento.setCustomValidity('Deve estar entre 18 e 100 anos.');
+                                                    invalidDataNascimento.textContent = 'Deve estar entre 18 e 100 anos.';
+                                                } else {
+                                                    inputDataNascimento.classList.remove('is-invalid');
+                                                    inputDataNascimento.setCustomValidity('');
+                                                    invalidDataNascimento.textContent = '';
+                                                }
+                                            }
+                                        });
+                                        
+                                    });
+                                    </script> -->
+                                    
+                                    
+                                    
+                                    
+                                    
+                                    
+
+                            </div>
+                        </div>
+
+
+                        <!-- Dados de endereço -->
+                        <div class="card card-reserva" style="width: 25rem;">
+                            <div class="card-body">
+                                <h3 class="card-title">Informações de Endereço</h3>
+                                <hr>
+
+                                <div class="row g-3">
+                                    <div class="form-group col">
+                                        <label for="cep">CEP</label>
+                                        <input class="form-control" id="cep" type="text" name="cep" minlength="9"
+                                            maxlength="9" value="<%=cliente.cep%>">
+                                        <div class="valid-feedback">
+                                            <!-- Looks good! -->
+                                        </div>
+                                        <div class="invalid-feedback">
+                                            <span id="invalidCep"></span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col">
+                                        <label for="numeroDaCasa">Nº da casa</label>
+
+                                        <input class="form-control" id="numeroDaCasa" type="text" name="numeroDaCasa"
+                                            maxlength="5" value="<%=cliente.numero_da_casa%>">
+                                        <div class="valid-feedback">
+                                            <!-- Looks good! -->
+                                        </div>
+                                        <div class="invalid-feedback">
+                                            <span id="invalidNumeroDaCasa"></span>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="form-group">
+                                    <label for="logradouro">Rua</label>
+                                    <input class="form-control" id="logradouro" type="text" name="logradouro"
+                                        placeholder="Ex.: Waltter Dias da Costa" minlength="2" maxlength="100"
+                                        value="<%=cliente.logradouro%>">
                                     <div class="valid-feedback">
                                         <!-- Looks good! -->
                                     </div>
                                     <div class="invalid-feedback">
-                                        <span id="invalidNumeroDaCasa"></span>
+                                        <span id="invalidLogradouro"></span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="complemento">Complemento</label>
+                                    <input class="form-control" id="complemento" type="text" name="complemento"
+                                        maxlength="200" value="<%=cliente.complemento%>">
+                                    <div class="invalid-feedback">
+                                        <span id="invalidComplento"></span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="localidade">Cidade</label>
+                                    <input class="form-control" id="localidade" type="text" minlength="3"
+                                        name="localidade" maxlength="50" value="<%=cliente.localidade%>">
+                                    <div class="valid-feedback">
+                                        <!-- Looks good! -->
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        <span id="invalidLocalidade"></span>
                                     </div>
                                 </div>
                             </div>
-                           
 
-                            <div class="form-group">
-                                <label for="logradouro">Rua</label>
-                                <input class="form-control" id="logradouro" type="text" name="logradouro" placeholder="Ex.: Waltter Dias da Costa" minlength="2" maxlength="100" value="<%=cliente.logradouro%>">
-                                <div class="valid-feedback">
-                                    <!-- Looks good! -->
-                                </div>
-                                <div class="invalid-feedback">
-                                    <span id="invalidLogradouro"></span>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="complemento">Complemento</label>
-                                <input class="form-control" id="complemento" type="text" name="complemento" maxlength="200" value="<%=cliente.complemento%>">
-                                <div class="invalid-feedback">
-                                    <span id="invalidComplento"></span>
-                                </div>
-                            </div>
-                          
-                            <div class="form-group">
-                                <label for="localidade">Cidade</label>
-                                <input class="form-control" id="localidade" type="text" minlength="3" name="localidade" maxlength="50" value="<%=cliente.localidade%>">
-                                <div class="valid-feedback">
-                                    <!-- Looks good! -->
-                                </div>
-                                <div class="invalid-feedback">
-                                    <span id="invalidLocalidade"></span>
-                                </div>
-                            </div>
                         </div>
-                        
-                    </div>
 
-                    <!-- Dados do login -->
-                    <div class="card card-reserva" style="width: 25rem;">
-                        <div class="card-body">
-                            <h3 class="card-title">Informações de login</h3>
-                            <hr>
-                            <div class="form-group">
-                                <label for="email">Login</label>
-                                
-                                <input class="form-control" id="email" type="email" name="email" value="<%=cliente.email%>">
-                                <div class="valid-feedback">
-                                    <!-- Looks good! -->
-                                </div>
-                                <div class="invalid-feedback">
-                                    <span id="invalidEmail"></span>
-                                </div>
-                            </div>
+                        <!-- Dados do login -->
+                        <div class="card card-reserva" style="width: 25rem;">
+                            <div class="card-body">
+                                <h3 class="card-title">Informações de login</h3>
+                                <hr>
+                                <div class="form-group">
+                                    <label for="email">Login</label>
 
-                            <div class="form-group">
-                                <label for="senha">Senha</label>
-                                
-                                <input class="form-control" id="senha" type="password" name="senha" value="<%=senha%>">
-                                <div class="valid-feedback">
-                                    <!-- Looks good! -->
+                                    <input class="form-control" id="email" type="email" name="email"
+                                        value="<%=cliente.email%>">
+                                    <div class="valid-feedback">
+                                        <!-- Looks good! -->
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        <span id="invalidEmail"></span>
+                                    </div>
                                 </div>
-                                <div class="invalid-feedback">
-                                    <span id="invalidSenha"></span>
-                                </div>
-                            </div>
 
-                            <div class="form-group">
-                                <label for="novaSenha">Nova senha</label>
-                                
-                                <input class="form-control" id="novaSenha" type="password" name="novaSenha" >
-                                <small class="form-text text-muted">No mínimo 8 dígitos.</small>
-                                <div class="valid-feedback">
-                                    <!-- Looks good! -->
-                                </div>
-                                <div class="invalid-feedback">
-                                    <span id="invalidSenha"></span>
-                                </div>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label for="senhaRepita">Repita a Senha</label>
-                                
-                                <input class="form-control" id="senhaRepita" type="password" name="senhaRepita" >
-                                <div class="valid-feedback">
-                                    <!-- Looks good! -->
-                                </div>
-                                <div class="invalid-feedback">
-                                    <span id="invalidSenhaRepita"></span>
-                                </div>
-                            </div>
+                                <div class="form-group">
+                                    <label for="senha">Senha</label>
 
-                            <div class="d-flex justify-content-center mt-3" style="margin: 0.5rem;">
-                                <button class="btn btn-secondary me-3" type="button" onclick="history.back()">Voltar</button>
-                                <input class="btn btn-primary" id="botao" type="submit" value="Cadastrar">
-                            </div>
-                                            
-                            <!-- <br><p style="margin: 0.5rem;" >
+                                    <input class="form-control" id="senha" type="password" name="senha"
+                                        value="<%=senha%>">
+                                    <div class="valid-feedback">
+                                        <!-- Looks good! -->
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        <span id="invalidSenha"></span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="novaSenha">Nova senha</label>
+
+                                    <input class="form-control" id="novaSenha" type="password" name="novaSenha">
+                                    <small class="form-text text-muted">No mínimo 8 dígitos.</small>
+                                    <div class="valid-feedback">
+                                        <!-- Looks good! -->
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        <span id="invalidSenha"></span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="senhaRepita">Repita a Senha</label>
+
+                                    <input class="form-control" id="senhaRepita" type="password" name="senhaRepita">
+                                    <div class="valid-feedback">
+                                        <!-- Looks good! -->
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        <span id="invalidSenhaRepita"></span>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex justify-content-center mt-3" style="margin: 0.5rem;">
+                                    <button class="btn btn-secondary me-3" type="button"
+                                        onclick="history.back()">Voltar</button>
+                                    <input class="btn btn-primary" id="botao" type="submit" value="Confirmar">
+                                </div>
+
+                                <!-- <br><p style="margin: 0.5rem;" >
                                 <input class="btn btn-primary" type="submit" value="Enviar">
                             </p> -->
+                            </div>
                         </div>
+                        <input type="hidden" id="bairro" name="bairro" value="">
+                        <input type="hidden" id="uf" name="uf" value="">
+
                     </div>
-                    <input type="hidden" id="bairro" name="bairro" value="">
-                    <input type="hidden" id="uf" name="uf" value="">
-
-                </div>
-            </form>
-            <!--  -->
+                </form>
+                <!--  -->
+            </div>
         </div>
-    </div>
 
-    <%-include('../partials/footer.ejs')%>
+        <%-include('../partials/footer.ejs')%>
 
 </body>
+
 </html>

@@ -65,6 +65,24 @@ class ReboqueController {
         })
     }
 
+    static async APIAtivarReboque(req, res) {
+
+        try {
+            const { placa } = req.params;
+            const { ativo } = req.body;
+            const resultado = await DAOReboque.ativar(placa, ativo)
+            if (resultado) {
+                return res.json({ success: true });
+            } else {
+                return res.json({ success: false });
+            }
+        } catch (error) {
+            console.error(error);
+            res.json({ success: false });
+        }
+        
+    }
+
 }
 
 

@@ -59,6 +59,34 @@ class DAOReboque {
         }
     }
 
+    static async getAllAtivos(){
+        try{
+            let reboques = await Reboque.findAll({
+                order: [['modelo', 'ASC']], // 'ASC' para ordenar de forma ascendente (opcional)
+                where: { ativo: true }
+            });
+            return reboques
+        }
+        catch(error){
+            console.log(error.toString())
+            return undefined
+        }
+    }
+
+    static async ativar(placa, isAtivo){
+        try{
+            const resultado = await Reboque.update({ativo: isAtivo}, {where: {placa: placa}})
+            if (resultado[0] === 1) {
+                return true
+            } else {
+                return false
+            }
+        } catch(erro) {
+            console.error(`Erro ao atualizar status ${erro}`);
+            return false
+        }
+    }
+
 }
 
 module.exports = DAOReboque

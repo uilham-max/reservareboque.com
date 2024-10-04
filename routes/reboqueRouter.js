@@ -10,5 +10,6 @@ router.get('/lista', autorizacao, ReboqueController.getLista)
 router.get('/editar/:placa?', autorizacao, upload.single("foto"), ReboqueController.getEditar)
 router.post('/editar', autorizacao, ReboqueController.postEditar)
 router.get('/deletar/:placa?', autorizacao, ReboqueController.getDeletar)
+router.put('/ativar/:placa', autorizacao, ReboqueController.APIAtivarReboque)
 
 module.exports = router

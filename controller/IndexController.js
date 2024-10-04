@@ -8,7 +8,7 @@ class IndexController{
 
         // await Login.cliente(process.env.CLIENTE_EMAIL_TESTE, process.env.CLIENTE_SENHA_TESTE, req)
     
-        DAOReboque.getAll().then(reboques => {
+        DAOReboque.getAllAtivos().then(reboques => {
             if(reboques){
                 res.render('index', {user: clienteNome(req, res), mensagem: '',reboques: reboques})
             } else {

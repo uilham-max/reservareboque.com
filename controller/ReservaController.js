@@ -41,8 +41,8 @@ class ReservaController {
             return res.render('erro', {mensagem: "A hora de início não pode ser menor que a hora atual."})
         }
 
-        if(dataInicio == dataFim && !(horaInicio > horaFim)){
-            return res.render('erro', {mensagem: "A hora final deve ser maior que a data inicial."})
+        if(dataInicio == dataFim && horaInicio > horaFim){
+            return res.render('erro', {mensagem: "A hora final deve ser maior que a hora inicial."})
         }
         
         dataInicio = new Date(dataInicio)

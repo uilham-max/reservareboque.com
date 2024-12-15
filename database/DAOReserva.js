@@ -307,7 +307,6 @@ class DAOReserva {
     //         return undefined;
     //     }
     // }
-
     static async getAtivasDesteReboqueGrafico(reboquePlaca) {
         try {
             // Obtendo o primeiro e o último dia do mês atual

@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', function() {
         altFormat: "d/m",
         // dateFormat: "Y-m-d", // Formato da data
         minDate: "today", // Bloqueia dias anteriores à data atual
-        defaultDate: [hoje, amanha],
+        // defaultDate: [hoje, amanha],
         // showMonths: 1, // Exibe todos os 12 meses do ano
         // inline: true, // Faz o calendário ficar fixo
         disable: disabledDates,

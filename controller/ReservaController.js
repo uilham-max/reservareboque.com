@@ -31,7 +31,7 @@ class ReservaController {
         if(new Date().getDay() == dataInicio && horaInicio < new Date().getHours()){
             return res.render('erro', {mensagem: "A hora de início não pode ser menor que a hora atual."})
         }
-
+        
         dataInicio = new Date(dataInicio)
         dataFim = new Date(dataFim)
         dataInicio.setHours(horaInicio)

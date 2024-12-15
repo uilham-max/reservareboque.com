@@ -28,8 +28,21 @@ class ReservaController {
     static async postClienteFormularioReserva(req, res){
         let {reboquePlaca, dataInicio, dataFim, horaInicio, horaFim} =  req.body
 
+        // Trata o datepickr com datas default
+        if(dataInicio == '' || dataFim == ''){
+            let hoje = new Date()
+            let amanha = new Date()
+            amanha.setDate(hoje.getDate() +1)
+            dataInicio = hoje
+            dataFim = amanha
+        }
+
         if(new Date().getDay() == dataInicio && horaInicio < new Date().getHours()){
             return res.render('erro', {mensagem: "A hora de início não pode ser menor que a hora atual."})
+        }
+
+        if(dataInicio == dataFim && !(horaInicio > horaFim)){
+            return res.render('erro', {mensagem: "A hora final deve ser maior que a data inicial."})
         }
         
         dataInicio = new Date(dataInicio)

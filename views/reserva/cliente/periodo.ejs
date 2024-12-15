@@ -34,14 +34,14 @@
                         
                         <div class="input-group" >
                             <span class="input-group-text">Período</span>
-                            <input class="calendario" id="dataIntervalo" type="text" placeholder="Informe o período">
+                            <input class="calendario" id="dataIntervalo" type="text">
                         </div><br>
 
                         <div class="input-group">
                             <span class="input-group-text">Hora Retirada</span>
                             <select class="form-select  calendario" id="horaInicio" name="horaInicio" required>
                               <!-- Gera opções de 00 a 23 -->
-                              <% for(let i = 8; i < 20; i++) { %>
+                              <% for(let i = 8; i < 24; i++) { %>
                                 <option value="<%= i %>"><%= i.toString().padStart(2, '0')+':00' %></option>
                               <% } %>
                             </select>
@@ -58,7 +58,7 @@
                             <span class="input-group-text">Hora Entrega</span>
                             <select class="form-select  calendario" id="horaFim" name="horaFim" required>
                               <!-- Gera opções de 00 a 23 -->
-                              <% for(let i = 8; i < 20; i++) { %>
+                              <% for(let i = 8; i < 24; i++) { %>
                                 <option value="<%= i %>"><%= i.toString().padStart(2, '0')+':00' %></option>
                               <% } %>
                             </select>

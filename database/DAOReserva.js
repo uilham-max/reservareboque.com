@@ -6,6 +6,7 @@ const utilitario = require('./utilitario')
 const sequelize = require('sequelize')
 const Pagamento = require('../model/Pagamento.js')
 const moment = require('moment-timezone')
+const { startOfMonth, endOfMonth } = require('date-fns')
 
 
 class DAOReserva {
@@ -271,33 +272,81 @@ class DAOReserva {
             return undefined;
         }
     }
+    // static async getAtivasDesteReboqueGrafico(reboquePlaca) {
+    //     try {
+    //         const currentDate = moment.tz(new Date(), 'America/Sao_Paulo').format();
+    
+    //         const reservas = await Reserva.findAll({
+    //             where: {
+    //                 reboquePlaca: reboquePlaca,
+    //                 [Op.or]: [
+    //                     { dataSaida: { [Op.gte]: currentDate } },
+    //                     { dataChegada: { [Op.gte]: currentDate } }
+    //                 ],
+    //                 [Op.or]: [
+    //                     { situacaoReserva: 'APROVADO' },
+    //                     { situacaoReserva: 'ANDAMENTO' },
+    //                     { situacaoReserva: 'AGUARDANDO_PAGAMENTO'},
+    //                     { situacaoReserva: 'CONCLUIDO'},
+    //                     { situacaoReserva: 'AGUARDANDO_ACEITACAO'},
+    //                 ]
+    //             },
+    //             order: [
+    //                 ['id', 'ASC'],
+    //             ],
+    //             include: [
+    //                 { model: Reboque }, 
+    //                 { model: Cliente }, 
+    //                 { model: Pagamento },
+    //             ]
+    //         });
+    //         // console.log(reservas);
+    //         return reservas;
+    //     } catch (error) {
+    //         console.log(error.toString());
+    //         return undefined;
+    //     }
+    // }
+
     static async getAtivasDesteReboqueGrafico(reboquePlaca) {
         try {
-            const currentDate = moment.tz(new Date(), 'America/Sao_Paulo').format();
-    
+            // Obtendo o primeiro e o último dia do mês atual
+            const startDate = startOfMonth(new Date());
+            const endDate = endOfMonth(new Date());
+
             const reservas = await Reserva.findAll({
                 where: {
                     reboquePlaca: reboquePlaca,
                     [Op.or]: [
-                        { dataSaida: { [Op.gte]: currentDate } },
-                        { dataChegada: { [Op.gte]: currentDate } }
+                        {
+                            dataSaida: {
+                                [Op.gte]: startDate,
+                                [Op.lt]: endDate,
+                            },
+                        },
+                        {
+                            dataChegada: {
+                                [Op.gte]: startDate,
+                                [Op.lt]: endDate,
+                            },
+                        },
                     ],
-                    [Op.or]: [
-                        { situacaoReserva: 'APROVADO' },
-                        { situacaoReserva: 'ANDAMENTO' },
-                        { situacaoReserva: 'AGUARDANDO_PAGAMENTO'},
-                        { situacaoReserva: 'CONCLUIDO'},
-                        { situacaoReserva: 'AGUARDANDO_ACEITACAO'},
-                    ]
+                    situacaoReserva: {
+                        [Op.in]: [
+                            'APROVADO',
+                            'ANDAMENTO',
+                            'AGUARDANDO_PAGAMENTO',
+                            'CONCLUIDO',
+                            'AGUARDANDO_ACEITACAO',
+                        ],
+                    },
                 },
-                order: [
-                    ['id', 'ASC'],
-                ],
+                order: [['id', 'ASC']],
                 include: [
-                    { model: Reboque }, 
-                    { model: Cliente }, 
+                    { model: Reboque },
+                    { model: Cliente },
                     { model: Pagamento },
-                ]
+                ],
             });
             // console.log(reservas);
             return reservas;

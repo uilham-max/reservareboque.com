@@ -1,4 +1,4 @@
 node_modules
 .env
 public/js/API_verificaPagamento.js
-,vscode
+.vscode

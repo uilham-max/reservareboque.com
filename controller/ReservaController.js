@@ -431,7 +431,9 @@ class ReservaController {
 
         const reservas = await DAOReserva.getAtivas();
 
-        res.render('reserva/admin/painel', { user: adminNome(req, res), mensagem: '', dataJSON: await Grafico.reservas(), reservas: reservas, useragent: useragent });
+        const dataJson = await Grafico.reservas()
+
+        res.render('reserva/admin/painel', { user: adminNome(req, res), mensagem: '', dataJSON: dataJson, reservas: reservas, useragent: useragent });
 
     }
     static async postAdminAprovaPagamentoEmDinheiro(req, res){

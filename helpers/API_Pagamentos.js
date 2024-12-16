@@ -23,7 +23,6 @@ async function estornoPagamento(codigoPagamento, valor){
         // return undefined
     }
 }
-
 async function deleteCobranca(codigoPagamento){
     let url = `${URL_BASE}/payments/${codigoPagamento}`
     let options = {
@@ -40,7 +39,6 @@ async function deleteCobranca(codigoPagamento){
         throw err
     }
 }
-
 async function receiveInCash(idCobranca, value, paymentDate){
     let url = `${URL_BASE}/payments/${idCobranca}/receiveInCash`
     
@@ -65,10 +63,8 @@ async function receiveInCash(idCobranca, value, paymentDate){
         return undefined
     }
 }
-
 async function notificacoesAtualizaBatch(notifications){
     let url = `${URL_BASE}/notifications/batch`
-    let customerId = notifications[0].customer
     
     let options = {
         headers: {
@@ -79,26 +75,27 @@ async function notificacoesAtualizaBatch(notifications){
     
     // HABILITA SOMENTE O RECEBIMENTO DE EMAIL E WHATSAPP QUANDO O PAGAMENTO É RECEBIDO
     let data = {
-        customer: customerId,
+        customer: notifications[0].customer, // Verifique se o ID do cliente está correto
         notifications: [
             {
-                id: notifications[0].id,
+                id: notifications[0].id, // Verifique se os IDs das notificações estão corretos
                 emailEnabledForProvider: true,
                 smsEnabledForProvider: false,
                 emailEnabledForCustomer: true,
                 smsEnabledForCustomer: true,
                 phoneCallEnabledForCustomer: false,
                 whatsappEnabledForCustomer: true,
+                enabled: true
             },
-            {id: notifications[1].id, enabled: false},
-            {id: notifications[2].id, enabled: false},
-            {id: notifications[3].id, enabled: false},
-            {id: notifications[4].id, enabled: false},
-            {id: notifications[5].id, enabled: false},
-            {id: notifications[6].id, enabled: false},
-            {id: notifications[7].id, enabled: false},
+            { id: notifications[1].id, enabled: false },
+            { id: notifications[2].id, enabled: false },
+            { id: notifications[3].id, enabled: false },
+            { id: notifications[4].id, enabled: false },
+            { id: notifications[5].id, enabled: false },
+            { id: notifications[6].id, enabled: false },
+            { id: notifications[7].id, enabled: false }
         ]
-    }
+    };
 
     try{
         let response = await axios.put(url, data, options)
@@ -108,7 +105,6 @@ async function notificacoesAtualizaBatch(notifications){
         throw err;
     }
 }
-
 async function recuperaNotificacao(customerID){
     let url = `${URL_BASE}/customers/${customerID}/notifications` 
     let options = {
@@ -125,10 +121,9 @@ async function recuperaNotificacao(customerID){
         throw err;
     }
 }
-
-async function listar_clientes(filtro_cpfCnpj) {
+async function listar_clientes(filtro_cpfCnpj, nome) {
     if (filtro_cpfCnpj) {
-        let url = URL_BASE + '/customers?cpfCnpj='+filtro_cpfCnpj;
+        let url = URL_BASE + '/customers?cpfCnpj=' + filtro_cpfCnpj;
         let options = {
             headers: {
                 accept: 'application/json',
@@ -162,38 +157,37 @@ async function listar_clientes(filtro_cpfCnpj) {
         }
     }
 }
-
-async function verificaCadastro(cpfCnpj) {
+async function verificaCadastro(cpfCnpj, nome) {
     try{
-        let retorno = await listar_clientes(cpfCnpj);
+        let retorno = await listar_clientes(cpfCnpj, nome);
         if (retorno.totalCount == 1){
             return retorno.data[0].id
         }else{
             return false;
         }
-    }catch (e){
+    }catch (err){
         console.error('error:' + err);
         throw err;
     }
 }
-
 async function cadastrarCliente(cpfCnpj, nome, telefone, email){
     let url = URL_BASE + '/customers';
+    
     let options = {
         headers: {
             accept: 'application/json',
             access_token: ACCESS_TOKEN
         }
     };
-    let newCliente = {
+    let data = {
         "name": nome,
         "cpfCnpj": cpfCnpj,
         "mobilePhone": telefone,
-        "email": email
+        "email": email,
     }
 
     try {
-        let response = await axios.post(url, newCliente, options);
+        let response = await axios.post(url, data, options);
         console.log("id do cliente criado:",response.data.id);
         return response.data;
     } catch (err) {
@@ -201,7 +195,6 @@ async function cadastrarCliente(cpfCnpj, nome, telefone, email){
         throw err;
     }
 }
-
 async function criarPagamento(customerID, valor, data_vencimento, dataInicio, dataFim, placa, formaPagamento){
     
     dataInicio = dataInicio.toString().slice(8,10)+'/'+dataInicio.toString().slice(5,7)+'/'+dataInicio.toString().slice(0,4)
@@ -237,7 +230,6 @@ async function criarPagamento(customerID, valor, data_vencimento, dataInicio, da
     }
 
 }
-
 async function gerarQRCode(id_cobranca){
     let url = URL_BASE + '/payments/' + id_cobranca + '/pixQrCode';
     let options = {
@@ -255,7 +247,6 @@ async function gerarQRCode(id_cobranca){
             throw err;
         }
 }
-
 async function criarCobranca(cpfCnpj, nome, telefone, email, valor, data_vencimento, dataInicio, dataFim, placa, formaPagamento){
     
     console.log(
@@ -284,7 +275,7 @@ async function criarCobranca(cpfCnpj, nome, telefone, email, valor, data_vencime
     }
 
     try{
-        customerID = await verificaCadastro(cpfCnpj)
+        customerID = await verificaCadastro(cpfCnpj, nome)
 
         if(customerID == false){
             console.log("criar cliente >>> nome:",nome,"cpf:",cpfCnpj);

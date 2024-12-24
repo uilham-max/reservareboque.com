@@ -1,9 +1,11 @@
 const axios = require('axios');
+const { Env } = require('./Env');
 
-const ACCESS_TOKEN = process.env.ACCESS_TOKEN
-const URL_BASE = process.env.URL_BASE
+const ACCESS_TOKEN = Env.getAccessToken()
+const URL_BASE = Env.getUrlBase()
 
 async function estornoPagamento(codigoPagamento, valor){
+    console.log("SPA - Estornando pagamento do cliente...");
     let url = `${URL_BASE}/payments/${codigoPagamento}/refund`
     let options = {
         headers: {
@@ -24,6 +26,7 @@ async function estornoPagamento(codigoPagamento, valor){
     }
 }
 async function deleteCobranca(codigoPagamento){
+    console.log("SPA - Deletando cobrança...");
     let url = `${URL_BASE}/payments/${codigoPagamento}`
     let options = {
         headers: {
@@ -40,6 +43,7 @@ async function deleteCobranca(codigoPagamento){
     }
 }
 async function receiveInCash(idCobranca, value, paymentDate){
+    console.log("SPA - Recebendo em dinheiro do cliente...");
     let url = `${URL_BASE}/payments/${idCobranca}/receiveInCash`
     
     let options = {
@@ -64,6 +68,7 @@ async function receiveInCash(idCobranca, value, paymentDate){
     }
 }
 async function notificacoesAtualizaBatch(notifications){
+    console.log("SPA - Atualizando notificações em batch do cliente...");
     let url = `${URL_BASE}/notifications/batch`
     
     let options = {
@@ -106,6 +111,7 @@ async function notificacoesAtualizaBatch(notifications){
     }
 }
 async function recuperaNotificacao(customerID){
+    console.log("SPA - Recuperando notificações do cliente...");
     let url = `${URL_BASE}/customers/${customerID}/notifications` 
     let options = {
         headers: {
@@ -122,6 +128,7 @@ async function recuperaNotificacao(customerID){
     }
 }
 async function listar_clientes(filtro_cpfCnpj, nome) {
+    console.log("SPA - Listando clientes...");
     if (filtro_cpfCnpj) {
         let url = URL_BASE + '/customers?cpfCnpj=' + filtro_cpfCnpj;
         let options = {
@@ -158,6 +165,7 @@ async function listar_clientes(filtro_cpfCnpj, nome) {
     }
 }
 async function verificaCadastro(cpfCnpj, nome) {
+    console.log("SPA - Verificando cadastro do cliente...");
     try{
         let retorno = await listar_clientes(cpfCnpj, nome);
         if (retorno.totalCount == 1){
@@ -171,6 +179,7 @@ async function verificaCadastro(cpfCnpj, nome) {
     }
 }
 async function cadastrarCliente(cpfCnpj, nome, telefone, email){
+    console.log("SPA - Cadastrando cliente...");
     let url = URL_BASE + '/customers';
     
     let options = {
@@ -196,6 +205,7 @@ async function cadastrarCliente(cpfCnpj, nome, telefone, email){
     }
 }
 async function criarPagamento(customerID, valor, data_vencimento, dataInicio, dataFim, placa, formaPagamento){
+    console.log("SPA - Criando pagamento...");
     
     dataInicio = dataInicio.toString().slice(8,10)+'/'+dataInicio.toString().slice(5,7)+'/'+dataInicio.toString().slice(0,4)
     dataFim = dataFim.toString().slice(8,10)+'/'+dataFim.toString().slice(5,7)+'/'+dataFim.toString().slice(0,4)
@@ -231,6 +241,8 @@ async function criarPagamento(customerID, valor, data_vencimento, dataInicio, da
 
 }
 async function gerarQRCode(id_cobranca){
+    console.log("SPA - Gerando QR Code...");
+
     let url = URL_BASE + '/payments/' + id_cobranca + '/pixQrCode';
     let options = {
         headers: {
@@ -248,6 +260,7 @@ async function gerarQRCode(id_cobranca){
         }
 }
 async function criarCobranca(cpfCnpj, nome, telefone, email, valor, data_vencimento, dataInicio, dataFim, placa, formaPagamento){
+    console.log("SPA - Iniciando Sistema de Pagamentos Automático (SPA)...");
     
     console.log(
         "\nCriando cobrança...", 

@@ -67,15 +67,14 @@ class DAOCliente{
     }
     static async insertClienteQueNaoQuerSeCadastrar(nome, cpf, telefone, email, cep, logradouro, complemento, localidade, numero_da_casa){
         console.log("Inserindo cliente sem cadastro...");
-        
         try{
-            const cliente = await Cliente.create({nome, email: email, cpf, telefone, data_nascimento: null, cep, logradouro, complemento, bairro: null, localidade, uf: null, numero_da_casa, ativo: true, cadastrado: false})
-            console.log(nome, 'Cliente sem cadastro inserido!');
+            const cliente = await Cliente.create({nome: nome, email: email, cpf: cpf, telefone: telefone, data_nascimento: null, cep: cep, logradouro: logradouro, complemento: complemento, bairro: null, localidade: localidade, uf: null, numero_da_casa: numero_da_casa, ativo: true, cadastrado: false})
+            // console.log(nome, 'Cliente sem cadastro inserido!');
             return cliente
         }
         catch(erro){
             console.log(erro.toString())
-            return undefined
+            return false
         }
     }
     static async insert(nome, email, senha, cpf, telefone, data_nascimento, cep, logradouro, complemento, bairro, localidade, uf, numero_da_casa){

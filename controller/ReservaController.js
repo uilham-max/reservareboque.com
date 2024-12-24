@@ -230,11 +230,13 @@ class ReservaController {
             // O cliente não está logado!
 
             cliente = await DAOCliente.verificaSeClienteExiste(cpf)
+            // console.log("Existe:",cliente,"cpf:",cpf);
+            
             if(!cliente){ 
                 console.log("Tentando inserir cliente sem cadastro...");
                 cliente = await DAOCliente.insertClienteQueNaoQuerSeCadastrar(nome, cpf, telefone, email, cep, logradouro, complemento, localidade, numeroDaCasa)
                 if(!cliente){
-                    return res.render('erro', {mensagem: 'erro ao criar cliente'})
+                    return res.render('erro', {mensagem: 'Erro ao criar cliente sem cadastro'})
                 }  
             }
             // A diaria não recebe desconto

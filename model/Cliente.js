@@ -10,7 +10,7 @@ const Cliente = conexao.define('cliente', {
     nome: Sequelize.STRING,
     email: {
         type: Sequelize.STRING,
-        unique: true,
+        // unique: true,
     },
     senha: Sequelize.STRING,
     cpf: {

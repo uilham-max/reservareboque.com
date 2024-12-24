@@ -69,48 +69,64 @@ async function receiveInCash(idCobranca, value, paymentDate){
         return undefined
     }
 }
-async function notificacoesAtualizaBatch(notifications){
+async function notificacoesAtualizaBatch(notifications) {
     console.log("SPA - Atualizando notificações em batch do cliente...");
-    let url = `${URL_BASE}/notifications/batch`
+    // console.log("SPA - Notificações a serem atualizadas: \n",notifications);
     
+    let url = `${URL_BASE}/notifications/batch`;
+
     let options = {
         headers: {
             accept: 'application/json',
+            'content-type': 'application/json',
             access_token: ACCESS_TOKEN
         }
-    }
-    
-    // HABILITA SOMENTE O RECEBIMENTO DE EMAIL E WHATSAPP QUANDO O PAGAMENTO É RECEBIDO
-    let data = {
-        customer: notifications[0].customer, // Verifique se o ID do cliente está correto
-        notifications: [
-            {
-                id: notifications[0].id, // Verifique se os IDs das notificações estão corretos
-                emailEnabledForProvider: true,
-                smsEnabledForProvider: false,
-                emailEnabledForCustomer: true,
-                smsEnabledForCustomer: true,
-                phoneCallEnabledForCustomer: false,
-                whatsappEnabledForCustomer: true,
-                enabled: true
-            },
-            { id: notifications[1].id, enabled: false },
-            { id: notifications[2].id, enabled: false },
-            { id: notifications[3].id, enabled: false },
-            { id: notifications[4].id, enabled: false },
-            { id: notifications[5].id, enabled: false },
-            { id: notifications[6].id, enabled: false },
-            { id: notifications[7].id, enabled: false }
-        ]
     };
 
-    try{
-        let response = await axios.put(url, data, options)
-        console.log(`habilitar cliente a receber notificações por WhatsApp...`);
-    }catch(err){
-        console.error('error:' + err);
-        throw err;
+    // Verifica se o cliente possui email antes de ativar notificações por email
+    const clientePossuiEmail = notifications.some(notification => notification.customerEmail); // Verificar se o campo de email do cliente está presente.
+
+    // Construindo o objeto de dados com as configurações desejadas
+    let data = {
+        customer: notifications[0].customer, // Todos pertencem ao mesmo cliente
+        notifications: notifications.map(notification => {
+            if (notification.event === 'PAYMENT_RECEIVED') {
+                return {
+                    id: notification.id,
+                    emailEnabledForProvider: true,
+                    smsEnabledForProvider: false,
+                    emailEnabledForCustomer: clientePossuiEmail,
+                    smsEnabledForCustomer: true,
+                    phoneCallEnabledForCustomer: false,
+                    whatsappEnabledForCustomer: true, // Apenas aqui ativamos o WhatsApp
+                    enabled: true
+                };
+            } else {
+                return {
+                    id: notification.id,
+                    enabled: false // As outras notificações são desativadas
+                };
+            }
+        })
+    };
+
+    // console.log('URL:', url);
+    // console.log('Cabeçalhos:', options.headers);
+    // console.log('Corpo da Requisição:', JSON.stringify(data, null, 2));
+
+    try {
+        let response = await axios.put(url, data, options);
+        console.log('SPA - Notificações atualizadas com sucesso...');
+        // console.log('Notificações atualizadas com sucesso:', response.data);
+    } catch (err) {
+        if (err.response) {
+            console.error('Erro na API - Status:', err.response.status);
+            console.error('Erro na API - Dados:', JSON.stringify(err.response.data, null, 2));
+        } else {
+            console.error('Erro:', err.message);
+        }
     }
+
 }
 async function recuperaNotificacao(customerID){
     console.log("SPA - Recuperando notificações do cliente...");
@@ -123,9 +139,11 @@ async function recuperaNotificacao(customerID){
     }
     try{
         let notificacoes = await axios.get(url, options)
+        // console.log("SPA - Notificações recuperadas:\n",notificacoes.data);
+        
         return notificacoes.data.data
     }catch(err){
-        console.error('error:' + err);
+        console.error('SPA - Erro ao recuperar notificações:\n' + err);
         throw err;
     }
 }
@@ -171,8 +189,11 @@ async function verificaCadastro(cpfCnpj, nome) {
     try{
         let retorno = await listar_clientes(cpfCnpj, nome);
         if (retorno.totalCount == 1){
+            console.log("SPA - Cliente encontrado: ",retorno.data[0].id);
+            
             return retorno.data[0].id
         }else{
+            console.log("SPA - Cliente NÃO encontrado!");
             return false;
         }
     }catch (err){
@@ -199,7 +220,7 @@ async function cadastrarCliente(cpfCnpj, nome, telefone, email){
 
     try {
         let response = await axios.post(url, data, options);
-        console.log("id do cliente criado:",response.data.id);
+        console.log("SPA - ID criado:",response.data.id);
         return response.data;
     } catch (err) {
         console.error('error:' + err);
@@ -293,7 +314,6 @@ async function criarCobranca(cpfCnpj, nome, telefone, email, valor, data_vencime
         customerID = await verificaCadastro(cpfCnpj, nome)
 
         if(customerID == false){
-            console.log("criar cliente >>> nome:",nome,"cpf:",cpfCnpj);
             let retornoCad = await cadastrarCliente(cpfCnpj, nome, telefone, email);
             let notifications = await recuperaNotificacao(retornoCad.id)
             await notificacoesAtualizaBatch(notifications)

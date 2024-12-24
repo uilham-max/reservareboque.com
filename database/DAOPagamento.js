@@ -106,7 +106,7 @@ class DAOPagamento {
             return pagamento.codigoPagamento
 
         } catch(erro){
-            console.log(erro.toString());
+            console.log("Erro ao inserir pagamento: \n",erro.toString());
             return undefined
         }
     }

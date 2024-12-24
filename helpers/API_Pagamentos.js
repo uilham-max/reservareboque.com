@@ -1,8 +1,10 @@
 const axios = require('axios');
-const { Env } = require('./Env');
+const { getAccessToken, getUrlBase } = require('./Env');
 
-const ACCESS_TOKEN = Env.getAccessToken()
-const URL_BASE = Env.getUrlBase()
+
+const ACCESS_TOKEN = getAccessToken()
+const URL_BASE = getUrlBase()
+
 
 async function estornoPagamento(codigoPagamento, valor){
     console.log("SPA - Estornando pagamento do cliente...");
@@ -325,6 +327,7 @@ async function criarCobranca(cpfCnpj, nome, telefone, email, valor, data_vencime
         throw err;
     }
 } 
+
 
 module.exports = {
     verificaCadastro, 

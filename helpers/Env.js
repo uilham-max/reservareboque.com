@@ -1,14 +1,15 @@
 
-export class Env {
 
-    static getAccessToken(){
+    getAccessToken = () => {
         return process.env.ACCESS_TOKEN
     }
 
-    static getUrlBase(){
+    getUrlBase = () => {
         return process.env.URL_BASE
     }
 
-}
 
-// module.exports = Env
+module.exports = {
+    getAccessToken,
+    getUrlBase
+}

@@ -12,7 +12,6 @@ class ClienteController {
     static async getEntrar(req, res) {
         res.render('cliente/entrar', { user: clienteNome(req, res), mensagem: "" })
     }
-
     static async postEntrar(req, res) {
         let { email, senha } = req.body
         DAOCliente.login(email, senha).then(cliente => {
@@ -31,11 +30,9 @@ class ClienteController {
         })
 
     }
-
     static async getNovo(req, res) {
         res.render('cliente/novo', { user: clienteNome(req, res), mensagem: '' })
     }
-
     static async postNovo(req, res) {
 
         let { nome, email, senha, senhaRepita, cpf, telefone, dataNascimento, cep,
@@ -89,13 +86,11 @@ class ClienteController {
             return res.render('erro', { mensagem: 'Erro ao inserir cliente' })
         }
     }
-
     static async getSair(req, res) {
         console.log(req.session.cliente.nome, 'fez logout...');
         req.session.cliente = undefined
         res.redirect('/')
     }
-
     static async getExiste(req, res) {
         /**
          * USADO PARA CONSULTAR PELO CPF DO CLIENTE QUE SERÁ CRIADO E SE ELE EXISTIR PREENCHER 
@@ -109,7 +104,6 @@ class ClienteController {
 
         })
     }
-
     static async getLista(req, res) {
 
         const clientes = await DAOCliente.getAll()
@@ -119,11 +113,9 @@ class ClienteController {
         return res.render('cliente/admin/lista', { user: adminNome(req, res), clientes: clientes, mensagem: '' })
 
     }
-
     static async getRecuperaSenha(req, res) {
         return res.render('cliente/recuperaSenha', { user: clienteNome(req, res), mensagem: '' })
     }
-
     static async postRecuperaSenha(req, res) {
 
         let { email } = req.body
@@ -157,7 +149,6 @@ class ClienteController {
         return res.render('cliente/recuperaSenha', { mensagem: 'E-mail enviado com sucesso!', user: clienteNome(req, res) })
 
     }
-
     static async getRedefineSenha(req, res) {
         let { token } = req.params
 
@@ -169,7 +160,6 @@ class ClienteController {
 
         return res.render('cliente/redefineSenha', { user: clienteNome(req, res), mensagem: "", token: token })
     }
-
     static async postRedefineSenha(req, res) {
         let { token, senha, senhaRepita } = req.body
 
@@ -198,7 +188,6 @@ class ClienteController {
         return res.render('cliente/redefineSenha', { user: clienteNome(req, res), mensagem: "Senha redefinida com sucesso!", token: '' })
         // return res.render('cliente/recuperaSenha', { user: clienteNome(req, res), mensagem: "Senha redefinida com sucesso", token: '' })
     }
-
     static async getEditar(req, res) {
         // console.log(req.session.cliente);
         if(req.session.cliente && req.session.cliente.cpf && req.session.cliente.senha){
@@ -210,7 +199,6 @@ class ClienteController {
         return res.render('erro', {mensagem: "Não foi possível encontrar o cliente da sessão"})
         
     }
-
     static async postEditar(req, res) {
 
         let { nome, email, senha, novaSenha, senhaRepita, cpf, telefone, dataNascimento, cep,
@@ -260,7 +248,5 @@ class ClienteController {
     }
 
 }
-
-
 
 module.exports = ClienteController

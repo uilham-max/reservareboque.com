@@ -1,13 +1,10 @@
+getAccessToken = () => {
+    return process.env.ACCESS_TOKEN
+}
 
-
-    getAccessToken = () => {
-        return process.env.ACCESS_TOKEN
-    }
-
-    getUrlBase = () => {
-        return process.env.URL_BASE
-    }
-
+getUrlBase = () => {
+    return process.env.URL_BASE
+}
 
 module.exports = {
     getAccessToken,

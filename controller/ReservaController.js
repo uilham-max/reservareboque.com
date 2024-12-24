@@ -228,8 +228,10 @@ class ReservaController {
             valorTotalDaReserva = valorTotalDaReservaComDesconto
         } else {
             // O cliente não está logado!
+
             cliente = await DAOCliente.verificaSeClienteExiste(cpf)
             if(!cliente){ 
+                console.log("Tentando inserir cliente sem cadastro...");
                 cliente = await DAOCliente.insertClienteQueNaoQuerSeCadastrar(nome, cpf, telefone, email, cep, logradouro, complemento, localidade, numeroDaCasa)
                 if(!cliente){
                     return res.render('erro', {mensagem: 'erro ao criar cliente'})

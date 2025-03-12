@@ -7,6 +7,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     inputCep.addEventListener('blur', async () => {
         const cep = inputCep.value.replace(/\D/g, ''); // Remove caracteres não numéricos do CEP
+        if(cep === ""){
+            return;
+        }
         if (cep.length !== 8) {
             return;
         } 
@@ -17,6 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 throw new Error('Erro ao consultar o CEP.');
             }
             const data = await response.json();
+            console.log(data.erro, "erro")
             if(data.erro == true){
                 throw new Error('CEP inválido.');
             }

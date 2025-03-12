@@ -7,10 +7,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     inputCep.addEventListener('blur', async () => {
         const cep = inputCep.value.replace(/\D/g, ''); // Remove caracteres não numéricos do CEP
+        if(cep === ""){
+            return;
+        }
         if (cep.length !== 8) {
             return;
         } 
-
         try {
             const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
             if (!response.ok) {

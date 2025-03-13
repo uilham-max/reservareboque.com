@@ -20,7 +20,19 @@ app.use(express.json())
 app.use(express.static('public'));
 app.use(express.urlencoded({ extended: false }));
 app.set('view engine', 'ejs');
-app.use(session({secret: 'udjs93ka0', resave: true, saveUninitialized: true}));
+// app.use(session({secret: 'udjs93ka0', resave: true, saveUninitialized: true}));
+
+app.use(session({
+    secret: 'udjs93ka0',
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 dias
+      httpOnly: true, // Evita que o cookie seja acessado via JavaScript no cliente
+      secure: false // True se estiver usando HTTPS
+    }
+  }));
+  
 app.use(useragent.express())
 
 // Para versões anteriores ao Express 4.16

@@ -9,6 +9,8 @@ document.addEventListener('DOMContentLoaded', ()=>{
   inputNumeroDaCasa = document.getElementById('numeroDaCasa')
   inputComplemento = document.getElementById('complemento')
   inputLocalidade = document.getElementById('localidade')
+  inputUf = document.getElementById('uf')
+  inputBairro = document.getElementById('bairro')
   
   invalidNome = document.getElementById('invalidNome');
   invalidCPF = document.getElementById('invalidCPF')
@@ -188,20 +190,55 @@ document.addEventListener('DOMContentLoaded', ()=>{
   })
 
 
-  // VALIDA CEP
-  inputCep.addEventListener('blur', () => {
-      const cep = inputCep.value.replace(/\D/g, '')
-      if(cep.length !== 8){
-          inputCep.classList.add('is-invalid')
-          inputCep.setCustomValidity('mensagem')
-          invalidCep.textContent = "Deve ter 8 dígitos numéricos."
-          return
-      } else {
-          inputCep.classList.remove('is-invalid')
-          inputCep.setCustomValidity('')
-          invalidCep.textContent = ''
-      }
-  })
+  // VALIDA CEP E CONSOME API VIACEP
+//   inputCep.addEventListener('blur', async () => {
+
+      
+//     const cep = inputCep.value.replace(/\D/g, ''); // Remove caracteres não numéricos do CEP
+    
+//     if(cep.length !== 8){
+//         inputCep.classList.add('is-invalid')
+//         inputCep.setCustomValidity('mensagem')
+//         invalidCep.textContent = "Deve ter 8 dígitos numéricos."
+//         //Limpar inputs quando CEP inválido
+//         inputLocalidade.value = "";
+//         inputUf.value = "";
+//         inputLogradouro.value = "";
+//         inputBairro.value = "";
+//         return
+//     } else {
+//         inputCep.classList.remove('is-invalid')
+//         inputCep.setCustomValidity('')
+//         invalidCep.textContent = ''
+//         try {
+//         const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+//         if (!response.ok) {
+//             throw new Error('Erro ao consultar o CEP.');
+//         }
+//         const data = await response.json();
+//         if(data.erro == "true"){
+//             inputCep.classList.add('is-invalid')
+//             inputCep.setCustomValidity('mensagem')
+//             invalidCep.textContent = "CEP inválido!"
+//             //Limpar inputs quando CEP inválido
+//             inputLocalidade.value = "";
+//             inputUf.value = "";
+//             inputLogradouro.value = "";
+//             inputBairro.value = "";
+//             return
+//         }
+//         inputLocalidade.value = data.localidade;
+//         inputUf.value = data.uf;
+//         inputLogradouro.value = data.logradouro;
+//         inputBairro.value = data.bairro;
+//         } catch (error) {
+//         console.error(error);
+//         alert('Ocorreu um erro ao consultar o CEP.');
+//         }
+
+//     }
+
+//   })
 
 
   // VALIDA RUA

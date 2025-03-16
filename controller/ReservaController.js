@@ -207,7 +207,7 @@ class ReservaController {
         /**
          * Calcula o valos da diária com desconto para clientes com ou sem cadastro
         */
-    
+        let dias = DiariaCalculo.calculaNumeroDeDias(dataInicio, dataFim)
         let valorTotalDaReserva = DiariaCalculo.calculaTotal(dataInicio, dataFim, reboque.valorDiaria)
         let valorTotalDaReservaComDesconto = DiariaCalculo.calculaTotal(dataInicio, dataFim, reboque.valorDiaria)
         
@@ -273,7 +273,7 @@ class ReservaController {
             }
     
             // RESERVA INSERT
-            const reserva = await DAOReserva.insert(dataInicio, dataFim, valorDiaria, dias, retorno.netValue, cliente.cpf, reboquePlaca, codigoPagamento, situacaoReserva)
+            const reserva = await DAOReserva.insert(dataInicio, dataFim, (valorTotalDaReserva/dias), dias, valorTotalDaReserva, cliente.cpf, reboquePlaca, codigoPagamento, situacaoReserva)
             if(!reserva){
                 return res.render('erro', {mensagem: 'Erro ao criar reserva.'})
             } else {

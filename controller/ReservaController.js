@@ -59,6 +59,9 @@ class ReservaController {
                 if(reboque && resposta.length === 0){
                     
                     let dias = DiariaCalculo.calculaNumeroDeDias(dataInicio, dataFim)
+                    if(dias > 31){
+                        return res.render('erro', {mensagem: "Uma reserva não pode ultrapassar 30 dias."})
+                    }
                     let valorTotalDaReserva = DiariaCalculo.calculaTotal(dataInicio, dataFim, reboque.valorDiaria)
                     let valorTotalDaReservaComDesconto = DiariaCalculo.calculaTotal(dataInicio, dataFim, reboque.valorDiaria)
                     

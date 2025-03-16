@@ -9,7 +9,7 @@ class DiariaCalculo {
 		return dataFinal.diff(dataInicial, 'hours')
 	}
 
-	static quantidadeDeDias(dataInicial, dataFinal) {
+	static calculaNumeroDeDias(dataInicial, dataFinal) {
 		
 		// Validar e converter datas para formato válido
         dataInicial = moment.tz(new Date(dataInicial), 'America/Sao_Paulo');
@@ -37,8 +37,8 @@ class DiariaCalculo {
 		return dataFinal.diff(dataInicial, 'days')
 	}
 
-	static calcularValorTotalDaReserva(quantidadeDeDias, valorDaDiaria){
-		let valor = quantidadeDeDias*valorDaDiaria
+	static calcularValorTotalDaReserva(dias, valorDaDiaria){
+		let valor = dias*valorDaDiaria
 		if(valor > 600){
 			valor = valor // Nova
 			// valor = 600 // Antiga

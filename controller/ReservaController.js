@@ -58,6 +58,7 @@ class ReservaController {
             DAOReboque.getOne(reboquePlaca).then(reboque => {
                 if(reboque && resposta.length === 0){
                     
+                    let dias = DiariaCalculo.calculaNumeroDeDias(dataInicio, dataFim)
                     let valorTotalDaReserva = DiariaCalculo.calculaTotal(dataInicio, dataFim)
                     let valorTotalDaReservaComDesconto = DiariaCalculo.calculaTotal(dataInicio, dataFim)
                     return res.render('reserva/cliente/formulario', {user: clienteNome(req, res), dias: dias, reboque: reboque, dataInicio: dataInicio, horaInicio: horaInicio, dataFim: dataFim, horaFim: horaFim, valorTotalDaReserva: valorTotalDaReserva,  valorTotalDaReservaComDesconto: valorTotalDaReservaComDesconto,})
@@ -142,6 +143,7 @@ class ReservaController {
     
     
         // CALCULA VALORES E APLICA DESCONTOS PARA CLIENTES CADASTRADOS E LOGADOS
+        let dias = DiariaCalculo.calculaNumeroDeDias(dataInicio, dataFim)
         let valorTotalDaReserva = DiariaCalculo.calculaTotal(dataInicio, dataFim)
         let valorTotalDaReservaComDesconto = DiariaCalculo.calculaTotal(dataInicio, dataFim)
         

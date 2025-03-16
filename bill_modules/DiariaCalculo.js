@@ -82,8 +82,6 @@ class DiariaCalculo {
 			}
 		}
 		
-		console.log(dataFinal.diff(dataInicial, 'days'));
-		
 		return dataFinal.diff(dataInicial, 'days')
 	}
 

@@ -9,7 +9,7 @@ class DiariaCalculo {
 		return dataFinal.diff(dataInicial, 'hours')
 	}
 
-	static calcularDiarias(dataInicial, dataFinal) {
+	static quantidadeDeDias(dataInicial, dataFinal) {
 		
 		// Validar e converter datas para formato válido
         dataInicial = moment.tz(new Date(dataInicial), 'America/Sao_Paulo');

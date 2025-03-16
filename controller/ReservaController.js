@@ -59,8 +59,9 @@ class ReservaController {
                 if(reboque && resposta.length === 0){
                     
                     let dias = DiariaCalculo.calculaNumeroDeDias(dataInicio, dataFim)
-                    let valorTotalDaReserva = DiariaCalculo.calculaTotal(dataInicio, dataFim)
-                    let valorTotalDaReservaComDesconto = DiariaCalculo.calculaTotal(dataInicio, dataFim)
+                    let valorTotalDaReserva = DiariaCalculo.calculaTotal(dataInicio, dataFim, reboque.valorDiaria)
+                    let valorTotalDaReservaComDesconto = DiariaCalculo.calculaTotal(dataInicio, dataFim, reboque.valorDiaria)
+                    
                     return res.render('reserva/cliente/formulario', {user: clienteNome(req, res), dias: dias, reboque: reboque, dataInicio: dataInicio, horaInicio: horaInicio, dataFim: dataFim, horaFim: horaFim, valorTotalDaReserva: valorTotalDaReserva,  valorTotalDaReservaComDesconto: valorTotalDaReservaComDesconto,})
     
                 } else {
@@ -144,8 +145,8 @@ class ReservaController {
     
         // CALCULA VALORES E APLICA DESCONTOS PARA CLIENTES CADASTRADOS E LOGADOS
         let dias = DiariaCalculo.calculaNumeroDeDias(dataInicio, dataFim)
-        let valorTotalDaReserva = DiariaCalculo.calculaTotal(dataInicio, dataFim)
-        let valorTotalDaReservaComDesconto = DiariaCalculo.calculaTotal(dataInicio, dataFim)
+        let valorTotalDaReserva = DiariaCalculo.calculaTotal(dataInicio, dataFim, reboque.valorDiaria)
+        let valorTotalDaReservaComDesconto = DiariaCalculo.calculaTotal(dataInicio, dataFim, reboque.valorDiaria)
         
         /**
          * É montado um objeto reserva com os dados necessario para inserir no banco de dados
@@ -207,8 +208,8 @@ class ReservaController {
          * Calcula o valos da diária com desconto para clientes com ou sem cadastro
         */
     
-        let valorTotalDaReserva = DiariaCalculo.calculaTotal(dataInicio, dataFim)
-        let valorTotalDaReservaComDesconto = DiariaCalculo.calculaTotal(dataInicio, dataFim)
+        let valorTotalDaReserva = DiariaCalculo.calculaTotal(dataInicio, dataFim, reboque.valorDiaria)
+        let valorTotalDaReservaComDesconto = DiariaCalculo.calculaTotal(dataInicio, dataFim, reboque.valorDiaria)
         
         /**
          * Se o cliente estiver cadastrado e logado, será calculado o desconto nas diarias

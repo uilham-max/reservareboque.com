@@ -205,6 +205,13 @@
                             <input class="form-control" id="valorTotalDaReserva_input" type="text" name="valorTotalDaReserva_input" value="R$ <%=(reserva.valorTotalDaReserva.toFixed(2)).replace('.',',')%>" disabled>
                         </div>
 
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" >Valor Diária</span>
+                            <input class="form-control" id="valorTotalDaReserva_input" type="text" name="valorTotalDaReserva_input" value="R$ <%=((reserva.valorTotalDaReserva/reserva.dias).toFixed(2)).replace('.',',')%>" disabled>
+                            <span class="input-group-text" id="horaInicio_input" name="horaInicio_input"><%= (reserva.dias).toString() %> Dias </span>
+
+                        </div>
+
 
                         <% if(user != '') { %>
                         <div class="input-group mb-3">

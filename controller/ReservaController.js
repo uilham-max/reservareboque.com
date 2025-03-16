@@ -2,7 +2,7 @@ const DAOReserva = require('../database/DAOReserva')
 const DAOCliente = require('../database/DAOCliente')
 const DAOReboque = require('../database/DAOReboque')
 const DAOPagamento = require('../database/DAOPagamento')
-const Diaria = require('../bill_modules/Diaria')
+const DiariaCalculo = require('../bill_modules/DiariaCalculo')
 const Grafico = require('../bill_modules/Grafico')
 const Login = require('../bill_modules/Login')
 var {clienteNome, adminNome} = require('../helpers/getSessionNome')
@@ -58,9 +58,9 @@ class ReservaController {
             DAOReboque.getOne(reboquePlaca).then(reboque => {
                 if(reboque && resposta.length === 0){
                     
-                    let dias = Diaria.calcularDiarias(dataInicio, dataFim)
-                    let valorTotalDaReserva = Diaria.calcularValorTotalDaReserva(dias, reboque.valorDiaria)
-                    let valorTotalDaReservaComDesconto = Diaria.aplicarDescontoNaDiariaParaCliente(valorTotalDaReserva, dias)
+                    let dias = DiariaCalculo.calcularDiarias(dataInicio, dataFim)
+                    let valorTotalDaReserva = DiariaCalculo.calcularValorTotalDaReserva(dias, reboque.valorDiaria)
+                    let valorTotalDaReservaComDesconto = DiariaCalculo.aplicarDescontoNaDiariaParaCliente(valorTotalDaReserva, dias)
                     return res.render('reserva/cliente/formulario', {user: clienteNome(req, res), dias: dias, reboque: reboque, dataInicio: dataInicio, horaInicio: horaInicio, dataFim: dataFim, horaFim: horaFim, valorTotalDaReserva: valorTotalDaReserva,  valorTotalDaReservaComDesconto: valorTotalDaReservaComDesconto,})
     
                 } else {
@@ -143,9 +143,9 @@ class ReservaController {
     
     
         // CALCULA VALORES E APLICA DESCONTOS PARA CLIENTES CADASTRADOS E LOGADOS
-        let dias = Diaria.calcularDiarias(dataInicio, dataFim)
-        let valorTotalDaReserva = Diaria.calcularValorTotalDaReserva(dias, reboque.valorDiaria)
-        let valorTotalDaReservaComDesconto = Diaria.aplicarDescontoNaDiariaParaCliente(valorTotalDaReserva, dias)
+        let dias = DiariaCalculo.calcularDiarias(dataInicio, dataFim)
+        let valorTotalDaReserva = DiariaCalculo.calcularValorTotalDaReserva(dias, reboque.valorDiaria)
+        let valorTotalDaReservaComDesconto = DiariaCalculo.aplicarDescontoNaDiariaParaCliente(valorTotalDaReserva, dias)
         
         /**
          * É montado um objeto reserva com os dados necessario para inserir no banco de dados
@@ -207,9 +207,9 @@ class ReservaController {
          * Calcula o valos da diária com desconto para clientes com ou sem cadastro
         */
     
-        let dias = Diaria.calcularDiarias(dataInicio, dataFim)
-        let valorTotalDaReserva = Diaria.calcularValorTotalDaReserva(dias, reboque.valorDiaria)
-        let valorTotalDaReservaComDesconto = Diaria.aplicarDescontoNaDiariaParaCliente(valorTotalDaReserva, dias)
+        let dias = DiariaCalculo.calcularDiarias(dataInicio, dataFim)
+        let valorTotalDaReserva = DiariaCalculo.calcularValorTotalDaReserva(dias, reboque.valorDiaria)
+        let valorTotalDaReservaComDesconto = DiariaCalculo.aplicarDescontoNaDiariaParaCliente(valorTotalDaReserva, dias)
         
         /**
          * Se o cliente estiver cadastrado e logado, será calculado o desconto nas diarias

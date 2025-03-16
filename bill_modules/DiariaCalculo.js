@@ -1,6 +1,6 @@
 const moment = require('moment-timezone')
 
-class Diaria {
+class DiariaCalculo {
 
 	static calcularQuantidadeHoras(dataInicial, dataFinal){
 		// Validar e converter datas para formato válido
@@ -60,5 +60,5 @@ class Diaria {
 		return valor
 	}
 }
-module.exports = Diaria
+module.exports = DiariaCalculo
 

@@ -2,38 +2,73 @@ document.addEventListener('DOMContentLoaded', () => {
 
     var inputHoraInicio = document.getElementById('horaInicio')
     var inputHoraFim = document.getElementById('horaFim')
+    var inputDataInicio = document.getElementById('dataInicio')
+    var inputDataFim = document.getElementById('dataFim')
 
     invalidHoraInicio = document.getElementById('invalidHoraInicio');
+    invalidHoraFim = document.getElementById('invalidHoraFim');
 
+    var dataAtual = new Date()
+    var horaAtual = dataAtual.getHours()
 
-    var data = new Date()
-
-    var hora = data.getHours()
-
-    inputHoraInicio.value = hora
+    // Hora de entrega recebe a horaAtual de inicio
+    inputHoraInicio.value = horaAtual
     inputHoraFim.value = inputHoraInicio.value
 
-    // Hora de entrega recebe a hora de inicio
+
+    // Hora inicio
     inputHoraInicio.addEventListener('change', () => {
-        inputHoraFim.value = inputHoraInicio.value
-    })
-
-
-
-    inputHoraInicio.addEventListener('change', () => {
-        // Verifica se tem onze dígitos
-        if (inputDataInicio.value == dataAtual && inputHoraInicio.value < hora) {
+        if(inputDataInicio.value == inputDataFim.value && Number(inputHoraInicio.value) > Number(inputHoraFim.value)){
             inputHoraInicio.classList.add('is-invalid')
             inputHoraInicio.setCustomValidity('mensagem')
-            invalidHoraInicio.textContent = `A partir das ${hora}:00hs`;
-            return;
+            invalidHoraInicio.textContent = `Hora inválida! 0102`;
         } else {
             inputHoraInicio.classList.remove('is-invalid')
             inputHoraInicio.setCustomValidity('')
             invalidHoraInicio.textContent = '';
         }
-
     })
+
+    // Hora fim
+    inputHoraFim.addEventListener('change', () => {
+        if(inputDataInicio.value == inputDataFim.value && Number(inputHoraInicio.value) > Number(inputHoraFim.value)){
+            inputHoraFim.classList.add('is-invalid')
+            inputHoraFim.setCustomValidity('mensagem')
+            invalidHoraFim.textContent = `Hora inválida! 0103`;
+        } else {
+            inputHoraFim.classList.remove('is-invalid')
+            inputHoraFim.setCustomValidity('')
+            invalidHoraFim.textContent = '';
+        }
+    })
+
+
+    // Hora inicio
+    inputHoraInicio.addEventListener('blur', () => {
+        if(inputDataInicio.value == inputDataFim.value && Number(inputHoraInicio.value) > Number(inputHoraFim.value)){
+            inputHoraInicio.classList.add('is-invalid')
+            inputHoraInicio.setCustomValidity('mensagem')
+            invalidHoraInicio.textContent = `Hora inválida! 0102`;
+        } else {
+            inputHoraInicio.classList.remove('is-invalid')
+            inputHoraInicio.setCustomValidity('')
+            invalidHoraInicio.textContent = '';
+        }
+    })
+
+    // Hora fim
+    inputHoraFim.addEventListener('blur', () => {
+        if(inputDataInicio.value == inputDataFim.value && Number(inputHoraInicio.value) > Number(inputHoraFim.value)){
+            inputHoraFim.classList.add('is-invalid')
+            inputHoraFim.setCustomValidity('mensagem')
+            invalidHoraFim.textContent = `Hora inválida! 0103`;
+        } else {
+            inputHoraFim.classList.remove('is-invalid')
+            inputHoraFim.setCustomValidity('')
+            invalidHoraFim.textContent = '';
+        }
+    })
+
 
 
     'use strict'

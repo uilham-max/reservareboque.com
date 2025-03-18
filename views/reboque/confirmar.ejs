@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%-include('../partials/header.ejs')%>
+</head>
+<body  >
+    
+    <%-include('../partials/navbar.ejs')%>
+
+    <div class="conteudo" >
+
+        <!-- Menssagem do topo da página em jumbotron -->
+        <div class="jumbotron jumbotron-fluid">
+            <h1 class="display-4" >Confirme os dados da sua reserva.</h1>
+            <!-- <p class="lead">Clientes cadastrados podem ver seu histórico de locações, gerenciar suas reservas e receber
+                descontos.</p> -->
+        </div>
+    </div>
+
+    <div class="container" >
+        <!-- <h3>Reboque escolhido</h3> -->
+        <form action="/reserva/cliente/qrcode" method="POST">
+            <div class="lista-reboques">
+            
+
+                <!-- Card do reboque -->
+                <div class="card card-reserva" style="width: 25rem;">
+                    <img src="../../../<%=reboque.foto%>" class="card-img-top" alt="...">
+
+                    <div class="card-body">
+
+                        <div class="titulo">
+                            <h3>
+                                <a href="#">
+                                    <div class="ano"><%=reboque.anoFabricacao%></div>
+                                    <div class="primeiro-nome"><%=reboque.modelo%></div>
+                                    <div  class="ultimo-nome">Carga</div>
+                                </a>
+                            </h3>
+                        </div>
+
+
+                        <div class="row justify-content-between">
+
+                            <div class="col-6">
+                                <div class="truncate float-start">
+                                    <p class="info-cost2 lato-black"><%=''%></p>
+                                </div>
+                            </div>
+
+
+                            <div class="col-6">
+                                <div class="truncate float-end">
+                                    <div class="row justify-content-evenly">
+                                        
+                                        <div class="col-4">
+                                            <div class=" float-start">
+                                                <a  href="https://wa.me/5553997032373"><img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" width="30" height="30"></a> <!-- Coloque seu número de WhatsApp -->
+                                            </div>
+                                        </div>
+        
+                                        <div class="col-4">
+                                            <div class=" ms-3 float-end">
+                                                <a  href="https://maps.app.goo.gl/bM2d9YG7UpkvGRBQ7" ><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-geo-alt" viewBox="0 0 16 16">
+                                                    <path d="M12.166 8.94c-.524 1.062-1.234 2.12-1.96 3.07A32 32 0 0 1 8 14.58a32 32 0 0 1-2.206-2.57c-.726-.95-1.436-2.008-1.96-3.07C3.304 7.867 3 6.862 3 6a5 5 0 0 1 10 0c0 .862-.305 1.867-.834 2.94M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10"/>
+                                                    <path d="M8 8a2 2 0 1 1 0-4 2 2 0 0 1 0 4m0 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>
+                                                    </svg></a>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        
+
+                        <div class="opicionais">
+                            
+                            <div class="box-opicionais-home">
+                                <div>
+                                    <img class="icon-card-index" src="/img/icons/icon-trailer-medidas.png" width="22" height="22">
+                                </div>
+                                <div class="text-none grey-text10 mt-1 ms-1">
+                                    <%=reboque.comprimento%> X <%=reboque.largura%> X <%=reboque.altura%>
+                                </div>
+                            </div>
+                            
+                            <div class="box-opicionais-home">
+                                <div>
+                                    <img class="icon-card-index" src="/img/icons/icon-trailer-peso.png" width="20" height="20" >
+                                </div>
+                                <div class="text-none grey-text10 mt-1 ms-1">
+                                    <%=reboque.pesoBruto%> Kg
+                                </div>
+                            </div>
+                            
+                            <div class="box-opicionais-home">
+                                <div>
+                                    <img class="icon-card-index" src="/img/icons/icon-trailer-open.png" width="22" height="22" >
+                                </div>
+                                <div class="text-none grey-text10 mt-1 ms-1">
+                                    Aberto
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Dados de cadastro -->
+                <div class="card card-reserva">
+                    <div class="card-body">
+                        <h3 class="card-title">Cliente</h3>
+                        <hr>
+                        <div class="form-group">
+                            <label for="nome_input">Nome</label>
+                            <input class="form-control" id="nome_input" type="text" name="nome_input" value="<%=cliente.nome%>" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label for="cpf_input">CPF</label>
+                            <input class="form-control" id="cpf_input" type="text" name="cpf_input" value="<%=cliente.cpf%>" disabled>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="telefone_input">Telefone</label>
+                            <input class="form-control" id="telefone_input" type="text" name="telefone_input" value="<%=cliente.telefone%>" disabled>
+                        </div>
+
+                        <% if(cliente.email != '') { %>
+                            <div class="form-group mb-3">
+                                <label for="email_input">E-mail</label>
+                                <input class="form-control" id="email_input" type="email" name="email_input" value="<%=cliente.email%>" disabled>
+                            </div>
+                        <% } %>
+                        
+                        
+                        
+                        
+                    </div>
+                </div>
+
+
+                <!-- Dados de Endereço -->
+                <div class="card card-reserva">
+                    <div class="card-body">
+                        <h3 class="card-title">Endereço</h3>
+                        <hr>
+                        <div class="form-group">
+                            <label for="cep_input">CEP</label>
+                            <input class="form-control" id="cep_input" type="text" name="cep_input"value="<%=cliente.cep%>" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label for="logradouro_input">Nome da rua</label>
+                            <input class="form-control" id="logradouro_input" type="text" name="logradouro_input"value="<%=cliente.logradouro%>" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label for="numeroDaCasa_input">Número da casa</label>
+                            <input class="form-control" id="numeroDaCasa_input" type="text" name="numeroDaCasa_input"value="<%=cliente.numero_da_casa%>" disabled>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="cidade_input">Cidade</label>
+                            <input class="form-control" id="cidade_input" type="text" name="cidade_input"value="<%=cliente.localidade%>" disabled>
+                        </div>
+
+                        
+
+                        <!-- <div class="alert alert-info mt-3">
+                            <strong>Atenção!</strong>
+                            As datas e o tipo de reboque da sua reserva poderão ser alterados pelo administrador. Caso seja necessário
+                            entre em contato pelos meios de comunição.
+                        </div> -->
+                    </div>
+                </div>
+
+
+                <!-- Periodo -->
+                <div class="card card-reserva" >
+                    <div class="card-body">
+                        <h3 class="card-title">Período</h3>
+                        <hr>
+
+                        
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" >Início</span>
+                            <input class="form-control" id="dataInicio_input" type="text" name="dataInicio_input" value="<%= new Date(reserva.dataInicio).toLocaleDateString('pt-BR').slice(0, 10) %>" disabled>
+                            <span class="input-group-text" id="horaInicio_input" name="horaInicio_input"><%= new Date(reserva.dataInicio).toString().slice(16, 21) + 'hs' %></span>
+                        
+                        </div>
+
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" >Fim</span>
+                            <input class="form-control" id="dataFim_input" type="text" name="dataFim_input" value="<%= new Date(reserva.dataFim).toLocaleDateString('pt-BR').slice(0, 10) %>" disabled>
+                            <!-- <input class="form-control" id="horaFim_input" type="text" name="horaFim_input" value="<%= new Date(reserva.dataFim).toString().slice(16, 21) + 'hs' %>" disabled> -->
+                            <span class="input-group-text" id="horaFim_input" name="horaFim_input"><%= new Date(reserva.dataFim).toString().slice(16, 21) + 'hs' %></span>
+                        
+                        </div>
+
+
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" >Valor Total</span>
+                            <input class="form-control" id="valorTotalDaReserva_input" type="text" name="valorTotalDaReserva_input" value="R$ <%=(reserva.valorTotalDaReserva.toFixed(2)).replace('.',',')%>" disabled>
+                        </div>
+
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" >Valor Diária</span>
+                            <input class="form-control" id="valorTotalDaReserva_input" type="text" name="valorTotalDaReserva_input" value="R$ <%=((reserva.valorTotalDaReserva/reserva.dias).toFixed(2)).replace('.',',')%>" disabled>
+                            <span class="input-group-text" id="horaInicio_input" name="horaInicio_input"><%= (reserva.dias).toString() %> Dias </span>
+
+                        </div>
+
+
+                        <% if(user != '') { %>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" >Desconto aplicado</span>
+                            <input class="form-control" id="desconto_input" type="text" name="desconto_input" value="R$ <%=reserva.desconto.toFixed(2)%>" disabled>
+                        </div>
+                        <% } %>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" >Pagamento</span>
+                            <input class="form-control" id="formaPagamento" type="text" name="formaPagamento" value="<%=reserva.formaPagamento%>" disabled>
+                        </div>
+
+                        <% if(reserva.formaPagamento == 'DINHEIRO') {%>
+                            <div class="alert alert-danger mt-3">
+                                <strong>Atenção!</strong>
+                                Forma de pagamento em <strong>dinheiro</strong> depende da aprovação do administrador.
+                                Contate-o por WhatsApp ou E-mail para aprovar sua reserva. 
+                                <p></p>
+                                <strong>Se não for aprovada em até 1 hora ela será removida.</strong>
+                            </div>
+                        <% } %>
+
+                        <div class="d-flex justify-content-center mt-3  mb-3" >
+                            <button class="btn btn-secondary me-3" type="button" onclick="history.back()">Voltar</button>
+                            <input class="btn btn-primary" type="submit" value="Confirmar">
+                        </div>
+                        
+                    </div>
+                </div>
+
+
+
+                <!-- dados da reserva -->
+                <input type="hidden" id="reboquePlaca" name="reboquePlaca" value="<%=reserva.reboquePlaca%>">
+                <input type="hidden" id="dataInicio" name="dataInicio" value="<%=reserva.dataInicio%>">
+                <input type="hidden" id="dataFim" name="dataFim" value="<%=reserva.dataFim%>">
+                <input type="hidden" id="dias" name="dias" value="<%=reserva.dias%>">
+                <input type="hidden" id="valorDiaria" name="valorDiaria" value="<%=reserva.valorDiaria%>">
+                <input type="hidden" id="valorTotalDaReserva" name="valorTotalDaReserva" value="<%=reserva.valorTotalDaReserva%>">
+                <input type="hidden" id="formaPagamento"  name="formaPagamento" value="<%=reserva.formaPagamento%>">
+
+
+                <!-- dados cliente -->
+                <input type="hidden" id="nome" name="nome" value="<%=cliente.nome%>">
+                <input type="hidden" id="cpf" name="cpf" value="<%=cliente.cpf%>">
+                <input type="hidden" id="telefone" name="telefone" value="<%=cliente.telefone%>">
+                <input type="hidden" id="email" name="email" value="<%=cliente.email%>">
+
+                <!-- dados endereço -->
+                <input type="hidden" id="logradouro" name="logradouro" value="<%=cliente.logradouro%>">
+                <input type="hidden" id="numeroDaCasa" name="numeroDaCasa" value="<%=cliente.numeroDaCasa%>">
+                <input type="hidden" id="localidade" name="localidade" value="<%=cliente.localidade%>">
+                <input type="hidden" id="cep" name="cep" value="<%=cliente.cep%>">
+                <input type="hidden" id="complemento" name="complemento" value="<%=cliente.complemento%>">
+            
+            </div>
+        </form>
+    </div>
+
+
+
+    <%-include('../partials/footer.ejs')%>
+</body>
+</html>

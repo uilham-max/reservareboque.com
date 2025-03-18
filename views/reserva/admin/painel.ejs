@@ -24,10 +24,10 @@
                     </div>
                     <input type="hidden" id="dataJSON" value="<%=dataJSON%>">
 
-                    <%if(useragent.isMobile) {%>
+                    <!-- <%if(useragent.isMobile) {%> -->
 
                     <!-- Listagem das reserva para MOBILE -->
-                    <div class="card card-reserva" style="width: 40rem;">
+                    <!-- <div class="card card-reserva" style="width: 40rem;">
                         <div class="card-body">
                             <div class="table-responsive">
                                 <table class="table table-striped" >
@@ -42,7 +42,7 @@
                                     <tbody>
                                         <% reservas.forEach(function(reserva){%>
                                             <tr>
-                                                <td><%=(reserva.cliente.nome).split(' ')[0]%></td>
+                                                <td><%=(reserva.cliente.nome).split(' ')[0]%><%=(reserva.cliente.nome).split(' ')[1]%></td>
                                                 <td><%=(reserva.reboque.placa).split('-')[0]%></td>
                                                 <td><%= new Date(reserva.dataSaida).toLocaleDateString('pt-BR').slice(0, 5) %> 
                                                     <%= new Date(reserva.dataSaida).toString().slice(16,18)+'h' %></td>
@@ -77,9 +77,9 @@
                                 </div>
                             <% } %>
                         </div>
-                    </div>
+                    </div> -->
 
-                    <%} else {%>
+                    <!-- <%} else {%> -->
 
                     <!-- Listagem das reservas para DESKTOP -->
                     <div class="card card-reserva" style="width: 45rem;">
@@ -91,6 +91,7 @@
                                     <thead>
                                         <tr>
                                             <th>Cliente</th>
+                                            <th>Telefone</th>
                                             <th>Reboque</th>
                                             <th>Diária</th>
                                             <th>Início/Hora</th>
@@ -102,8 +103,9 @@
                                     <tbody>
                                         <% reservas.forEach(function(reserva){%>
                                             <tr>
-                                                <td><%=(reserva.cliente.nome).split(' ')[0]%></td>
-                                                <td><%=(reserva.reboque.placa).split('-')[0]%></td>
+                                                <td><%=(reserva.cliente.nome).split(' ')[0]%> <%=(reserva.cliente.nome).split(' ')[1]%></td>
+                                                <td><%=(reserva.cliente.telefone)%></td>
+                                                <td><%=(reserva.reboque.placa)%></td>
                                                 <td>R$ <%=((reserva.pagamento.valor/reserva.diarias).toFixed(2)).replace('.',',')%></td>
                                                 <td><%= new Date(reserva.dataSaida).toLocaleDateString('pt-BR').slice(0, 5) %> 
                                                     <%= new Date(reserva.dataSaida).toString().slice(16,21) %></td>
@@ -140,7 +142,7 @@
                             <% } %>
                         </div>
                     </div>
-                    <%}%>
+                    <!-- <%}%> -->
                 </div>
             </div>
         </div>

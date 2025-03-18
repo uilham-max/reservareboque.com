@@ -24,30 +24,37 @@
                     </div>
                     <input type="hidden" id="dataJSON" value="<%=dataJSON%>">
 
-                    <!-- <%if(useragent.isMobile) {%> -->
+                    <%if(useragent.isMobile) {%>
 
                     <!-- Listagem das reserva para MOBILE -->
-                    <!-- <div class="card card-reserva" style="width: 40rem;">
+                    <div class="card card-reserva" style="width: 40rem;">
                         <div class="card-body">
                             <div class="table-responsive">
                                 <table class="table table-striped" >
                                     <thead>
                                         <tr>
                                             <th>Cliente</th>
+                                            <th>Telefone</th>
                                             <th>Reboque</th>
-                                            <th>Início</th>
-                                            <th>Fim</th>
+                                            <th>Diária</th>
+                                            <th>Início/Hora</th>
+                                            <th>Fim/Hora</th>
+                                            <th>Total</th>
+                                            <th>Ação</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <% reservas.forEach(function(reserva){%>
                                             <tr>
-                                                <td><%=(reserva.cliente.nome).split(' ')[0]%><%=(reserva.cliente.nome).split(' ')[1]%></td>
-                                                <td><%=(reserva.reboque.placa).split('-')[0]%></td>
+                                                <td><%=(reserva.cliente.nome).split(' ')[0]%> <%=(reserva.cliente.nome).split(' ')[1]%></td>
+                                                <td><%=(reserva.cliente.telefone)%></td>
+                                                <td><%=(reserva.reboque.placa)%></td>
+                                                <td>R$ <%=((reserva.pagamento.valor/reserva.diarias).toFixed(2)).replace('.',',')%></td>
                                                 <td><%= new Date(reserva.dataSaida).toLocaleDateString('pt-BR').slice(0, 5) %> 
-                                                    <%= new Date(reserva.dataSaida).toString().slice(16,18)+'h' %></td>
+                                                    <%= new Date(reserva.dataSaida).toString().slice(16,21) %></td>
                                                 <td><%= new Date(reserva.dataChegada).toLocaleDateString('pt-BR').slice(0, 5) %>
-                                                <%= new Date(reserva.dataChegada).toString().slice(16,18)+'h' %></td>
+                                                    <%= new Date(reserva.dataChegada).toString().slice(16,21) %></td>
+                                                <td>R$ <%=reserva.pagamento.valor%></td>
                                                 <% if(reserva.situacaoReserva == 'APROVADO') { %>
                                                     <td><a href="/reserva/admin/situacao/<%=reserva.id%>/<%='APROVADO'%>" class="btn btn-info">Iniciar</a></td>
                                                 <% } else if (reserva.situacaoReserva == 'ANDAMENTO') { %>
@@ -77,9 +84,9 @@
                                 </div>
                             <% } %>
                         </div>
-                    </div> -->
+                    </div>
 
-                    <!-- <%} else {%> -->
+                    <%} else {%>
 
                     <!-- Listagem das reservas para DESKTOP -->
                     <div class="card card-reserva" style="width: 45rem;">
@@ -142,7 +149,7 @@
                             <% } %>
                         </div>
                     </div>
-                    <!-- <%}%> -->
+                    <%}%>
                 </div>
             </div>
         </div>

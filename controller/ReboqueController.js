@@ -3,6 +3,12 @@ const DAOCliente = require('../database/DAOCliente')
 const DAOReboque = require('../database/DAOReboque')
 const DAOReserva = require('../database/DAOReserva')
 const {adminNome} = require('../helpers/getSessionNome')
+const moment = require('moment-timezone')
+const DAOPagamento = require('../database/DAOPagamento')
+const { estornoPagamento, receiveInCash, criarCobranca } = require('../helpers/API_Pagamentos')
+
+
+
 
 class ReboqueController {
 
@@ -19,7 +25,6 @@ class ReboqueController {
         return res.render('reboque/reservar', {user: "", mensagem: "", reboque: reboque, reservas: reservas})
     
     }
-
     static async postReservar(req, res){
         let {cpf, reboquePlaca, horaInicio, horaFim, dataInicio, dataFim, formaPagamento} = req.body
         cpf = cpf.replace(/\D/g, '')
@@ -62,6 +67,64 @@ class ReboqueController {
         }
     
         return res.render('reboque/confirmar', {user:'', reboque: reboque, cliente: cliente, reserva: reserva, mensagem: '' })
+    
+    }
+    static async postGerarReserva(req, res){
+        
+        let {reservaStr, clienteStr} = req.body
+
+        const reservaObj = JSON.parse(reservaStr);
+        const clienteObj = JSON.parse(clienteStr);
+
+        let dataInicio = moment.tz(new Date(reservaObj.dataInicio), 'America/Sao_Paulo');
+        let dataFim = moment.tz(new Date(reservaObj.dataFim), 'America/Sao_Paulo');
+
+        
+        // Criar um identificador único para o formulário
+        const formIdentifier = `${reservaObj.reboquePlaca}-${reservaObj.dataInicio}-${reservaObj.dataFim}`;
+    
+        // Verificar se o formulário já foi enviado com base no identificador
+        if (req.session.submittedForms && req.session.submittedForms.includes(formIdentifier)) {
+            console.log("O formulário está duplicado. Envio cancelado!");
+            return res.render('erro', { mensagem: 'Erro. Formulário duplicado!' });
+        }
+
+        let data_vencimento = moment.tz( new Date(), 'America/Sao_Paulo' )
+        data_vencimento = data_vencimento.format('YYYY-MM-DD')
+        
+        // Cria cobrança na API de pagamentos
+        const retorno = await criarCobranca(clienteObj.cpf, clienteObj.nome, clienteObj.telefone, clienteObj.email, reservaObj.valorTotalDaReserva, data_vencimento, dataInicio, dataFim, reservaObj.reboquePlaca, reservaObj.formaPagamento)
+        if(!retorno){
+            return res.render('erro', { mensagem: "Erro ao criar cobrança PIX."})
+        }        
+
+        // Adiciona 60 minutos como tempo de expiração da reservas caso não seja paga
+        var reservaDataExpiracao = moment.tz(new Date(), 'America/Sao_Paulo')
+        reservaDataExpiracao.add(60, 'minutes')
+        
+        // PAGAMENTO INSERT
+        const codigoPagamento = await DAOPagamento.insert(retorno.id_cobranca, reservaObj.valorTotalDaReserva, retorno.billingType, reservaDataExpiracao)
+        if(!codigoPagamento){
+            return res.render('erro', { mensagem: "Erro ao criar pagamento."})
+        }
+
+        let situacaoReserva = 'APROVADO'
+        if(reservaObj.formaPagamento == 'DINHEIRO'){
+            situacaoReserva = 'AGUARDANDO_ACEITACAO'
+        }
+
+        // RESERVA INSERT
+        const reserva = await DAOReserva.insert(reservaObj.dataInicio, reservaObj.dataFim, (reservaObj.valorTotalDaReserva/reservaObj.dias), reservaObj.dias, reservaObj.valorTotalDaReserva, clienteObj.cpf, reservaObj.reboquePlaca, codigoPagamento, situacaoReserva)
+        if(!reserva){
+            return res.render('erro', {mensagem: 'Erro ao criar reserva.'})
+        }
+        
+        // Marcar o formulário específico como enviado
+        console.log("Marcando formulário como enviado...");
+        req.session.submittedForms = req.session.submittedForms || [];
+        req.session.submittedForms.push(formIdentifier);
+        
+        return res.redirect('/reserva/admin/painel')
     
     }
 

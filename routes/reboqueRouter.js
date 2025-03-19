@@ -12,6 +12,7 @@ router.post('/editar', autorizacao, ReboqueController.postEditar)
 router.get('/deletar/:placa?', autorizacao, ReboqueController.getDeletar)
 router.put('/ativar/:placa', autorizacao, ReboqueController.APIAtivarReboque)
 router.get('/reservar/:placa', autorizacao, ReboqueController.getReservar)
-router.post('/confirmar', autorizacao, ReboqueController.postReservar)
+router.post('/reservar', autorizacao, ReboqueController.postReservar)
+router.post('/finalizar', autorizacao, ReboqueController.postGerarReserva)
 
 module.exports = router

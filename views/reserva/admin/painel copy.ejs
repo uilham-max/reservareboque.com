@@ -24,16 +24,15 @@
                     </div>
                     <input type="hidden" id="dataJSON" value="<%=dataJSON%>">
 
-                    <!-- Listagem das reservas para DESKTOP -->
-                    <div class="card card-reserva" style="width: 45rem;">
-                        <div class="card-body">
-                            <h5>Reservas dos reboques</h5>
+                    <%if(useragent.isMobile) {%>
 
+                    <!-- Listagem das reserva para MOBILE -->
+                    <div class="card card-reserva" style="width: 40rem;">
+                        <div class="card-body">
                             <div class="table-responsive">
                                 <table class="table table-striped" >
                                     <thead>
                                         <tr>
-                                            <th>Ação</th>
                                             <th>Cliente</th>
                                             <th>Telefone</th>
                                             <th>Reboque</th>
@@ -41,12 +40,21 @@
                                             <th>Início/Hora</th>
                                             <th>Fim/Hora</th>
                                             <th>Total</th>
-                                            <th>Editar</th>
+                                            <th>Ação</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <% reservas.forEach(function(reserva){%>
                                             <tr>
+                                                <td><%=(reserva.cliente.nome).split(' ')[0]%> <%=(reserva.cliente.nome).split(' ')[1]%></td>
+                                                <td><%=(reserva.cliente.telefone)%></td>
+                                                <td><%=(reserva.reboque.placa)%></td>
+                                                <td>R$ <%=((reserva.pagamento.valor/reserva.diarias).toFixed(2)).replace('.',',')%></td>
+                                                <td><%= new Date(reserva.dataSaida).toLocaleDateString('pt-BR').slice(0, 5) %> 
+                                                    <%= new Date(reserva.dataSaida).toString().slice(16,21) %></td>
+                                                <td><%= new Date(reserva.dataChegada).toLocaleDateString('pt-BR').slice(0, 5) %>
+                                                    <%= new Date(reserva.dataChegada).toString().slice(16,21) %></td>
+                                                <td>R$ <%=reserva.pagamento.valor%></td>
                                                 <% if(reserva.situacaoReserva == 'APROVADO') { %>
                                                     <td><a href="/reserva/admin/situacao/<%=reserva.id%>/<%='APROVADO'%>" class="btn btn-info">Iniciar</a></td>
                                                 <% } else if (reserva.situacaoReserva == 'ANDAMENTO') { %>
@@ -62,17 +70,7 @@
                                                 <% } else { %>
                                                     <td><a href="#" class="btn btn-info">PIX</a></td>
                                                 <% }  %>
-                                                <td><%=(reserva.cliente.nome).split(' ')[0]%> <%=(reserva.cliente.nome).split(' ')[1]%></td>
-                                                <td><%=(reserva.cliente.telefone)%></td>
-                                                <td><%=(reserva.reboque.placa)%></td>
-                                                <td>R$ <%=((reserva.pagamento.valor/reserva.diarias).toFixed(2)).replace('.',',')%></td>
-                                                <td><%= new Date(reserva.dataSaida).toLocaleDateString('pt-BR').slice(0, 5) %> 
-                                                    <%= new Date(reserva.dataSaida).toString().slice(16,21) %></td>
-                                                <td><%= new Date(reserva.dataChegada).toLocaleDateString('pt-BR').slice(0, 5) %>
-                                                    <%= new Date(reserva.dataChegada).toString().slice(16,21) %></td>
-                                                <td>R$ <%=reserva.pagamento.valor%></td>
-                                                <td><a href="/reserva/admin/editar/<%=reserva.id%>" class="fas fa-edit" style="color: rgb(0, 140, 255);" 
-                                                    ata-toggle="tooltip" title="Editar reserva" ></a></td>
+                                                
                                             </tr>
                                         <%})%>
                                     </tbody>
@@ -87,7 +85,71 @@
                             <% } %>
                         </div>
                     </div>
-                    
+
+                    <%} else {%>
+
+                    <!-- Listagem das reservas para DESKTOP -->
+                    <div class="card card-reserva" style="width: 45rem;">
+                        <div class="card-body">
+                            <h5>Reservas dos reboques</h5>
+
+                            <div class="table-responsive">
+                                <table class="table table-striped" >
+                                    <thead>
+                                        <tr>
+                                            <th>Cliente</th>
+                                            <th>Telefone</th>
+                                            <th>Reboque</th>
+                                            <th>Diária</th>
+                                            <th>Início/Hora</th>
+                                            <th>Fim/Hora</th>
+                                            <th>Total</th>
+                                            <th>Ação</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <% reservas.forEach(function(reserva){%>
+                                            <tr>
+                                                <td><%=(reserva.cliente.nome).split(' ')[0]%> <%=(reserva.cliente.nome).split(' ')[1]%></td>
+                                                <td><%=(reserva.cliente.telefone)%></td>
+                                                <td><%=(reserva.reboque.placa)%></td>
+                                                <td>R$ <%=((reserva.pagamento.valor/reserva.diarias).toFixed(2)).replace('.',',')%></td>
+                                                <td><%= new Date(reserva.dataSaida).toLocaleDateString('pt-BR').slice(0, 5) %> 
+                                                    <%= new Date(reserva.dataSaida).toString().slice(16,21) %></td>
+                                                <td><%= new Date(reserva.dataChegada).toLocaleDateString('pt-BR').slice(0, 5) %>
+                                                    <%= new Date(reserva.dataChegada).toString().slice(16,21) %></td>
+                                                <td>R$ <%=reserva.pagamento.valor%></td>
+                                                <% if(reserva.situacaoReserva == 'APROVADO') { %>
+                                                    <td><a href="/reserva/admin/situacao/<%=reserva.id%>/<%='APROVADO'%>" class="btn btn-info">Iniciar</a></td>
+                                                <% } else if (reserva.situacaoReserva == 'ANDAMENTO') { %>
+                                                    <td><a href="/reserva/admin/situacao/<%=reserva.id%>/<%='ANDAMENTO'%>" class="btn btn-danger">Encerrar</a></td>
+                                                <% } else if(reserva.situacaoReserva == 'AGUARDANDO_ACEITACAO'){ %>
+                                                    <td>
+                                                        <form action="/reserva/admin/pagamento/dinheiro" method="POST">
+                                                            <input type="hidden" id="codigoPagamento" name="codigoPagamento" value="<%=reserva.pagamento.codigoPagamento%>">
+                                                            <input type="hidden" id="valor" name="valor" value="<%=reserva.pagamento.valor%>">
+                                                            <input type="submit" class="btn btn-success" value="Aprovar">
+                                                        </form>
+                                                    </td>
+                                                <% } else { %>
+                                                    <td><a href="#" class="btn btn-info">PIX</a></td>
+                                                <% }  %>
+                                                
+                                            </tr>
+                                        <%})%>
+                                    </tbody>
+                
+                                </table>
+                            </div>
+                            
+                            <% if(mensagem != '') { %>
+                                <div class="alert alert-danger">
+                                    <strong><%= mensagem %></strong> 
+                                </div>
+                            <% } %>
+                        </div>
+                    </div>
+                    <%}%>
                 </div>
             </div>
         </div>

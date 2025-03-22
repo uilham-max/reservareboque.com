@@ -29,8 +29,6 @@ class DAOPagamento {
             console.error(erro.toString());
         }
     }
-
-
     // static async removePeloCodigoPagamento(codigoPagamento){
     //     try {
     //         let removido = await Pagamento.destroy({where: {codigoPagamento: codigoPagamento}})
@@ -43,8 +41,6 @@ class DAOPagamento {
     //         console.error(erro.toString());
     //     }
     // }
-
-
     static async listaPagamentosComPrazoExpirado(){
         try {
             var horas = moment.tz(new Date(), 'America/Sao_Paulo')
@@ -63,8 +59,6 @@ class DAOPagamento {
             return undefined
         }
     }
-
-
     static async verificaPagamento(codigoPagamento){
         try{
             let resposta = await Pagamento.findOne({where: {codigoPagamento: codigoPagamento}})
@@ -74,8 +68,6 @@ class DAOPagamento {
             return undefined
         }
     }
-
-
     static async atualizarPagamentoParaAprovado(codigoPagamento){
         try{
             const [numLinhasAtualizadas] = await Pagamento.update(
@@ -96,8 +88,6 @@ class DAOPagamento {
             return false;
         }
     }
-    
-
     // Recebe o valor da reserva e um código do sistema de pagamento
     static async insert(codigoPagamento, valorTotalDaReserva, billingType, dataExpiracao){
         try{
@@ -110,7 +100,26 @@ class DAOPagamento {
             return undefined
         }
     }
-
+    static async updateValor(codigoPagamento, valor){
+        try{ 
+            const [numLinhasAtualizadas] = await Pagamento.update(
+                {valor: valor},
+                {where: {codigoPagamento: codigoPagamento}}
+            );
+            // console.log('Atualizando status do pagamento para aprovado...');
+            if (numLinhasAtualizadas > 0) {
+                console.log(codigoPagamento, '--> Valor do pagamento atualizado.');
+                let pagamento = await Pagamento.findByPk(codigoPagamento)
+                return pagamento;
+            } else {
+                console.log('Nenhuma linha foi atualizada. O pagamento não foi encontrado.');
+                return undefined;
+            }
+        } catch(erro){
+            console.error('Erro ao atualizar o valor do pagamento:', erro);
+            return false;
+        }
+    }
     // static async delete(id){
     //     try{
     //         await Pagamento.destroy({where:{id: id}})
@@ -121,7 +130,6 @@ class DAOPagamento {
     //         return false
     //     }
     // }
-
     static async getAllPagamentosFalse(){
         try{
             const pagamentos = await Pagamento.findAll({where:{aprovado: false}})

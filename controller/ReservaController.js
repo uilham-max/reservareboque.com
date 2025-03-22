@@ -498,6 +498,44 @@ class ReservaController {
         res.render('reserva/admin/painel', {user: adminNome(req, res), reservas: reservas, mensagem: "", dataJSON: await Grafico.reservas() })
     
     }
+    static async getReservaAdminEditar(req, res){
+        let reserva = await DAOReserva.getOne(req.params.reservaId)
+        try{
+            DAOReserva.getAtivasDesteReboque(reserva.reboque.placa).then(reservas => {
+                DAOReboque.getOne(reserva.reboque.placa).then(reboque => {
+                    if(reboque){
+                        return res.render('reserva/admin/editar', {user: adminNome(req, res), mensagem: "", reservas: reservas, reserva: reserva})
+                    } else {
+                        return res.render('erro', {mensagem: "Erro ao mostrar reboque."})
+                    }
+                })
+            })
+        } catch(err){
+            console.error(err)
+            return res.render('erro', {mensagem: "Erro ao mostrar reboque."})
+        }
+    }
+    static async postReservaAdminEditar(req, res){
+        let {idPagamento, idReserva, dataInicioNova, dataFimNova, horaInicio, horaFim, valor, reboquePlaca} = req.body
+        console.log(idPagamento, idReserva, dataInicioNova, dataFimNova, horaInicio, horaFim, valor, reboquePlaca);
+
+        dataInicioNova = new Date(dataInicioNova)
+        dataFimNova = new Date(dataFimNova)
+        dataInicioNova.setHours(horaInicio)
+        dataFimNova.setHours(horaFim)
+
+        let resultadoReserva = await DAOReserva.adminAtualizaPeriodo(idReserva, dataInicioNova, dataFimNova, reboquePlaca)
+        if(!resultadoReserva){
+            return res.render('erro', {mensagem: "Erro ao atualizar período da reserva."})
+        }
+
+        let resultadoPagamento = await DAOPagamento.updateValor(idPagamento, Number(valor))
+        if(!resultadoPagamento){
+            return res.render('erro', {mensagem: "Erro ao atualizar o valor do pagamento."})
+        }
+        return res.redirect('/reserva/admin/painel')
+        
+    }
 
 
 

@@ -83,6 +83,26 @@ class DAOReserva {
             return false
         }
     }
+    static async adminAtualizaPeriodo(idReserva, dataInicio, dataFim, reboquePlaca){
+        try{
+            const [numLinhasAtualizadas] = await Reserva.update(
+                {dataSaida: dataInicio, dataChegada: dataFim},
+                {where: {id: idReserva}},
+            )
+            // console.log('Atualizando status do pagamento para aprovado...');
+            if (numLinhasAtualizadas > 0) {
+                console.log(idReserva, '--> Período atualizado');
+                let reserva = await Reserva.findByPk(idReserva)
+                return reserva;
+            } else {
+                console.log('Nenhuma linha foi atualizada. Reserva não encontrada.');
+                return undefined;
+            }
+        } catch(erro) {
+            console.log("Erro ao alterar data da reserva", erro);
+            return false
+        }
+    }
 
     static async insert(dataInicio, dataFim, valorDiaria, dias, valorTotal, clienteCpf, reboquePlaca, codigoPagamento, situacaoReserva) {
         try {

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%-include('../../partials/header.ejs')%>
+    <script src="/js/validaInputDataPeriodoAdmin.js" ></script>
+</head>
+<body  >
+    
+    <%-include('../../partials/navbaradmin.ejs')%>
+
+    <div class="conteudo" >
+
+            <!-- Menssagem do topo da página em jumbotron -->
+            <div class="jumbotron jumbotron-fluid">
+
+            </div>
+
+
+        <div class="container" >
+            <!-- <h3>Reboque escolhido</h3> -->
+            <div class="lista-reboques">
+                
+
+                <div class="card card-reserva" style="width: 25rem;">
+                    <div class="card-body">
+                        <form class="needs-validation" novalidate action="/reserva/admin/editar" method="POST">
+                            <h5>Editar Reserva</h5>
+                            <hr>
+
+                            <div class="input-group mb-3 mt-5">
+                                <span class="input-group-text" >Data Retirada</span>
+                                <input class="form-control" id="dataInicio" type="date" name="dataInicioNova" required>
+                                <div class="valid-feedback">
+                                    <!-- Looks good! -->
+                                </div>
+                                <div class="invalid-feedback">
+                                    Verifique a data.
+                                </div>
+                            
+                            </div>
+
+                            <div class="input-group">
+                                <span class="input-group-text">Hora Retirada</span>
+                                <select class="form-select" id="horaInicio" name="horaInicio" required>
+                                  <!-- Gera opções de 00 a 23 -->
+                                  <% for(let i = 8; i < 20; i++) { %>
+                                    <option value="<%= i %>"><%= i.toString().padStart(2, '0')+':00' %></option>
+                                  <% } %>
+                                </select>
+                                <div class="valid-feedback">
+                                    <!-- Looks good! -->
+                                </div>
+                                <div class="invalid-feedback">
+                                    <span id="invalidHoraInicio" ></span>
+                                </div>
+                            </div><br>
+
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" >Data Entrega</span>
+                                <input class="form-control" id="dataFim" type="date" name="dataFimNova" required>
+                                <div class="valid-feedback">
+                                    <!-- Looks good! -->
+                                </div>
+                                <div class="invalid-feedback">
+                                    Verifique a data.
+                                </div>
+                            </div>
+
+                            <div class="input-group mb-3">
+                                <span class="input-group-text">Hora Entrega</span>
+                                <select class="form-select" id="horaFim" name="horaFim" required>
+                                  <!-- Gera opções de 00 a 23 -->
+                                  <% for(let i = 8; i < 20; i++) { %>
+                                    <option value="<%= i %>"><%= i.toString().padStart(2, '0')+':00' %></option>
+                                  <% } %>
+                                </select>
+                                <div class="valid-feedback">
+                                    <!-- Looks good! -->
+                                </div>
+                                <div class="invalid-feedback">
+                                    <span id="invalidHoraFim" ></span>
+                                </div>
+                            </div><br>
+
+                            <div class="input-group mb-3">
+                                <span class="input-group-text">Valor R$</span>
+                                <input class="form-control" type="number" id="valor" name="valor" value="<%=reserva.pagamento.valor%>" >
+                                <div class="valid-feedback">
+                                    <!-- Looks good! -->
+                                </div>
+                                <div class="invalid-feedback">
+                                    <span id="invalidHoraFim" ></span>
+                                </div>
+                            </div><br>
+
+                            <div class="d-md-flex justify-content-center" style="margin: 0.5rem;">
+                                <button style="margin: 0.3rem;" class="btn btn-secondary" type="button" onclick="history.back()">Voltar</button>
+                                <input style="margin: 0.3rem;" class="btn btn-primary" id="botao" type="submit" value="Finalizar">
+
+                            </div>
+                            
+                            <% if(mensagem){%>
+                                <div class="alert alert-danger">
+                                    <strong>Atenção!</strong>
+                                    <%= mensagem %>
+                                </div>
+                            <% } %>
+
+                            <input type="hidden" name="idReserva" value="<%=reserva.id%>" >
+                            <input type="hidden" name="reboquePlaca" id="reboquePlaca" value="<%=reserva.reboque.placa%>">
+                            <input type="hidden" name="idPagamento" id="idPagamento" value="<%=reserva.pagamento.codigoPagamento%>">
+
+
+                            <!-- Variáveis usadas em "/js/validaInputDataPeriodoAdmin.js" -->
+                             <input type="hidden" id="dataInicioAntiga" value="<%=reserva.dataInicio%>">
+                             <input type="hidden" id="dataFimAntiga" value="<%=reserva.dataFim%>">
+                             <input type="hidden" id="horaInicioAntiga" value="<%=reserva.horaInicio%>">
+                             <input type="hidden" id="horaFimAntiga" value="<%=reserva.horaFim%>">
+
+
+                        </form>
+                    </div>
+                </div>
+
+                <divc class="card card-reserva" style="width: 25rem;">
+                    <div class="card card-body">
+                        <% if(reservas != '') {%>
+                            <div class="alert alert-info">
+                                <h5 class="card-text">Reservas deste reboque</h5>
+                                <% reservas.forEach(function(reserva) { %>
+
+                                    <!-- Ignora a reserva a ser alterada -->
+                                        <p>
+                                            <h6><b>Período: </b> de <span id="dataSaida"><%= new Date(reserva.dataSaida).toLocaleDateString('pt-BR') %>
+                                            </span> à <span id="dataChegada"><%= new Date(reserva.dataChegada).toLocaleDateString('pt-BR') %></span></h6>
+                                        </p>
+    
+                                <%})%>
+                            </div>
+                        <% } %>  
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <%-include('../../partials/footer.ejs')%>
+</body>
+</html>

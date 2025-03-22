@@ -28,7 +28,10 @@ router.get('/cliente/concluido', clienteAutorizacao, ReservaController.getClient
 router.get('/admin/historico', autorizacao, ReservaController.getHistoricoReserva)
 router.post('/admin/historico', autorizacao, ReservaController.postHistoricoReservas)
 router.get('/admin/receita', autorizacao, ReservaController.getReceitaPeriodo)
-router.post('/admin/receira', autorizacao, ReservaController.postReceitaPeriodo)
+router.post('/admin/receita', autorizacao, ReservaController.postReceitaPeriodo)
+
+router.get('/admin/editar/:reservaId', autorizacao, ReservaController.getReservaAdminEditar)
+router.post('/admin/editar', autorizacao, ReservaController.postReservaAdminEditar)
 
 
 module.exports = router

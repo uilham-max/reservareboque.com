@@ -5,12 +5,25 @@ document.addEventListener('DOMContentLoaded', () => {
     var inputHoraInicio = document.getElementById('horaInicio')
     var inputHoraFim = document.getElementById('horaFim')
 
+    var dataInicioAntiga = document.getElementById('dataInicioAntiga')
+    var dataFimAntiga = document.getElementById('dataFimAntiga')
+
     invalidHoraInicio = document.getElementById('invalidHoraInicio');
 
 
-    var data = new Date()
+    function formatarData(date) {
+        if (!(date instanceof Date) || isNaN(date)) {
+            throw new Error("Parâmetro inválido: deve ser um objeto Date válido.");
+        }
 
-    //   console.log(data);
+        const ano = date.getFullYear();
+        const mes = String(date.getMonth() + 1).padStart(2, '0'); // getMonth() retorna de 0 a 11
+        const dia = String(date.getDate()).padStart(2, '0');
+
+        return `${ano}-${mes}-${dia}`;
+    }
+
+    var data = new Date()
 
     function obterUltimoDiaMesAtual() {
         let dataAtual = new Date();
@@ -39,10 +52,10 @@ document.addEventListener('DOMContentLoaded', () => {
         return inicio.toISOString().slice(0, 10)
     }
 
-    inputDataInicio.value = dataAtual
-    inputDataFim.value = adicionaUmDia(inputDataInicio.value)
+    inputDataInicio.value = formatarData(new Date(dataInicioAntiga.value))
+    inputDataFim.value = formatarData(new Date(dataFimAntiga.value))
     inputDataInicio.setAttribute('min', dataAtual);
-    inputDataFim.setAttribute('min', adicionaUmDia(inputDataInicio.value)); // TESTENDO AQUI
+    inputDataFim.setAttribute('min', dataAtual); // TESTENDO AQUI
     inputHoraInicio.value = hora
     inputHoraFim.value = inputHoraInicio.value
 

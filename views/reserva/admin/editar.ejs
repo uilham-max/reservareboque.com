@@ -112,10 +112,9 @@
 
 
                             <!-- Variáveis usadas em "/js/validaInputDataPeriodoAdmin.js" -->
-                             <input type="hidden" id="dataInicioAntiga" value="<%=reserva.dataInicio%>">
-                             <input type="hidden" id="dataFimAntiga" value="<%=reserva.dataFim%>">
-                             <input type="hidden" id="horaInicioAntiga" value="<%=reserva.horaInicio%>">
-                             <input type="hidden" id="horaFimAntiga" value="<%=reserva.horaFim%>">
+                            <input type="hidden" id="dataInicioAntiga" value="<%=reserva.dataSaida%>">
+                            <input type="hidden" id="dataFimAntiga" value="<%=reserva.dataChegada%>">
+                             
 
 
                         </form>
@@ -144,7 +143,6 @@
             </div>
         </div>
     </div>
-
     <%-include('../../partials/footer.ejs')%>
 </body>
 </html>

@@ -516,15 +516,17 @@ class ReservaController {
         }
     }
     static async postReservaAdminEditar(req, res){
-        let {idPagamento, idReserva, dataInicioNova, dataFimNova, horaInicio, horaFim, valor, reboquePlaca} = req.body
-        console.log(idPagamento, idReserva, dataInicioNova, dataFimNova, horaInicio, horaFim, valor, reboquePlaca);
+        let {idPagamento, idReserva, dataInicio, dataFim, horaInicio, horaFim, valor, reboquePlaca} = req.body
 
-        dataInicioNova = new Date(dataInicioNova)
-        dataFimNova = new Date(dataFimNova)
-        dataInicioNova.setHours(horaInicio)
-        dataFimNova.setHours(horaFim)
+        // Converte as datas para o fuso correto desde o início
+        dataInicio = moment.tz(dataInicio, 'America/Sao_Paulo');
+        dataFim = moment.tz(dataFim, 'America/Sao_Paulo');
 
-        let resultadoReserva = await DAOReserva.adminAtualizaPeriodo(idReserva, dataInicioNova, dataFimNova, reboquePlaca)
+        // Define a hora corretamente sem mudar o fuso horário
+        dataInicio = dataInicio.hour(horaInicio).minute(0).second(0);
+        dataFim = dataFim.hour(horaFim).minute(0).second(0);
+
+        let resultadoReserva = await DAOReserva.adminAtualizaPeriodo(idReserva, dataInicio, dataFim, reboquePlaca)
         if(!resultadoReserva){
             return res.render('erro', {mensagem: "Erro ao atualizar período da reserva."})
         }

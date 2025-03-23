@@ -4,12 +4,14 @@ document.addEventListener('DOMContentLoaded', () => {
     var inputDataFim = document.getElementById('dataFim')
     var inputHoraInicio = document.getElementById('horaInicio')
     var inputHoraFim = document.getElementById('horaFim')
-
     var dataInicioAntiga = document.getElementById('dataInicioAntiga')
     var dataFimAntiga = document.getElementById('dataFimAntiga')
-
+    var valor = document.getElementById('valor')
     invalidHoraInicio = document.getElementById('invalidHoraInicio');
 
+    function obterHora(date) {
+        return String(date.getHours()).padStart(2, '0');
+    }
 
     function formatarData(date) {
         if (!(date instanceof Date) || isNaN(date)) {
@@ -23,8 +25,6 @@ document.addEventListener('DOMContentLoaded', () => {
         return `${ano}-${mes}-${dia}`;
     }
 
-    var data = new Date()
-
     function obterUltimoDiaMesAtual() {
         let dataAtual = new Date();
         let ano = dataAtual.getFullYear();
@@ -34,6 +34,13 @@ document.addEventListener('DOMContentLoaded', () => {
         return ultimoDiaMesAtual.getDate();
     }
 
+    function adicionaUmDia(p1) {
+        inicio = new Date(p1)
+        inicio.setDate(inicio.getDate() + 1)
+        return inicio.toISOString().slice(0, 10)
+    }
+
+    var data = new Date()
     let ultimoDia = obterUltimoDiaMesAtual();
 
     var ano = data.getFullYear()
@@ -44,32 +51,24 @@ document.addEventListener('DOMContentLoaded', () => {
     mes = mes < 10 ? '0' + mes : mes
     dia = dia < 10 ? '0' + dia : dia
 
-    var dataAtual = (`${ano}-${mes}-${dia}`)
-
-    function adicionaUmDia(p1) {
-        inicio = new Date(p1)
-        inicio.setDate(inicio.getDate() + 1)
-        return inicio.toISOString().slice(0, 10)
-    }
-
+    var dataAtual = formatarData(data)
     inputDataInicio.value = formatarData(new Date(dataInicioAntiga.value))
     inputDataFim.value = formatarData(new Date(dataFimAntiga.value))
     inputDataInicio.setAttribute('min', dataAtual);
-    inputDataFim.setAttribute('min', dataAtual); // TESTENDO AQUI
-    inputHoraInicio.value = hora
-    inputHoraFim.value = inputHoraInicio.value
+    inputDataFim.setAttribute('min', dataAtual);
+    inputHoraInicio.value = obterHora(new Date(dataInicioAntiga.value))
+    inputHoraFim.value = obterHora(new Date(dataFimAntiga.value))
 
     // Hora de entrega recebe a hora de inicio
     inputHoraInicio.addEventListener('change', () => {
         inputHoraFim.value = inputHoraInicio.value
     })
 
-
     // DATA INICIO CHANGE
     inputDataInicio.addEventListener('change', () => {
 
         if (inputDataInicio.value != dataAtual) {
-            inputHoraInicio.value = 8
+            // inputHoraInicio.value = 8
             inputHoraInicio.classList.remove('is-invalid')
             inputHoraInicio.setCustomValidity('')
             invalidHoraInicio.textContent = '';
@@ -86,7 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // DATA FIM SEMPRE SERÁ O DIA SEGUINTE
-        inputDataFim.setAttribute('min', adicionaUmDia(inputDataInicio.value));
+        // inputDataFim.setAttribute('min', adicionaUmDia(inputDataInicio.value));
     })
 
 
@@ -105,7 +104,6 @@ document.addEventListener('DOMContentLoaded', () => {
     })
 
     inputHoraInicio.addEventListener('change', () => {
-        // Verifica se tem onze dígitos
         if (inputDataInicio.value == dataAtual && inputHoraInicio.value < hora) {
             inputHoraInicio.classList.add('is-invalid')
             inputHoraInicio.setCustomValidity('mensagem')

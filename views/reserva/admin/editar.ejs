@@ -29,7 +29,7 @@
 
                             <div class="input-group mb-3 mt-5">
                                 <span class="input-group-text" >Data Retirada</span>
-                                <input class="form-control" id="dataInicio" type="date" name="dataInicioNova" required>
+                                <input class="form-control" id="dataInicio" type="date" name="dataInicio" required>
                                 <div class="valid-feedback">
                                     <!-- Looks good! -->
                                 </div>
@@ -57,7 +57,7 @@
 
                             <div class="input-group mb-3">
                                 <span class="input-group-text" >Data Entrega</span>
-                                <input class="form-control" id="dataFim" type="date" name="dataFimNova" required>
+                                <input class="form-control" id="dataFim" type="date" name="dataFim" required>
                                 <div class="valid-feedback">
                                     <!-- Looks good! -->
                                 </div>
@@ -84,12 +84,13 @@
 
                             <div class="input-group mb-3">
                                 <span class="input-group-text">Valor R$</span>
-                                <input class="form-control" type="number" id="valor" name="valor" value="<%=reserva.pagamento.valor%>" >
+                                <input class="form-control" type="text" id="valor" name="valor" value="<%=reserva.pagamento.valor%>" >
                                 <div class="valid-feedback">
                                     <!-- Looks good! -->
                                 </div>
                                 <div class="invalid-feedback">
-                                    <span id="invalidHoraFim" ></span>
+                                    <span id="invalidValor" ></span>
+                                    <!-- Erro valor -->
                                 </div>
                             </div><br>
 
@@ -114,8 +115,6 @@
                             <!-- Variáveis usadas em "/js/validaInputDataPeriodoAdmin.js" -->
                             <input type="hidden" id="dataInicioAntiga" value="<%=reserva.dataSaida%>">
                             <input type="hidden" id="dataFimAntiga" value="<%=reserva.dataChegada%>">
-                             
-
 
                         </form>
                     </div>

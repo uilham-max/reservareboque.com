@@ -98,7 +98,7 @@
     </div>
 
 
-
+<!-- 
     <script>
         const ctx = document.getElementById('myChart');
         
@@ -206,6 +206,149 @@
             },
         });
     </script>
+     -->
+
+
+
+     <script>
+        const ctx = document.getElementById('myChart');
+        
+        let dataJSON = document.getElementById('dataJSON');
+        let dataArray = JSON.parse(dataJSON.value);
+    
+        // Obtém o nome do mês atual e o último dia do mês
+        const monthNames = [
+            'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 
+            'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
+        ];
+        const now = new Date();
+        const currentMonth = monthNames[now.getMonth()]; // Nome do mês atual
+        const lastDayOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate(); // Último dia do mês
+    
+        // Paleta de cores para os reboques
+        const colors = [
+            'rgba(255, 99, 132, 0.2)',  // Vermelho
+            'rgba(54, 162, 235, 0.2)',  // Azul
+            'rgba(255, 206, 86, 0.2)',  // Amarelo
+            'rgba(75, 192, 192, 0.2)',  // Verde água
+            'rgba(153, 102, 255, 0.2)', // Roxo
+            'rgba(255, 159, 64, 0.2)'   // Laranja
+        ];
+    
+        const borderColors = [
+            'rgba(255, 99, 132, 1)',
+            'rgba(54, 162, 235, 1)',
+            'rgba(255, 206, 86, 1)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(153, 102, 255, 1)',
+            'rgba(255, 159, 64, 1)'
+        ];
+    
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                datasets: dataArray.datasets.map((dataset, index) => ({
+                    ...dataset,
+                    backgroundColor: colors[index % colors.length],
+                    borderColor: borderColors[index % borderColors.length],
+                    borderWidth: 2,
+                    fill: true,
+                    tension: 0.3,
+                })),
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top',
+                        labels: {
+                            color: '#333',
+                            font: {
+                                size: 14,
+                            },
+                        },
+                    },
+                    title: {
+                        display: true,
+                        text: 'Reservas Diárias por Reboque',
+                        color: '#333',
+                        font: {
+                            size: 20,
+                            weight: 'bold',
+                        },
+                        padding: {
+                            top: 20,
+                            bottom: 30,
+                        },
+                    },
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false,
+                        callbacks: {
+                            label: function (context) {
+                                let label = context.dataset.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                label += parseFloat(context.raw.y).toFixed(2);
+                                return label;
+                            },
+                        },
+                    },
+                },
+                interaction: {
+                    mode: 'index',
+                    intersect: false,
+                },
+                scales: {
+                    x: {
+                        type: 'linear',
+                        min: 1, // Começa no dia 1
+                        max: lastDayOfMonth, // Termina no último dia do mês
+                        title: {
+                            display: true,
+                            text: 'Mês de '+currentMonth, // Exibe o nome do mês atual
+                            color: '#333',
+                            font: {
+                                size: 16,
+                            },
+                        },
+                        ticks: {
+                            color: '#555',
+                            stepSize: 1, // Garante que os ticks sejam por dia
+                        },
+                        grid: {
+                            color: 'rgba(200, 200, 200, 0.3)',
+                        },
+                    },
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Valor R$',
+                            color: '#333',
+                            font: {
+                                size: 16,
+                            },
+                        },
+                        ticks: {
+                            color: '#555',
+                        },
+                        grid: {
+                            color: 'rgba(200, 200, 200, 0.3)',
+                        },
+                    },
+                },
+                animation: {
+                    duration: 3000,
+                    easing: 'easeOutBounce',
+                },
+            },
+        });
+    </script>
+    
     
     <%-include('../../partials/footer.ejs')%>
 

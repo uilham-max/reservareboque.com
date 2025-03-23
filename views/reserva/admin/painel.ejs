@@ -38,8 +38,10 @@
                                             <th>Telefone</th>
                                             <th>Reboque</th>
                                             <th>Diária</th>
-                                            <th>Início/Hora</th>
-                                            <th>Fim/Hora</th>
+                                            <th>Início</th>
+                                            <th>Hora</th>
+                                            <th>Fim</th>
+                                            <th>Hora</th>
                                             <th>Total</th>
                                             <th>Editar</th>
                                         </tr>
@@ -65,12 +67,12 @@
                                                 <td><%=(reserva.cliente.nome).split(' ')[0]%> <%=(reserva.cliente.nome).split(' ')[1]%></td>
                                                 <td><%=(reserva.cliente.telefone)%></td>
                                                 <td><%=(reserva.reboque.placa)%></td>
-                                                <td>R$ <%=((reserva.pagamento.valor/reserva.diarias).toFixed(2)).replace('.',',')%></td>
-                                                <td><%= new Date(reserva.dataSaida).toLocaleDateString('pt-BR').slice(0, 5) %> 
-                                                    <%= new Date(reserva.dataSaida).toString().slice(16,21) %></td>
-                                                <td><%= new Date(reserva.dataChegada).toLocaleDateString('pt-BR').slice(0, 5) %>
-                                                    <%= new Date(reserva.dataChegada).toString().slice(16,21) %></td>
-                                                <td>R$ <%=reserva.pagamento.valor%></td>
+                                                <td><%=((reserva.pagamento.valor/reserva.diarias).toFixed(2)).replace('.',',')%></td>
+                                                <td><%= new Date(reserva.dataSaida).toLocaleDateString('pt-BR').slice(0, 5) %></td>
+                                                <td><%= new Date(reserva.dataSaida).toString().slice(16,18) %>h</td>
+                                                <td><%= new Date(reserva.dataChegada).toLocaleDateString('pt-BR').slice(0, 5) %></td>
+                                                <td><%= new Date(reserva.dataChegada).toString().slice(16,18) %>h</td>
+                                                <td><%=reserva.pagamento.valor%></td>
                                                 <td><a href="/reserva/admin/editar/<%=reserva.id%>" class="fas fa-edit" style="color: rgb(0, 140, 255);" 
                                                     ata-toggle="tooltip" title="Editar reserva" ></a></td>
                                             </tr>

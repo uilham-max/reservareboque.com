@@ -8,6 +8,8 @@ const Login = require('../bill_modules/Login')
 var {clienteNome, adminNome} = require('../helpers/getSessionNome')
 const { estornoPagamento, receiveInCash, criarCobranca } = require('../helpers/API_Pagamentos')
 const moment = require('moment-timezone')
+const { deleteCobranca } = require('../helpers/API_Pagamentos');
+
 
 
 class ReservaController {
@@ -537,6 +539,17 @@ class ReservaController {
         }
         return res.redirect('/reserva/admin/painel')
         
+    }
+    static async getReservaAdminCancelar(req, res){
+        let codigoPagamento = req.params.codigoPagamento
+        try{
+            await DAOPagamento.atualizaSituacaoParaCancelado(codigoPagamento)
+            await DAOReserva.atualizaSituacaoParaCancelada(codigoPagamento)
+            await deleteCobranca(codigoPagamento)
+        } catch(err){
+            console.error(err)
+        }
+        return res.redirect('/reserva/admin/painel')
     }
 
 

@@ -8,5 +8,6 @@
 
 * Criar recurso para tirar dúvidas.
 * Criar recurso para informar como funciona uma reserva/locação.
+* Status de pagamento: AGUARDANDO_PAGAMENTO, APROVADO, CANCELADO,
 
 

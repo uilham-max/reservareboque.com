@@ -37,12 +37,12 @@
                                             <th>Cliente</th>
                                             <th>Telefone</th>
                                             <th>Reboque</th>
+                                            <th>Total</th>
                                             <th>Diária</th>
                                             <th>Início</th>
                                             <th>Hora</th>
                                             <th>Fim</th>
                                             <th>Hora</th>
-                                            <th>Total</th>
                                             <th>Editar</th>
                                         </tr>
                                     </thead>
@@ -67,12 +67,12 @@
                                                 <td><%=(reserva.cliente.nome).split(' ')[0]%> <%=(reserva.cliente.nome).split(' ')[1]%></td>
                                                 <td><%=(reserva.cliente.telefone)%></td>
                                                 <td><%=(reserva.reboque.placa)%></td>
+                                                <td><%=(reserva.pagamento.valor)%></td>
                                                 <td><%=((reserva.pagamento.valor/reserva.diarias).toFixed(2)).replace('.',',')%></td>
                                                 <td><%= new Date(reserva.dataSaida).toLocaleDateString('pt-BR').slice(0, 5) %></td>
                                                 <td><%= new Date(reserva.dataSaida).toString().slice(16,18) %>h</td>
                                                 <td><%= new Date(reserva.dataChegada).toLocaleDateString('pt-BR').slice(0, 5) %></td>
                                                 <td><%= new Date(reserva.dataChegada).toString().slice(16,18) %>h</td>
-                                                <td><%=reserva.pagamento.valor%></td>
                                                 <td><a href="/reserva/admin/editar/<%=reserva.id%>" class="fas fa-edit" style="color: rgb(0, 140, 255);" 
                                                     ata-toggle="tooltip" title="Editar reserva" ></a></td>
                                             </tr>
@@ -96,119 +96,6 @@
 
         
     </div>
-
-
-<!-- 
-    <script>
-        const ctx = document.getElementById('myChart');
-        
-        let dataJSON = document.getElementById('dataJSON');
-        let dataArray = JSON.parse(dataJSON.value);
-    
-        new Chart(ctx, {
-            type: 'line', // Gráfico de linha
-            data: {
-                datasets: dataArray.datasets.map((dataset, index) => ({
-                    ...dataset,
-                    backgroundColor: `rgba(${(index * 60) % 255}, ${(index * 120) % 255}, 200, 0.2)`, // Cores suaves
-                    borderColor: `rgba(${(index * 60) % 255}, ${(index * 120) % 255}, 200, 1)`, // Bordas mais vivas
-                    borderWidth: 2,
-                    fill: true,
-                    tension: 0.3,
-                })),
-            },
-            options: {
-                responsive: true, // Torna o gráfico responsivo
-                maintainAspectRatio: false, // Permite que o gráfico se ajuste ao container
-                plugins: {
-                    legend: {
-                        display: true,
-                        position: 'top',
-                        labels: {
-                            color: '#333',
-                            font: {
-                                size: 14,
-                            },
-                        },
-                    },
-                    title: {
-                        display: true,
-                        text: 'Reservas Diárias por Reboque',
-                        color: '#333',
-                        font: {
-                            size: 20,
-                            weight: 'bold',
-                        },
-                        padding: {
-                            top: 20,
-                            bottom: 30,
-                        },
-                    },
-                    tooltip: {
-                        mode: 'index',
-                        intersect: false,
-                        callbacks: {
-                            label: function (context) {
-                                let label = context.dataset.label || '';
-                                if (label) {
-                                    label += ': ';
-                                }
-                                label += parseFloat(context.raw.y).toFixed(2); // Mostra o valor formatado
-                                return label;
-                            },
-                        },
-                    },
-                },
-                interaction: {
-                    mode: 'index',
-                    intersect: false,
-                },
-                scales: {
-                    x: {
-                        type: 'linear',
-                        title: {
-                            display: true,
-                            text: 'Dias do Mês',
-                            color: '#333',
-                            font: {
-                                size: 16,
-                            },
-                        },
-                        ticks: {
-                            color: '#555',
-                        },
-                        grid: {
-                            color: 'rgba(200, 200, 200, 0.3)',
-                        },
-                    },
-                    y: {
-                        beginAtZero: true,
-                        title: {
-                            display: true,
-                            text: 'Valor da Reserva (R$)',
-                            color: '#333',
-                            font: {
-                                size: 16,
-                            },
-                        },
-                        ticks: {
-                            color: '#555',
-                        },
-                        grid: {
-                            color: 'rgba(200, 200, 200, 0.3)',
-                        },
-                    },
-                },
-                animation: {
-                    duration: 1000,
-                    easing: 'easeOutBounce',
-                },
-            },
-        });
-    </script>
-     -->
-
-
 
      <script>
         const ctx = document.getElementById('myChart');

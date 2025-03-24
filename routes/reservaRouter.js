@@ -32,6 +32,8 @@ router.post('/admin/receita', autorizacao, ReservaController.postReceitaPeriodo)
 
 router.get('/admin/editar/:reservaId', autorizacao, ReservaController.getReservaAdminEditar)
 router.post('/admin/editar', autorizacao, ReservaController.postReservaAdminEditar)
+router.get('/admin/cancelar/:codigoPagamento', autorizacao, ReservaController.getReservaAdminCancelar)
+//router.post('/admin/adiar', autorizacao, ReservaController.postReservaAdminAdiar)
 
 
 module.exports = router

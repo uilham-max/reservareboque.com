@@ -4,6 +4,7 @@ const { getAccessToken, getUrlBase } = require('./Env');
 
 const ACCESS_TOKEN = getAccessToken()
 const URL_BASE = getUrlBase()
+const moment = require('moment-timezone')
 
 
 async function estornoPagamento(codigoPagamento, valor){
@@ -230,9 +231,11 @@ async function cadastrarCliente(cpfCnpj, nome, telefone, email){
 async function criarPagamento(customerID, valor, data_vencimento, dataInicio, dataFim, placa, formaPagamento){
     console.log("SPA - Criando pagamento...");
     
-    dataInicio = dataInicio.toString().slice(8,10)+'/'+dataInicio.toString().slice(5,7)+'/'+dataInicio.toString().slice(0,4)
-    dataFim = dataFim.toString().slice(8,10)+'/'+dataFim.toString().slice(5,7)+'/'+dataFim.toString().slice(0,4)
-    
+    dataInicio = moment(dataInicio).format('DD/MM/YYYY')
+    dataFim = moment(dataFim).format('DD/MM/YYYY')
+
+    console.log('Data formatada',dataInicio, dataFim);
+
     if(formaPagamento != 'PIX'){
         formaPagamento = 'UNDEFINED'
     }

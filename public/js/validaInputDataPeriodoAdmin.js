@@ -12,7 +12,6 @@ document.addEventListener('DOMContentLoaded', () => {
     function obterHora(date) {
         return String(date.getHours()).padStart(2, '0');
     }
-
     function formatarData(date) {
         if (!(date instanceof Date) || isNaN(date)) {
             throw new Error("Parâmetro inválido: deve ser um objeto Date válido.");
@@ -25,98 +24,10 @@ document.addEventListener('DOMContentLoaded', () => {
         return `${ano}-${mes}-${dia}`;
     }
 
-    function obterUltimoDiaMesAtual() {
-        let dataAtual = new Date();
-        let ano = dataAtual.getFullYear();
-        let mes = dataAtual.getMonth();
-
-        let ultimoDiaMesAtual = new Date(ano, mes + 1, 0);
-        return ultimoDiaMesAtual.getDate();
-    }
-
-    function adicionaUmDia(p1) {
-        inicio = new Date(p1)
-        inicio.setDate(inicio.getDate() + 1)
-        return inicio.toISOString().slice(0, 10)
-    }
-
-    var data = new Date()
-    let ultimoDia = obterUltimoDiaMesAtual();
-
-    var ano = data.getFullYear()
-    var mes = data.getMonth() + 1
-    var dia = data.getDate()
-    var hora = data.getHours()
-
-    mes = mes < 10 ? '0' + mes : mes
-    dia = dia < 10 ? '0' + dia : dia
-
-    var dataAtual = formatarData(data)
     inputDataInicio.value = formatarData(new Date(dataInicioAntiga.value))
     inputDataFim.value = formatarData(new Date(dataFimAntiga.value))
-    inputDataInicio.setAttribute('min', dataAtual);
-    inputDataFim.setAttribute('min', dataAtual);
     inputHoraInicio.value = obterHora(new Date(dataInicioAntiga.value))
     inputHoraFim.value = obterHora(new Date(dataFimAntiga.value))
-
-    // Hora de entrega recebe a hora de inicio
-    inputHoraInicio.addEventListener('change', () => {
-        inputHoraFim.value = inputHoraInicio.value
-    })
-
-    // DATA INICIO CHANGE
-    inputDataInicio.addEventListener('change', () => {
-
-        if (inputDataInicio.value != dataAtual) {
-            // inputHoraInicio.value = 8
-            inputHoraInicio.classList.remove('is-invalid')
-            inputHoraInicio.setCustomValidity('')
-            invalidHoraInicio.textContent = '';
-        }
-
-        // Não deixa o usuario informar uma data menor que a atual 
-        if (inputDataInicio.value < dataAtual) {
-            inputDataInicio.value = dataAtual
-        }
-
-        // Quando baixar a data de inicio a de fim nao baixa
-        if ((inputDataInicio.value > inputDataFim.value)) {
-            inputDataFim.value = adicionaUmDia(inputDataInicio.value)
-        }
-
-        // DATA FIM SEMPRE SERÁ O DIA SEGUINTE
-        // inputDataFim.setAttribute('min', adicionaUmDia(inputDataInicio.value));
-    })
-
-
-    // tratamento campo data fim
-    inputDataFim.addEventListener('change', () => {
-
-        // não deixa informar uma data menor que a data atual
-        if (inputDataFim.value < dataAtual) {
-            inputDataFim.value = dataAtual
-        }
-
-        // Se o fim for memor que o inicio e maior que a data atual, então baixa a data de inicio
-        if (inputDataFim.value < inputDataInicio.value && inputDataFim.value >= dataAtual) {
-            inputDataInicio.value = inputDataFim.value
-        }
-    })
-
-    inputHoraInicio.addEventListener('change', () => {
-        if (inputDataInicio.value == dataAtual && inputHoraInicio.value < hora) {
-            inputHoraInicio.classList.add('is-invalid')
-            inputHoraInicio.setCustomValidity('mensagem')
-            invalidHoraInicio.textContent = `A partir das ${hora}:00hs`;
-            return;
-        } else {
-            inputHoraInicio.classList.remove('is-invalid')
-            inputHoraInicio.setCustomValidity('')
-            invalidHoraInicio.textContent = '';
-        }
-
-    })
-
 
     'use strict'
 

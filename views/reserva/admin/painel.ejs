@@ -64,14 +64,21 @@
                                                 <% } else { %>
                                                     <td><a href="#" class="btn btn-info">PIX</a></td>
                                                 <% }  %>
-                                                <td><%=(reserva.cliente.nome).split(' ')[0]%> <%=(reserva.cliente.nome).split(' ')[1]%></td>
+                                                <% 
+                                                    let nome = reserva.cliente.nome.trim();
+                                                    let partes = nome.split(/\s+/); // Divide corretamente considerando múltiplos espaços
+                                                    let primeiroNome = partes[0]; // Sempre existe
+                                                    let ultimoNome = partes.length > 1 ? partes[partes.length - 1] : ""; // Evita erro caso haja apenas um nome
+                                                %>
+                                                <td><%= primeiroNome %> <%= ultimoNome %></td>
+
                                                 <td><%=(reserva.cliente.telefone)%></td>
                                                 <td><%=(reserva.reboque.placa)%></td>
-                                                <td><%=(reserva.pagamento.valor)%></td>
+                                                <td><%=((reserva.pagamento.valor).toFixed(2)).replace('.',',')%></td>
                                                 <td><%=((reserva.pagamento.valor/reserva.diarias).toFixed(2)).replace('.',',')%></td>
-                                                <td><%= new Date(reserva.dataSaida).toLocaleDateString('pt-BR').slice(0, 5) %></td>
+                                                <td><%= new Date(reserva.dataSaida).toLocaleDateString('pt-BR').slice(0, 10) %></td>
                                                 <td><%= new Date(reserva.dataSaida).toString().slice(16,18) %>h</td>
-                                                <td><%= new Date(reserva.dataChegada).toLocaleDateString('pt-BR').slice(0, 5) %></td>
+                                                <td><%= new Date(reserva.dataChegada).toLocaleDateString('pt-BR').slice(0, 10) %></td>
                                                 <td><%= new Date(reserva.dataChegada).toString().slice(16,18) %>h</td>
                                                 <td><a href="/reserva/admin/editar/<%=reserva.id%>" class="fas fa-edit" style="color: rgb(0, 140, 255);" 
                                                     ata-toggle="tooltip" title="Editar reserva" ></a></td>
@@ -97,7 +104,7 @@
         
     </div>
 
-     <script>
+    <script>
         const ctx = document.getElementById('myChart');
         
         let dataJSON = document.getElementById('dataJSON');

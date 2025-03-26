@@ -234,8 +234,6 @@ async function criarPagamento(customerID, valor, data_vencimento, dataInicio, da
     dataInicio = moment(dataInicio).format('DD/MM/YYYY')
     dataFim = moment(dataFim).format('DD/MM/YYYY')
 
-    console.log('Data formatada',dataInicio, dataFim);
-
     if(formaPagamento != 'PIX'){
         formaPagamento = 'UNDEFINED'
     }
@@ -295,9 +293,9 @@ async function criarCobranca(cpfCnpj, nome, telefone, email, valor, data_vencime
         "\nTelefone:--------------", telefone, 
         "\nEmail:-----------------", email, 
         "\nValor:-----------------", valor, 
-        "\nData de Vencimento:----", data_vencimento, 
-        "\nInício da Reserva:-----", dataInicio, 
-        "\nFim da Reserva:--------", dataFim, 
+        "\nData de Vencimento:----", moment(data_vencimento).format('DD/MM/YYYY'), 
+        "\nInício da Reserva:-----", moment(dataInicio).format('DD/MM/YYYY'), 
+        "\nFim da Reserva:--------", moment(dataFim).format('DD/MM/YYYY'), 
         "\nPlaca do Reboque:------", placa, 
         "\nForma de Pagamento:----", formaPagamento, 
         "\n"

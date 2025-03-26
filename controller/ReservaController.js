@@ -267,7 +267,7 @@ class ReservaController {
             dataExpiracao.add(60, 'minutes')
     
             // PAGAMENTO INSERT
-            const codigoPagamento = await DAOPagamento.insert(retorno.id_cobranca, retorno.netValue, retorno.billingType, dataExpiracao)
+            const codigoPagamento = await DAOPagamento.insert(retorno.id_cobranca, valorTotalDaReserva, retorno.billingType, dataExpiracao)
             if(!codigoPagamento){
                 return res.render('erro', { mensagem: "Erro ao criar pagamento."})
             }

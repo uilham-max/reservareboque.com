@@ -8,7 +8,13 @@ document.addEventListener('DOMContentLoaded', function() {
     // Função para criar um array com os dia indisponíveis
     const disabledDates = [];
     reservas.forEach(function(reserva) { 
-        const startDate = new Date(new Date(reserva.dataSaida).getFullYear(), new Date(reserva.dataSaida).getMonth(), new Date(reserva.dataSaida).getDate());
+        // Verifica se a data de saída é após as 18h para considerar o dia seguinte como indisponível
+        var startDate;
+        if (new Date(reserva.dataSaida).getHours() > 18) {
+            startDate = new Date(new Date(reserva.dataSaida).getFullYear(), new Date(reserva.dataSaida).getMonth(), new Date(new Date(reserva.dataSaida).setDate(new Date(reserva.dataSaida).getDate()+1)).getDate());
+        } else {
+            startDate = new Date(new Date(reserva.dataSaida).getFullYear(), new Date(reserva.dataSaida).getMonth(), new Date(reserva.dataSaida).getDate());
+        }
         const endDate = new Date(new Date(reserva.dataChegada).getFullYear(), new Date(reserva.dataChegada).getMonth(), new Date(reserva.dataChegada).getDate());
         disabledDates.push({
             from: startDate,
@@ -57,11 +63,18 @@ document.addEventListener('DOMContentLoaded', function() {
             // instance.open(); // Abre o calendário automaticamente
         },
         onDayCreate: function(dObj, dStr, fp, dayElem){
-            // Utilize dayElem.dateObj, which is the corresponding Date
+            let date = dayElem.dateObj || new Date(dayElem.getAttribute("data-date"));
 
-            // dummy logic - Marca com um circulo vermelho os dias indisponíveis
-            if (isDateDisabled(dayElem.dateObj, disabledDates))
-                dayElem.innerHTML += "<span class='event'></span>";
+            if (isDateDisabled(date, disabledDates)) {
+                dayElem.innerHTML += "<span class='event'></span>"; // Círculo vermelho
+                dayElem.classList.add("disabled-day"); // Adiciona classe para estilizar
+
+                // Adiciona um elemento "X" sobre o número
+                let xMark = document.createElement("span");
+                xMark.classList.add("x-mark");
+                xMark.innerHTML = "×"; // Símbolo de X
+                dayElem.appendChild(xMark);
+            }
         },
         onChange: function(selectedDates, dateStr, instance) {
             if (selectedDates.length === 2) {

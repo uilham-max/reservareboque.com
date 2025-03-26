@@ -275,7 +275,27 @@ li {
     flex-wrap: wrap;
 } */
 
-.event {
+/* cor da data desabilitada */
+.disabled-day {
+    color: rgb(0, 0, 0) !important; /* Número vermelho */
+    font-weight: bold;
+    position: relative; /* Para posicionar o X corretamente */
+}
+
+/* X sobre a data desabilitada */
+.x-mark {
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 48px; /* Ajuste o tamanho do X */
+    font-weight:lighter; /* Ajuste a espessura do X */
+    color: red; /* Cor do X */
+    pointer-events: none; /* Impede interação */
+}
+
+/* Adiciona circulo no dia desabilitado */
+/* .event {
     position: absolute;
     width: 25px;
     height: 25px;
@@ -284,10 +304,9 @@ li {
     left: 6px;
     top: 8px;
     content: " ";
-    /* display: block; */
-    background: #ffb5b5;
-    opacity: 15%;
-}
+    background: #ee1616;
+    opacity: 55%;
+} */
 
 .event.busy {
     display: inline-block;

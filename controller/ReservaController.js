@@ -30,7 +30,7 @@ class ReservaController {
     static async postClienteFormularioReserva(req, res){
         let {reboquePlaca, dataInicio, dataFim, horaInicio, horaFim} =  req.body
 
-        // Trata o datepickr com datas default
+        // SE O USUÁRIO NÃO INTERAGIR COM O DATEPICKER, AS DATAS SERÃO DEFINIDAS COMO HOJE E AMANHÃ
         if(dataInicio == '' || dataFim == ''){
             let hoje = new Date()
             let amanha = new Date()

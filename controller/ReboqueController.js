@@ -28,15 +28,26 @@ class ReboqueController {
     static async postReservar(req, res){
         let {cpf, reboquePlaca, horaInicio, horaFim, dataInicio, dataFim, formaPagamento} = req.body
         cpf = cpf.replace(/\D/g, '')
-        
-        if(new Date().getDay() == dataInicio && horaInicio < new Date().getHours()){
-            return res.render('erro', {mensagem: "A hora de início não pode ser menor que a hora atual."})
+
+        // SE O USUÁRIO NÃO INTERAGIR COM O DATEPICKER, AS DATAS SERÃO DEFINIDAS COMO HOJE E AMANHÃ
+        if(dataInicio == '' || dataFim == ''){
+            let hoje = new Date()
+            let amanha = new Date()
+            amanha.setDate(hoje.getDate() +1)
+            dataInicio = hoje
+            dataFim = amanha
         }
+
+        dataInicio = moment.tz(new Date(dataInicio), 'America/Sao_Paulo');
+        dataFim = moment.tz(new Date(dataFim), 'America/Sao_Paulo');
 
         dataInicio = new Date(dataInicio)
         dataFim = new Date(dataFim)
         dataInicio.setHours(horaInicio, 0, 0)
         dataFim.setHours(horaFim, 0, 0)
+
+        dataInicio = moment.tz(dataInicio, 'America/Sao_Paulo');
+        dataFim = moment.tz(dataFim, 'America/Sao_Paulo');
     
         let cliente = await DAOCliente.getOne(cpf)
         if(!cliente){

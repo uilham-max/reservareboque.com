@@ -104,15 +104,26 @@ class ClienteController {
 
         })
     }
+    // CONTROLLER CLIENTE
     static async getLista(req, res) {
+        const pagina = parseInt(req.query.page) || 1;
+        const limite = 10;
 
-        const clientes = await DAOCliente.getAll()
-        if (!clientes) {
-            return res.render('erro', { mensagem: "Erro na listagem de clientes." })
+        const resultado = await DAOCliente.getAll(pagina, limite);
+        
+        if (!resultado) {
+            return res.render('erro', { mensagem: "Erro na listagem de clientes." });
         }
-        return res.render('cliente/admin/lista', { user: adminNome(req, res), clientes: clientes, mensagem: '' })
 
+        return res.render('cliente/admin/lista', {
+            user: adminNome(req, res),
+            clientes: resultado.clientes,
+            paginaAtual: resultado.paginaAtual,
+            totalPaginas: resultado.totalPaginas,
+            mensagem: ''
+        });
     }
+
     static async getRecuperaSenha(req, res) {
         return res.render('cliente/recuperaSenha', { user: clienteNome(req, res), mensagem: '' })
     }

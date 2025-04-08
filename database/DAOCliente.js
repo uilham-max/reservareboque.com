@@ -118,16 +118,27 @@ class DAOCliente{
             return undefined
         }
     }
-    static async getAll(){
-        try{
-            let clientes = await Cliente.findAll({order: ['nome']})
-            return clientes
-        }
-        catch(error){
-            console.log(error.toString())
-            return undefined
+    // DAOCLIENTE.js
+    static async getAll(pagina = 1, limite = 10){
+        try {
+            const offset = (pagina - 1) * limite;
+            const { count, rows } = await Cliente.findAndCountAll({
+                order: [['nome', 'ASC']],
+                limit: limite,
+                offset: offset
+            });
+            return {
+                total: count,
+                clientes: rows,
+                paginaAtual: pagina,
+                totalPaginas: Math.ceil(count / limite)
+            };
+        } catch(error) {
+            console.log(error.toString());
+            return undefined;
         }
     }
+
     static async getOneByEmail(email){
         try{
             let cliente = await Cliente.findOne({where: {email: email}})

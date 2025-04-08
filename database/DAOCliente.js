@@ -118,7 +118,6 @@ class DAOCliente{
             return undefined
         }
     }
-    // DAOCLIENTE.js
     static async getAll(pagina = 1, limite = 10){
         try {
             const offset = (pagina - 1) * limite;

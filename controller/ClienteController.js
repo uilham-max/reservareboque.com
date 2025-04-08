@@ -104,7 +104,6 @@ class ClienteController {
 
         })
     }
-    // CONTROLLER CLIENTE
     static async getLista(req, res) {
         const pagina = parseInt(req.query.page) || 1;
         const limite = 10;

@@ -593,6 +593,14 @@ class ReservaController {
             res.render('erro', {mensagem: "Erro ao filtrar lucros."})
         }
     }
+    static async getReservaAdminLista(req, res){
+        let reservas = await DAOReserva.getTodasReservas()
+        if(reservas){
+            res.render('reserva/admin/lista', {user: adminNome(req, res), reservas: reservas})
+        } else {
+            res.render('erro', {mensagem: "Erro ao listar reservas."})
+        }
+    }
 
 }
 

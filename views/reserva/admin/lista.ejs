@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%-include('../../partials/header.ejs')%>
+</head>
+<body>
+    <%-include('../../partials/navbaradmin.ejs')%>
+    <div class="conteudo" >
+
+        <div class="container" >
+            
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                <a class="btn btn-primary me-md-2" href="/admin/cliente/novo">Novo Cliente</a>
+            </div>
+            <br>
+
+            <div class="d-flex justify-content-start">
+                <h3 class="display-4">Lista de Reservas</h3>
+            </div>
+            <br>
+
+            <div class="table-responsive">
+                <table class="table table-striped" >
+                    <thead>
+                        <tr>
+                            <th>Cliente</th>
+                            <th>Reboque</th>
+                            <th>Diária</th>
+                            <th>Saída/Hora</th>
+                            <th>Chegada/Hora</th>
+                            <th>Tempo</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% reservas.forEach(function(reserva){%>
+                            <tr>
+                                <td><%=reserva.cliente.nome%></td>
+                                <td><%=reserva.reboque.placa%></td>
+                                <td>R$ <%=reserva.valorDiaria%>,00</td>
+                                <td><%=new Date(reserva.dataSaida).toLocaleDateString('pt-BR').slice(0, 10)%> - 
+                                    <%=new Date(reserva.dataSaida).toString().slice(16,21)+"hs"%></td>
+                                <td><%=new Date(reserva.dataChegada).toLocaleDateString('pt-BR').slice(0, 10)%> - 
+                                    <%=new Date(reserva.dataChegada).toString().slice(16,21)+'hs'%></td>
+                                <td><%=reserva.diarias%> dias</td>
+                                <td>R$ <%=reserva.pagamento.valor%></td>
+                                <td><a href="/reserva/admin/excluir/<%=reserva.id%>" class="fas fa-trash" style="color: black;"
+                                    ata-toggle="tooltip" title="Excluir reserva"
+                                    onclick="return confirm('Confirma a exclusão?')" ></a></td>
+                            </tr>
+                        <%})%>
+                    </tbody>
+
+                </table>
+
+                
+            </div>
+
+
+
+        </div>
+    </div>
+
+    <%-include('../../partials/footer'); %>
+
+</body>
+</html>

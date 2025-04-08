@@ -126,9 +126,13 @@ class DAOReserva {
             return undefined
         }
     }
-    static async getAll(){
+
+    static async getTodasReservas(){
         try { 
-            let reservas = await Reserva.findAll()
+            let reservas = await Reserva.findAll({
+                include: [{ model: Reboque }, { model: Cliente }, {model: Pagamento}],
+                order: [['dataSaida', 'ASC']]
+            })
             return reservas
         } catch(erro) {
             console.log(erro.toString());

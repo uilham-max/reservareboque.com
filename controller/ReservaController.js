@@ -594,12 +594,18 @@ class ReservaController {
         }
     }
     static async getReservaAdminLista(req, res){
-        let reservas = await DAOReserva.getTodasReservas()
-        if(reservas){
-            res.render('reserva/admin/lista', {user: adminNome(req, res), reservas: reservas})
-        } else {
+        const pagina = parseInt(req.query.page) || 1;
+        const limite = 10;
+        const resultado = await DAOReserva.getTodasReservas(pagina, limite)
+        if(!resultado){
             res.render('erro', {mensagem: "Erro ao listar reservas."})
         }
+        res.render('reserva/admin/lista', {
+            user: adminNome(req, res), 
+            reservas: resultado.reservas,
+            paginaAtual: resultado.paginaAtual,
+            totalPaginas: resultado.totalPaginas,
+        })
     }
 
 }

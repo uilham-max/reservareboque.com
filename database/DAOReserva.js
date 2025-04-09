@@ -127,13 +127,21 @@ class DAOReserva {
         }
     }
 
-    static async getTodasReservas(){
+    static async getTodasReservas(pagina = 1, limite = 10) {
         try { 
-            let reservas = await Reserva.findAll({
-                include: [{ model: Reboque }, { model: Cliente }, {model: Pagamento}],
-                order: [['dataSaida', 'ASC']]
+            const offset = (pagina - 1) * limite
+            const {count, rows} = await Reserva.findAndCountAll({
+                order: [['dataSaida', 'DESC']],
+                limit: limite,
+                offset: offset,
+                include: [{ model: Reboque }, { model: Cliente }, {model: Pagamento}]
             })
-            return reservas
+            return {
+                total: count,
+                reservas: rows,
+                paginaAtual: pagina,
+                totalPaginas: Math.ceil(count / limite)
+            }
         } catch(erro) {
             console.log(erro.toString());
             return undefined

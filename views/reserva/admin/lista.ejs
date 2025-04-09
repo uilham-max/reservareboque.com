@@ -53,6 +53,26 @@
 
                 </table>
 
+                <div class="d-flex justify-content-center">
+                    <ul class="pagination">
+                        <!-- Botão Anterior -->
+                        <li class="page-item <%= paginaAtual === 1 ? 'disabled' : '' %>">
+                            <a class="page-link" href="?page=<%= paginaAtual - 1 %>">Anterior</a>
+                        </li>
+                
+                        <!-- Números de página -->
+                        <% for(let i = 1; i <= totalPaginas; i++) { %>
+                            <li class="page-item <%= i === paginaAtual ? 'active' : '' %>">
+                                <a class="page-link" href="?page=<%= i %>"><%= i %></a>
+                            </li>
+                        <% } %>
+                
+                        <!-- Botão Próximo -->
+                        <li class="page-item <%= paginaAtual === totalPaginas ? 'disabled' : '' %>">
+                            <a class="page-link" href="?page=<%= paginaAtual + 1 %>">Próximo</a>
+                        </li>
+                    </ul>
+                </div>
                 
             </div>
 

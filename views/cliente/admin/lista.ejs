@@ -23,21 +23,19 @@
                 <table class="table table-striped" >
                     <thead>
                         <tr>
-                            <th>ID</th>
                             <th>Nome</th>
                             <th>CPF</th>
                             <th>Telefone</th>
-                            <th>Endereço</th>
+                            <th>Logradouro/N°.</th>
                         </tr>
                     </thead>
                     <tbody>
                         <% clientes.forEach(function(cliente){%>
                             <tr>
-                                <td><%=cliente.id%></td>
                                 <td><%=cliente.nome%></td>
                                 <td><%=cliente.cpf%></td>
                                 <td><%=cliente.telefone%></td>
-                                <td><%=cliente.endereco%></td>
+                                <td><%=cliente.logradouro%>, <%=cliente.numero_da_casa%></td>
                                 <td><a href="/admin/cliente/editar/<%=cliente.cpf%>" class="fas fa-edit" style="color: black;" 
                                     ata-toggle="tooltip" title="Editar cliente" ></a></td>
                                 <td><a href="/admin/cliente/excluir/<%=cliente.cpf%>" class="fas fa-trash" style="color: black;"

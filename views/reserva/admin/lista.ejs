@@ -8,11 +8,6 @@
     <div class="conteudo" >
 
         <div class="container" >
-            
-            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                <a class="btn btn-primary me-md-2" href="/admin/cliente/novo">Novo Cliente</a>
-            </div>
-            <br>
 
             <div class="d-flex justify-content-start">
                 <h3 class="display-4">Lista de Reservas</h3>
@@ -24,6 +19,7 @@
                     <thead>
                         <tr>
                             <th>Cliente</th>
+                            <th>Telefone</th>
                             <th>Reboque</th>
                             <th>Diária</th>
                             <th>Saída/Hora</th>
@@ -36,6 +32,7 @@
                         <% reservas.forEach(function(reserva){%>
                             <tr>
                                 <td><%=reserva.cliente.nome%></td>
+                                <td>(<%=reserva.cliente.telefone.slice(0,2)%>) <%=reserva.cliente.telefone.slice(2,3)%> <%=reserva.cliente.telefone.slice(3,7)%>-<%=reserva.cliente.telefone.slice(7,16)%></td>
                                 <td><%=reserva.reboque.placa%></td>
                                 <td>R$ <%=reserva.valorDiaria%>,00</td>
                                 <td><%=new Date(reserva.dataSaida).toLocaleDateString('pt-BR').slice(0, 10)%> - 

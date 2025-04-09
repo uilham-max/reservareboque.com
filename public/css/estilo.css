@@ -327,4 +327,11 @@ li {
     max-width: 100%;
 }
 
+.table td {
+    padding: 0.5rem;
+    text-align: left;
+    vertical-align: middle;
+    border: 1px solid #ddd;
+}
+
 

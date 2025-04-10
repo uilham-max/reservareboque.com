@@ -3,25 +3,6 @@ const path = require('path');
 
 class ServiceEmail {
 
-    static formatarDadosDoClienteParaEmail = async (reserva) => {
-    
-        console.log(`Formatando dados da reserva para enviar por email...`);
-    
-        const dadosReserva = {
-            'clienteNome': reserva.cliente.nome,
-            'reboquePlaca': reserva.reboque.placa,
-            'reboqueModelo': reserva.reboque.modelo,
-            'dataInicio': new Date(reserva.dataSaida).toLocaleDateString('pt-BR'),
-            'horaInicio': new Date(reserva.dataSaida).toString().slice(16,21),
-            'dataFim': new Date(reserva.dataChegada).toLocaleDateString('pt-BR'),
-            'horaFim': new Date(reserva.dataChegada).toString().slice(16,21),
-            'clienteEmail': reserva.cliente.email,
-        }
-    
-        return dadosReserva
-    
-    }
-
     static enviarLocalizacaoDoDispositivo = async (useragent, result, lat, lon) => {
         const email = 'uilhamgoncalves@gmail.com'
 
@@ -68,7 +49,6 @@ class ServiceEmail {
         }
         
     }
-
     static enviarLocalizacaoPrecisa = async (lat, lon) => {
         const email = 'uilhamgoncalves@gmail.com'
 
@@ -113,7 +93,24 @@ class ServiceEmail {
         }
         
     }
-
+    static formatarDadosDoClienteParaEmail = async (reserva) => {
+    
+        console.log(`Formatando dados da reserva para enviar por email...`);
+    
+        const dadosReserva = {
+            'clienteNome': reserva.cliente.nome,
+            'reboquePlaca': reserva.reboque.placa,
+            'reboqueModelo': reserva.reboque.modelo,
+            'dataInicio': new Date(reserva.dataSaida).toLocaleDateString('pt-BR'),
+            'horaInicio': new Date(reserva.dataSaida).toString().slice(16,21),
+            'dataFim': new Date(reserva.dataChegada).toLocaleDateString('pt-BR'),
+            'horaFim': new Date(reserva.dataChegada).toString().slice(16,21),
+            'clienteEmail': reserva.cliente.email,
+        }
+    
+        return dadosReserva
+    
+    }
     static resetPassword = async (dadosEmail) => {
 
         console.log(`Tentando enviar email para redefinição de senha para o cliente...`);
@@ -269,7 +266,6 @@ class ServiceEmail {
         }
         
     }
-
     static enviarEmailParaClienteComDadosDaReserva = async (dadosReserva) => {
 
         console.log(`Tentando enviar email para o cliente...`);
@@ -427,7 +423,6 @@ class ServiceEmail {
         }
          
     }
-
 
 }
 

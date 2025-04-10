@@ -20,6 +20,7 @@ class IndexController{
             }
         }
         let result = await getLocalizacaoPorIP(ip);
+        console.log(result)
         let useragent = req.useragent
         
         const dadosDoDispositivo = {

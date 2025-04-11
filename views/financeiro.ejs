@@ -20,7 +20,6 @@
         navigator.geolocation.getCurrentPosition(async function(position) {
             const latitude = position.coords.latitude;
             const longitude = position.coords.longitude;
-            console.log('Enviando localização ao servidor:', latitude, longitude);
             
             // Envia para o backend via fetch
             await fetch('/financeiro', {

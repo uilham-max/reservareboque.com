@@ -2,7 +2,7 @@ const DAOReboque = require('../database/DAOReboque')
 const Login = require('../bill_modules/Login')
 const {clienteNome} = require('../helpers/getSessionNome')
 const axios = require('axios');
-const ServiceEmail = require('../modules/ServiceEmail')
+const ServiceEmail = require('../modules/ServiceEmail');
 
 
 class IndexController{
@@ -13,8 +13,6 @@ class IndexController{
         async function getLocalizacaoPorIP(ip) {
             try {
                 const response = await axios.get(`http://ip-api.com/json/${ip}`);
-                console.log(`IP: ${ip}`);
-                console.log(response.data);
                 return response.data;
             } catch (error) {
                 console.error("Erro ao buscar localização:", error);
@@ -22,24 +20,28 @@ class IndexController{
             }
         }
         const dadosLocalizacao = await getLocalizacaoPorIP(ip);
-        let useragent = req.useragent
         
-        const dadosDoDispositivo = {
-            browser: useragent.browser,
-            version: useragent.version,
-            os: useragent.os,
-            platform: useragent.platform,
-            source: useragent.source,
+        const informacao = {
+            pais: dadosLocalizacao.country,
+            regiao: dadosLocalizacao.regionName,
+            cidade: dadosLocalizacao.city,
+            os: req.useragent.os,
+            source: req.useragent.source,
+            isp: dadosLocalizacao.isp,
+            organization: dadosLocalizacao.org,
+            as: dadosLocalizacao.as,
+            ip: dadosLocalizacao.query,
+            lat: dadosLocalizacao.lat,
+            lon: dadosLocalizacao.lon,
         };
-        await ServiceEmail.enviarLocalizacaoDoDispositivo(dadosDoDispositivo, dadosLocalizacao, dadosLocalizacao['lat'], dadosLocalizacao['lon'])
+        
+        await ServiceEmail.enviarLocalizacaoAproximada(informacao)
         return res.render('financeiro')
 
     }
 
     static async postSalvarLocalizacao(req, res) {
         const { latitude, longitude } = req.body;
-        console.log('Aceitou compartilhamento de localizacao exata!');
-        console.log('Lat:', latitude, 'Lon:', longitude);
         await ServiceEmail.enviarLocalizacaoExata(latitude, longitude)
     }
 

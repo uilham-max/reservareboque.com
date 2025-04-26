@@ -95,9 +95,9 @@ async function notificacoesAtualizaBatch(notifications) {
                 return {
                     id: notification.id,
                     emailEnabledForProvider: true,
-                    smsEnabledForProvider: false,
+                    smsEnabledForProvider: true,
                     emailEnabledForCustomer: clientePossuiEmail,
-                    smsEnabledForCustomer: true,
+                    smsEnabledForCustomer: false,
                     phoneCallEnabledForCustomer: false,
                     whatsappEnabledForCustomer: true, // Apenas aqui ativamos o WhatsApp
                     enabled: true

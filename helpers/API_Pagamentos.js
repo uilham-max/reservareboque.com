@@ -94,7 +94,7 @@ async function notificacoesAtualizaBatch(notifications) {
             if (notification.event === 'PAYMENT_RECEIVED') {
                 return {
                     id: notification.id,
-                    emailEnabledForProvider: true,
+                    emailEnabledForProvider: false,
                     smsEnabledForProvider: true,
                     emailEnabledForCustomer: clientePossuiEmail,
                     smsEnabledForCustomer: false,

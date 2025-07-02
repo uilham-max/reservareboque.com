@@ -13,42 +13,112 @@
                 <h3 class="display-4">Lista de Reservas</h3>
             </div>
             <br>
+            
+            <div class="container" >
+                <div class="lista-reboques">
+                    
+                    <% reservas.forEach(function (reserva) { %>
+                    
+                    
+                    <div class="card border-info mb-3" style="max-width: 18rem;margin: 0.5rem;">
 
-            <div class="table-responsive">
-                <table class="table table-striped" >
-                    <thead>
-                        <tr>
-                            <th>Cliente</th>
-                            <th>Telefone</th>
-                            <th>Reboque</th>
-                            <th>Diária</th>
-                            <th>Saída/Hora</th>
-                            <th>Chegada/Hora</th>
-                            <th>Tempo</th>
-                            <th>Total</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <% reservas.forEach(function(reserva){%>
-                            <tr>
-                                <td><%=reserva.cliente.nome%></td>
-                                <td>(<%=reserva.cliente.telefone.slice(0,2)%>) <%=reserva.cliente.telefone.slice(2,3)%> <%=reserva.cliente.telefone.slice(3,7)%>-<%=reserva.cliente.telefone.slice(7,16)%></td>
-                                <td><%=reserva.reboque.placa%></td>
-                                <td>R$ <%=reserva.valorDiaria%>,00</td>
-                                <td><%=new Date(reserva.dataSaida).toLocaleDateString('pt-BR').slice(0, 10)%> - 
-                                    <%=new Date(reserva.dataSaida).toString().slice(16,21)+"hs"%></td>
-                                <td><%=new Date(reserva.dataChegada).toLocaleDateString('pt-BR').slice(0, 10)%> - 
-                                    <%=new Date(reserva.dataChegada).toString().slice(16,21)+'hs'%></td>
-                                <td><%=reserva.diarias%> dias</td>
-                                <td>R$ <%=reserva.pagamento.valor%></td>
-                                <td><a href="/reserva/admin/excluir/<%=reserva.id%>" class="fas fa-trash" style="color: black;"
-                                    ata-toggle="tooltip" title="Excluir reserva"
-                                    onclick="return confirm('Confirma a exclusão?')" ></a></td>
-                            </tr>
-                        <%})%>
-                    </tbody>
+                        <div class="opicionais">
+                                <div class="text-none grey-text10 mt-1 ms-1">
+                                    Cliente: <%=reserva.cliente.nome%> 
+                                </div>
+                        </div>
+                        <div class="opicionais">
+                                <div class="text-none grey-text10 mt-1 ms-1">
+                                    CPF: <%=reserva.cliente.cpf%> 
+                                </div>
+                        </div>
+                        <div class="opicionais">
+                                <div class="text-none grey-text10 mt-1 ms-1">
+                                    Telefone: <%=reserva.cliente.telefone%> 
+                                </div>
+                        </div>
+                        <div class="opicionais">
+                                <div class="text-none grey-text10 mt-1 ms-1">
+                                    Rua: <%=reserva.cliente.logradouro%>, <%=reserva.cliente.numero_da_casa%>
+                                </div>
+                        </div>
+                        <div class="opicionais">
+                                <div class="text-none grey-text10 mt-1 ms-1">
+                                    Cidade: <%=reserva.cliente.localidade%> 
+                                </div>
+                        </div>
+                        <div class="opicionais">
+                                <div class="text-none grey-text10 mt-1 ms-1">
+                                    <%=reserva.diarias%> dia(s) 
+                                </div>
+                        </div>
+                        <div class="opicionais">
+                                <div class="text-none grey-text10 mt-1 ms-1">
+                                    Diária R$ <%=reserva.reboque.valorDiaria%>,00
+                                </div>
+                        </div>
+                        <div class="opicionais">
+                                <div class="text-none grey-text10 mt-1 ms-1">
+                                    Reboque: R$ <%=reserva.reboque.placa%>
+                                </div>
+                        </div>
 
-                </table>
+                        <div class="opicionais">
+                                <div class="text-none grey-text10 mt-1 ms-1">
+                                    Inicio: <%=new Date(reserva.dataSaida).toLocaleDateString('pt-BR').slice(0, 10)%> - 
+                                    <%=new Date(reserva.dataSaida).toString().slice(16,21)+"hs"%>
+                                </div>
+                        </div>
+                        <div class="opicionais">
+                                <div class="text-none grey-text10 mt-1 ms-1">
+                                    Fim: <%=new Date(reserva.dataChegada).toLocaleDateString('pt-BR').slice(0, 10)%> - 
+                                    <%=new Date(reserva.dataChegada).toString().slice(16,21)+'hs'%>
+                                </div>
+                        </div>
+                        <!-- <div class="opicionais">
+                            <div class="box-opicionais-home">
+                                <div class="text-none grey-text10 mt-1 ms-1">
+                                    <%=new Date(reserva.dataSaida).toLocaleDateString('pt-BR').slice(0, 10)%> - 
+                                    <%=new Date(reserva.dataSaida).toString().slice(16,21)+"hs"%>
+                                </div>
+                            </div>
+                            <div class="box-opicionais-home">
+                                <div class="text-none grey-text10 mt-1 ms-1">
+                                    <%=new Date(reserva.dataChegada).toLocaleDateString('pt-BR').slice(0, 10)%> - 
+                                    <%=new Date(reserva.dataChegada).toString().slice(16,21)+'hs'%>
+                                </div>
+                            </div>
+                        </div> -->
+                        <div class="row justify-content-between" style="margin: 0.5rem;">
+                            <div class="col-6">
+                                <div class="truncate float-start">
+                                    <p class="info-cost2 lato-black"><%='R$ '+reserva.pagamento.valor%>,00</p>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="truncate float-end">
+                                    <div class="col-4">
+                                        <div class=" float-start">
+                                            <a href="/reserva/admin/excluir/<%=reserva.id%>" class="fas fa-trash" style="color: black;"
+                                                ata-toggle="tooltip" title="Excluir reserva"
+                                                onclick="return confirm('Confirma a exclusão?')" >
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+
+
+                    </div>
+                    <% }) %>
+
+                </div>
+            </div>
+            <!-- Conteúdo de cada card -->
 
                 <div class="d-flex justify-content-center">
                     <ul class="pagination">

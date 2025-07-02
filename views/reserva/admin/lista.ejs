@@ -23,11 +23,13 @@
                     <div class="card border-info mb-3" style="max-width: 18rem;margin: 0.5rem;">
 
                         <div class="opicionais">
+                            <div class="box-opicionais-home">
                                 <div class="text-none grey-text10 mt-1 ms-1">
                                     Cliente: <%=reserva.cliente.nome%> 
                                 </div>
+                            </div>
                         </div>
-                        <div class="opicionais">
+                        <!-- <div class="opicionais">
                                 <div class="text-none grey-text10 mt-1 ms-1">
                                     CPF: <%=reserva.cliente.cpf%> 
                                 </div>
@@ -36,58 +38,88 @@
                                 <div class="text-none grey-text10 mt-1 ms-1">
                                     Telefone: <%=reserva.cliente.telefone%> 
                                 </div>
+                        </div> -->
+                        <div class="opicionais">
+                            <div class="box-opicionais-home">
+                                <div class="text-none grey-text10 mt-1 ms-1">
+                                    CPF: <%=reserva.cliente.cpf%>
+                                </div>
+                            </div>
+                            <div class="box-opicionais-home">
+                                <div class="text-none grey-text10 mt-1 ms-1">
+                                    Telefone: <%=reserva.cliente.telefone%> 
+                                </div>
+                            </div>
                         </div>
+                        <!-- <div class="opicionais">
+                                <div class="text-none grey-text10 mt-1 ms-1">
+                                    <%=reserva.cliente.logradouro%>, <%=reserva.cliente.numero_da_casa%>, <%=reserva.cliente.localidade%>
+                                </div>
+                        </div> -->
+                        <div class="opicionais">
+                            <div class="box-opicionais-home">
+                                <div class="text-none grey-text10 mt-1 ms-1">
+                                    Rua: <%=reserva.cliente.logradouro%>
+                                </div>
+                            </div>
+                            <div class="box-opicionais-home">
+                                <div class="text-none grey-text10 mt-1 ms-1">
+                                    No.: <%=reserva.cliente.numero_da_casa%>
+                                </div>
+                            </div>
+                            <div class="box-opicionais-home">
+                                <div class="text-none grey-text10 mt-1 ms-1">
+                                    Cidade: <%=reserva.cliente.localidade%>
+                                </div>
+                            </div>
+                        </div>
+                        
+<!--                         
                         <div class="opicionais">
                                 <div class="text-none grey-text10 mt-1 ms-1">
-                                    Rua: <%=reserva.cliente.logradouro%>, <%=reserva.cliente.numero_da_casa%>
+                                    Reboque: <%=reserva.reboque.placa%>
                                 </div>
-                        </div>
-                        <div class="opicionais">
-                                <div class="text-none grey-text10 mt-1 ms-1">
-                                    Cidade: <%=reserva.cliente.localidade%> 
-                                </div>
-                        </div>
-                        <div class="opicionais">
-                                <div class="text-none grey-text10 mt-1 ms-1">
-                                    <%=reserva.diarias%> dia(s) 
-                                </div>
-                        </div>
-                        <div class="opicionais">
-                                <div class="text-none grey-text10 mt-1 ms-1">
-                                    Diária R$ <%=reserva.reboque.valorDiaria%>,00
-                                </div>
-                        </div>
-                        <div class="opicionais">
-                                <div class="text-none grey-text10 mt-1 ms-1">
-                                    Reboque: R$ <%=reserva.reboque.placa%>
-                                </div>
-                        </div>
+                        </div> -->
 
+                    
                         <div class="opicionais">
+                            <div class="box-opicionais-home">
                                 <div class="text-none grey-text10 mt-1 ms-1">
                                     Inicio: <%=new Date(reserva.dataSaida).toLocaleDateString('pt-BR').slice(0, 10)%> - 
                                     <%=new Date(reserva.dataSaida).toString().slice(16,21)+"hs"%>
                                 </div>
-                        </div>
-                        <div class="opicionais">
+                            </div>
+                            <div class="box-opicionais-home">
                                 <div class="text-none grey-text10 mt-1 ms-1">
                                     Fim: <%=new Date(reserva.dataChegada).toLocaleDateString('pt-BR').slice(0, 10)%> - 
                                     <%=new Date(reserva.dataChegada).toString().slice(16,21)+'hs'%>
                                 </div>
+                            </div>
                         </div>
+
+                        <div class="opicionais">
+                            <div class="box-opicionais-home">
+                                <div class="text-none grey-text10 mt-1 ms-1">
+                                    Placa: <%=reserva.reboque.placa%>
+                                </div>
+                            </div>
+                            <div class="box-opicionais-home">
+                                <div class="text-none grey-text10 mt-1 ms-1">
+                                    Diária: R$ <%=reserva.reboque.valorDiaria%>,00
+                                </div>
+                            </div>
+                            <div class="box-opicionais-home">
+                                <div class="text-none grey-text10 mt-1 ms-1">
+                                    Dia(s): <%=reserva.diarias%>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        
                         <!-- <div class="opicionais">
-                            <div class="box-opicionais-home">
                                 <div class="text-none grey-text10 mt-1 ms-1">
-                                    <%=new Date(reserva.dataSaida).toLocaleDateString('pt-BR').slice(0, 10)%> - 
-                                    <%=new Date(reserva.dataSaida).toString().slice(16,21)+"hs"%>
+                                    Diária R$ <%=reserva.reboque.valorDiaria%>,00 - Dia(s) <%=reserva.diarias%>
                                 </div>
-                            </div>
-                            <div class="box-opicionais-home">
-                                <div class="text-none grey-text10 mt-1 ms-1">
-                                    <%=new Date(reserva.dataChegada).toLocaleDateString('pt-BR').slice(0, 10)%> - 
-                                    <%=new Date(reserva.dataChegada).toString().slice(16,21)+'hs'%>
-                                </div>
-                            </div>
                         </div> -->
                         <div class="row justify-content-between" style="margin: 0.5rem;">
                             <div class="col-6">

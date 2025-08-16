@@ -30,6 +30,39 @@
             <form class="needs-validation" novalidate action="/reserva/cliente/confirmar" method="POST">
                 <div class="lista-reboques">
 
+                    
+                    <!-- Dados de RESERVA -->
+                    <div class="card card-reserva" style="width: 25rem;">
+                        <div class="card-body">
+                            <h3 class="card-title">Período</h3>
+                            <hr>
+
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" >Início</span>
+                                <input class="form-control" id="dataInicio_input" type="text" name="dataInicio_input" value="<%= new Date(dataInicio).toLocaleDateString('pt-BR').slice(0, 10) %>" disabled>
+                                <span class="input-group-text" id="horaInicio_input" name="horaInicio_input"><%= new Date(dataInicio).toString().slice(16, 21) + 'hs' %></span>
+                                
+                            </div>
+
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" >Fim</span>
+                                <input class="form-control" id="dataFim_input" type="text" name="dataFim_input" value="<%= new Date(dataFim).toLocaleDateString('pt-BR').slice(0, 10) %>" disabled>
+                                <span class="input-group-text" id="horaFim_input" name="horaFim_input"><%= new Date(dataFim).toString().slice(16, 21) + 'hs' %></span>
+                            
+                            </div>
+
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" >Diárias</span>
+                                <input class="form-control" id="diarias_input" type="text" name="diarias_input" value="<%= dias %> dias" disabled>
+                            </div>
+
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" >Total R$</span>
+                                <input class="form-control" id="dataFim_input" type="text" name="dataFim_input" value="<%=(valorTotalDaReserva.toFixed(2)).replace('.',',')%>" disabled>
+                            </div>
+                        
+                        </div><br>
+                    </div>
             
                     <!-- Dados pessoais -->
                     <div class="card card-reserva">
@@ -155,88 +188,108 @@
                         
                     </div>
 
-                    <!-- Dados de RESERVA -->
-                    <!-- <div class="card card-reserva" style="width: 25rem;">
-                        <div class="card-body">
-                            <h3 class="card-title">Período</h3>
-                            <hr>
-
-                            <div class="input-group mb-3">
-                                <span class="input-group-text" >Início</span>
-                                <input class="form-control" id="dataInicio_input" type="text" name="dataInicio_input" value="<%= new Date(dataInicio).toLocaleDateString('pt-BR').slice(0, 10) %>" disabled>
-                                <span class="input-group-text" id="horaInicio_input" name="horaInicio_input"><%= new Date(dataInicio).toString().slice(16, 21) + 'hs' %></span>
-                                
-                            </div>
-
-                            <div class="input-group mb-3">
-                                <span class="input-group-text" >Fim</span>
-                                <input class="form-control" id="dataFim_input" type="text" name="dataFim_input" value="<%= new Date(dataFim).toLocaleDateString('pt-BR').slice(0, 10) %>" disabled>
-                                <span class="input-group-text" id="horaFim_input" name="horaFim_input"><%= new Date(dataFim).toString().slice(16, 21) + 'hs' %></span>
-                            
-                            </div>
-
-                            <div class="input-group mb-3">
-                                <span class="input-group-text" >Diárias</span>
-                                <input class="form-control" id="diarias_input" type="text" name="diarias_input" value="<%= dias %> dias" disabled>
-                            </div>
-
-                            <div class="input-group mb-3">
-                                <span class="input-group-text" >Total R$</span>
-                                <input class="form-control" id="dataFim_input" type="text" name="dataFim_input" value="<%=(valorTotalDaReserva.toFixed(2)).replace('.',',')%>" disabled>
-                            </div>
-                        
-                        </div><br>
-                    </div> -->
 
 
                     <!-- Informções de pagamento -->
-                    <div class="card card-reserva" style="width: 25rem;">
-                        <div class="card-body">
+                    
+                        
                             
-                            <h3 class="card-title">Pagamento</h3>
-                            <hr>
+                                <fieldset class="card-reserva card-body mb-3 p-3 border rounded shadow-sm bg-light">
+                                <legend class="col-form-label col-sm-12 fw-bold text-primary mb-3">
+                                    <i class="bi bi-wallet2"></i> Escolha a Forma de Pagamento
+                                </legend>
 
+                                <div class="col-sm-12">
 
-                            <div>
-                                <div class="alert alert-info">
-                                    Economeze R$ 
-                                    <%= ((valorTotalDaReserva-valorTotalDaReservaComDesconto).toFixed(2)).replace('.',',') %> 
-                                    nesta reserva criando uma conta.                                
-                                    <a class="btn btn-outline-primary" href="/cliente/novo"> Criar conta </a> 
+                                    <!-- PIX -->
+                                    <div class="form-check mb-2">
+                                    <input class="form-check-input" onclick="alert('Após confirmar os dados da sua reserva será gerado um QR Code Pix. Caso não seja efetuado o pagamento em 1h, a reserva será cancelada.')" type="radio" name="formaPagamento" id="formaPagamentoPix" value="PIX" required>
+                                    <label class="form-check-label fw-semibold" for="formaPagamentoPix">
+                                        <i class="bi bi-upc-scan text-success"></i> Pix
+                                    </label>
+                                    <div class="valid-feedback">
+                                        Forma de pagamento válida.
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        <span id="invalidPix">Selecione uma forma de pagamento.</span>
+                                    </div>
+                                    </div>
+
+                                    <!-- Dinheiro -->
+                                    <div class="form-check">
+                                    <input class="form-check-input" onclick="alert('Ao escolher Dinheiro, comunique a empresa pelo WhatsApp (53) 99703-2373. Caso contrário, sua reserva será removida em 1h.')" type="radio" name="formaPagamento" id="formaPagamentoDinheiro" value="DINHEIRO" required
+                                        data-bs-toggle="tooltip" data-bs-placement="right"
+                                        title="Ao escolher Dinheiro, comunique a empresa pelo WhatsApp (53) 99703-2373. Caso contrário, sua reserva será removida em 1h.">
+                                    <label class="form-check-label fw-semibold" for="formaPagamentoDinheiro">
+                                        <i class="bi bi-cash-coin text-warning"></i> Dinheiro
+                                    </label>
+                                    <div class="valid-feedback">
+                                        Forma de pagamento válida.
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        <span id="invalidDinheiro">Selecione uma forma de pagamento.</span>
+                                    </div>
+                                    </div>
+                                    <br>
+                                    <hr>
+
+                                    <div class="d-flex justify-content-center" style="margin: 0.5rem;">
+                                        <button class="btn btn-secondary me-3" type="button" onclick="history.back()">Voltar</button>
+                                        <input class="btn btn-primary validation" id="botao" type="submit" value="Confirmar">
+                                    </div>
+
                                 </div>
-                            </div>
-                            <br>
 
-                            <fieldset class="row mb-1">
-                                <!-- <legend class="col-form-label col-sm-2 pt-0">Radios</legend> -->
+
+                                </fieldset>
+
+                                <!-- Ativar tooltips do Bootstrap -->
+                                <script>
+                                document.addEventListener("DOMContentLoaded", function () {
+                                    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+                                    tooltipTriggerList.map(function (tooltipTriggerEl) {
+                                    return new bootstrap.Tooltip(tooltipTriggerEl)
+                                    })
+                                });
+                                </script>
+
+
+                            <!-- <fieldset class="row mb-1">
                                 <div class="col-sm-10">
+
                                   <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="formaPagamento" id="formaPagamento" value="PIX" checked>
+                                    <input class="form-check-input" type="radio" name="formaPagamento" id="formaPagamento" value="PIX" required>
+                                    <div class="valid-feedback">
+                                        Looks good!
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        <span id="invalidLocalidade"></span>
+                                    </div>
                                     <label class="form-check-label" for="gridRadios1">
                                       Pix
                                     </label>
                                   </div>
+
                                   <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="formaPagamento" id="formaPagamento" value="DINHEIRO">
+                                    <input class="form-check-input" onclick="alert('Forma de pagamento em dinheiro é preciso comunicar a empresa pelo WhatsApp (53) 99703-2373 para a reserva ser aprovada pelo adminstrador. Caso contrário o sistema a removerá em 1 hora.')" type="radio" name="formaPagamento" id="formaPagamento" value="DINHEIRO" required>
+                                    <div class="valid-feedback">
+                                        Looks good!
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        <span id="invalidLocalidade"></span>
+                                    </div>
                                     <label class="form-check-label" for="gridRadios2">
                                       Dinheiro
                                     </label>
                                   </div>
+
                                 </div>
-                            </fieldset>
+                            </fieldset> -->
 
                             <!-- <p style="margin: 0.5rem;" >
                                 <input class="btn btn-primary validation" id="botao" type="submit" value="Confirmar">
                             </p> -->
 
-                            <div class="d-flex justify-content-center" style="margin: 0.5rem;">
-                                <button class="btn btn-secondary me-3" type="button" onclick="history.back()">Voltar</button>
-                                <input class="btn btn-primary validation" id="botao" type="submit" value="Confirmar">
-                            </div>
-
-                            
-                        </div>
-                    </div>
 
                     <input type="hidden" id="reboquePlaca" name="reboquePlaca" value="<%=reboque.placa%>">
                     <input type="hidden" id="dataInicio" name="dataInicio" value="<%=dataInicio%>">

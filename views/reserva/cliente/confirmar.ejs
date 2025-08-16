@@ -23,6 +23,74 @@
             <div class="lista-reboques">
             
 
+
+                <!-- Dados de cadastro -->
+                <div class="card card-reserva">
+                    <div class="card-body">
+                        <h3 class="card-title">Cliente</h3>
+                        <hr>
+                        <div class="form-group">
+                            <label for="nome_input">Nome</label>
+                            <input class="form-control" id="nome_input" type="text" name="nome_input" value="<%=cliente.nome%>" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label for="cpf_input">CPF</label>
+                            <input class="form-control" id="cpf_input" type="text" name="cpf_input" value="<%=cliente.cpf%>" disabled>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="telefone_input">Telefone</label>
+                            <input class="form-control" id="telefone_input" type="text" name="telefone_input" value="<%=cliente.telefone%>" disabled>
+                        </div>
+
+                        <% if(cliente.email != '') { %>
+                            <div class="form-group mb-3">
+                                <label for="email_input">E-mail</label>
+                                <input class="form-control" id="email_input" type="email" name="email_input" value="<%=cliente.email%>" disabled>
+                            </div>
+                        <% } %>
+                        
+                        
+                        
+                        
+                    </div>
+                </div>
+
+
+                <!-- Dados de Endereço -->
+                <div class="card card-reserva">
+                    <div class="card-body">
+                        <h3 class="card-title">Endereço</h3>
+                        <hr>
+                        <div class="form-group">
+                            <label for="cep_input">CEP</label>
+                            <input class="form-control" id="cep_input" type="text" name="cep_input"value="<%=cliente.cep%>" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label for="logradouro_input">Nome da rua</label>
+                            <input class="form-control" id="logradouro_input" type="text" name="logradouro_input"value="<%=cliente.logradouro%>" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label for="numeroDaCasa_input">Número da casa</label>
+                            <input class="form-control" id="numeroDaCasa_input" type="text" name="numeroDaCasa_input"value="<%=cliente.numeroDaCasa%>" disabled>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="cidade_input">Cidade</label>
+                            <input class="form-control" id="cidade_input" type="text" name="cidade_input"value="<%=cliente.localidade%>" disabled>
+                        </div>
+
+                        
+
+                        <!-- <div class="alert alert-info mt-3">
+                            <strong>Atenção!</strong>
+                            As datas e o tipo de reboque da sua reserva poderão ser alterados pelo administrador. Caso seja necessário
+                            entre em contato pelos meios de comunição.
+                        </div> -->
+                    </div>
+                </div>
+
+                
                 <!-- Card do reboque -->
                 <div class="card card-reserva" style="width: 25rem;">
                     <img src="../../../<%=reboque.foto%>" class="card-img-top" alt="...">
@@ -109,73 +177,6 @@
 
                     </div>
                 </div>
-
-                <!-- Dados de cadastro -->
-                <div class="card card-reserva">
-                    <div class="card-body">
-                        <h3 class="card-title">Cliente</h3>
-                        <hr>
-                        <div class="form-group">
-                            <label for="nome_input">Nome</label>
-                            <input class="form-control" id="nome_input" type="text" name="nome_input" value="<%=cliente.nome%>" disabled>
-                        </div>
-                        <div class="form-group">
-                            <label for="cpf_input">CPF</label>
-                            <input class="form-control" id="cpf_input" type="text" name="cpf_input" value="<%=cliente.cpf%>" disabled>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="telefone_input">Telefone</label>
-                            <input class="form-control" id="telefone_input" type="text" name="telefone_input" value="<%=cliente.telefone%>" disabled>
-                        </div>
-
-                        <% if(cliente.email != '') { %>
-                            <div class="form-group mb-3">
-                                <label for="email_input">E-mail</label>
-                                <input class="form-control" id="email_input" type="email" name="email_input" value="<%=cliente.email%>" disabled>
-                            </div>
-                        <% } %>
-                        
-                        
-                        
-                        
-                    </div>
-                </div>
-
-
-                <!-- Dados de Endereço -->
-                <div class="card card-reserva">
-                    <div class="card-body">
-                        <h3 class="card-title">Endereço</h3>
-                        <hr>
-                        <div class="form-group">
-                            <label for="cep_input">CEP</label>
-                            <input class="form-control" id="cep_input" type="text" name="cep_input"value="<%=cliente.cep%>" disabled>
-                        </div>
-                        <div class="form-group">
-                            <label for="logradouro_input">Nome da rua</label>
-                            <input class="form-control" id="logradouro_input" type="text" name="logradouro_input"value="<%=cliente.logradouro%>" disabled>
-                        </div>
-                        <div class="form-group">
-                            <label for="numeroDaCasa_input">Número da casa</label>
-                            <input class="form-control" id="numeroDaCasa_input" type="text" name="numeroDaCasa_input"value="<%=cliente.numeroDaCasa%>" disabled>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="cidade_input">Cidade</label>
-                            <input class="form-control" id="cidade_input" type="text" name="cidade_input"value="<%=cliente.localidade%>" disabled>
-                        </div>
-
-                        
-
-                        <!-- <div class="alert alert-info mt-3">
-                            <strong>Atenção!</strong>
-                            As datas e o tipo de reboque da sua reserva poderão ser alterados pelo administrador. Caso seja necessário
-                            entre em contato pelos meios de comunição.
-                        </div> -->
-                    </div>
-                </div>
-
 
                 <!-- Periodo -->
                 <div class="card card-reserva" >

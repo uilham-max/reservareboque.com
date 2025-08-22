@@ -14,142 +14,77 @@
             </div>
             <br>
             
-            <div class="container" >
-                <div class="lista-reboques">
-                    
-                    <% reservas.forEach(function (reserva) { %>
-                    
-                    
-                    <div class="card border-info mb-3" style="max-width: 18rem;margin: 0.5rem;">
+            <div class="container">
+  <div class="row lista-reboques">
+    <% reservas.forEach(function (reserva, i) { %>
+    <div class="col-md-4 col-sm-6 mb-4">
+      <div class="card shadow-sm border-0 h-100">
 
-                        <div class="opicionais">
-                            <div class="box-opicionais-home">
-                                <div class="text-none grey-text10 mt-1 ms-1">
-                                    Cliente: <%=reserva.cliente.nome%> 
-                                </div>
-                            </div>
-                        </div>
-                        <!-- <div class="opicionais">
-                                <div class="text-none grey-text10 mt-1 ms-1">
-                                    CPF: <%=reserva.cliente.cpf%> 
-                                </div>
-                        </div>
-                        <div class="opicionais">
-                                <div class="text-none grey-text10 mt-1 ms-1">
-                                    Telefone: <%=reserva.cliente.telefone%> 
-                                </div>
-                        </div> -->
-                        <div class="opicionais">
-                            <div class="box-opicionais-home">
-                                <div class="text-none grey-text10 mt-1 ms-1">
-                                    CPF: <%=reserva.cliente.cpf%>
-                                </div>
-                            </div>
-                            <div class="box-opicionais-home">
-                                <div class="text-none grey-text10 mt-1 ms-1">
-                                    Telefone: <%=reserva.cliente.telefone%> 
-                                </div>
-                            </div>
-                        </div>
-                        <!-- <div class="opicionais">
-                                <div class="text-none grey-text10 mt-1 ms-1">
-                                    <%=reserva.cliente.logradouro%>, <%=reserva.cliente.numero_da_casa%>, <%=reserva.cliente.localidade%>
-                                </div>
-                        </div> -->
-                        <div class="opicionais">
-                            <div class="box-opicionais-home">
-                                <div class="text-none grey-text10 mt-1 ms-1">
-                                    Rua: <%=reserva.cliente.logradouro%>
-                                </div>
-                            </div>
-                            <div class="box-opicionais-home">
-                                <div class="text-none grey-text10 mt-1 ms-1">
-                                    No.: <%=reserva.cliente.numero_da_casa%>
-                                </div>
-                            </div>
-                            <div class="box-opicionais-home">
-                                <div class="text-none grey-text10 mt-1 ms-1">
-                                    Cidade: <%=reserva.cliente.localidade%>
-                                </div>
-                            </div>
-                        </div>
-                        
-<!--                         
-                        <div class="opicionais">
-                                <div class="text-none grey-text10 mt-1 ms-1">
-                                    Reboque: <%=reserva.reboque.placa%>
-                                </div>
-                        </div> -->
+        <!-- Cabeçalho do Card (clicável) -->
+        <div class="card-header bg-white d-flex justify-content-between align-items-center"
+             data-bs-toggle="collapse" data-bs-target="#detalhesReserva<%=i%>"
+             style="cursor:pointer;">
+          <div>
+            <h6 class="mb-1 fw-bold text-primary"><i class="fas fa-user"></i> <%=reserva.cliente.nome%></h6>
+            <small class="text-muted">
+              <i class="fas fa-calendar-alt"></i> 
+              <%=new Date(reserva.dataSaida).toLocaleDateString('pt-BR')%> → 
+              <%=new Date(reserva.dataChegada).toLocaleDateString('pt-BR')%>
+            </small>
+          </div>
+          <span class="fw-bold text-success fs-6">
+            R$ <%=reserva.pagamento.valor%>,00
+          </span>
+        </div>
 
-                    
-                        <div class="opicionais">
-                            <div class="box-opicionais-home">
-                                <div class="text-none grey-text10 mt-1 ms-1">
-                                    Inicio: <%=new Date(reserva.dataSaida).toLocaleDateString('pt-BR').slice(0, 10)%> - 
-                                    <%=new Date(reserva.dataSaida).toString().slice(16,21)+"hs"%>
-                                </div>
-                            </div>
-                            <div class="box-opicionais-home">
-                                <div class="text-none grey-text10 mt-1 ms-1">
-                                    Fim: <%=new Date(reserva.dataChegada).toLocaleDateString('pt-BR').slice(0, 10)%> - 
-                                    <%=new Date(reserva.dataChegada).toString().slice(16,21)+'hs'%>
-                                </div>
-                            </div>
-                        </div>
+        <!-- Corpo colapsável -->
+        <div id="detalhesReserva<%=i%>" class="collapse">
+          <div class="card-body p-3">
 
-                        <div class="opicionais">
-                            <div class="box-opicionais-home">
-                                <div class="text-none grey-text10 mt-1 ms-1">
-                                    Placa: <%=reserva.reboque.placa%>
-                                </div>
-                            </div>
-                            <div class="box-opicionais-home">
-                                <div class="text-none grey-text10 mt-1 ms-1">
-                                    Diária: R$ <%=reserva.reboque.valorDiaria%>,00
-                                </div>
-                            </div>
-                            <div class="box-opicionais-home">
-                                <div class="text-none grey-text10 mt-1 ms-1">
-                                    Dia(s): <%=reserva.diarias%>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        
-                        <!-- <div class="opicionais">
-                                <div class="text-none grey-text10 mt-1 ms-1">
-                                    Diária R$ <%=reserva.reboque.valorDiaria%>,00 - Dia(s) <%=reserva.diarias%>
-                                </div>
-                        </div> -->
-                        <div class="row justify-content-between" style="margin: 0.5rem;">
-                            <div class="col-6">
-                                <div class="truncate float-start">
-                                    <p class="info-cost2 lato-black"><%='R$ '+reserva.pagamento.valor%>,00</p>
-                                </div>
-                            </div>
-                            <div class="col-6">
-                                <div class="truncate float-end">
-                                    <div class="col-4">
-                                        <div class=" float-start">
-                                            <a href="/reserva/admin/excluir/<%=reserva.id%>" class="fas fa-trash" style="color: black;"
-                                                ata-toggle="tooltip" title="Excluir reserva"
-                                                onclick="return confirm('Confirma a exclusão?')" >
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+            <!-- Cliente -->
+            <p class="mb-1 text-muted"><i class="fas fa-id-card"></i> CPF: <%=reserva.cliente.cpf%></p>
+            <p class="mb-1 text-muted"><i class="fas fa-phone"></i> <%=reserva.cliente.telefone%></p>
 
+            <!-- Endereço -->
+            <hr>
+            <p class="mb-1"><i class="fas fa-map-marker-alt"></i> 
+              <%=reserva.cliente.logradouro%>, <%=reserva.cliente.numero_da_casa%>
+            </p>
+            <p class="mb-1 text-muted"><%=reserva.cliente.localidade%></p>
 
+            <!-- Período -->
+            <hr>
+            <p class="mb-1"><i class="fas fa-calendar-day text-success"></i> 
+              Início: <%=new Date(reserva.dataSaida).toLocaleDateString('pt-BR')%> 
+              <small class="text-muted"><%=new Date(reserva.dataSaida).toString().slice(16,21)+'h'%></small>
+            </p>
+            <p class="mb-1"><i class="fas fa-calendar-check text-danger"></i> 
+              Fim: <%=new Date(reserva.dataChegada).toLocaleDateString('pt-BR')%> 
+              <small class="text-muted"><%=new Date(reserva.dataChegada).toString().slice(16,21)+'h'%></small>
+            </p>
 
+            <!-- Reboque -->
+            <hr>
+            <p class="mb-1"><i class="fas fa-trailer"></i> Placa: <strong><%=reserva.reboque.placa%></strong></p>
+            <p class="mb-1"><i class="fas fa-dollar-sign"></i> Diária: R$ <%=reserva.reboque.valorDiaria%>,00</p>
+            <p class="mb-1"><i class="fas fa-clock"></i> Dias: <%=reserva.diarias%></p>
+          </div>
+        </div>
 
+        <!-- Rodapé com ação -->
+        <div class="card-footer bg-light d-flex justify-content-end">
+          <a href="/reserva/admin/excluir/<%=reserva.id%>" 
+             class="btn btn-sm btn-outline-danger"
+             onclick="return confirm('Confirma a exclusão?')">
+            <i class="fas fa-trash"></i> Excluir
+          </a>
+        </div>
+      </div>
+    </div>
+    <% }) %>
+  </div>
+</div>
 
-                    </div>
-                    <% }) %>
-
-                </div>
-            </div>
             <!-- Conteúdo de cada card -->
 
                 <div class="d-flex justify-content-center">

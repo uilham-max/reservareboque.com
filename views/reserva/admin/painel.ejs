@@ -12,12 +12,12 @@
                 <div class="lista-reboques">
                 
                     <!-- Gráficos      -->
-                    <div class="jumbotron jumbotron-fluid">
+                    <!-- <div class="jumbotron jumbotron-fluid">
                         <div class="container">
                         <h1 class="display-4">Bem-vindo ao Painel do Administrador</h1>
                         <p class="lead">Escolha uma opção para gerenciar.</p>
                         </div>
-                    </div>
+                    </div> -->
 
                     <div class="card card-reserva" style="width: 45rem;">
                         <canvas id="myChart"></canvas>
@@ -154,27 +154,16 @@
                 responsive: true,
                 maintainAspectRatio: false,
                 plugins: {
-                    legend: {
-                        display: true,
-                        position: 'top',
-                        labels: {
-                            color: '#333',
-                            font: {
-                                size: 14,
-                            },
+                    title: {
+                        font: {
+                            size: window.innerWidth < 600 ? 16 : 20,
                         },
                     },
-                    title: {
-                        display: true,
-                        text: 'Reservas Diárias por Reboque',
-                        color: '#333',
-                        font: {
-                            size: 20,
-                            weight: 'bold',
-                        },
-                        padding: {
-                            top: 20,
-                            bottom: 30,
+                    legend: {
+                        labels: {
+                            font: {
+                                size: window.innerWidth < 600 ? 10 : 14,
+                            },
                         },
                     },
                     tooltip: {
@@ -201,14 +190,14 @@
                         type: 'linear',
                         min: 1, // Começa no dia 1
                         max: lastDayOfMonth, // Termina no último dia do mês
-                        title: {
-                            display: true,
-                            text: 'Mês de '+currentMonth, // Exibe o nome do mês atual
-                            color: '#333',
-                            font: {
-                                size: 16,
-                            },
-                        },
+                        // title: {
+                        //     display: true,
+                        //     text: 'Mês de '+currentMonth, // Exibe o nome do mês atual
+                        //     color: '#333',
+                        //     font: {
+                        //         size: 16,
+                        //     },
+                        // },
                         ticks: {
                             color: '#555',
                             stepSize: 1, // Garante que os ticks sejam por dia
@@ -219,14 +208,14 @@
                     },
                     y: {
                         beginAtZero: true,
-                        title: {
-                            display: true,
-                            text: 'Valor R$',
-                            color: '#333',
-                            font: {
-                                size: 16,
-                            },
-                        },
+                        // title: {
+                        //     display: true,
+                        //     text: 'Valor R$',
+                        //     color: '#333',
+                        //     font: {
+                        //         size: 16,
+                        //     },
+                        // },
                         ticks: {
                             color: '#555',
                         },

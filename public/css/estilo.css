@@ -271,11 +271,13 @@ li {
 
 
 
-
+/*
+* Inicio do css para footer
+*/
 
 
 /* ===== Footer fixo estilo app (sempre visível) ===== */
-:root { --footer-h: 70px; }
+:root { --footer-h: 50px; }
 
 /* Mantenha seu body com min-height etc., mas garanta o padding-bottom: */
 html, body {
@@ -313,7 +315,7 @@ footer {
 
 footer a {
   color: #fff;
-  font-size: 1.5rem;
+  font-size: 1.3rem;
   text-decoration: none;
   transition: 0.3s;
 }

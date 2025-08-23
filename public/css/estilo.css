@@ -1,10 +1,4 @@
-/* Estilo para o corpo da página */
-body {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    margin: 0;
-}
+
 
 /* Estilo para o conteúdo principal */
 .conteudo {
@@ -23,12 +17,6 @@ body {
     padding: 0px 18px;
     /* font-size: 1.2em; */
 }
-
-/* .nav-item a:hover {
-    background-color: #3d3d3d;
-    font-weight: 500;
-    border-radius: 10px;
-} */
 
 /* Estilo para os cards de reboque */
 .lista-reboques {
@@ -174,11 +162,6 @@ a {
     /* Cor do texto */
 }
 
-/* .card-index p {
-    margin: 2px 0;
-    color: #666;
-} */
-
 .card-reserva {
     width: 25rem;
     border: 1px solid #ddd;
@@ -202,37 +185,9 @@ a {
     /* Alinha o link à direita */
 }
 
-/* a {
-    text-decoration: none;
-} */
-
-
-
-
-
-
-
-
-/* Estilo para o sticky footer */
-.sticky-footer {
-    background-color: #333;
-    color: white;
-    text-align: center;
-    padding: 10px 0;
-}
-
 
 @import url('https://fonts.googleapis.com/css?family=Rubik&display=swap');
 
-
-/* p {
-    font-size: calc(12px + (14 - 12) * ((100vw - 360px) / (1600 - 360))) !important;
-    display: fkex;
-} */
-
-/* h3 {
-    font-size: calc(24px + (30 - 24) * ((100vw - 360px) / (1600 - 360))) !important;
-} */
 
 .social {
     font-size: 21px !important;
@@ -241,13 +196,6 @@ a {
 
 .color-text {
     color: #757575 !important;
-}
-
-
-
-footer {
-    margin-top: 10rem;
-    color: #caced1 !important;
 }
 
 li {
@@ -269,12 +217,6 @@ li {
     background-color: #28323C !important;
 }
 
-
-/* .flatpickr-calendar {
-    display: flex;
-    flex-wrap: wrap;
-} */
-
 /* cor da data desabilitada */
 .disabled-day {
     color: rgb(0, 0, 0) !important; /* Número vermelho */
@@ -294,19 +236,7 @@ li {
     pointer-events: none; /* Impede interação */
 }
 
-/* Adiciona circulo no dia desabilitado */
-/* .event {
-    position: absolute;
-    width: 25px;
-    height: 25px;
-    border-radius: 150px;
-    bottom: 3px;
-    left: 6px;
-    top: 8px;
-    content: " ";
-    background: #ee1616;
-    opacity: 55%;
-} */
+
 
 .event.busy {
     display: inline-block;
@@ -335,3 +265,63 @@ li {
 }
 
 
+
+
+
+
+
+
+
+
+
+/* ===== Footer fixo estilo app (sempre visível) ===== */
+:root { --footer-h: 70px; }
+
+/* Mantenha seu body com min-height etc., mas garanta o padding-bottom: */
+html, body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+}
+
+/* Reserva espaço para o footer fixo sem precisar de wrapper específico */
+body { padding-bottom: var(--footer-h); }
+
+/* Se você usa um wrapper de conteúdo, mantenha a classe existente `.conteudo` */
+.conteudo {
+  /* o seu CSS já tem margin-top: 60px por causa da navbar fixa — ok */
+  padding-left: 20px;
+  padding-right: 20px;
+  /* NÃO precisa de padding-bottom gigante aqui */
+}
+
+/* Footer fixo */
+footer {
+  position: fixed;
+  bottom: 0;
+  left: 0; right: 0;
+  height: var(--footer-h);
+  width: 100%;
+  background: #222;
+  color: #fff;
+  z-index: 1030;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  box-shadow: 0 -2px 6px rgba(0,0,0,0.2);
+}
+
+footer a {
+  color: #fff;
+  font-size: 1.5rem;
+  text-decoration: none;
+  transition: 0.3s;
+}
+footer a:hover {
+  color: #0d6efd;
+  transform: scale(1.2);
+}
+
+/* (Opcional) suporte ao “notch” no iOS */
+footer { padding-bottom: env(safe-area-inset-bottom); }
+body   { padding-bottom: calc(var(--footer-h) + env(safe-area-inset-bottom)); }

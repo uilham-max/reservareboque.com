@@ -39,6 +39,7 @@
                                             <th>Reboque</th>
                                             <th>Total</th>
                                             <th>Diária</th>
+                                            <th>Forma</th>
                                             <th>Início</th>
                                             <th>Hora</th>
                                             <th>Fim</th>
@@ -76,6 +77,7 @@
                                                 <td><%=(reserva.reboque.placa)%></td>
                                                 <td><%=((reserva.pagamento.valor).toFixed(2)).replace('.',',')%></td>
                                                 <td><%=((reserva.pagamento.valor/reserva.diarias).toFixed(2)).replace('.',',')%></td>
+                                                <td><%=(reserva.pagamento.forma)%></td>
                                                 <td><%= new Date(reserva.dataSaida).toLocaleDateString('pt-BR').slice(0, 10) %></td>
                                                 <td><%= new Date(reserva.dataSaida).toString().slice(16,18) %>h</td>
                                                 <td><%= new Date(reserva.dataChegada).toLocaleDateString('pt-BR').slice(0, 10) %></td>

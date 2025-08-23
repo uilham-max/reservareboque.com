@@ -275,26 +275,23 @@ li {
 * Inicio do css para footer
 */
 
-
 /* ===== Footer fixo estilo app (sempre visível) ===== */
-:root { --footer-h: 50px; }
+:root { --footer-h: 70px; } /* aumentei um pouco p/ caber texto + ícone */
 
-/* Mantenha seu body com min-height etc., mas garanta o padding-bottom: */
+/* Body reserva espaço p/ footer */
 html, body {
   margin: 0;
   padding: 0;
   min-height: 100%;
 }
+body {
+  padding-bottom: calc(var(--footer-h) + env(safe-area-inset-bottom));
+}
 
-/* Reserva espaço para o footer fixo sem precisar de wrapper específico */
-body { padding-bottom: var(--footer-h); }
-
-/* Se você usa um wrapper de conteúdo, mantenha a classe existente `.conteudo` */
+/* Conteúdo */
 .conteudo {
-  /* o seu CSS já tem margin-top: 60px por causa da navbar fixa — ok */
   padding-left: 20px;
   padding-right: 20px;
-  /* NÃO precisa de padding-bottom gigante aqui */
 }
 
 /* Footer fixo */
@@ -311,19 +308,39 @@ footer {
   align-items: center;
   justify-content: space-around;
   box-shadow: 0 -2px 6px rgba(0,0,0,0.2);
+  padding-bottom: env(safe-area-inset-bottom);
 }
 
+/* Links do footer (ícone + texto) */
 footer a {
-  color: #fff;
-  font-size: 1.3rem;
+  color: #aaa;
   text-decoration: none;
+  text-align: center;
+  font-size: 0.75rem; /* texto pequeno */
+  flex: 1;
   transition: 0.3s;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
+
+footer a i {
+  font-size: 1.4rem;
+  line-height: 1;       /* remove diferença interna */
+  height: 22px;         /* 🔑 força todos ícones a mesma altura */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 2px;   /* espaço entre ícone e texto */
+}
+
+
+
+/* Estado ativo/hover */
+/* footer a.active, */
 footer a:hover {
   color: #0d6efd;
-  transform: scale(1.2);
+  transform: scale(1.1);
 }
-
-/* (Opcional) suporte ao “notch” no iOS */
-footer { padding-bottom: env(safe-area-inset-bottom); }
-body   { padding-bottom: calc(var(--footer-h) + env(safe-area-inset-bottom)); }

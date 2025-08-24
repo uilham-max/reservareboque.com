@@ -25,79 +25,200 @@
                     <input type="hidden" id="dataJSON" value="<%=dataJSON%>">
 
                     <!-- Listagem das reservas para DESKTOP -->
-                    <div class="card card-reserva" style="width: 45rem;">
-                        <div class="card-body">
-                            <h5>Reservas dos reboques</h5>
+                    <!-- === LISTAGEM DAS RESERVAS (DESKTOP + MOBILE) === -->
+<div class="card card-reserva">
+  <div class="card-body">
+    <h5 class="mb-3">📋 Reservas dos Reboques</h5>
 
-                            <div class="table-responsive">
-                                <table class="table table-striped" >
-                                    <thead>
-                                        <tr>
-                                            <th>Ação</th>
-                                            <th>Cliente</th>
-                                            <th>Telefone</th>
-                                            <th>Reboque</th>
-                                            <th>Total</th>
-                                            <th>Diária</th>
-                                            <th>Forma</th>
-                                            <th>Início</th>
-                                            <th>Hora</th>
-                                            <th>Fim</th>
-                                            <th>Hora</th>
-                                            <th>Editar</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <% reservas.forEach(function(reserva){%>
-                                            <tr>
-                                                <% if(reserva.situacaoReserva == 'APROVADO') { %>
-                                                    <td><a href="/reserva/admin/situacao/<%=reserva.id%>/<%='APROVADO'%>" class="btn btn-info">Iniciar</a></td>
-                                                <% } else if (reserva.situacaoReserva == 'ANDAMENTO') { %>
-                                                    <td><a href="/reserva/admin/situacao/<%=reserva.id%>/<%='ANDAMENTO'%>" class="btn btn-danger">Encerrar</a></td>
-                                                <% } else if(reserva.situacaoReserva == 'AGUARDANDO_ACEITACAO'){ %>
-                                                    <td>
-                                                        <form action="/reserva/admin/pagamento/dinheiro" method="POST">
-                                                            <input type="hidden" id="codigoPagamento" name="codigoPagamento" value="<%=reserva.pagamento.codigoPagamento%>">
-                                                            <input type="hidden" id="valor" name="valor" value="<%=reserva.pagamento.valor%>">
-                                                            <input type="submit" class="btn btn-success" value="Aprovar">
-                                                        </form>
-                                                    </td>
-                                                <% } else { %>
-                                                    <td><a href="#" class="btn btn-info">PIX</a></td>
-                                                <% }  %>
-                                                <% 
-                                                    let nome = reserva.cliente.nome.trim();
-                                                    let partes = nome.split(/\s+/); // Divide corretamente considerando múltiplos espaços
-                                                    let primeiroNome = partes[0]; // Sempre existe
-                                                    let ultimoNome = partes.length > 1 ? partes[partes.length - 1] : ""; // Evita erro caso haja apenas um nome
-                                                %>
-                                                <td><%= primeiroNome %> <%= ultimoNome %></td>
+    <!-- TABELA – Desktop (md e acima) -->
+    <div class="table-responsive d-none d-md-block">
+      <table class="table table-striped align-middle">
+        <thead class="table-light">
+          <tr>
+            <th>Ação</th>
+            <th>Cliente</th>
+            <th>Telefone</th>
+            <th>Reboque</th>
+            <th>Total</th>
+            <th>Diária</th>
+            <th>Forma</th>
+            <th>Início</th>
+            <th>Hora</th>
+            <th>Fim</th>
+            <th>Hora</th>
+            <th>Editar</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% reservas.forEach(function(reserva){ %>
+            <tr>
+              <!-- Ação -->
+              <td>
+                <% if(reserva.situacaoReserva == 'APROVADO') { %>
+                  <a href="/reserva/admin/situacao/<%=reserva.id%>/APROVADO" class="btn btn-sm btn-info">Iniciar</a>
+                <% } else if (reserva.situacaoReserva == 'ANDAMENTO') { %>
+                  <a href="/reserva/admin/situacao/<%=reserva.id%>/ANDAMENTO" class="btn btn-sm btn-danger">Encerrar</a>
+                <% } else if(reserva.situacaoReserva == 'AGUARDANDO_ACEITACAO'){ %>
+                  <form action="/reserva/admin/pagamento/dinheiro" method="POST" class="d-inline">
+                    <input type="hidden" name="codigoPagamento" value="<%=reserva.pagamento.codigoPagamento%>">
+                    <input type="hidden" name="valor" value="<%=reserva.pagamento.valor%>">
+                    <button type="submit" class="btn btn-sm btn-success">Aprovar</button>
+                  </form>
+                <% } else { %>
+                  <span class="badge bg-primary">PIX</span>
+                <% } %>
+              </td>
 
-                                                <td><%=(reserva.cliente.telefone)%></td>
-                                                <td><%=(reserva.reboque.placa)%></td>
-                                                <td><%=((reserva.pagamento.valor).toFixed(2)).replace('.',',')%></td>
-                                                <td><%=((reserva.pagamento.valor/reserva.diarias).toFixed(2)).replace('.',',')%></td>
-                                                <td><%=(reserva.pagamento.forma)%></td>
-                                                <td><%= new Date(reserva.dataSaida).toLocaleDateString('pt-BR').slice(0, 10) %></td>
-                                                <td><%= new Date(reserva.dataSaida).toString().slice(16,18) %>h</td>
-                                                <td><%= new Date(reserva.dataChegada).toLocaleDateString('pt-BR').slice(0, 10) %></td>
-                                                <td><%= new Date(reserva.dataChegada).toString().slice(16,18) %>h</td>
-                                                <td><a href="/reserva/admin/editar/<%=reserva.id%>" class="fas fa-edit" style="color: rgb(0, 140, 255);" 
-                                                    ata-toggle="tooltip" title="Editar reserva" ></a></td>
-                                            </tr>
-                                        <%})%>
-                                    </tbody>
-                
-                                </table>
-                            </div>
-                            
-                            <% if(mensagem != '') { %>
-                                <div class="alert alert-danger">
-                                    <strong><%= mensagem %></strong> 
-                                </div>
-                            <% } %>
-                        </div>
-                    </div>
+              <!-- Cliente (primeiro + último) -->
+              <%
+                let nome = reserva.cliente.nome.trim();
+                let partes = nome.split(/\s+/);
+                let primeiroNome = partes[0];
+                let ultimoNome = partes.length > 1 ? partes[partes.length - 1] : "";
+              %>
+              <td><%= primeiroNome %> <%= ultimoNome %></td>
+
+              <td><%= reserva.cliente.telefone %></td>
+              <td><%= reserva.reboque.placa %></td>
+              <td>R$ <%= (reserva.pagamento.valor).toFixed(2).replace('.',',') %></td>
+              <td>R$ <%= (reserva.pagamento.valor/reserva.diarias).toFixed(2).replace('.',',') %></td>
+              <td>
+                <% if(reserva.pagamento.forma === 'PIX'){ %>
+                  <span class="badge bg-primary">PIX</span>
+                <% } else if(reserva.pagamento.forma === 'DINHEIRO'){ %>
+                  <span class="badge bg-warning text-dark">DINHEIRO</span>
+                <% } else { %>
+                  <span class="badge bg-secondary"><%= reserva.pagamento.forma %></span>
+                <% } %>
+              </td>
+              <td><%= new Date(reserva.dataSaida).toLocaleDateString('pt-BR') %></td>
+              <td><%= new Date(reserva.dataSaida).toString().slice(16,18) %>h</td>
+              <td><%= new Date(reserva.dataChegada).toLocaleDateString('pt-BR') %></td>
+              <td><%= new Date(reserva.dataChegada).toString().slice(16,18) %>h</td>
+              <td>
+                <a href="/reserva/admin/editar/<%=reserva.id%>" class="btn btn-sm btn-outline-primary" data-bs-toggle="tooltip" title="Editar reserva">
+                  <i class="fas fa-edit"></i>
+                </a>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- CARDS – Mobile (abaixo de md) -->
+    <div class="d-md-none">
+      <div class="row g-3">
+        <% reservas.forEach(function(reserva, i){ 
+          let nome = reserva.cliente.nome.trim();
+          let partes = nome.split(/\s+/);
+          let primeiroNome = partes[0];
+          let ultimoNome = partes.length > 1 ? partes[partes.length - 1] : "";
+
+          let forma = reserva.pagamento.forma || '';
+          let formaBadge = forma === 'PIX' ? 'bg-primary' : (forma === 'DINHEIRO' ? 'bg-warning text-dark' : 'bg-secondary');
+
+          let sit = reserva.situacaoReserva;
+          let sitLabel = (sit === 'APROVADO' ? 'Aprovado' : (sit === 'ANDAMENTO' ? 'Em andamento' : (sit === 'AGUARDANDO_ACEITACAO' ? 'Aguardando' : sit)));
+          let sitBadge = (sit === 'APROVADO' ? 'bg-success' : (sit === 'ANDAMENTO' ? 'bg-info' : (sit === 'AGUARDANDO_ACEITACAO' ? 'bg-warning text-dark' : 'bg-secondary')));
+        %>
+        <div class="col-12">
+          <div class="card reserva-card shadow-sm h-100">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-start">
+                <div>
+                  <h6 class="mb-1 text-primary fw-bold">
+                    <i class="fas fa-user me-1"></i><%= primeiroNome %> <%= ultimoNome %>
+                  </h6>
+                  <div class="small text-muted">
+                    <i class="fas fa-trailer me-1"></i><%= reserva.reboque.placa %>
+                  </div>
+                </div>
+                <span class="badge <%= sitBadge %>"><%= sitLabel %></span>
+              </div>
+
+              <div class="mt-2 d-flex justify-content-between align-items-center">
+                <div class="fw-bold fs-6 text-success">
+                  R$ <%= (reserva.pagamento.valor).toFixed(2).replace('.',',') %>
+                </div>
+                <span class="badge <%= formaBadge %>"><%= forma %></span>
+              </div>
+
+              <button class="btn btn-sm btn-link px-0 mt-2" type="button"
+                      data-bs-toggle="collapse" data-bs-target="#detalhes<%= i %>">
+                Detalhes <i class="fas fa-chevron-down"></i>
+              </button>
+
+              <div id="detalhes<%= i %>" class="collapse">
+                <hr class="my-2">
+                <div class="small">
+                  <div class="mb-1"><i class="fas fa-phone me-1"></i><%= reserva.cliente.telefone %></div>
+                  <div class="mb-1">
+                    <i class="fas fa-dollar-sign me-1"></i>Diária:
+                    R$ <%= (reserva.pagamento.valor/reserva.diarias).toFixed(2).replace('.',',') %>
+                    <span class="ms-2"><i class="fas fa-clock me-1"></i>Dia(s): <%= reserva.diarias %></span>
+                  </div>
+                  <div class="mb-1">
+                    <i class="fas fa-calendar-day me-1 text-success"></i>
+                    Início: <%= new Date(reserva.dataSaida).toLocaleDateString('pt-BR') %>
+                    <%= new Date(reserva.dataSaida).toString().slice(16,18) %>h
+                  </div>
+                  <div class="mb-1">
+                    <i class="fas fa-calendar-check me-1 text-danger"></i>
+                    Fim: <%= new Date(reserva.dataChegada).toLocaleDateString('pt-BR') %>
+                    <%= new Date(reserva.dataChegada).toString().slice(16,18) %>h
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card-footer bg-light d-flex justify-content-between">
+              <div>
+                <% if(reserva.situacaoReserva == 'APROVADO') { %>
+                  <a href="/reserva/admin/situacao/<%=reserva.id%>/APROVADO" class="btn btn-sm btn-outline-success">
+                    <i class="fas fa-play me-1"></i>Iniciar
+                  </a>
+                <% } else if (reserva.situacaoReserva == 'ANDAMENTO') { %>
+                  <a href="/reserva/admin/situacao/<%=reserva.id%>/ANDAMENTO" class="btn btn-sm btn-outline-danger">
+                    <i class="fas fa-stop me-1"></i>Encerrar
+                  </a>
+                <% } else if(reserva.situacaoReserva == 'AGUARDANDO_ACEITACAO'){ %>
+                  <form action="/reserva/admin/pagamento/dinheiro" method="POST" class="d-inline">
+                    <input type="hidden" name="codigoPagamento" value="<%=reserva.pagamento.codigoPagamento%>">
+                    <input type="hidden" name="valor" value="<%=reserva.pagamento.valor%>">
+                    <button type="submit" class="btn btn-sm btn-outline-primary">
+                      <i class="fas fa-check me-1"></i>Aprovar
+                    </button>
+                  </form>
+                <% } else { %>
+                  <span class="badge bg-primary"><i class="fas fa-qrcode me-1"></i>PIX</span>
+                <% } %>
+              </div>
+
+              <a href="/reserva/admin/editar/<%=reserva.id%>" class="btn btn-sm btn-outline-secondary" data-bs-toggle="tooltip" title="Editar reserva">
+                <i class="fas fa-edit"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+        <% }) %>
+      </div>
+    </div>
+
+    <% if(mensagem && mensagem !== '') { %>
+      <div class="alert alert-danger mt-3">
+        <strong><%= mensagem %></strong>
+      </div>
+    <% } %>
+  </div>
+</div>
+
+<!-- Estilo leve para os cards -->
+<style>
+  .reserva-card{border-radius:1rem;transition:transform .2s ease,box-shadow .2s ease}
+  .reserva-card:hover{transform:translateY(-3px);box-shadow:0 8px 18px rgba(0,0,0,.12)}
+</style>
+
                     
                 </div>
             </div>

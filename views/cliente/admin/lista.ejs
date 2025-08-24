@@ -1,74 +1,89 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <%-include('../../partials/header.ejs')%>
+    <%- include('../../partials/header.ejs') %>
+    <style>
+        .card-cliente {
+            border-radius: 1rem;
+            box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
+            transition: transform 0.2s ease-in-out;
+        }
+        .card-cliente:hover {
+            transform: translateY(-5px);
+            box-shadow: 0px 8px 18px rgba(0,0,0,0.15);
+        }
+        .cliente-nome {
+            font-weight: 600;
+            font-size: 1.2rem;
+            color: #333;
+        }
+        .cliente-dados {
+            font-size: 0.95rem;
+            color: #555;
+        }
+        .btn-action {
+            font-size: 1.1rem;
+            margin-right: 10px;
+            transition: color 0.2s;
+        }
+        .btn-action:hover {
+            color: #0d6efd !important;
+        }
+    </style>
 </head>
 <body>
-    <%-include('../../partials/navbaradmin.ejs')%>
-    <div class="conteudo" >
+    <%- include('../../partials/navbaradmin.ejs') %>
 
-        <div class="container" >
+    <div class="conteudo">
+        <div class="container">
 
-            <div class="d-flex justify-content-start">
-                <h3 class="display-4">Lista de Clientes</h3>
-            </div>
-            <br>
-
-            <div class="table-responsive">
-                <table class="table table-striped" >
-                    <thead>
-                        <tr>
-                            <th>Nome</th>
-                            <th>CPF</th>
-                            <th>Telefone</th>
-                            <th>Logradouro/N°.</th>
-                            <th>Localidade</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <% clientes.forEach(function(cliente){%>
-                            <tr>
-                                <td><%=cliente.nome%></td>
-                                <td><%=cliente.cpf.slice(0, 3)%>.<%=cliente.cpf.slice(3, 6)%>.<%=cliente.cpf.slice(6, 9)%>-<%=cliente.cpf.slice(9, 11)%></td>
-                                <td>(<%=cliente.telefone.slice(0,2)%>) <%=cliente.telefone.slice(2,3)%> <%=cliente.telefone.slice(3,7)%>-<%=cliente.telefone.slice(7,11)%></td>
-                                <td><%=cliente.logradouro%>, <%=cliente.numero_da_casa%></td>
-                                <td><%=cliente.localidade%></td>
-                                <td><a href="/admin/cliente/editar/<%=cliente.cpf%>" class="fas fa-edit" style="color: black;" 
-                                    ata-toggle="tooltip" title="Editar cliente" ></a></td>
-                                <td><a href="/admin/cliente/excluir/<%=cliente.cpf%>" class="fas fa-trash" style="color: black;"
-                                    ata-toggle="tooltip" title="Excluir cliente"
-                                    onclick="return confirm('Confirma a exclusão?')" ></a></td>
-                            </tr>
-                        <%})%>
-                    </tbody>
-
-                </table>
-                <div class="d-flex justify-content-center">
-                    <ul class="pagination">
-                        <!-- Botão Anterior -->
-                        <li class="page-item <%= paginaAtual === 1 ? 'disabled' : '' %>">
-                            <a class="page-link" href="?page=<%= paginaAtual - 1 %>">Anterior</a>
-                        </li>
-                
-                        <!-- Números de página -->
-                        <% for(let i = 1; i <= totalPaginas; i++) { %>
-                            <li class="page-item <%= i === paginaAtual ? 'active' : '' %>">
-                                <a class="page-link" href="?page=<%= i %>"><%= i %></a>
-                            </li>
-                        <% } %>
-                
-                        <!-- Botão Próximo -->
-                        <li class="page-item <%= paginaAtual === totalPaginas ? 'disabled' : '' %>">
-                            <a class="page-link" href="?page=<%= paginaAtual + 1 %>">Próximo</a>
-                        </li>
-                    </ul>
-                </div>
-                
-                
+            <div class="d-flex justify-content-start mb-4">
+                <h3 class="display-5">📋 Lista de Clientes</h3>
             </div>
 
+            <div class="row">
+                <% clientes.forEach(function(cliente){ %>
+                    <div class="col-md-6 col-lg-4 mb-4">
+                        <div class="card card-cliente h-100">
+                            <div class="card-body">
+                                <h5 class="cliente-nome"><i class="fas fa-user-circle me-2"></i><%= cliente.nome %></h5>
+                                <p class="cliente-dados mb-1"><strong>CPF:</strong> <%= cliente.cpf.slice(0, 3) %>.<%= cliente.cpf.slice(3, 6) %>.<%= cliente.cpf.slice(6, 9) %>-<%= cliente.cpf.slice(9, 11) %></p>
+                                <p class="cliente-dados mb-1"><strong>Telefone:</strong> (<%= cliente.telefone.slice(0,2) %>) <%= cliente.telefone.slice(2,3) %> <%= cliente.telefone.slice(3,7) %>-<%= cliente.telefone.slice(7,11) %></p>
+                                <p class="cliente-dados mb-1"><strong>Endereço:</strong> <%= cliente.logradouro %>, <%= cliente.numero_da_casa %></p>
+                                <p class="cliente-dados mb-3"><strong>Localidade:</strong> <%= cliente.localidade %></p>
+                                
+                                <div class="d-flex justify-content-end">
+                                    <a href="/admin/cliente/editar/<%= cliente.cpf %>" class="fas fa-edit btn-action" title="Editar"></a>
+                                    <a href="/admin/cliente/excluir/<%= cliente.cpf %>" class="fas fa-trash btn-action text-danger" title="Excluir" onclick="return confirm('Confirma a exclusão?')"></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <% }) %>
+            </div>
+
+            <!-- Paginação -->
+            <div class="d-flex justify-content-center mt-4">
+                <ul class="pagination">
+                    <li class="page-item <%= paginaAtual === 1 ? 'disabled' : '' %>">
+                        <a class="page-link" href="?page=<%= paginaAtual - 1 %>">Anterior</a>
+                    </li>
+            
+                    <% for(let i = 1; i <= totalPaginas; i++) { %>
+                        <li class="page-item <%= i === paginaAtual ? 'active' : '' %>">
+                            <a class="page-link" href="?page=<%= i %>"><%= i %></a>
+                        </li>
+                    <% } %>
+            
+                    <li class="page-item <%= paginaAtual === totalPaginas ? 'disabled' : '' %>">
+                        <a class="page-link" href="?page=<%= paginaAtual + 1 %>">Próximo</a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Mensagem de exclusão -->
             <% if(mensagem){ %>
-                <div class="alert alert-danger">
+                <div class="alert alert-danger mt-3">
                     <strong>Exclusão de registro!</strong> <%= mensagem %>
                 </div>
             <% } %>
@@ -76,7 +91,6 @@
         </div>
     </div>
 
-    <%-include('../../partials/footer'); %>
-
+    <%- include('../../partials/footer'); %>
 </body>
 </html>

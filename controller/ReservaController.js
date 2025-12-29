@@ -9,6 +9,7 @@ var {clienteNome, adminNome} = require('../helpers/getSessionNome')
 const { estornoPagamento, receiveInCash, criarCobranca } = require('../helpers/API_Pagamentos')
 const moment = require('moment-timezone')
 const { deleteCobranca } = require('../helpers/API_Pagamentos');
+const Caledario = require('../bill_modules/Calendario')
 
 
 
@@ -451,11 +452,13 @@ class ReservaController {
 
         let useragent = req.useragent
 
+        const reboques = await DAOReserva.getSomaReservasPorReboqueMesAtual(Caledario.primeiroDiaDoMesAtual(), Caledario.ultimoDiaDoMesAtual())
+        
         const reservas = await DAOReserva.getAtivas();
 
         const dataJson = await Grafico.reservas()
 
-        res.render('reserva/admin/painel', { user: adminNome(req, res), mensagem: '', dataJSON: dataJson, reservas: reservas, useragent: useragent });
+        res.render('reserva/admin/painel', { user: adminNome(req, res), mensagem: '', dataJSON: dataJson, reservas: reservas, useragent: useragent, reboques: reboques });
 
     }
     static async postAdminAprovaPagamentoEmDinheiro(req, res){

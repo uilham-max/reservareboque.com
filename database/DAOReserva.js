@@ -238,6 +238,42 @@ class DAOReserva {
         }
     }
 
+    static async getSomaReservasPorReboqueMesAtual(dataInicio, dataFim) {
+        try {
+            const reservas = await Reserva.findAll({
+                attributes: [
+                    'reboquePlaca',
+                    [sequelize.fn('SUM', sequelize.col('pagamento.valor')), 'total']
+                ],
+                where: {
+                    dataSaida: {
+                        [Op.gte]: dataInicio
+                    },
+                    dataChegada: {
+                        [Op.lte]: dataFim
+                    }
+                },
+                include: [
+                    {
+                        model: Pagamento,
+                        attributes: [],
+                        where: {
+                            situacao: 'APROVADO'
+                        }
+                    }
+                ],
+                group: ['reserva.reboquePlaca'],
+                raw: true
+            });
+
+            return reservas;
+        } catch (error) {
+            console.log(error.toString());
+            return undefined;
+        }
+    }
+
+
 
     static async getVerificaDisponibilidade(reboquePlaca, inicioDoPeriodo, fimDoPeriodo) {
         try {

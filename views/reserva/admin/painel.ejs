@@ -226,7 +226,9 @@
                     ...dataset,
                     backgroundColor: colors[index % colors.length],
                     borderColor: borderColors[index % borderColors.length],
-                    borderWidth: 1
+                    borderWidth: 1,
+                    barPercentage: 0.8,
+                    categoryPercentage: window.innerWidth < 600 ? 0.6 : 0.9
                 })),
             },
             options: {
@@ -263,6 +265,9 @@
                         max: lastDayOfMonth,
                         ticks: {
                             stepSize: 1,
+                            font: {
+                                size: window.innerWidth < 600 ? 4 : 12
+                            }
                         },
                         stacked: true
                     },

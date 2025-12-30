@@ -531,7 +531,9 @@ class ReservaController {
         dataInicio = dataInicio.hour(horaInicio).minute(0).second(0);
         dataFim = dataFim.hour(horaFim).minute(0).second(0);
 
-        let resultadoReserva = await DAOReserva.adminAtualizaPeriodo(idReserva, dataInicio, dataFim, reboquePlaca)
+        const diarias = DiariaCalculo.calculaNumeroDeDias(dataInicio, dataFim)
+
+        let resultadoReserva = await DAOReserva.adminAtualizaPeriodo(idReserva, dataInicio, dataFim, reboquePlaca, diarias)
         if(!resultadoReserva){
             return res.render('erro', {mensagem: "Erro ao atualizar período da reserva."})
         }

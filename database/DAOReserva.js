@@ -83,10 +83,10 @@ class DAOReserva {
             return false
         }
     }
-    static async adminAtualizaPeriodo(idReserva, dataInicio, dataFim, reboquePlaca){
+    static async adminAtualizaPeriodo(idReserva, dataInicio, dataFim, reboquePlaca, diarias){
         try{
             const [numLinhasAtualizadas] = await Reserva.update(
-                {dataSaida: dataInicio, dataChegada: dataFim},
+                {dataSaida: dataInicio, dataChegada: dataFim, diarias: diarias},
                 {where: {id: idReserva}},
             )
             // console.log('Atualizando status do pagamento para aprovado...');

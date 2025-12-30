@@ -56,7 +56,7 @@ class Grafico {
                 }
 
                 // MONTA O ARRAY DE CALENDARIO DE CADA REBOQUE QUE SERÁ PASSADO PARA O CHART
-                datasets.push({ type: "line", label: reboques[i].placa.slice(0, 3), data: [...dia] });
+                datasets.push({ label: reboques[i].placa.slice(0, 3), data: [...dia] });
 
                 // RESETA O CALENDARIO
                 for (let m = 0; m < dataAtual.daysInMonth(); m++) {

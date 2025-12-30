@@ -220,15 +220,13 @@
         ];
     
         new Chart(ctx, {
-            type: 'line',
+            type: 'bar', // 🔴 mudou de line para bar
             data: {
                 datasets: dataArray.datasets.map((dataset, index) => ({
                     ...dataset,
                     backgroundColor: colors[index % colors.length],
                     borderColor: borderColors[index % borderColors.length],
-                    borderWidth: 2,
-                    fill: true,
-                    tension: 0.3,
+                    borderWidth: 1
                 })),
             },
             options: {
@@ -248,69 +246,41 @@
                         },
                     },
                     tooltip: {
-                        mode: 'index',
-                        intersect: false,
                         callbacks: {
                             label: function (context) {
                                 let label = context.dataset.label || '';
-                                if (label) {
-                                    label += ': ';
-                                }
-                                label += parseFloat(context.raw.y).toFixed(2);
+                                if (label) label += ': ';
+                                label += Number(context.raw.y).toFixed(2);
                                 return label;
                             },
                         },
                     },
                 },
-                interaction: {
-                    mode: 'index',
-                    intersect: false,
-                },
                 scales: {
                     x: {
-                        type: 'linear',
-                        min: 1, // Começa no dia 1
-                        max: lastDayOfMonth, // Termina no último dia do mês
-                        // title: {
-                        //     display: true,
-                        //     text: 'Mês de '+currentMonth, // Exibe o nome do mês atual
-                        //     color: '#333',
-                        //     font: {
-                        //         size: 16,
-                        //     },
-                        // },
+                        type: 'linear', // ✅ pode manter linear (dias do mês)
+                        min: 1,
+                        max: lastDayOfMonth,
                         ticks: {
-                            color: '#555',
-                            stepSize: 1, // Garante que os ticks sejam por dia
+                            stepSize: 1,
                         },
-                        grid: {
-                            color: 'rgba(200, 200, 200, 0.3)',
-                        },
+                        stacked: true
                     },
                     y: {
                         beginAtZero: true,
-                        // title: {
-                        //     display: true,
-                        //     text: 'Valor R$',
-                        //     color: '#333',
-                        //     font: {
-                        //         size: 16,
-                        //     },
-                        // },
                         ticks: {
-                            color: '#555',
+                            callback: value => `R$ ${value}`,
                         },
-                        grid: {
-                            color: 'rgba(200, 200, 200, 0.3)',
-                        },
+                        stacked: true
                     },
                 },
                 animation: {
-                    duration: 3000,
-                    easing: 'easeOutBounce',
+                    duration: 1500, // barra fica melhor com animação mais curta
+                    easing: 'easeOutQuart',
                 },
             },
         });
+
     </script>
     
     

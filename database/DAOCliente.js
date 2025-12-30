@@ -1,6 +1,6 @@
 const Cliente = require('../model/Cliente.js')
 const bcrypt = require('bcryptjs')
-const { Op } = require('sequelize')
+const { Op, fn, col, where } = require('sequelize')
 
 
 
@@ -118,21 +118,34 @@ class DAOCliente{
             return undefined
         }
     }
-    static async getAll(pagina = 1, limite = 10){
+    static async getAll(pagina = 1, limite = 10, q = '') {
         try {
             const offset = (pagina - 1) * limite;
+
+            let where = {};
+
+            if (q) {
+                where = {
+                    [Op.or]: [
+                        { nome: { [Op.iLike]: `%${q}%` } }
+                    ]
+                };
+            }
+
             const { count, rows } = await Cliente.findAndCountAll({
+                where,
                 order: [['nome', 'ASC']],
                 limit: limite,
-                offset: offset
+                offset
             });
+
             return {
                 total: count,
                 clientes: rows,
                 paginaAtual: pagina,
                 totalPaginas: Math.ceil(count / limite)
             };
-        } catch(error) {
+        } catch (error) {
             console.log(error.toString());
             return undefined;
         }

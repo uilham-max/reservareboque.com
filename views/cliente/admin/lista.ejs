@@ -40,6 +40,30 @@
             <div class="d-flex justify-content-start mb-4">
                 <h3 class="display-5">📋 Lista de Clientes</h3>
             </div>
+            
+            
+            <div class="row mb-4">
+                <div class="col-md-6 col-lg-4">
+                    <form method="GET" action="/cliente/lista">
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="fas fa-search"></i>
+                            </span>
+                            <input
+                                type="text"
+                                name="q"
+                                class="form-control"
+                                placeholder="Buscar por nome"
+                                value="<%= typeof q !== 'undefined' ? q : '' %>"
+                            >
+                            <button class="btn btn-primary" type="submit">
+                                Buscar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
 
             <div class="row">
                 <% clientes.forEach(function(cliente){ %>
@@ -66,17 +90,17 @@
             <div class="d-flex justify-content-center mt-4">
                 <ul class="pagination">
                     <li class="page-item <%= paginaAtual === 1 ? 'disabled' : '' %>">
-                        <a class="page-link" href="?page=<%= paginaAtual - 1 %>">Anterior</a>
+                        <a class="page-link" href="?page=<%= paginaAtual - 1 %><%= q ? `&q=${q}` : '' %>">Anterior</a>
                     </li>
             
                     <% for(let i = 1; i <= totalPaginas; i++) { %>
                         <li class="page-item <%= i === paginaAtual ? 'active' : '' %>">
-                            <a class="page-link" href="?page=<%= i %>"><%= i %></a>
+                            <a class="page-link" href="?page=<%= i %><%= q ? `&q=${q}` : '' %>"><%= i %></a>
                         </li>
                     <% } %>
             
                     <li class="page-item <%= paginaAtual === totalPaginas ? 'disabled' : '' %>">
-                        <a class="page-link" href="?page=<%= paginaAtual + 1 %>">Próximo</a>
+                        <a class="page-link" href="?page=<%= paginaAtual + 1 %><%= q ? `&q=${q}` : '' %>">Próximo</a>
                     </li>
                 </ul>
             </div>

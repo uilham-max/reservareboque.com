@@ -107,8 +107,9 @@ class ClienteController {
     static async getLista(req, res) {
         const pagina = parseInt(req.query.page) || 1;
         const limite = 10;
+        const q = (req.query.q || '').trim();
 
-        const resultado = await DAOCliente.getAll(pagina, limite);
+        const resultado = await DAOCliente.getAll(pagina, limite, q);
         
         if (!resultado) {
             return res.render('erro', { mensagem: "Erro na listagem de clientes." });
@@ -119,6 +120,7 @@ class ClienteController {
             clientes: resultado.clientes,
             paginaAtual: resultado.paginaAtual,
             totalPaginas: resultado.totalPaginas,
+            q, // importante para manter o valor no input
             mensagem: ''
         });
     }

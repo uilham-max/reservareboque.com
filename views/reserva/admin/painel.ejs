@@ -111,6 +111,7 @@
                                                 <hr class="my-2">
                                                 <div class="small">
                                                     <div class="mb-1"><i class="fas fa-phone me-1"></i><%= reserva.cliente.telefone %></div>
+                                                    <div class="mb-1"><i class="fas fa-file-alt me-1"></i><%= reserva.cliente.cpf %></div>
                                                     <div class="mb-1">
                                                         <i class="fas fa-dollar-sign me-1"></i>Diária:
                                                         R$ <%= (reserva.pagamento.valor/reserva.diarias).toFixed(2).replace('.',',') %>

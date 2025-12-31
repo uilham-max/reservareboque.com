@@ -500,7 +500,9 @@ class ReservaController {
         if (!reservas) {
             return res.render('erro', { mensagem: "Erro na listagem de reservas." })
         }
-        res.render('reserva/admin/painel', {user: adminNome(req, res), reservas: reservas, mensagem: "", dataJSON: await Grafico.reservas() })
+        const reboques = await DAOReserva.getSomaReservasPorReboqueMesAtual(Caledario.primeiroDiaDoMesAtual(), Caledario.ultimoDiaDoMesAtual())
+
+        res.render('reserva/admin/painel', {user: adminNome(req, res), reservas: reservas, mensagem: "", dataJSON: await Grafico.reservas(), reboques: reboques })
     
     }
     static async getReservaAdminEditar(req, res){

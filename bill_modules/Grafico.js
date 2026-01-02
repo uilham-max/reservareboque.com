@@ -28,24 +28,40 @@ class Grafico {
                 // ITERA PELAS RESERVAS DE CADA REBOQUE
                 for (let j = 0; j < reservas.length; j++) {
 
-                    let dataInicio = parseInt(reservas[j].dataValues.dataSaida.getDate());
-                    let dataFim = parseInt(reservas[j].dataValues.dataChegada.getDate());
-                    let maxDay = dataAtual.daysInMonth();
-                    let valorDiaria = (reservas[j].pagamento.valor / reservas[j].dataValues.diarias).toFixed(2);
+                    const inicioReserva = moment(reservas[j].dataValues.dataSaida);
+                    const fimReserva    = moment(reservas[j].dataValues.dataChegada);
 
-                    if (dataFim < dataInicio) {
-                        dataFim = maxDay;
+                    // limites do mês atual
+                    const inicioMes = dataAtual.clone().startOf('month');
+                    const fimMes    = dataAtual.clone().endOf('month');
+
+                    // calcula a interseção
+                    const inicioEfetivo = moment.max(inicioReserva, inicioMes);
+                    const fimEfetivo    = moment.min(fimReserva, fimMes);
+
+                    // se não intersecta o mês atual, ignora
+                    if (inicioEfetivo.isAfter(fimEfetivo)) {
+                        continue;
                     }
+
 
                     let diasReservadosArray = [];
 
-                    // GRAVAR DIAS NO ARRAY
-                    for (let k = dataInicio; k <= dataFim; k++) {
-                        diasReservadosArray.push({ x: k.toString(), y: valorDiaria });
+                    let valorDiaria = reservas[j].pagamento.valor / reservas[j].dataValues.diarias;
+
+                    for (
+                        let diaIter = inicioEfetivo.clone();
+                        diaIter.isSameOrBefore(fimEfetivo);
+                        diaIter.add(1, 'day')
+                    ) {
+                        diasReservadosArray.push({
+                            x: diaIter.date().toString(), // dia do mês ATUAL
+                            y: valorDiaria
+                        });
                     }
 
-                    // JUNTAR DIAS DO REBOQUE NUM UNICO ARRAY
                     datasArray.push(...diasReservadosArray);
+
                 }
 
                 // COPIA CADA DIA RESERVADO PARA O CALENDARIO DO REBOQUE

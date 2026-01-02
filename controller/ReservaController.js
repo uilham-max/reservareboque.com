@@ -453,8 +453,6 @@ class ReservaController {
 
         let useragent = req.useragent
 
-        console.log(Caledario.primeiroDiaDoMesAtual(), Caledario.ultimoDiaDoMesAtual());
-        
         const reboques = await DAOReserva.getSomaReservasPorReboqueMesAtual(Caledario.primeiroDiaDoMesAtual(), Caledario.ultimoDiaDoMesAtual())
         
         const reservas = await DAOReserva.getAtivas();

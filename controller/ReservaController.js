@@ -10,6 +10,7 @@ const { estornoPagamento, receiveInCash, criarCobranca } = require('../helpers/A
 const moment = require('moment-timezone')
 const { deleteCobranca } = require('../helpers/API_Pagamentos');
 const Caledario = require('../bill_modules/Calendario')
+const Logger = require('nodemon/lib/utils/log')
 
 
 
@@ -452,6 +453,8 @@ class ReservaController {
 
         let useragent = req.useragent
 
+        console.log(Caledario.primeiroDiaDoMesAtual(), Caledario.ultimoDiaDoMesAtual());
+        
         const reboques = await DAOReserva.getSomaReservasPorReboqueMesAtual(Caledario.primeiroDiaDoMesAtual(), Caledario.ultimoDiaDoMesAtual())
         
         const reservas = await DAOReserva.getAtivas();
@@ -500,9 +503,12 @@ class ReservaController {
         if (!reservas) {
             return res.render('erro', { mensagem: "Erro na listagem de reservas." })
         }
+
+        const dataJson = await Grafico.reservas()
+
         const reboques = await DAOReserva.getSomaReservasPorReboqueMesAtual(Caledario.primeiroDiaDoMesAtual(), Caledario.ultimoDiaDoMesAtual())
 
-        res.render('reserva/admin/painel', {user: adminNome(req, res), reservas: reservas, mensagem: "", dataJSON: await Grafico.reservas(), reboques: reboques })
+        res.render('reserva/admin/painel', {user: adminNome(req, res), reservas: reservas, mensagem: "", dataJSON: dataJson, reboques: reboques })
     
     }
     static async getReservaAdminEditar(req, res){

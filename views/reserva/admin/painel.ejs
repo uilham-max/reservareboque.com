@@ -255,20 +255,23 @@
                         },
                     },
                     tooltip: {
-                        callbacks: {
-                             label: function(context) {
-                                const ponto = context.raw;
+    callbacks: {
+        label: function (context) {
+            const ponto = context.raw;
 
-                                let texto = `Valor: R$ ${ponto.y.toFixed(2)}`;
+            const linhas = [];
 
-                                if (ponto.clientes.length > 0) {
-                                    texto += `\nClientes: ${ponto.clientes.join(', ')}`;
-                                }
+            linhas.push(`Valor: R$ ${Number(ponto.y).toFixed(2)}`);
 
-                                return texto;
-                            },
-                        },
-                    },
+            if (ponto.clientes && ponto.clientes.length > 0) {
+                ponto.clientes.forEach(c => linhas.push(`- ${c}`));
+            }
+
+            return linhas; // 👈 array = múltiplas linhas
+        }
+    }
+},
+
                 },
                 scales: {
                     x: {

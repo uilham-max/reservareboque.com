@@ -450,17 +450,18 @@ class ReservaController {
     static async getAdminPainel(req, res){
 
         // await Login.admin(process.env.ADMIN_EMAIL_TESTE, process.env.ADMIN_SENHA_TESTE, req)
+        
+        const competencia = req.query?.competencia || moment().tz('America/Sao_Paulo').format('YYYY-MM');
 
         let useragent = req.useragent
-
+        
         const reboques = await DAOReserva.getSomaReservasPorReboqueMesAtual(Caledario.primeiroDiaDoMesAtual(), Caledario.ultimoDiaDoMesAtual())
         
         const reservas = await DAOReserva.getAtivas();
 
-        const dataJson = await Grafico.reservas()
+        const dataJson = await Grafico.reservas(competencia)
 
         res.render('reserva/admin/painel', { user: adminNome(req, res), mensagem: '', dataJSON: dataJson, reservas: reservas, useragent: useragent, reboques: reboques });
-
     }
     static async postAdminAprovaPagamentoEmDinheiro(req, res){
         let {codigoPagamento, valor} = req.body
@@ -478,6 +479,7 @@ class ReservaController {
     }
     static async getAdminSituacaoReserva(req, res){
 
+        const competencia = req.query?.competencia || moment().tz('America/Sao_Paulo').format('YYYY-MM');
         let idReserva = req.params.idReserva
         let situacao = req.params.situacao
         let resposta
@@ -502,7 +504,7 @@ class ReservaController {
             return res.render('erro', { mensagem: "Erro na listagem de reservas." })
         }
 
-        const dataJson = await Grafico.reservas()
+        const dataJson = await Grafico.reservas(competencia)
 
         const reboques = await DAOReserva.getSomaReservasPorReboqueMesAtual(Caledario.primeiroDiaDoMesAtual(), Caledario.ultimoDiaDoMesAtual())
 

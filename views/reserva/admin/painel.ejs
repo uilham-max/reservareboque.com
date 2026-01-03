@@ -54,11 +54,20 @@
                         </div>
                     </div>
 
-
-
-                    <div class="container mt-3" >
-                        <canvas id="myChart"></canvas>
+                    <div class="container mt-3">
+                        <div class="card shadow-sm">
+                            <div class="container mt-3">
+                                <form action="painel">
+                                    <input class="btn btn-sm btn-outline-success" type="submit" value="Buscar gráfico">
+                                    <input type="text" placeholder="YYYY-MM" id="competencia" name="competencia">
+                                </form>
+                            </div>
+                            <div class="container mt-3" >
+                                <canvas id="myChart"></canvas>
+                            </div>
+                        </div>
                     </div>
+
                     <input type="hidden" id="dataJSON" value="<%=dataJSON%>">
 
                     <!-- Listagem das reservas -->
@@ -247,11 +256,16 @@
                     },
                     tooltip: {
                         callbacks: {
-                            label: function (context) {
-                                let label = context.dataset.label || '';
-                                if (label) label += ': ';
-                                label += Number(context.raw.y).toFixed(2);
-                                return label;
+                             label: function(context) {
+                                const ponto = context.raw;
+
+                                let texto = `Valor: R$ ${ponto.y.toFixed(2)}`;
+
+                                if (ponto.clientes.length > 0) {
+                                    texto += `\nClientes: ${ponto.clientes.join(', ')}`;
+                                }
+
+                                return texto;
                             },
                         },
                     },

@@ -4,94 +4,94 @@ const DAOReboque = require('../database/DAOReboque');
 
 class Grafico {
 
-    static async reservas() {
+    static async reservas(competencia) {
 
-        let dataAtual = moment.tz('America/Sao_Paulo');
-        let dia = [];
-        let datasets = [];
+        // competência no formato YYYY-MM
+        const dataCompetencia = moment.tz(
+            competencia,
+            'YYYY-MM',
+            'America/Sao_Paulo'
+        );
 
-        // MONTAR ARRAY DE DIAS
-        for (let i = 0; i < dataAtual.daysInMonth(); i++) {
-            dia[i] = { x: (i + 1).toString(), y: "0" };
-        }
+        const datasets = [];
 
-        let reboques = await DAOReboque.getAll();
+        const diasNoMes = dataCompetencia.daysInMonth();
+
+        // LIMITES DO MÊS DA COMPETÊNCIA
+        const inicioMes = dataCompetencia.clone().startOf('month');
+        const fimMes    = dataCompetencia.clone().endOf('month');
+
+        // BUSCA TODOS OS REBOQUES
+        const reboques = await DAOReboque.getAll();
 
         // ITERA POR CADA REBOQUE
-        for (let i = 0; i < reboques.length; i++) {
-            // RETORNA RESERVAS DE CADA REBOQUE
-            let reservas = await DAOReserva.getAtivasDesteReboqueGrafico(reboques[i].placa);
+        for (const reboque of reboques) {
 
-            if (reservas) {
-                let datasArray = [];
+            // CALENDÁRIO DO MÊS PARA ESTE REBOQUE
+            const dia = [];
 
-                // ITERA PELAS RESERVAS DE CADA REBOQUE
-                for (let j = 0; j < reservas.length; j++) {
+            for (let i = 0; i < diasNoMes; i++) {
+                dia.push({
+                    x: (i + 1).toString(),
+                    y: 0,
+                    clientes: []
+                });
+            }
 
-                    const inicioReserva = moment(reservas[j].dataValues.dataSaida);
-                    const fimReserva    = moment(reservas[j].dataValues.dataChegada);
+            // BUSCA AS RESERVAS DO REBOQUE NO PERÍODO
+            const reservas = await DAOReserva.getAtivasDesteReboqueGrafico(
+                reboque.placa,
+                dataCompetencia
+            );
 
-                    // limites do mês atual
-                    const inicioMes = dataAtual.clone().startOf('month');
-                    const fimMes    = dataAtual.clone().endOf('month');
+            if (!reservas || reservas.length === 0) {
+                continue;
+            }
 
-                    // calcula a interseção
-                    const inicioEfetivo = moment.max(inicioReserva, inicioMes);
-                    const fimEfetivo    = moment.min(fimReserva, fimMes);
+            // ITERA PELAS RESERVAS
+            for (const reserva of reservas) {
 
-                    // se não intersecta o mês atual, ignora
-                    if (inicioEfetivo.isAfter(fimEfetivo)) {
-                        continue;
-                    }
+                const inicioReserva = moment(reserva.dataSaida);
+                const fimReserva    = moment(reserva.dataChegada);
 
+                // INTERSEÇÃO COM O MÊS DA COMPETÊNCIA
+                const inicioEfetivo = moment.max(inicioReserva, inicioMes);
+                const fimEfetivo    = moment.min(fimReserva, fimMes);
 
-                    let diasReservadosArray = [];
-
-                    let valorDiaria = reservas[j].pagamento.valor / reservas[j].dataValues.diarias;
-
-                    for (
-                        let diaIter = inicioEfetivo.clone();
-                        diaIter.isSameOrBefore(fimEfetivo);
-                        diaIter.add(1, 'day')
-                    ) {
-                        diasReservadosArray.push({
-                            x: diaIter.date().toString(), // dia do mês ATUAL
-                            y: valorDiaria
-                        });
-                    }
-
-                    datasArray.push(...diasReservadosArray);
-
+                if (inicioEfetivo.isAfter(fimEfetivo)) {
+                    continue;
                 }
 
-                // COPIA CADA DIA RESERVADO PARA O CALENDARIO DO REBOQUE
-                for (let l = 0; l < datasArray.length; l++) {
-                    if (parseInt(datasArray[l].x) <= dia.length) {
-                        dia[parseInt(datasArray[l].x) - 1].y = datasArray[l].y;
+                const valorDiaria =
+                    reserva.pagamento.valor / reserva.diarias;
+
+                const nomeCliente = reserva.cliente.nome;
+
+                // DISTRIBUI A RESERVA PELOS DIAS
+                for (
+                    let diaIter = inicioEfetivo.clone();
+                    diaIter.isSameOrBefore(fimEfetivo);
+                    diaIter.add(1, 'day')
+                ) {
+                    const index = diaIter.date() - 1;
+
+                    dia[index].y += valorDiaria;
+
+                    if (!dia[index].clientes.includes(nomeCliente)) {
+                        dia[index].clientes.push(nomeCliente);
                     }
-                }
-
-                // MONTA O ARRAY DE CALENDARIO DE CADA REBOQUE QUE SERÁ PASSADO PARA O CHART
-                datasets.push({ label: reboques[i].placa.slice(0, 3), data: [...dia] });
-
-                // RESETA O CALENDARIO
-                for (let m = 0; m < dataAtual.daysInMonth(); m++) {
-                    dia[m] = { x: (m + 1).toString(), y: "0" };
                 }
             }
+
+            // DATASET DO REBOQUE
+            datasets.push({
+                label: reboque.placa.slice(0, 3),
+                data: dia
+            });
         }
 
-        // console.log('Datasets:', datasets); // NESTE PONTO OS DADOS ESTÃO CORRETOS
-
-        let dataMock = { datasets };
-        let dataJSON = JSON.stringify(dataMock);
-        // console.log('Data JSON:', dataJSON); // VERIFICAR AQUI SE OS DADOS ESTÃO CORRETOS
-
-        return dataJSON
-
+        return JSON.stringify({ datasets });
     }
-
-
 }
 
-module.exports = Grafico
+module.exports = Grafico;

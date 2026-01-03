@@ -375,12 +375,12 @@ class DAOReserva {
     //         return undefined;
     //     }
     // }
-    static async getAtivasDesteReboqueGrafico(reboquePlaca) {
+    static async getAtivasDesteReboqueGrafico(reboquePlaca, competencia) {
         try {
             // Obtendo o primeiro e o último dia do mês atual
-            const startDate = startOfMonth(new Date());
-            const endDate = endOfMonth(new Date());
-
+            const startDate = startOfMonth(new Date(competencia));
+            const endDate = endOfMonth(new Date(competencia));
+            
             const reservas = await Reserva.findAll({
                 where: {
                     reboquePlaca: reboquePlaca,

@@ -243,8 +243,6 @@ class DAOReserva {
             const dataCompetencia = moment.tz( competencia, 'YYYY-MM', 'America/Sao_Paulo' );
             const startDate = startOfMonth(new Date(dataCompetencia));
             const endDate = endOfMonth(new Date(dataCompetencia));
-            console.log("START DATE: ",startDate);
-            console.log("END DATE: ",endDate);
     
             const reservas = await Reserva.findAll({
                 attributes: [

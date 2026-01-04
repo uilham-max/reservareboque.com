@@ -238,8 +238,14 @@ class DAOReserva {
         }
     }
 
-    static async getSomaReservasPorReboqueMesAtual(dataInicio, dataFim) {
+    static async getSomaReservasPorReboqueMesAtual(competencia) {
         try {
+            const dataCompetencia = moment.tz( competencia, 'YYYY-MM', 'America/Sao_Paulo' );
+            const startDate = startOfMonth(new Date(dataCompetencia));
+            const endDate = endOfMonth(new Date(dataCompetencia));
+            console.log("START DATE: ",startDate);
+            console.log("END DATE: ",endDate);
+    
             const reservas = await Reserva.findAll({
                 attributes: [
                     'reboquePlaca',
@@ -247,10 +253,10 @@ class DAOReserva {
                 ],
                 where: {
                     dataSaida: {
-                        [Op.gte]: dataInicio
+                        [Op.gte]: startDate
                     },
                     dataChegada: {
-                        [Op.lte]: dataFim
+                        [Op.lte]: endDate
                     }
                 },
                 include: [

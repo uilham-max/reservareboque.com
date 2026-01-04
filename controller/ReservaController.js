@@ -455,7 +455,7 @@ class ReservaController {
 
         let useragent = req.useragent
         
-        const reboques = await DAOReserva.getSomaReservasPorReboqueMesAtual(Caledario.primeiroDiaDoMesAtual(), Caledario.ultimoDiaDoMesAtual())
+        const reboques = await DAOReserva.getSomaReservasPorReboqueMesAtual(competencia)
         
         const reservas = await DAOReserva.getAtivas();
 
@@ -506,7 +506,7 @@ class ReservaController {
 
         const dataJson = await Grafico.reservas(competencia)
 
-        const reboques = await DAOReserva.getSomaReservasPorReboqueMesAtual(Caledario.primeiroDiaDoMesAtual(), Caledario.ultimoDiaDoMesAtual())
+        const reboques = await DAOReserva.getSomaReservasPorReboqueMesAtual(competencia)
 
         res.render('reserva/admin/painel', {user: adminNome(req, res), reservas: reservas, mensagem: "", dataJSON: dataJson, reboques: reboques })
     

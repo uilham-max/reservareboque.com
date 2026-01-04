@@ -211,6 +211,9 @@
     
         // Paleta de cores para os reboques
         const colors = [
+            'rgba(40, 40, 40, 0.4)', // Cinza
+            'rgba(0, 0, 0)',       // Preto
+            'rgba(255, 255, 255, 0.4)',  // Branco
             'rgba(255, 99, 132, 0.2)',  // Vermelho
             'rgba(54, 162, 235, 0.2)',  // Azul
             'rgba(255, 206, 86, 0.2)',  // Amarelo
@@ -220,6 +223,9 @@
         ];
     
         const borderColors = [
+            'rgba(0, 0, 0, 0.5)',   
+            'rgba(0, 0, 0, 0.5)',   
+            'rgba(0, 0, 0, 0.5)',  
             'rgba(255, 99, 132, 1)',
             'rgba(54, 162, 235, 1)',
             'rgba(255, 206, 86, 1)',
@@ -255,22 +261,22 @@
                         },
                     },
                     tooltip: {
-    callbacks: {
-        label: function (context) {
-            const ponto = context.raw;
+                    callbacks: {
+                        label: function (context) {
+                            const ponto = context.raw;
 
-            const linhas = [];
+                            const linhas = [];
 
-            linhas.push(`Valor: R$ ${Number(ponto.y).toFixed(2)}`);
+                            linhas.push(`Valor: R$ ${Number(ponto.y).toFixed(2)}`);
 
-            if (ponto.clientes && ponto.clientes.length > 0) {
-                ponto.clientes.forEach(c => linhas.push(`- ${c}`));
-            }
+                            if (ponto.clientes && ponto.clientes.length > 0) {
+                                ponto.clientes.forEach(c => linhas.push(`- ${c}`));
+                            }
 
-            return linhas; // 👈 array = múltiplas linhas
-        }
-    }
-},
+                            return linhas; // 👈 array = múltiplas linhas
+                        }
+                    }
+                },
 
                 },
                 scales: {

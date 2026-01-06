@@ -86,24 +86,63 @@
                 <% }) %>
             </div>
 
-            <!-- Paginação -->
+            <%
+                const maxPaginasVisiveis = 2; // quantas antes/depois da atual
+                const inicio = Math.max(1, paginaAtual - maxPaginasVisiveis);
+                const fim = Math.min(totalPaginas, paginaAtual + maxPaginasVisiveis);
+            %>
+
             <div class="d-flex justify-content-center mt-4">
-                <ul class="pagination">
+                <ul class="pagination flex-wrap justify-content-center">
+
+                    <!-- Anterior -->
                     <li class="page-item <%= paginaAtual === 1 ? 'disabled' : '' %>">
-                        <a class="page-link" href="?page=<%= paginaAtual - 1 %><%= q ? `&q=${q}` : '' %>">Anterior</a>
+                    <a class="page-link" href="?page=<%= paginaAtual - 1 %>">Anterior</a>
                     </li>
-            
-                    <% for(let i = 1; i <= totalPaginas; i++) { %>
-                        <li class="page-item <%= i === paginaAtual ? 'active' : '' %>">
-                            <a class="page-link" href="?page=<%= i %><%= q ? `&q=${q}` : '' %>"><%= i %></a>
+
+                    <!-- Primeira página -->
+                    <% if (inicio > 1) { %>
+                    <li class="page-item">
+                        <a class="page-link" href="?page=1">1</a>
+                    </li>
+
+                    <% if (inicio > 2) { %>
+                        <li class="page-item disabled">
+                        <span class="page-link">...</span>
                         </li>
                     <% } %>
-            
-                    <li class="page-item <%= paginaAtual === totalPaginas ? 'disabled' : '' %>">
-                        <a class="page-link" href="?page=<%= paginaAtual + 1 %><%= q ? `&q=${q}` : '' %>">Próximo</a>
+                    <% } %>
+
+                    <!-- Páginas centrais -->
+                    <% for (let i = inicio; i <= fim; i++) { %>
+                    <li class="page-item <%= i === paginaAtual ? 'active' : '' %>">
+                        <a class="page-link" href="?page=<%= i %>"><%= i %></a>
                     </li>
+                    <% } %>
+
+                    <!-- Última página -->
+                    <% if (fim < totalPaginas) { %>
+                    <% if (fim < totalPaginas - 1) { %>
+                        <li class="page-item disabled">
+                        <span class="page-link">...</span>
+                        </li>
+                    <% } %>
+
+                    <li class="page-item">
+                        <a class="page-link" href="?page=<%= totalPaginas %>">
+                        <%= totalPaginas %>
+                        </a>
+                    </li>
+                    <% } %>
+
+                    <!-- Próximo -->
+                    <li class="page-item <%= paginaAtual === totalPaginas ? 'disabled' : '' %>">
+                    <a class="page-link" href="?page=<%= paginaAtual + 1 %>">Próximo</a>
+                    </li>
+
                 </ul>
             </div>
+
 
             <!-- Mensagem de exclusão -->
             <% if(mensagem){ %>

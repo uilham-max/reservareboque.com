@@ -143,18 +143,18 @@
                                         <div class="card-footer bg-light d-flex justify-content-between">
                                             <div>
                                                 <% if(reserva.situacaoReserva == 'APROVADO') { %>
-                                                    <a href="/reserva/admin/situacao/<%=reserva.id%>/APROVADO" class="btn btn-sm btn-outline-success">
+                                                    <a href="/reserva/admin/situacao/<%=reserva.id%>/APROVADO" onclick="return confirm('Confirma a operação?')" class="btn btn-sm btn-outline-success">
                                                         <i class="fas fa-play me-1"></i>Iniciar
                                                     </a>
                                                 <% } else if (reserva.situacaoReserva == 'ANDAMENTO') { %>
-                                                    <a href="/reserva/admin/situacao/<%=reserva.id%>/ANDAMENTO" class="btn btn-sm btn-outline-danger">
+                                                    <a href="/reserva/admin/situacao/<%=reserva.id%>/ANDAMENTO" onclick="return confirm('Confirma a operação?')" class="btn btn-sm btn-outline-danger">
                                                         <i class="fas fa-stop me-1"></i>Encerrar
                                                     </a>
                                                 <% } else if(reserva.situacaoReserva == 'AGUARDANDO_ACEITACAO'){ %>
                                                     <form action="/reserva/admin/pagamento/dinheiro" method="POST" class="d-inline">
                                                         <input type="hidden" name="codigoPagamento" value="<%=reserva.pagamento.codigoPagamento%>">
                                                         <input type="hidden" name="valor" value="<%=reserva.pagamento.valor%>">
-                                                        <button type="submit" class="btn btn-sm btn-outline-primary">
+                                                        <button type="submit" onclick="return confirm('Confirma a operação?')" class="btn btn-sm btn-outline-primary">
                                                             <i class="fas fa-check me-1"></i>Aprovar
                                                         </button>
                                                     </form>

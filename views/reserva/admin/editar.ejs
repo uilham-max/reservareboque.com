@@ -94,10 +94,10 @@
                                 </div>
                             </div><br>
 
-                            <div class="d-md-flex justify-content-center" style="margin: 0.5rem;">
-                                <button style="margin: 0.3rem;" class="btn btn-secondary" type="button" onclick="history.back()">Voltar</button>
-                                <input style="margin: 0.3rem;" class="btn btn-primary" id="botao" type="submit" value="Confirmar">
-                                <a href="/reserva/admin/cancelar/<%=reserva.pagamentoCodigoPagamento%>"  class="btn btn-info" onclick="return confirm('Confirma a exclusão?')">Exclui Reserva</a>
+                            <div class="d-md-flex justify-content-center">
+                                <button class="btn btn-secondary" type="button" onclick="history.back()">Voltar</button>
+                                <a href="/reserva/admin/cancelar/<%=reserva.pagamentoCodigoPagamento%>"  class="btn btn-danger" onclick="return confirm('Confirma a exclusão?')">Excluir</a>
+                                <input class="btn btn-success" id="botao" type="submit" value="Editar">
 
                             </div>
                             

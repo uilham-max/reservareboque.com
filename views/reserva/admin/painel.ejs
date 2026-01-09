@@ -67,6 +67,17 @@
                             </div>
                         </div>
                     </div>
+                    <script>
+                        const inputCompetencia = document.getElementById('competencia');
+
+                        const hoje = new Date();
+                        const ano = hoje.getFullYear();
+                        const mes = String(hoje.getMonth() + 1).padStart(2, '0');
+
+                        inputCompetencia.value = `${ano}-${mes}`;
+                    </script>
+
+
 
                     <input type="hidden" id="dataJSON" value="<%=dataJSON%>">
 

@@ -48,21 +48,6 @@ class Grafico {
             // ITERA PELAS RESERVAS
             for (const reserva of reservas) {
                 
-                // EXCLUI DO GRÁFICO DIAS QUE INICIAM DEPOIS DAS 18H
-                if (reserva.dataSaida.getHours() > 18) {
-                    // cria uma nova data para não alterar o objeto original
-                    const novaData = new Date(reserva.dataSaida);
-                    
-                    // soma 1 dia
-                    novaData.setDate(novaData.getDate() + 1);
-                    
-                    // opcional: zera hora para evitar efeitos colaterais
-                    novaData.setHours(0, 0, 0, 0);
-
-                    reserva.dataSaida = novaData;
-                }
-
-
                 const inicioReserva = moment(reserva.dataSaida);
                 const fimReserva    = moment(reserva.dataChegada);
 

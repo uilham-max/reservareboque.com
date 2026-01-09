@@ -99,7 +99,7 @@
 
           <!-- Anterior -->
           <li class="page-item <%= paginaAtual === 1 ? 'disabled' : '' %>">
-            <a class="page-link" href="?page=<%= paginaAtual - 1 %>">Anterior</a>
+            <a class="page-link" href="?page=<%= paginaAtual - 1 %>"><</a>
           </li>
 
           <!-- Primeira página -->
@@ -139,7 +139,7 @@
 
           <!-- Próximo -->
           <li class="page-item <%= paginaAtual === totalPaginas ? 'disabled' : '' %>">
-            <a class="page-link" href="?page=<%= paginaAtual + 1 %>">Próximo</a>
+            <a class="page-link" href="?page=<%= paginaAtual + 1 %>">></a>
           </li>
 
         </ul>

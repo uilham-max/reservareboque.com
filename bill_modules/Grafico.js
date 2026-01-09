@@ -39,10 +39,7 @@ class Grafico {
             }
 
             // BUSCA AS RESERVAS DO REBOQUE NO PERÍODO
-            const reservas = await DAOReserva.getAtivasDesteReboqueGrafico(
-                reboque.placa,
-                dataCompetencia
-            );
+            const reservas = await DAOReserva.getAtivasDesteReboqueGrafico( reboque.placa, dataCompetencia );
 
             if (!reservas || reservas.length === 0) {
                 continue;
@@ -50,6 +47,21 @@ class Grafico {
 
             // ITERA PELAS RESERVAS
             for (const reserva of reservas) {
+                
+                // EXCLUI DO GRÁFICO DIAS QUE INICIAM DEPOIS DAS 18H
+                if (reserva.dataSaida.getHours() > 18) {
+                    // cria uma nova data para não alterar o objeto original
+                    const novaData = new Date(reserva.dataSaida);
+                    
+                    // soma 1 dia
+                    novaData.setDate(novaData.getDate() + 1);
+                    
+                    // opcional: zera hora para evitar efeitos colaterais
+                    novaData.setHours(0, 0, 0, 0);
+
+                    reserva.dataSaida = novaData;
+                }
+
 
                 const inicioReserva = moment(reserva.dataSaida);
                 const fimReserva    = moment(reserva.dataChegada);
@@ -62,17 +74,11 @@ class Grafico {
                     continue;
                 }
 
-                const valorDiaria =
-                    reserva.pagamento.valor / reserva.diarias;
-
+                const valorDiaria = reserva.pagamento.valor / reserva.diarias;
                 const nomeCliente = reserva.cliente.nome;
 
                 // DISTRIBUI A RESERVA PELOS DIAS
-                for (
-                    let diaIter = inicioEfetivo.clone();
-                    diaIter.isSameOrBefore(fimEfetivo);
-                    diaIter.add(1, 'day')
-                ) {
+                for ( let diaIter = inicioEfetivo.clone(); diaIter.isSameOrBefore(fimEfetivo); diaIter.add(1, 'day') ) {
                     const index = diaIter.date() - 1;
 
                     dia[index].y += valorDiaria;

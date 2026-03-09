@@ -90,6 +90,15 @@ class ReservaController {
             return res.render('erro', {mensagem: "A hora de início não pode ser menor que a hora atual."})
         }
 
+        // SE O USUÁRIO NÃO INTERAGIR COM O DATEPICKER, AS DATAS SERÃO DEFINIDAS COMO HOJE E AMANHÃ
+        if(dataInicio == '' || dataFim == ''){
+            let hoje = new Date()
+            let amanha = new Date()
+            amanha.setDate(hoje.getDate() +1)
+            dataInicio = hoje
+            dataFim = amanha
+        }
+
         dataInicio = new Date(dataInicio)
         dataFim = new Date(dataFim)
         dataInicio.setHours(horaInicio, 0, 0)

@@ -237,7 +237,7 @@
 
                         <div class="d-flex justify-content-center mt-3  mb-3" >
                             <button class="btn btn-secondary me-3" type="button" onclick="history.back()">Voltar</button>
-                            <input class="btn btn-primary" type="submit" value="Criar Reserva">
+                            <input class="btn btn-primary" type="submit" value="Criar Reserva" id="submitBtn" onclick="disableButton()">
                         </div>
                         
                     </div>
@@ -275,5 +275,12 @@
 
 
     <%-include('../../partials/footer.ejs')%>
+    <script>
+        function disableButton() {
+            const btn = document.getElementById('submitBtn');
+            btn.disabled = true;
+            btn.value = 'Processando...';
+        }
+    </script>
 </body>
 </html>

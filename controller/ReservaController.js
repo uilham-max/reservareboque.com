@@ -11,6 +11,7 @@ const moment = require('moment-timezone')
 const { deleteCobranca } = require('../helpers/API_Pagamentos');
 const Caledario = require('../bill_modules/Calendario')
 const Logger = require('nodemon/lib/utils/log')
+const { FormaPagamento } = require('../helpers/enums')
 
 
 
@@ -185,7 +186,7 @@ class ReservaController {
          * Finalmente o servidor retorna a página de confirmação dos dados com os objetos criados
         */
     
-        return res.render('reserva/cliente/confirmar', {user: clienteNome(req, res), reboque: reboque, cliente: cliente, reserva: reserva, mensagem: '' })
+        return res.render('reserva/cliente/confirmar', {user: clienteNome(req, res), reboque: reboque, cliente: cliente, reserva: reserva, mensagem: '', FormaPagamento: FormaPagamento })
 
     }
     static async postGerarQRCode(req, res){
@@ -284,7 +285,7 @@ class ReservaController {
             }
     
             let situacaoReserva = 'AGUARDANDO_PAGAMENTO'
-            if(formaPagamento == 'DINHEIRO'){
+            if(formaPagamento == FormaPagamento.DINHEIRO){
                 situacaoReserva = 'AGUARDANDO_ACEITACAO'
             }
     
@@ -298,7 +299,7 @@ class ReservaController {
                 req.session.submittedForms = req.session.submittedForms || [];
                 req.session.submittedForms.push(formIdentifier);
     
-                if(formaPagamento == 'PIX'){
+                if(formaPagamento == FormaPagamento.PIX){
                     return res.render('reserva/cliente/qrcode', {user: clienteNome(req, res), formaPagamento: formaPagamento, id_cobranca: retorno.id_cobranca, image: retorno.encodedImage, PIXCopiaECola: retorno.PIXCopiaECola, mensagem: ''})
                 } else {
                     return res.render('reserva/cliente/sucesso', {user: clienteNome(req, res), formaPagamento: formaPagamento, mensagem: ""})

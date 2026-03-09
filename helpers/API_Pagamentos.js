@@ -1,5 +1,6 @@
 const axios = require('axios');
 const { getAccessToken, getUrlBase } = require('./Env');
+const { FormaPagamento } = require('./enums');
 
 
 const ACCESS_TOKEN = getAccessToken()
@@ -324,10 +325,10 @@ async function criarCobranca(cpfCnpj, nome, telefone, email, valor, data_vencime
         retornoPag = await criarPagamento(customerID, valor, data_vencimento, dataInicio, dataFim, placa, formaPagamento);
 
         if(retornoPag.billingType == 'UNDEFINED'){
-            retornoPag.billingType = 'DINHEIRO'
+            retornoPag.billingType = FormaPagamento.DINHEIRO
         }
 
-        if(formaPagamento == 'PIX'){
+        if(formaPagamento == FormaPagamento.PIX){
             retornoQR = await gerarQRCode(retornoPag.id);
         }
 

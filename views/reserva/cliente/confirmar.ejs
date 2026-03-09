@@ -225,7 +225,7 @@
                             <input class="form-control" id="formaPagamento" type="text" name="formaPagamento" value="<%=reserva.formaPagamento%>" disabled>
                         </div>
 
-                        <% if(reserva.formaPagamento == 'DINHEIRO') {%>
+                        <% if(reserva.formaPagamento == FormaPagamento.DINHEIRO) {%>
                             <div class="alert alert-danger mt-3">
                                 <strong>Atenção!</strong>
                                 Forma de pagamento em <strong>dinheiro</strong> depende da aprovação do administrador.

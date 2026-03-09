@@ -6,6 +6,7 @@ const {adminNome} = require('../helpers/getSessionNome')
 const moment = require('moment-timezone')
 const DAOPagamento = require('../database/DAOPagamento')
 const { estornoPagamento, receiveInCash, criarCobranca } = require('../helpers/API_Pagamentos')
+const { FormaPagamento } = require('../helpers/enums')
 
 
 
@@ -77,7 +78,7 @@ class ReboqueController {
             'formaPagamento': formaPagamento,
         }
     
-        return res.render('reboque/confirmar', {user:'', reboque: reboque, cliente: cliente, reserva: reserva, mensagem: '' })
+        return res.render('reboque/confirmar', {user:'', reboque: reboque, cliente: cliente, reserva: reserva, mensagem: '', FormaPagamento: FormaPagamento })
     
     }
     static async postGerarReserva(req, res){

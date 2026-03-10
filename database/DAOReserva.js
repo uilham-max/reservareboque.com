@@ -7,6 +7,7 @@ const sequelize = require('sequelize')
 const Pagamento = require('../model/Pagamento.js')
 const moment = require('moment-timezone')
 const { startOfMonth, endOfMonth } = require('date-fns')
+const { SituacaoReserva } = require('../helpers/enums')
 
 
 class DAOReserva {
@@ -14,7 +15,7 @@ class DAOReserva {
     static async atualizaSituacaoParaAprovado(codigoPagamento){
         try{
             await Reserva.update(
-                {situacaoReserva: "APROVADO"},
+                {situacaoReserva: SituacaoReserva.APROVADO},
                 {where: {pagamentoCodigoPagamento: codigoPagamento}}
             )
             console.log('Atualizando a situação da reserva para "APROVADO"...');
@@ -31,7 +32,7 @@ class DAOReserva {
         try{
             await Reserva.update(
                 {
-                    situacaoReserva: 'CONCLUIDO', 
+                    situacaoReserva: SituacaoReserva.CONCLUIDO, 
                     dataChegada: currentDate
                 },
                 {where: {id: idReserva}},
@@ -47,7 +48,7 @@ class DAOReserva {
         console.log('Atualizando situação da reserva para ANDAMENTO...');
         try{
             await Reserva.update(
-                {situacaoReserva: 'ANDAMENTO'},
+                {situacaoReserva: SituacaoReserva.ANDAMENTO},
                 {where: {id: idReserva}},
             )
             console.log('Situação atualizada para ANDAMENTO com sucesso!');
@@ -60,7 +61,7 @@ class DAOReserva {
     static async atualizaSituacaoParaCancelada(codigoPagamento){
         try{
             await Reserva.update(
-                {situacaoReserva: "CANCELADO"},
+                {situacaoReserva: SituacaoReserva.CANCELADO},
                 {where: {pagamentoCodigoPagamento: codigoPagamento}},
             )
             console.log(`${codigoPagamento} --> Reserva "CANCELADA"`);
@@ -194,8 +195,8 @@ class DAOReserva {
                     ],
                     clienteCpf: cpf,
                     [Op.or]: [
-                        {situacaoReserva: 'APROVADO'},
-                        {situacaoReserva: 'ANDAMENTO'}
+                        {situacaoReserva: SituacaoReserva.APROVADO},
+                        {situacaoReserva: SituacaoReserva.ANDAMENTO}
                     ]
                     
                 },
@@ -221,10 +222,10 @@ class DAOReserva {
                         { dataChegada: { [Op.gte]: currentDate } }
                     ],
                     [Op.or]: [
-                        { situacaoReserva: 'APROVADO' },
-                        { situacaoReserva: 'ANDAMENTO' },
-                        { situacaoReserva: 'AGUARDANDO_PAGAMENTO' },
-                        { situacaoReserva: 'AGUARDANDO_ACEITACAO' },
+                        { situacaoReserva: SituacaoReserva.APROVADO },
+                        { situacaoReserva: SituacaoReserva.ANDAMENTO },
+                        { situacaoReserva: SituacaoReserva.AGUARDANDO_PAGAMENTO },
+                        { situacaoReserva: SituacaoReserva.AGUARDANDO_ACEITACAO },
                     ]
                 },
                 order: ['dataSaida'],
@@ -286,7 +287,7 @@ class DAOReserva {
                     [Op.and]: [
                         sequelize.literal(`("dataSaida", "dataChegada") OVERLAPS (:inicioDoPeriodo, :fimDoPeriodo)`),
                         {reboquePlaca: reboquePlaca},
-                        { situacaoReserva: { [Op.ne]: 'CANCELADO' } } // Modificado para mostrar as reservas canceladas na tela de periodo da reserva
+                        { situacaoReserva: { [Op.ne]: SituacaoReserva.CANCELADO } } // Modificado para mostrar as reservas canceladas na tela de periodo da reserva
                     ],
                 },
                 replacements: {inicioDoPeriodo, fimDoPeriodo},
@@ -324,10 +325,10 @@ class DAOReserva {
                         { dataChegada: { [Op.gte]: currentDate } }
                     ],
                     [Op.or]: [
-                        { situacaoReserva: 'APROVADO' },
-                        { situacaoReserva: 'ANDAMENTO' },
-                        { situacaoReserva: 'AGUARDANDO_PAGAMENTO'},
-                        { situacaoReserva: 'AGUARDANDO_ACEITACAO'},
+                        { situacaoReserva: SituacaoReserva.APROVADO },
+                        { situacaoReserva: SituacaoReserva.ANDAMENTO },
+                        { situacaoReserva: SituacaoReserva.AGUARDANDO_PAGAMENTO},
+                        { situacaoReserva: SituacaoReserva.AGUARDANDO_ACEITACAO},
                     ]
                 },
                 order: [['id', 'ASC']],

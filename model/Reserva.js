@@ -36,7 +36,7 @@ const Reserva = conexao.define('reserva', {
         }
     },
     situacaoReserva: {
-        // APROVADO, CONCLUIDO, CANCELADO, ANDAMENTO, AGUARDANDO_PAGAMENTO, ADIADO
+        // Valores possíveis: ver SituacaoReserva em helpers/enums.js
         type: Sequelize.STRING
     }
 }, {

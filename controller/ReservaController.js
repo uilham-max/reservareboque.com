@@ -11,7 +11,7 @@ const moment = require('moment-timezone')
 const { deleteCobranca } = require('../helpers/API_Pagamentos');
 const Caledario = require('../bill_modules/Calendario')
 const Logger = require('nodemon/lib/utils/log')
-const { FormaPagamento } = require('../helpers/enums')
+const { FormaPagamento, SituacaoReserva } = require('../helpers/enums')
 
 
 
@@ -284,9 +284,9 @@ class ReservaController {
                 return res.render('erro', { mensagem: "Erro ao criar pagamento."})
             }
     
-            let situacaoReserva = 'AGUARDANDO_PAGAMENTO'
+            let situacaoReserva = SituacaoReserva.AGUARDANDO_PAGAMENTO
             if(formaPagamento == FormaPagamento.DINHEIRO){
-                situacaoReserva = 'AGUARDANDO_ACEITACAO'
+                situacaoReserva = SituacaoReserva.AGUARDANDO_ACEITACAO
             }
     
             // RESERVA INSERT
@@ -337,7 +337,7 @@ class ReservaController {
 
         console.log(`Situação da reserva: ${reserva.situacaoReserva}`);
 
-        if (reserva.situacaoReserva == 'ANDAMENTO' || reserva.situacaoReserva == 'FINALIZADO' || reserva.situacaoReserva == 'CANCELADO') {
+        if (reserva.situacaoReserva == SituacaoReserva.ANDAMENTO || reserva.situacaoReserva == SituacaoReserva.CONCLUIDO || reserva.situacaoReserva == SituacaoReserva.CANCELADO) {
             return res.render('erro', {mensagem: "Erro ao obter detalhes da reserva."})
         }
 
@@ -349,7 +349,7 @@ class ReservaController {
         let reboquePlaca = reserva.dataValues.reboquePlaca
     
         // NÃO PODE ALTERAR A DATA DE UMA RESERVA EM ANDAMENTO
-        if(reserva.dataValues.situacaoReserva == 'ANDAMENTO'){
+        if(reserva.dataValues.situacaoReserva == SituacaoReserva.ANDAMENTO){
             return res.render('erro', {mensagem: "Erro. Não pode alterar a data de uma reserva em andamento."})
         }
         // console.log(reserva.dataValues.situacaoReserva);
@@ -495,10 +495,10 @@ class ReservaController {
         let resposta
         
         switch (situacao) {
-            case 'APROVADO':
+            case SituacaoReserva.APROVADO:
                 resposta = await DAOReserva.atualizaSituacaoParaAndamento(idReserva)
                 break
-            case 'ANDAMENTO':
+            case SituacaoReserva.ANDAMENTO:
                 resposta = await DAOReserva.atualizaSituacaoParaConcluido(idReserva)
                 break
             default:

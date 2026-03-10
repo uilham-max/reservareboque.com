@@ -9,6 +9,46 @@
     <div class="container-responsive">
         <div class="conteudo">
             <div class="container">
+                <!-- Header de status das reservas (dashboard) -->
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 header-reservas">
+                            <h2 class="fw-bold text-dark mb-3 mb-md-0"><i class="fas fa-tachometer-alt"></i> Visão Geral</h2>
+                            <div class="d-flex flex-wrap gap-2 gap-md-3 justify-content-center justify-content-md-end">
+                                <div class="stat-card bg-success text-white p-3 rounded shadow">
+                                    <i class="fas fa-check-circle fa-2x"></i>
+                                    <div class="mt-2">
+                                        <div class="h5 mb-0"><%= reservas.filter(r => r.situacaoReserva === 'APROVADO').length %></div>
+                                        <small>Aprovadas</small>
+                                    </div>
+                                </div>
+                                <div class="stat-card bg-primary text-white p-3 rounded shadow">
+                                    <i class="fas fa-user-clock fa-2x"></i>
+                                    <div class="mt-2">
+                                        <div class="h5 mb-0"><%= reservas.filter(r => r.situacaoReserva === 'AGUARDANDO_ACEITACAO').length %></div>
+                                        <small>Aguardando Aceitação</small>
+                                    </div>
+                                </div>
+                                <div class="stat-card bg-warning text-dark p-3 rounded shadow">
+                                    <i class="fas fa-dollar-sign fa-2x"></i>
+                                    <div class="mt-2">
+                                        <div class="h5 mb-0"><%= reservas.filter(r => r.situacaoReserva === 'AGUARDANDO_PAGAMENTO').length %></div>
+                                        <small>Aguardando Pagamento</small>
+                                    </div>
+                                </div>
+                                <div class="stat-card bg-info text-white p-3 rounded shadow">
+                                    <i class="fas fa-clock fa-2x"></i>
+                                    <div class="mt-2">
+                                        <div class="h5 mb-0"><%= reservas.filter(r => r.situacaoReserva === 'ANDAMENTO').length %></div>
+                                        <small>Em Andamento</small>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="lista-reboques">
 
                     <%
@@ -18,52 +58,75 @@
                     %>
 
                     <div class="container mt-3">
-                        <div class="card shadow-sm">
-                            <div class="card-body p-3">
-
-                                <!-- TOTAL GERAL -->
-                                <div class="text-center mb-3">
-                                    <small class="text-muted">Total do período</small><br>
-                                    <h5 class="fw-bold text-success mb-0">
-                                        R$ <%= totalGeral.toFixed(2) %>
-                                    </h5>
+                        <div class="card h-100 shadow-sm border-0" style="border-radius: 15px; overflow: hidden; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);">
+                            <!-- Header com Total Geral -->
+                            <div class="card-header text-white header-success" style="border: none; padding: 1rem;">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="mb-0 fw-bold"><i class="fas fa-chart-line"></i> Receita do Período</h6>
+                                        <small>Resumo financeiro</small>
+                                    </div>
+                                    <div class="text-end">
+                                        <div class="fs-4 fw-bold">R$ <%= totalGeral.toFixed(2).replace('.',',') %></div>
+                                        <small>Total arrecadado</small>
+                                    </div>
                                 </div>
+                            </div>
 
-                                <!-- LISTA DE REBOQUES -->
-                                <% reboques.forEach(function(reboque) { %>
-                                    <div class="card mb-2">
-                                        <div class="card-body py-2 px-3">
-                                            <div class="d-flex justify-content-between align-items-center">
-                                                <div>
-                                                    <small class="text-muted">Placa</small><br>
-                                                    <strong><%= reboque.reboquePlaca %></strong>
-                                                </div>
-
-                                                <div class="text-end">
-                                                    <small class="text-muted">Total</small><br>
-                                                    <strong class="text-success">
-                                                        R$ <%= Number(reboque.total).toFixed(2) %>
-                                                    </strong>
+                            <!-- Body com Lista de Reboques -->
+                            <div class="card-body">
+                                <div class="row g-3">
+                                    <% reboques.forEach(function(reboque) { %>
+                                    <div class="col-12 col-md-6 col-lg-4">
+                                        <div class="card border-0 shadow-sm" style="border-radius: 10px; background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);">
+                                            <div class="card-body p-3">
+                                                <div class="d-flex align-items-center justify-content-between">
+                                                    <div class="d-flex align-items-center">
+                                                        <div class="avatar-circle bg-success text-white me-3" style="width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 0.9rem;">
+                                                            <i class="fas fa-trailer"></i>
+                                                        </div>
+                                                        <div>
+                                                            <small class="text-muted d-block">Reboque</small>
+                                                            <strong class="text-dark"><%= reboque.reboquePlaca %></strong>
+                                                        </div>
+                                                    </div>
+                                                    <div class="text-end">
+                                                        <small class="text-muted d-block">Receita</small>
+                                                        <strong class="text-success fs-6">R$ <%= Number(reboque.total).toFixed(2).replace('.',',') %></strong>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                <% }) %>
-
+                                    <% }) %>
+                                </div>
                             </div>
                         </div>
                     </div>
 
                     <div class="container mt-3">
-                        <div class="card shadow-sm">
-                            <div class="container mt-3">
-                                <form class="d-flex align-items-center gap-2" action="painel">
-                                    <input class="btn btn-sm btn-outline-success" type="submit" value="Buscar">
-                                    <input type="text" placeholder="YYYY-MM" id="competencia" name="competencia" class="form-control form-control-sm" style="max-width: 120px;">
-                                </form>
+                        <div class="card h-100 shadow-sm border-0" style="border-radius: 15px; overflow: hidden; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);">
+                            <!-- Header do Gráfico -->
+                            <div class="card-header text-white header-info" style="border: none; padding: 1rem;">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="mb-0 fw-bold"><i class="fas fa-chart-bar"></i> Análise de Receita</h6>
+                                        <small>Receita diária por reboque</small>
+                                    </div>
+                                    <div class="text-end">
+                                        <form class="d-flex align-items-center gap-2" action="painel">
+                                            <input class="btn btn-sm btn-outline-light" type="submit" value="Buscar">
+                                            <input type="text" placeholder="YYYY-MM" id="competencia" name="competencia" class="form-control form-control-sm" style="max-width: 120px;">
+                                        </form>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="container mt-3" >
-                                <canvas id="myChart"></canvas>
+
+                            <!-- Body com o Gráfico -->
+                            <div class="card-body">
+                                <div style="position: relative; height: 400px; width: 100%;">
+                                    <canvas id="myChart"></canvas>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -101,57 +164,84 @@
                                     let sitBadge = (sit === 'APROVADO' ? 'bg-success' : (sit === 'ANDAMENTO' ? 'bg-info' : (sit === 'AGUARDANDO_ACEITACAO' ? 'bg-warning text-dark' : 'bg-secondary')));
                                 %>
                                 <div class="col-12 col-md-6 col-lg-4">
-                                    <div class="card reserva-card shadow-sm h-100">
-                                        <div class="card-body">
-                                            <div class="d-flex justify-content-between align-items-start">
+                                    <div class="card h-100 shadow-sm border-0" style="border-radius: 15px; overflow: hidden; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);">
+                                        <!-- Header com Status e Valor -->
+                                        <div class="card-header text-white <% if (reserva.situacaoReserva === 'APROVADO') { %>header-aprovado<% } else if (reserva.situacaoReserva === 'CANCELADO') { %>header-cancelado<% } else if (reserva.situacaoReserva === 'ANDAMENTO') { %>header-andamento<% } else if (reserva.situacaoReserva === 'CONCLUIDO') { %>header-concluido<% } else { %>header-default<% } %>" style="border: none; padding: 1rem;">
+                                            <div class="d-flex flex-wrap justify-content-between align-items-start gap-2">
                                                 <div>
-                                                    <h6 class="mb-1 text-primary fw-bold">
-                                                        <i class="fas fa-user me-1"></i><%= primeiroNome %> <%= ultimoNome %>
-                                                    </h6>
-                                                    <div class="small text-muted">
-                                                        <i class="fas fa-trailer me-1"></i><%= reserva.reboque.placa %>
+                                                    <h6 class="mb-2 fw-bold"><i class="fas fa-calendar-check"></i> Reserva</h6>
+                                                    <small>ID: <%=reserva.id%></small>
+                                                </div>
+                                                <div class="text-end">
+                                                    <span class="badge bg-white text-dark fw-bold d-block mb-2"><%= sitLabel %></span>
+                                                    <div class="fw-bold">R$ <%= (reserva.pagamento.valor).toFixed(2).replace('.',',') %></div>
+                                                    <small><%=reserva.diarias%> dia(s)</small>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Body com Infos Principais -->
+                                        <div class="card-body">
+                                            <div class="row g-3">
+                                                <!-- Cliente -->
+                                                <div class="col-12">
+                                                    <div class="d-flex align-items-center">
+                                                        <div class="avatar-circle bg-primary text-white me-3" style="width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold;">
+                                                            <%= primeiroNome.charAt(0).toUpperCase() %>
+                                                        </div>
+                                                        <div>
+                                                            <h6 class="mb-0 fw-bold text-dark"><%= primeiroNome %> <%= ultimoNome %></h6>
+                                                            <small class="text-muted"><i class="fas fa-id-card"></i> <%= reserva.cliente.cpf %></small>
+                                                            <br>
+                                                            <small class="text-muted"><i class="fas fa-phone"></i> <%= reserva.cliente.telefone %></small>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                                <span class="badge <%= sitBadge %>"><%= sitLabel %></span>
-                                            </div>
 
-                                            <div class="mt-2 d-flex justify-content-between align-items-center">
-                                                <div class="fw-bold fs-6 text-success">
-                                                    R$ <%= (reserva.pagamento.valor).toFixed(2).replace('.',',') %>
+                                                <!-- Reboque -->
+                                                <div class="col-12">
+                                                    <div class="p-2 bg-light rounded border-start border-success border-4">
+                                                        <div class="d-flex align-items-center justify-content-between">
+                                                            <div>
+                                                                <i class="fas fa-trailer text-success me-2"></i>
+                                                                <strong class="text-dark"><%= reserva.reboque.placa %></strong>
+                                                                <small class="text-muted d-block">Diária: R$ <%= (reserva.pagamento.valor/reserva.diarias).toFixed(2).replace('.',',') %></small>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                                <span class="badge <%= formaBadge %>"><%= forma %></span>
-                                            </div>
 
-                                            <button class="btn btn-sm btn-link px-0 mt-2" type="button"
-                                                    data-bs-toggle="collapse" data-bs-target="#detalhes<%= i %>">
-                                                Detalhes <i class="fas fa-chevron-down"></i>
-                                            </button>
+                                                <!-- Período -->
+                                                <div class="col-12">
+                                                    <div class="p-2 bg-light rounded border-start border-info border-4">
+                                                        <div class="row g-2">
+                                                            <div class="col-6">
+                                                                <small class="text-muted d-block"><i class="fas fa-calendar-day"></i> Saída</small>
+                                                                <strong class="text-dark"><%= new Date(reserva.dataSaida).toLocaleDateString('pt-BR') %></strong>
+                                                                <small class="text-muted d-block"><%= new Date(reserva.dataSaida).toString().slice(16,18) %>h</small>
+                                                            </div>
+                                                            <div class="col-6">
+                                                                <small class="text-muted d-block"><i class="fas fa-calendar-check"></i> Chegada</small>
+                                                                <strong class="text-dark"><%= new Date(reserva.dataChegada).toLocaleDateString('pt-BR') %></strong>
+                                                                <small class="text-muted d-block"><%= new Date(reserva.dataChegada).toString().slice(16,18) %>h</small>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
 
-                                            <div id="detalhes<%= i %>" class="collapse">
-                                                <hr class="my-2">
-                                                <div class="small">
-                                                    <div class="mb-1"><i class="fas fa-phone me-1"></i><%= reserva.cliente.telefone %></div>
-                                                    <div class="mb-1"><i class="fas fa-file-alt me-1"></i><%= reserva.cliente.cpf %></div>
-                                                    <div class="mb-1">
-                                                        <i class="fas fa-dollar-sign me-1"></i>Diária:
-                                                        R$ <%= (reserva.pagamento.valor/reserva.diarias).toFixed(2).replace('.',',') %>
-                                                        <span class="ms-2"><i class="fas fa-clock me-1"></i>Dia(s): <%= reserva.diarias %></span>
-                                                    </div>
-                                                    <div class="mb-1">
-                                                        <i class="fas fa-calendar-day me-1 text-success"></i>
-                                                        Início: <%= new Date(reserva.dataSaida).toLocaleDateString('pt-BR') %>
-                                                        <%= new Date(reserva.dataSaida).toString().slice(16,18) %>h
-                                                    </div>
-                                                    <div class="mb-1">
-                                                        <i class="fas fa-calendar-check me-1 text-danger"></i>
-                                                        Fim: <%= new Date(reserva.dataChegada).toLocaleDateString('pt-BR') %>
-                                                        <%= new Date(reserva.dataChegada).toString().slice(16,18) %>h
+                                                <!-- Forma de Pagamento -->
+                                                <div class="col-12">
+                                                    <div class="d-flex justify-content-center">
+                                                        <span class="badge <%= formaBadge %> fs-6 px-3 py-2">
+                                                            <i class="fas fa-credit-card me-1"></i><%= forma %>
+                                                        </span>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
 
-                                        <div class="card-footer bg-light d-flex justify-content-between">
+                                        <!-- Footer com Ações -->
+                                        <div class="card-footer bg-white border-0 d-flex justify-content-between align-items-center">
                                             <div>
                                                 <% if(reserva.situacaoReserva == 'APROVADO') { %>
                                                     <a href="/reserva/admin/situacao/<%=reserva.id%>/APROVADO" onclick="return confirm('Confirma a operação?')" class="btn btn-sm btn-outline-success">
@@ -220,29 +310,31 @@
         const currentMonth = monthNames[now.getMonth()]; // Nome do mês atual
         const lastDayOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate(); // Último dia do mês
     
-        // Paleta de cores para os reboques
+        // Paleta de cores elegante para os reboques
         const colors = [
-            'rgba(120, 120, 120)', // Cinza
-            'rgba(0, 0, 0)',       // Preto
-            'rgba(255, 255, 255)',  // Branco
-            'rgba(255, 99, 132, 0.2)',  // Vermelho
-            'rgba(54, 162, 235, 0.2)',  // Azul
-            'rgba(255, 206, 86, 0.2)',  // Amarelo
-            'rgba(75, 192, 192, 0.2)',  // Verde água
-            'rgba(153, 102, 255, 0.2)', // Roxo
-            'rgba(255, 159, 64, 0.2)'   // Laranja
+            'rgba(54, 162, 235, 0.8)',   // Azul
+            'rgba(255, 99, 132, 0.8)',   // Vermelho
+            'rgba(255, 205, 86, 0.8)',   // Amarelo
+            'rgba(75, 192, 192, 0.8)',   // Verde menta
+            'rgba(153, 102, 255, 0.8)',  // Roxo
+            'rgba(255, 159, 64, 0.8)',   // Laranja
+            'rgba(199, 199, 199, 0.8)',  // Cinza
+            'rgba(83, 102, 255, 0.8)',   // Azul escuro
+            'rgba(255, 99, 255, 0.8)',   // Rosa
+            'rgba(99, 255, 132, 0.8)'    // Verde claro
         ];
     
         const borderColors = [
-            'rgba(0, 0, 0, 0.5)',   
-            'rgba(0, 0, 0, 0.5)',   
-            'rgba(0, 0, 0, 0.5)',  
-            'rgba(255, 99, 132, 1)',
-            'rgba(54, 162, 235, 1)',
-            'rgba(255, 206, 86, 1)',
-            'rgba(75, 192, 192, 1)',
-            'rgba(153, 102, 255, 1)',
-            'rgba(255, 159, 64, 1)'
+            'rgba(54, 162, 235, 1)',    // Azul
+            'rgba(255, 99, 132, 1)',    // Vermelho
+            'rgba(255, 205, 86, 1)',    // Amarelo
+            'rgba(75, 192, 192, 1)',    // Verde menta
+            'rgba(153, 102, 255, 1)',   // Roxo
+            'rgba(255, 159, 64, 1)',    // Laranja
+            'rgba(199, 199, 199, 1)',   // Cinza
+            'rgba(83, 102, 255, 1)',    // Azul escuro
+            'rgba(255, 99, 255, 1)',    // Rosa
+            'rgba(99, 255, 132, 1)'     // Verde claro
         ];
     
         new Chart(ctx, {
@@ -252,7 +344,9 @@
                     ...dataset,
                     backgroundColor: colors[index % colors.length],
                     borderColor: borderColors[index % borderColors.length],
-                    borderWidth: 1,
+                    borderWidth: 2,
+                    borderRadius: 8,
+                    borderSkipped: false,
                 })),
             },
             options: {
@@ -260,55 +354,118 @@
                 maintainAspectRatio: false,
                 plugins: {
                     title: {
+                        display: true,
+                        text: 'Análise de Receita - Receita Diária por Reboque',
                         font: {
                             size: window.innerWidth < 600 ? 16 : 20,
+                            weight: 'bold',
+                            family: 'Arial, sans-serif'
                         },
+                        color: '#495057',
+                        padding: {
+                            top: 10,
+                            bottom: 30
+                        }
                     },
                     legend: {
                         labels: {
                             font: {
                                 size: window.innerWidth < 600 ? 10 : 14,
+                                family: 'Arial, sans-serif'
                             },
+                            color: '#495057',
+                            padding: 20,
+                            usePointStyle: true,
+                            pointStyle: 'rectRounded',
+                            generateLabels: function(chart) {
+                                const datasets = chart.data.datasets;
+                                const labels = chart.data.labels;
+                                return datasets.map((dataset, i) => ({
+                                    text: dataset.label,
+                                    fillStyle: dataset.backgroundColor,
+                                    strokeStyle: dataset.borderColor,
+                                    lineWidth: dataset.borderWidth,
+                                    hidden: !chart.isDatasetVisible(i),
+                                    index: i,
+                                    pointStyle: 'rectRounded'
+                                }));
+                            }
                         },
+                        position: 'top'
                     },
                     tooltip: {
-                    callbacks: {
-                        label: function (context) {
-                            const ponto = context.raw;
-
-                            const linhas = [];
-
-                            linhas.push(`Valor: R$ ${Number(ponto.y).toFixed(2)}`);
-
-                            if (ponto.clientes && ponto.clientes.length > 0) {
-                                ponto.clientes.forEach(c => linhas.push(`- ${c}`));
+                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                        titleColor: '#fff',
+                        bodyColor: '#fff',
+                        borderColor: '#fff',
+                        borderWidth: 1,
+                        cornerRadius: 8,
+                        displayColors: true,
+                        callbacks: {
+                            label: function (context) {
+                                const ponto = context.raw;
+                                const linhas = [];
+                                linhas.push(`Valor: R$ ${Number(ponto.y).toFixed(2).replace('.',',')}`);
+                                if (ponto.clientes && ponto.clientes.length > 0) {
+                                    ponto.clientes.forEach(c => linhas.push(`- ${c}`));
+                                }
+                                return linhas;
                             }
-
-                            return linhas; // 👈 array = múltiplas linhas
                         }
                     }
-                },
 
                 },
                 scales: {
                     x: {
-                        type: 'linear', // ✅ pode manter linear (dias do mês)
+                        type: 'linear',
                         min: 1,
                         max: lastDayOfMonth,
                         ticks: {
                             stepSize: 1,
+                            color: '#6c757d',
+                            font: {
+                                size: 12,
+                                family: 'Arial, sans-serif'
+                            }
+                        },
+                        grid: {
+                            color: 'rgba(108, 117, 125, 0.1)',
+                            borderColor: 'rgba(108, 117, 125, 0.2)'
                         },
                         stacked: true
                     },
                     y: {
-                        display: false,
-                        stacked: true
+                        display: true,
+                        stacked: true,
+                        ticks: {
+                            callback: function(value) {
+                                return 'R$ ' + value.toFixed(2).replace('.', ',');
+                            },
+                            color: '#6c757d',
+                            font: {
+                                size: 11,
+                                family: 'Arial, sans-serif'
+                            }
+                        },
+                        grid: {
+                            color: 'rgba(0, 0, 0, 0.1)'
+                        }
                     },
                 },
                 animation: {
-                    duration: 1500, // barra fica melhor com animação mais curta
-                    easing: 'easeOutQuart',
+                    duration: 2000,
+                    easing: 'easeInOutQuart',
                 },
+                interaction: {
+                    mode: 'index',
+                    intersect: false,
+                },
+                elements: {
+                    bar: {
+                        borderRadius: 8,
+                        borderSkipped: false,
+                    }
+                }
             },
         });
 

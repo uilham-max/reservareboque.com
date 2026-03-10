@@ -76,7 +76,7 @@ class Grafico {
 
             // DATASET DO REBOQUE
             datasets.push({
-                label: reboque.placa.slice(0, 3),
+                label: reboque.placa,
                 data: dia
             });
         }

@@ -8,6 +8,13 @@ var { removerPagamentosAPI } = require('./helpers/removerPagamentosNaoAprovados.
 const port = 3000
 const app = express()
 
+require('./model/Cliente');
+require('./model/Reserva');
+require('./model/CreditosReserva');
+require('./model/Reboque');
+require('./model/Pagamento');
+require('./model/Admin');
+
 const indexRouter = require('./routes/indexRouter')
 const adminRouter = require('./routes/adminRouter')
 const clienteRouter = require('./routes/clienteRouter')

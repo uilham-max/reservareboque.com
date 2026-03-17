@@ -21,6 +21,7 @@ const clienteRouter = require('./routes/clienteRouter')
 const reboqueRouter = require('./routes/reboqueRouter')
 const pagamentoRouter = require('./routes/pagamentoRouter')
 const reservaRouter = require('./routes/reservaRouter')
+const creditosReservaRouter = require('./routes/CreditosReservaRouter')
 
 // Para Express 4.16 ou superior
 app.use(express.json())
@@ -52,6 +53,8 @@ app.use('/cliente', clienteRouter)
 app.use('/reboque', reboqueRouter)
 app.use ('/pagamento', pagamentoRouter)
 app.use('/reserva', reservaRouter)
+app.use('/creditos-reserva', creditosReservaRouter)
+
 
 // Como o render não fica mais de 1 minuto no ar, isso remove pagamenos quando ele sobe.
 try{

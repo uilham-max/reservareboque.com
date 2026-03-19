@@ -3,10 +3,12 @@ const DAOReserva = require('../database/DAOReserva');
 const cron = require('node-cron');
 const { deleteCobranca } = require('./API_Pagamentos');
 const moment = require('moment-timezone');
+const { SituacaoReserva } = require('./enums');
 
 const cancelaReservaEPagamento = async (codigoPagamento) => {
     await DAOPagamento.atualizaSituacaoParaCancelado(codigoPagamento)
-    await DAOReserva.atualizaSituacaoParaCancelada(codigoPagamento)
+    let reservas = await DAOReserva.getOneByPagamentoCodigoPagamento(codigoPagamento) 
+    await DAOReserva.atualizaSituacao(reservas[0].id, SituacaoReserva.CANCELADO)
 }
 
 const removerPagamentosAPI = async () => {

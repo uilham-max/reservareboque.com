@@ -1,6 +1,7 @@
 const DAOPagamento = require('../database/DAOPagamento')
 const DAOReserva = require('../database/DAOReserva')
 const ServiceEmail = require('../modules/ServiceEmail')
+const { SituacaoReserva } = require('../helpers/enums')
 
 
 class PagamentoController {
@@ -10,7 +11,8 @@ class PagamentoController {
             let codigoPagamento = req.body.payment.id
             console.log("Executar: Atualizar situação de pagamento e reserva para aprovado:",codigoPagamento);
             await DAOPagamento.atualizarPagamentoParaAprovado(codigoPagamento)
-            await DAOReserva.atualizaSituacaoParaAprovado(codigoPagamento) // Recuperar Id da reserva para atualizar a situação dela para aprovado
+            let reservas = await DAOReserva.getOneByPagamentoCodigoPagamento(codigoPagamento)
+            await DAOReserva.atualizaSituacao(reservas[0].id, SituacaoReserva.APROVADO)
             await ServiceEmail.enviarEmailParaClienteComDadosDaReserva(await ServiceEmail.formatarDadosDoClienteParaEmail((await DAOReserva.getOneByPagamentoCodigoPagamento(codigoPagamento))[0]))
         }catch(error){
             console.warn(error);

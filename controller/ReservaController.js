@@ -483,8 +483,8 @@ class ReservaController {
         if(!response){
             return res.render('erro', {mensagem: 'Erro ao acessar recurso'})
         }
-        await DAOReserva.atualizaSituacaoParaAprovado(codigoPagamento)
-        
+        let reservas = await DAOReserva.getOneByPagamentoCodigoPagamento(codigoPagamento)
+        await DAOReserva.atualizaSituacao(reservas[0].id, SituacaoReserva.APROVADO)        
         return res.redirect('/reserva/admin/painel')    
     }
     static async getAdminSituacaoReserva(req, res){
@@ -496,10 +496,10 @@ class ReservaController {
         
         switch (situacao) {
             case SituacaoReserva.APROVADO:
-                resposta = await DAOReserva.atualizaSituacaoParaAndamento(idReserva)
+                resposta = await DAOReserva.atualizaSituacao(idReserva, SituacaoReserva.ANDAMENTO)
                 break
             case SituacaoReserva.ANDAMENTO:
-                resposta = await DAOReserva.atualizaSituacaoParaConcluido(idReserva)
+                resposta = await DAOReserva.atualizaSituacao(idReserva, SituacaoReserva.CONCLUIDO)
                 break
             default:
                 return res.render('erro', {mensagem: "Erro ao atualizar situação da reserva"})
@@ -567,7 +567,8 @@ class ReservaController {
         let codigoPagamento = req.params.codigoPagamento
         try{
             await DAOPagamento.atualizaSituacaoParaCancelado(codigoPagamento)
-            await DAOReserva.atualizaSituacaoParaCancelada(codigoPagamento)
+            let reservas = await DAOReserva.getOneByPagamentoCodigoPagamento(codigoPagamento) // Recuperar Id da reserva para atualizar a situação dela para aprovado 
+            await DAOReserva.atualizaSituacao(reservas[0].id, SituacaoReserva.CANCELADO)
             await deleteCobranca(codigoPagamento)
         } catch(err){
             console.error(err)

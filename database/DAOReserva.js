@@ -12,75 +12,17 @@ const { SituacaoReserva } = require('../helpers/enums')
 
 class DAOReserva {
 
-    static async atualizaSituacaoParaAprovado(codigoPagamento){
+    static async atualizaSituacao(idReserva, status){
+        console.log('Atualizando situação da reserva para ', status);
         try{
             await Reserva.update(
-                {situacaoReserva: SituacaoReserva.APROVADO},
-                {where: {pagamentoCodigoPagamento: codigoPagamento}}
-            )
-            console.log('Atualizando a situação da reserva para "APROVADO"...');
-            return true
-        }catch(erro){
-            console.log(erro.toString());
-            return false
-        }
-
-    }
-    static async atualizaSituacaoParaConcluido(idReserva){
-        const currentDate = moment.tz(new Date(), 'America/Sao_Paulo').format();
-        console.log('Atualizando situação da reserva para CONCLUIDO...');
-        try{
-            await Reserva.update(
-                {
-                    situacaoReserva: SituacaoReserva.CONCLUIDO, 
-                    dataChegada: currentDate
-                },
+                {situacaoReserva: status},
                 {where: {id: idReserva}},
             )
-            console.log('Situação atualizada para CONCLUIDO com sucesso!');
+            console.log('Situação atualizada para ', status, ' com sucesso!');
             return true
         } catch(erro) {
-            console.error(`Erro ao atualizar situação da reserva para CONCLUIDO \n ${erro}`);
-            return false
-        }
-    }
-    static async atualizaSituacaoParaAndamento(idReserva){
-        console.log('Atualizando situação da reserva para ANDAMENTO...');
-        try{
-            await Reserva.update(
-                {situacaoReserva: SituacaoReserva.ANDAMENTO},
-                {where: {id: idReserva}},
-            )
-            console.log('Situação atualizada para ANDAMENTO com sucesso!');
-            return true
-        } catch(erro) {
-            console.error(`Erro ao atualizar situação da reserva para ANDAMENTO \n ${erro}`);
-            return false
-        }
-    }
-    static async atualizaSituacaoParaCancelada(codigoPagamento){
-        try{
-            await Reserva.update(
-                {situacaoReserva: SituacaoReserva.CANCELADO},
-                {where: {pagamentoCodigoPagamento: codigoPagamento}},
-            )
-            console.log(`${codigoPagamento} --> Reserva "CANCELADA"`);
-            return true
-        }catch(erro){
-            console.log("Erro ao atualizar reserva para CANCELADO\n",erro.toString());
-            return false
-        }
-
-    }
-    static async alterarPeriodo(idReserva, dataIncio, dataFim){
-        try{
-            await Reserva.update(
-                {dataSaida: dataIncio, dataChegada: dataFim},
-                {where: {id: idReserva}},
-            )
-            return true
-        } catch(erro) {
-            console.log("Erro ao alterar data da reserva", erro);
+            console.error(`Erro ao atualizar situação da reserva para ${status} \n ${erro}`);
             return false
         }
     }

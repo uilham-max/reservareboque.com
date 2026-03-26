@@ -2,12 +2,16 @@ const CreditosReserva = require('../model/CreditosReserva');
 
 class DAOCreditosReserva {
     static async criarCreditoReserva(reservaId, clienteCpf, creditos) {
+        let criado_em = moment.tz(new Date(), 'America/Sao_Paulo').format()
+        let atualizado_em = moment.tz(new Date(), 'America/Sao_Paulo').format()
         try {
             const novoCredito = await CreditosReserva.create({
                 reservaId,
                 clienteCpf,
                 creditos,
-                utilizado: false
+                utilizado: false,
+                criado_em: criado_em,
+                atualizado_em: atualizado_em
             });
             return novoCredito;
         } catch (error) {

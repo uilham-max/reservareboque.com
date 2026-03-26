@@ -7,16 +7,33 @@ const sequelize = require('sequelize')
 const Pagamento = require('../model/Pagamento.js')
 const moment = require('moment-timezone')
 const { startOfMonth, endOfMonth } = require('date-fns')
-const { SituacaoReserva } = require('../helpers/enums')
+const { SituacaoReserva, motivoCancelamento } = require('../helpers/enums')
 
 
 class DAOReserva {
 
+    static async registrarMotivoCancelamento(idReserva, motivo) {
+        // motivo: CLIENTE, ADMIN, NAO_PAGO, CREDITO
+        let atualizado_em = moment.tz(new Date(), 'America/Sao_Paulo').format()
+        try {
+            await Reserva.update(
+                { motivoCancelamento: motivo, atualizado_em: atualizado_em },
+                { where: { id: idReserva } }
+            );
+            console.log(`Motivo de cancelamento registrado para a reserva ${idReserva}: ${motivo}`);
+            return true;
+        } catch (error) {
+            console.error(`Erro ao registrar motivo de cancelamento para a reserva ${idReserva}:`, error);
+            return false;
+        }
+    }
     static async atualizaSituacao(idReserva, status){
+        // situacaoReserva: APROVADO, CONCLUIDO, CANCELADO, ANDAMENTO, AGUARDANDO_PAGAMENTO, ADIADO, AGUARDANDO_ACEITACAO, CANCELADO_COM_CREDITO
+        let atualizado_em = moment.tz(new Date(), 'America/Sao_Paulo').format()
         console.log('Atualizando situação da reserva para ', status);
         try{
             await Reserva.update(
-                {situacaoReserva: status},
+                {situacaoReserva: status, atualizado_em: atualizado_em},
                 {where: {id: idReserva}},
             )
             console.log('Situação atualizada para ', status, ' com sucesso!');
@@ -27,9 +44,10 @@ class DAOReserva {
         }
     }
     static async adminAtualizaPeriodo(idReserva, dataInicio, dataFim, reboquePlaca, diarias){
+        let atualizado_em = moment.tz(new Date(), 'America/Sao_Paulo').format()
         try{
             const [numLinhasAtualizadas] = await Reserva.update(
-                {dataSaida: dataInicio, dataChegada: dataFim, diarias: diarias},
+                {dataSaida: dataInicio, dataChegada: dataFim, diarias: diarias, atualizado_em: atualizado_em},
                 {where: {id: idReserva}},
             )
             // console.log('Atualizando status do pagamento para aprovado...');
@@ -48,8 +66,10 @@ class DAOReserva {
     }
 
     static async insert(dataInicio, dataFim, valorDiaria, dias, valorTotal, clienteCpf, reboquePlaca, codigoPagamento, situacaoReserva) {
+        let criado_em = moment.tz(new Date(), 'America/Sao_Paulo').format()
+        let atualizado_em = moment.tz(new Date(), 'America/Sao_Paulo').format()
         try {
-            let reserva = await Reserva.create({id: reboquePlaca+"_"+codigoPagamento, dataSaida: dataInicio, dataChegada: dataFim, valorDiaria: valorDiaria.toFixed(0), diarias: dias, valorTotal: valorTotal, clienteCpf: clienteCpf, reboquePlaca: reboquePlaca, pagamentoCodigoPagamento: codigoPagamento, situacaoReserva: situacaoReserva })
+            let reserva = await Reserva.create({id: reboquePlaca+"_"+codigoPagamento, dataSaida: dataInicio, dataChegada: dataFim, valorDiaria: valorDiaria.toFixed(0), diarias: dias, valorTotal: valorTotal, clienteCpf: clienteCpf, reboquePlaca: reboquePlaca, pagamentoCodigoPagamento: codigoPagamento, situacaoReserva: situacaoReserva, criado_em: criado_em, atualizado_em: atualizado_em })
             console.log('Reserva criada! aguardando pagamento...');
             return reserva
         }

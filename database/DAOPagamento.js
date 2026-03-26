@@ -18,8 +18,12 @@ class DAOPagamento {
 
     // Atualiza a situação do pagamento para cancelado
     static async atualizaSituacaoParaCancelado(codigoPagamento){
+        let atualizado_em = moment.tz(new Date(), 'America/Sao_Paulo').format()
         try {
-            let cancelado = await Pagamento.update({situacao: "CANCELADO"},{where: {codigoPagamento: codigoPagamento}})
+            let cancelado = await Pagamento.update(
+                {situacao: "CANCELADO", atualizado_em: atualizado_em},
+                {where: {codigoPagamento: codigoPagamento}}
+            )
             if(cancelado){
                 console.log(`${codigoPagamento}" --> Pagamento "CANCELADO"`);
             } else {
@@ -69,9 +73,10 @@ class DAOPagamento {
         }
     }
     static async atualizarPagamentoParaAprovado(codigoPagamento){
+        let atualizado_em = moment.tz(new Date(), 'America/Sao_Paulo').format()
         try{
             const [numLinhasAtualizadas] = await Pagamento.update(
-                {aprovado: true, situacao: "APROVADO"},
+                {aprovado: true, situacao: "APROVADO", atualizado_em: atualizado_em},
                 {where: {codigoPagamento: codigoPagamento}}
             );
             // console.log('Atualizando status do pagamento para aprovado...');
@@ -90,8 +95,21 @@ class DAOPagamento {
     }
     // Recebe o valor da reserva e um código do sistema de pagamento
     static async insert(codigoPagamento, valorTotalDaReserva, billingType, dataExpiracao){
+        let criado_em = moment.tz(new Date(), 'America/Sao_Paulo').format()
+        let atualizado_em = moment.tz(new Date(), 'America/Sao_Paulo').format()
         try{
-            const pagamento = await Pagamento.create({valor: valorTotalDaReserva.toFixed(2), codigoPagamento: codigoPagamento, forma: billingType, aprovado: false, dataExpiracao: dataExpiracao, situacao: "AGUARDANDO_PAGAMENTO"})
+            const pagamento = await Pagamento.create(
+                {
+                    valor: valorTotalDaReserva.toFixed(2), 
+                    codigoPagamento: codigoPagamento, 
+                    forma: billingType, 
+                    aprovado: false, 
+                    dataExpiracao: dataExpiracao, 
+                    situacao: "AGUARDANDO_PAGAMENTO",
+                    criado_em: criado_em,
+                    atualizado_em: atualizado_em
+                }
+            )
             console.log('A cobrança criada expira em: ',dataExpiracao.format('YYYY-MM-DD HH:mm:ss'));
             return pagamento.codigoPagamento
 
@@ -101,9 +119,10 @@ class DAOPagamento {
         }
     }
     static async updateValor(codigoPagamento, valor){
+        let atualizado_em = moment.tz(new Date(), 'America/Sao_Paulo').format()
         try{ 
             const [numLinhasAtualizadas] = await Pagamento.update(
-                {valor: valor},
+                {valor: valor, atualizado_em: atualizado_em},
                 {where: {codigoPagamento: codigoPagamento}}
             );
             // console.log('Atualizando status do pagamento para aprovado...');

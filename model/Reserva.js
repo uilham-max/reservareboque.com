@@ -38,9 +38,15 @@ const Reserva = conexao.define('reserva', {
     situacaoReserva: {
         // Valores possíveis: ver SituacaoReserva em helpers/enums.js
         type: Sequelize.STRING
-    }
+    },
+    motivoCancelamento: {
+        // Valores possíveis: ver motivoCancelamento em helpers/enums.js
+        type: Sequelize.STRING
+    }, 
 }, {
-    timestamps: false,
+    timestamps: true,
+    createdAt: 'criado_em',
+    updatedAt: 'atualizado_em',
     // indexes: [
     //     {
     //         unique: true,

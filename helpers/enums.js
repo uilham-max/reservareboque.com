@@ -18,7 +18,7 @@ const SituacaoReserva = Object.freeze({
 });
 
 // Motivos de cancelamento para uma reserva
-const motivoCancelamento = Object.freeze({
+const MotivoCancelamento = Object.freeze({
     CLIENTE: 'CLIENTE',
     ADMIN: 'ADMIN',
     NAO_PAGO: 'NAO_PAGO'
@@ -27,5 +27,5 @@ const motivoCancelamento = Object.freeze({
 module.exports = {
     FormaPagamento,
     SituacaoReserva,
-    motivoCancelamento
+    MotivoCancelamento
 };

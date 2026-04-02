@@ -12,10 +12,38 @@ const { deleteCobranca } = require('../helpers/API_Pagamentos');
 const Caledario = require('../bill_modules/Calendario')
 const Logger = require('nodemon/lib/utils/log')
 const { FormaPagamento, SituacaoReserva } = require('../helpers/enums')
-
+const ReservaService = require('../services/ReservaService')
+const CreditosReservaService = require('../services/CreditosReservaService')
 
 
 class ReservaController {
+
+    constructor() {
+        const daoReserva = new DAOReserva();
+        const creditosReservaService = new CreditosReservaService();
+        this.reservaService = new ReservaService(
+            daoReserva, 
+            creditosReservaService
+        );
+    }
+
+    async getGerarCreditoReserva(req, res) {
+        const reservaId = req.params.id;
+        try {
+            const { credito, reserva } = await this.reservaService.novoCreditoReserva(reservaId);
+            return res.render('reserva/cliente/detalhe', {
+                user: clienteNome(req, res), 
+                mensagem: 'Crédito de reserva gerado com sucesso.', 
+                reserva: reserva, 
+                credito: credito,
+            });
+        } catch (error) {
+            return res.render('erro', { 
+                mensagem: 'Erro ao gerar crédito para a reserva: ' 
+                + error.message 
+            });
+        }
+    }
 
 
     static async getClienteInformaPeriodo(req, res){
@@ -324,7 +352,7 @@ class ReservaController {
         if(reservas == ''){
             return res.render('reserva/cliente/lista', {user: clienteNome(req, res), reservas: reservas, mensagem: "Sua lista de reservas está vazia."})
         }
-        return res.render('reserva/cliente/lista', {user: clienteNome(req, res), reservas: reservas, mensagem: ''})
+        return res.render('reserva/cliente/lista', {user: clienteNome(req, res), reservas: reservas, SituacaoReserva: SituacaoReserva, mensagem: ''})
     }
     static async getClienteDetalharReserva(req, res){
         let reserva = await DAOReserva.getOne(req.params.reservaId)

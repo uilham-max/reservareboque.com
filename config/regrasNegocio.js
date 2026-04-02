@@ -1,0 +1,3 @@
+module.exports = {
+    HORAS_LIMITE_GERACAO_CREDITO_RESERVA: 24
+}

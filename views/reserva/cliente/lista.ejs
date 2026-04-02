@@ -37,7 +37,11 @@
                                                         <%= new Date(reserva.dataSaida).toString().slice(16,18)+'h' %></span></td>
                                                     <td><span id="dataChegada"><%= new Date(reserva.dataChegada).toLocaleDateString('pt-BR').slice(0, 5) %> -
                                                         <%= new Date(reserva.dataChegada).toString().slice(16,18)+'h' %></span></td>
-                                                    <td><%= reserva.situacaoReserva %></td>
+                                                    <% if (reserva.situacaoReserva === SituacaoReserva.APROVADO) { %>
+                                                        <td><span class="badge bg-success">Reservado</span></td>
+                                                    <% } else if (reserva.situacaoReserva === SituacaoReserva.CANCELADO_COM_CREDITO) { %>
+                                                        <td><span class="badge bg-warning">Crédito</span></td>
+                                                    <% } %>
                                                     <td><a href="/reserva/cliente/detalhe/<%= reserva.id %>" class="btn btn-primary">Detalhes</a></td>
                                                 </tr>
                                             <% }) %>

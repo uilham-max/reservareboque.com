@@ -1,34 +1,41 @@
 
 const DAOCreditosReserva = require('../database/DAOCreditosReserva');
-const { SituacaoReserva, motivoCancelamento } = require('../helpers/enums');
+const CreditosReservaService = require('../services/CreditosReservaService');
 const DAOReserva = require('../database/DAOReserva');
+const creditosReservaService = new CreditosReservaService();
 
 class CreditosReservaController {
 
-    static async teste(req, res) {
-        res.status(200).json({ message: 'Teste de rota para créditos de reserva funcionando!' });
+    constructor() {
+        this.creditosReservaService = new CreditosReservaService();
     }
 
-    static async criarCreditoReserva(req, res) {
+    async listarPorCliente(req, res) {
+    }
+
+    async aplicarCredito(req, res) {
+    }
+
+    async detalhar(req, res) {
+    }
+
+    async postCriarCreditoReserva(req, res) {
+        // Reserva decide se pode ou não criar crédito, então não tem autorização de cliente aqui, só o ID da reserva para criar o crédito
+        // Crédito executa como criar o crédito, atualiza a reserva para cancelada com crédito e registra o motivo do cancelamento como cliente
+
+        const { reservaId } = req.body;
         try {
-            const { reservaId, clienteCpf, diarias } = req.body;
-            const creditos = diarias;
-            console.log('Criando crédito de reserva com os seguintes dados:', { reservaId, clienteCpf, creditos });
-            const novoCredito = await DAOCreditosReserva.criarCreditoReserva(reservaId, clienteCpf, creditos);
-            
-            await DAOReserva.atualizaSituacao(reservaId, SituacaoReserva.CANCELADO_COM_CREDITO);
-            await DAOReserva.registrarMotivoCancelamento(reservaId, motivoCancelamento.CREDITO);
-            
-            res.status(201).json(novoCredito);
+            const dadosView = await this.creditosReservaService.criarCreditoReserva(reservaId);
+            res.status(201).json(dadosView);
         } catch (error) {
             res.status(500).json({ error: error.message });
         }
     }
 
-    static async marcarComoUtilizado(req, res) {
+    async putMarcarComoUtilizado(req, res) {
         try {
             const { reservaId } = req.params;
-            await DAOCreditosReserva.marcarComoUtilizado(reservaId);
+            await creditosReservaService.marcarComoUtilizado(reservaId);
             res.status(200).json({ message: 'Crédito marcado como utilizado com sucesso.' });
         } catch (error) {
             res.status(500).json({ error: error.message });

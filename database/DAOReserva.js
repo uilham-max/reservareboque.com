@@ -12,7 +12,7 @@ const { SituacaoReserva, motivoCancelamento } = require('../helpers/enums')
 
 class DAOReserva {
 
-    static async registrarMotivoCancelamento(idReserva, motivo) {
+    async registrarMotivoCancelamento(idReserva, motivo) {
         // motivo: CLIENTE, ADMIN, NAO_PAGO, CREDITO
         let atualizado_em = moment.tz(new Date(), 'America/Sao_Paulo').format()
         try {
@@ -158,7 +158,8 @@ class DAOReserva {
                     clienteCpf: cpf,
                     [Op.or]: [
                         {situacaoReserva: SituacaoReserva.APROVADO},
-                        {situacaoReserva: SituacaoReserva.ANDAMENTO}
+                        {situacaoReserva: SituacaoReserva.ANDAMENTO},
+                        {situacaoReserva: SituacaoReserva.CANCELADO_COM_CREDITO}
                     ]
                     
                 },

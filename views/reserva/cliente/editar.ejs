@@ -10,12 +10,7 @@
 
     <div class="conteudo" >
 
-            <!-- Menssagem do topo da página em jumbotron -->
-            <div class="jumbotron jumbotron-fluid">
-                <h1 class="display-4" >Alterar data da reserva.</h1>
-                <!-- <p class="lead">Clientes cadastrados podem ver seu histórico de locações, gerenciar suas reservas e receber -->
-                    <!-- descontos.</p> -->
-            </div>
+
 
 
         <div class="container" >
@@ -35,8 +30,9 @@
                     <div class="card-body">
                         <form class="needs-validation" novalidate action="/reserva/cliente/editar" method="POST">
                             <h5>Alterar Período</h5>
+                            <a>O período da reserva pode ser alterado caso haja disponibilidade.</a>
                             <hr>
-
+                            
                             <div class="input-group mb-3 mt-5">
                                 <span class="input-group-text" >Data Retirada</span>
                                 <input class="form-control" id="dataInicio" type="date" name="dataInicioNova" required>
@@ -98,6 +94,7 @@
                                 </div>
                             </div><br>
 
+                            <a>A quantidade de dias deve ser igual à original.</a>
                             
 
                             <input type="hidden" name="diarias" value="<%=reserva.diarias%>" >
@@ -127,8 +124,9 @@
                 <divc class="card card-reserva" style="width: 25rem;">
                     <div class="card card-body">
                         <% if(reservas != '') {%>
+                            <h3>Atenção</h3>
                             <div class="alert alert-info">
-                                <h5 class="card-text">Reservas deste reboque</h5>
+                                <h5 class="card-text">Perídos inválidos</h5>
                                 <% reservas.forEach(function(reserva) { %>
 
                                     <!-- Ignora a reserva a ser alterada -->

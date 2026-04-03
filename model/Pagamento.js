@@ -19,7 +19,9 @@ const Pagamento = conexao.define('pagamento', {
     situacao: Sequelize.STRING,
 },
 {
-    timestamps: false,
+    timestamps: true,
+    createdAt: 'criado_em',
+    updatedAt: 'atualizado_em'
 })
 
 module.exports = Pagamento

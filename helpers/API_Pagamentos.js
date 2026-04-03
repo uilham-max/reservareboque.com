@@ -232,8 +232,8 @@ async function cadastrarCliente(cpfCnpj, nome, telefone, email){
 async function criarPagamento(customerID, valor, data_vencimento, dataInicio, dataFim, placa, formaPagamento){
     console.log("SPA - Criando pagamento...");
     
-    dataInicio = moment(dataInicio).format('DD/MM/YYYY')
-    dataFim = moment(dataFim).format('DD/MM/YYYY')
+    dataInicio = moment(new Date(dataInicio)).format('DD/MM/YYYY')
+    dataFim = moment(new Date(dataFim)).format('DD/MM/YYYY')
 
     if(formaPagamento != 'PIX'){
         formaPagamento = 'UNDEFINED'
@@ -294,9 +294,9 @@ async function criarCobranca(cpfCnpj, nome, telefone, email, valor, data_vencime
         "\nTelefone:--------------", telefone, 
         "\nEmail:-----------------", email, 
         "\nValor:-----------------", valor, 
-        "\nData de Vencimento:----", moment(data_vencimento).format('DD/MM/YYYY'), 
-        "\nInício da Reserva:-----", moment(dataInicio).format('DD/MM/YYYY'), 
-        "\nFim da Reserva:--------", moment(dataFim).format('DD/MM/YYYY'), 
+        "\nData de Vencimento:----", moment(new Date(data_vencimento)).format('DD/MM/YYYY'), 
+        "\nInício da Reserva:-----", moment(new Date(dataInicio)).format('DD/MM/YYYY'), 
+        "\nFim da Reserva:--------", moment(new Date(dataFim)).format('DD/MM/YYYY'), 
         "\nPlaca do Reboque:------", placa, 
         "\nForma de Pagamento:----", formaPagamento, 
         "\n"

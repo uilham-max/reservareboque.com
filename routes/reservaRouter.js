@@ -4,7 +4,9 @@ const autorizacao = require('../autorizacao/autorizacao')
 const clienteAutorizacao = require('../autorizacao/clienteAutorizacao')
 
 const ReservaController = require('../controller/ReservaController')
+const reservaController = new ReservaController();
 
+router.get('/:id/gerar-credito', clienteAutorizacao, reservaController.getGerarCreditoReserva.bind(reservaController)); // '/reserva/:id/gerar-credito'
 
 router.get('/cliente/periodo/:reboquePlaca?', ReservaController.getClienteInformaPeriodo)
 router.post('/cliente/formulario', ReservaController.postClienteFormularioReserva)
@@ -33,7 +35,6 @@ router.post('/admin/receita', autorizacao, ReservaController.postReceitaPeriodo)
 router.get('/admin/editar/:reservaId', autorizacao, ReservaController.getReservaAdminEditar)
 router.post('/admin/editar', autorizacao, ReservaController.postReservaAdminEditar)
 router.get('/admin/cancelar/:codigoPagamento', autorizacao, ReservaController.getReservaAdminCancelar)
-//router.post('/admin/adiar', autorizacao, ReservaController.postReservaAdminAdiar)
 router.get('/admin/lista', autorizacao, ReservaController.getReservaAdminLista)
 
 

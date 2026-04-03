@@ -128,7 +128,7 @@ docker run -v .:/app -p 3000:3000 locadoraApp
 ```
 
 
-# Acessar aplicação
+# 7. Acessar aplicação
 
 Abra no navegador:
 
@@ -147,9 +147,9 @@ http://localhost:3000
 
 
 
-# Usando o Ngrok para desenvolvimento
+# 8. Usando o Ngrok para desenvolvimento
 
-A principal função do Ngrok aqui é publicar a aplicação na Web para modo de desenvolvimento.
+A principal função do Ngrok aqui é publicar a aplicação na Web para modo de desenvolvimento. 
 * Siga as instruções do site do ``Ngrok`` para configurar um ``token``.
 * Esse comando vai criar uma URL para ser acessada por clientes na internet.
 
@@ -164,8 +164,14 @@ A URL será parecida com:
  https://4906-187-62-98-219.ngrok-free.app
 ```
 
+## 🎯 Observações
 
-# Configurar webhook de pagamento Asaas para DSV ou PRD
+* Sempre que o server do Ngrok for reiniciado será necessario:
+1. Configurar a nova URL no Webhook do Asaas.
+2. Configurar a nova URL no frontend para resposta de sucesso para o cliente em ``public/js/API_verificaPagamento.js``
+
+
+# 9. Configurar webhook de pagamento Asaas para DSV ou PRD
 
 * Acessar o Asaas e ativar o webhook de desenvolvimento
 ```
@@ -188,7 +194,7 @@ https://4906-187-62-98-219.ngrok-free.app/pagamento/webhook/pix
 ```
 
 
-# Configurar tela de sucesso para o cliente
+# 10. Configurar tela de sucesso para o cliente
 
 
 * Quando o cliente clica no botão `Criar Reserva`O arquivo `API_verificaPagamento.js` ficará disparando requisições em busca do ``status`` do ``pagamento``. Quando o status for igual `APROVADO`, o cliente revebera uma tela de `Sucesso`.
@@ -212,11 +218,10 @@ const resposta = await fetch(`https://www.reboquesoliveira.com/pagamento/aprovad
 * Certifique-se de que o PostgreSQL está em execução.
 * Verifique se as variáveis do `.env` estão corretas.
 * Usar o ``Ngrok`` para gerar uma URL externa.
-* Definir a URL na configuração do Webhook do Asaas
+* Definir a URL do ``Ngrok`` na configuração do Webhook do Asaas
 
 
 # Autor
 
-Desenvolvido por Uilham Gonçalves.
-
+Desenvolvido por Uilham de Oliveira.
 

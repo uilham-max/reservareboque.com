@@ -12,6 +12,12 @@
             <h1 class="display-4">Detalhes da Reserva</h1>
         </div>
 
+        <% if (mensagem) { %>
+        <div class="alert alert-success" role="alert">
+            <%= mensagem %>
+        </div>
+        <% } %>
+
         <div class="container">
                 <div class="lista-reboques">
 
@@ -67,16 +73,33 @@
                             </div>
 
                             <div class="d-md-flex justify-content-center" style="margin: 0.5rem;">
-                                <button style="margin: 0.3rem;" class="btn btn-secondary" type="button" onclick="history.back()">Voltar</button>
-                                <% if(reserva.situacaoReserva == 'APROVADO' || reserva.situacaoReservaReserva == 'ADIADO') {%>
-                                    <a style="margin: 0.3rem;" class="btn btn-primary" href="/reserva/cliente/editar/<%= reserva.id %>">Alterar período</a>
-                                    <a style="margin: 0.3rem;" class="btn btn-danger" 
-                                        onclick="return confirm('Este recurso está indisponível no momento')" 
-                                        href="#">Guardar
+                                    <button 
+                                        style="margin: 0.3rem;" 
+                                        class="btn btn-secondary" 
+                                        type="button" 
+                                        onclick="history.back()">Voltar
+                                    </button>
+                                <% if(reserva.situacaoReserva == 'APROVADO' || reserva.situacaoReserva == 'CANCELADO_COM_CREDITO') {%>
+                                    <a 
+                                        style="margin: 0.3rem;" 
+                                        class="btn btn-primary" 
+                                        href="/reserva/cliente/editar/<%= reserva.id %>">Alterar
                                     </a>
+                                    <a 
+                                        style="margin: 0.3rem;" 
+                                        class="btn btn-warning" 
+                                        onclick="return confirm('Este recurso está indisponível no momento')" 
+                                        href="#">Reduzir
+                                    </a>
+                                    <a 
+                                        style="margin: 0.3rem;" 
+                                        class="btn btn-primary" 
+                                        href="/reserva/<%= reserva.id %>/gerar-credito">Crédito
+                                    </a>
+
                                 <% } %>
                             </div>
-                            
+
                         </div>
                     </div>
 

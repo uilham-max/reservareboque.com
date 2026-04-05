@@ -1,7 +1,7 @@
 const DAOPagamento = require('../database/DAOPagamento')
 const DAOReserva = require('../database/DAOReserva')
 const ServiceEmail = require('../modules/ServiceEmail')
-const { SituacaoReserva } = require('../helpers/enums')
+const { SituacaoReserva } = require('../enums')
 
 
 class PagamentoController {

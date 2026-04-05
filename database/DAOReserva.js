@@ -7,7 +7,7 @@ const sequelize = require('sequelize')
 const Pagamento = require('../model/Pagamento.js')
 const moment = require('moment-timezone')
 const { startOfMonth, endOfMonth } = require('date-fns')
-const { SituacaoReserva, motivoCancelamento } = require('../helpers/enums')
+const { SituacaoReserva, MotivoCancelamento } = require('../enums')
 
 
 class DAOReserva {

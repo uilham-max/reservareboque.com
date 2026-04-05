@@ -1,7 +1,7 @@
 
 const sequelize = require('../database/conexao');
 const DAOReserva = require('../database/DAOReserva');
-const { SituacaoReserva, MotivoCancelamento } = require('../helpers/enums');
+const { SituacaoReserva, MotivoCancelamento } = require('../enums');
 
 class ReservaService {
 

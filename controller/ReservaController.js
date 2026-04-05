@@ -11,7 +11,7 @@ const moment = require('moment-timezone')
 const { deleteCobranca } = require('../helpers/API_Pagamentos');
 const Caledario = require('../bill_modules/Calendario')
 const Logger = require('nodemon/lib/utils/log')
-const { FormaPagamento, SituacaoReserva } = require('../helpers/enums')
+const { FormaPagamento, SituacaoReserva } = require('../enums')
 const ReservaService = require('../services/ReservaService')
 const CreditosReservaService = require('../services/CreditosReservaService')
 

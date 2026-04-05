@@ -6,7 +6,7 @@ const {adminNome} = require('../helpers/getSessionNome')
 const moment = require('moment-timezone')
 const DAOPagamento = require('../database/DAOPagamento')
 const { estornoPagamento, receiveInCash, criarCobranca } = require('../helpers/API_Pagamentos')
-const { FormaPagamento, SituacaoReserva } = require('../helpers/enums')
+const { FormaPagamento, SituacaoReserva } = require('../enums')
 
 
 

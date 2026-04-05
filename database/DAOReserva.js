@@ -159,7 +159,8 @@ class DAOReserva {
                     [Op.or]: [
                         {situacaoReserva: SituacaoReserva.APROVADO},
                         {situacaoReserva: SituacaoReserva.ANDAMENTO},
-                        {situacaoReserva: SituacaoReserva.CANCELADO_COM_CREDITO}
+                        {situacaoReserva: SituacaoReserva.CANCELADO_COM_CREDITO},
+                        {situacaoReserva: SituacaoReserva.AGUARDANDO_ACEITACAO},
                     ]
                     
                 },

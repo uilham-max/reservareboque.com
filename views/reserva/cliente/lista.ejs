@@ -41,6 +41,8 @@
                                                         <td><span class="badge bg-success">Reservado</span></td>
                                                     <% } else if (reserva.situacaoReserva === SituacaoReserva.CANCELADO_COM_CREDITO) { %>
                                                         <td><span class="badge bg-warning">Crédito</span></td>
+                                                    <% } else if (reserva.situacaoReserva === SituacaoReserva.AGUARDANDO_ACEITACAO) { %>
+                                                        <td><span class="badge bg-info">Pendente Aprovação</span></td>
                                                     <% } %>
                                                     <td><a href="/reserva/cliente/detalhe/<%= reserva.id %>" class="btn btn-primary">Detalhes</a></td>
                                                 </tr>

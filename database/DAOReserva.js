@@ -161,6 +161,7 @@ class DAOReserva {
                         {situacaoReserva: SituacaoReserva.ANDAMENTO},
                         {situacaoReserva: SituacaoReserva.CANCELADO_COM_CREDITO},
                         {situacaoReserva: SituacaoReserva.AGUARDANDO_ACEITACAO},
+                        {situacaoReserva: SituacaoReserva.AGUARDANDO_PAGAMENTO},
                     ]
                     
                 },

@@ -1,7 +1,8 @@
-const { FormaPagamento, SituacaoReserva, MotivoCancelamento } = require('../enums');
+const { FormaPagamento, SituacaoReserva, MotivoCancelamento, StatusPagamento } = require('../enums');
 
 module.exports = {
   FormaPagamento,
   SituacaoReserva,
-  MotivoCancelamento
+  MotivoCancelamento,
+  StatusPagamento
 };

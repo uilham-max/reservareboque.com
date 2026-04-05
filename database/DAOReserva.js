@@ -7,7 +7,7 @@ const sequelize = require('sequelize')
 const Pagamento = require('../model/Pagamento.js')
 const moment = require('moment-timezone')
 const { startOfMonth, endOfMonth } = require('date-fns')
-const { SituacaoReserva, MotivoCancelamento } = require('../enums')
+const { SituacaoReserva, MotivoCancelamento, StatusPagamento } = require('../enums')
 
 
 class DAOReserva {
@@ -226,7 +226,7 @@ class DAOReserva {
                         model: Pagamento,
                         attributes: [],
                         where: {
-                            situacao: 'APROVADO'
+                            situacao: StatusPagamento.APROVADO
                         }
                     }
                 ],

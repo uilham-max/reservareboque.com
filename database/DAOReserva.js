@@ -279,7 +279,14 @@ class DAOReserva {
                     [Op.and]: [
                         sequelize.literal(`("dataSaida", "dataChegada") OVERLAPS (:inicioDoPeriodo, :fimDoPeriodo)`),
                         {reboquePlaca: reboquePlaca},
-                        { situacaoReserva: { [Op.ne]: SituacaoReserva.CANCELADO } } // Modificado para mostrar as reservas canceladas na tela de periodo da reserva
+                        { 
+                            situacaoReserva: { 
+                                [Op.notIn]: [
+                                    SituacaoReserva.CANCELADO,
+                                    SituacaoReserva.CANCELADO_COM_CREDITO,
+                                ] 
+                            } 
+                        } // Modificado para mostrar as reservas canceladas na tela de periodo da reserva
                     ],
                 },
                 replacements: {inicioDoPeriodo, fimDoPeriodo},

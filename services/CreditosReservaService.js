@@ -1,27 +1,27 @@
 const DAOCreditosReserva = require('../database/DAOCreditosReserva');
+const ReservaService = require('./ReservaService');
+const sequelize = require('../database/conexao');
 
 class CreditosReservaService {
 
-    // constructor(daoCreditosReserva) {
-    //     this.daoCreditosReserva = daoCreditosReserva;
-    // }
-
     constructor() {
         this.daoCreditosReserva = new DAOCreditosReserva();
+        this.reservaService = new ReservaService();
     }
 
-    async criarCreditoReserva(reservaId, clienteCpf, diarias) {
+    async criarCreditoReserva(idReserva) {
+        const t = await sequelize.transaction();
         try {
-            if (!reservaId || !clienteCpf || diarias == null) {
-                throw new Error('Parâmetros inválidos para criação de crédito.');
-            }
-            const creditos = diarias;
 
-            console.log('Criando crédito de reserva:', { reservaId, clienteCpf, creditos });
+            const reservaAtualizada = await this.reservaService.cancelarComCredito(idReserva, { transaction: t });
+            const novoCredito = await this.daoCreditosReserva.novoCreditoReserva(idReserva, reservaAtualizada.clienteCpf, reservaAtualizada.diarias, { transaction: t });
 
-            const novoCredito = await this.daoCreditosReserva.criarCreditoReserva(reservaId, clienteCpf, creditos);
-            return novoCredito;
+            await t.commit();
+            return { credito: novoCredito, reserva: reservaAtualizada };
+
         } catch (error) {
+            await t.rollback();
+            console.error(error.message);
             throw new Error('CreditosReservaService não pode criar crédito.\n' + error.message);
         }
     }

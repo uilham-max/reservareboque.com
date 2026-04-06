@@ -1,8 +1,6 @@
-
-const DAOCreditosReserva = require('../database/DAOCreditosReserva');
 const CreditosReservaService = require('../services/CreditosReservaService');
-const DAOReserva = require('../database/DAOReserva');
-const creditosReservaService = new CreditosReservaService();
+var { clienteNome } = require('../helpers/getSessionNome')
+
 
 class CreditosReservaController {
 
@@ -10,37 +8,17 @@ class CreditosReservaController {
         this.creditosReservaService = new CreditosReservaService();
     }
 
-    async listarPorCliente(req, res) {
-    }
-
-    async aplicarCredito(req, res) {
-    }
-
-    async detalhar(req, res) {
-    }
-
-    async postCriarCreditoReserva(req, res) {
-        // Reserva decide se pode ou não criar crédito, então não tem autorização de cliente aqui, só o ID da reserva para criar o crédito
-        // Crédito executa como criar o crédito, atualiza a reserva para cancelada com crédito e registra o motivo do cancelamento como cliente
-
-        const { reservaId } = req.body;
+    async getCriarCreditoReserva(req, res) {
+        const idReserva = req.params.idReserva;
         try {
-            const dadosView = await this.creditosReservaService.criarCreditoReserva(reservaId);
-            res.status(201).json(dadosView);
+            const { credito, reserva } = await this.creditosReservaService.criarCreditoReserva(idReserva);
+            return res.render('reserva/cliente/detalhe', { user: clienteNome(req, res), mensagem: 'Crédito de reserva gerado com sucesso.', reserva: reserva, credito: credito});
         } catch (error) {
-            res.status(500).json({ error: error.message });
+            console.error(error);
+            return res.render('erro', { mensagem: 'Erro ao gerar crédito para a reserva: ' + error.message });
         }
     }
 
-    async putMarcarComoUtilizado(req, res) {
-        try {
-            const { reservaId } = req.params;
-            await creditosReservaService.marcarComoUtilizado(reservaId);
-            res.status(200).json({ message: 'Crédito marcado como utilizado com sucesso.' });
-        } catch (error) {
-            res.status(500).json({ error: error.message });
-        }
-    }
 }
 
 module.exports = CreditosReservaController;

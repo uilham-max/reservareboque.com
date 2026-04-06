@@ -12,13 +12,13 @@ const { SituacaoReserva, MotivoCancelamento, StatusPagamento } = require('../enu
 
 class DAOReserva {
 
-    async registrarMotivoCancelamento(idReserva, motivo) {
+    async registrarMotivoCancelamento(idReserva, motivo, options = {}) {
         // motivo: CLIENTE, ADMIN, NAO_PAGO, CREDITO
         let atualizado_em = moment.tz(new Date(), 'America/Sao_Paulo').format()
         try {
             await Reserva.update(
                 { motivoCancelamento: motivo, atualizado_em: atualizado_em },
-                { where: { id: idReserva } }
+                { where: { id: idReserva }, ...options }
             );
             console.log(`Motivo de cancelamento registrado para a reserva ${idReserva}: ${motivo}`);
             return true;
@@ -35,6 +35,22 @@ class DAOReserva {
             await Reserva.update(
                 {situacaoReserva: status, atualizado_em: atualizado_em},
                 {where: {id: idReserva}},
+            )
+            console.log('Situação atualizada para ', status, ' com sucesso!');
+            return true
+        } catch(erro) {
+            console.error(`Erro ao atualizar situação da reserva para ${status} \n ${erro}`);
+            return false
+        }
+    }
+    async atualizaSituacao(idReserva, status, options = {}){
+        // situacaoReserva: APROVADO, CONCLUIDO, CANCELADO, ANDAMENTO, AGUARDANDO_PAGAMENTO, ADIADO, AGUARDANDO_ACEITACAO, CANCELADO_COM_CREDITO
+        let atualizado_em = moment.tz(new Date(), 'America/Sao_Paulo').format()
+        console.log('Atualizando situação da reserva para ', status);
+        try{
+            await Reserva.update(
+                {situacaoReserva: status, atualizado_em: atualizado_em},
+                {where: {id: idReserva}, ...options},
             )
             console.log('Situação atualizada para ', status, ' com sucesso!');
             return true
@@ -79,6 +95,17 @@ class DAOReserva {
         }
     }
     static async getOne(id) {
+        try {
+            // console.log('ID -->', id);
+            let reserva = await Reserva.findByPk(id, {include: [{model: Cliente}, {model: Reboque}, {model: Pagamento}]})
+            return reserva
+        }
+        catch (error) {
+            console.log(error.toString())
+            return undefined
+        }
+    }
+    async getOne(id) {
         try {
             // console.log('ID -->', id);
             let reserva = await Reserva.findByPk(id, {include: [{model: Cliente}, {model: Reboque}, {model: Pagamento}]})

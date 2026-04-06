@@ -91,11 +91,19 @@
                                         onclick="return confirm('Este recurso está indisponível no momento')" 
                                         href="#">Reduzir
                                     </a>
-                                    <a 
-                                        style="margin: 0.3rem;" 
-                                        class="btn btn-primary" 
-                                        href="/reserva/<%= reserva.id %>/gerar-credito">Crédito
+                                    <% if(!(reserva.situacaoReserva == 'CANCELADO_COM_CREDITO')) { %>
+                                    <a
+                                        style="margin: 0.3rem;"
+                                        class="btn btn-info"
+                                        href="/creditos-reserva/<%= reserva.id %>/criar">Crédito
                                     </a>
+                                    <% } else { %>
+                                    <a
+                                        style="margin: 0.3rem;"
+                                        class="btn btn-success"
+                                        href="/creditos-reserva/<%= reserva.id %>/aplicar">Ativar
+                                    </a>
+                                    <% } %>
 
                                 <% } %>
                             </div>

@@ -27,24 +27,6 @@ class ReservaController {
         );
     }
 
-    async getGerarCreditoReserva(req, res) {
-        const reservaId = req.params.id;
-        try {
-            const { credito, reserva } = await this.reservaService.novoCreditoReserva(reservaId);
-            return res.render('reserva/cliente/detalhe', {
-                user: clienteNome(req, res), 
-                mensagem: 'Crédito de reserva gerado com sucesso.', 
-                reserva: reserva, 
-                credito: credito,
-            });
-        } catch (error) {
-            return res.render('erro', { 
-                mensagem: 'Erro ao gerar crédito para a reserva: ' 
-                + error.message 
-            });
-        }
-    }
-
 
     static async getClienteInformaPeriodo(req, res){
         const reboquePlaca = req.params.reboquePlaca

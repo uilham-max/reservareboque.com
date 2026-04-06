@@ -2,7 +2,8 @@ const CreditosReserva = require('../model/CreditosReserva');
 const moment = require('moment-timezone');
 
 class DAOCreditosReserva {
-    async criarCreditoReserva(reservaId, clienteCpf, creditos) {
+    
+    async novoCreditoReserva(reservaId, clienteCpf, creditos, options = {}) {
         let criado_em = moment.tz(new Date(), 'America/Sao_Paulo').format()
         let atualizado_em = moment.tz(new Date(), 'America/Sao_Paulo').format()
         try {
@@ -13,7 +14,7 @@ class DAOCreditosReserva {
                 utilizado: false,
                 criado_em: criado_em,
                 atualizado_em: atualizado_em
-            });
+            }, options);
             return novoCredito;
         } catch (error) {
             throw new Error('DAOCreditosReserva não pode criar crédito.\n' + error.message);

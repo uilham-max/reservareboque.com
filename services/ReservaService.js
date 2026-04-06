@@ -1,58 +1,24 @@
-
-const sequelize = require('../database/conexao');
 const DAOReserva = require('../database/DAOReserva');
 const { SituacaoReserva, MotivoCancelamento } = require('../enums');
 
 class ReservaService {
 
-    constructor(daoReserva, creditosReservaService) {
-        this.creditosReservaService = creditosReservaService;
-        this.daoReserva = daoReserva;
+    constructor() {
+        this.daoReserva = new DAOReserva();
     }
 
-    async novoCreditoReserva(reservaId) {
-        const t = await sequelize.transaction();
+    async cancelarComCredito(reservaId, options = {}) {
         try {
-            
-            const reserva = await DAOReserva.getOne(
-                reservaId
-            );
-            
-            this.podeGerarCredito(
-                reserva
-            )
 
-            const novoCredito = await this.creditosReservaService.criarCreditoReserva(
-                reservaId, 
-                reserva.clienteCpf, 
-                reserva.diarias,
-                { transaction: t }
-            );
-
-            await DAOReserva.atualizaSituacao(
-                reservaId, 
-                SituacaoReserva.CANCELADO_COM_CREDITO,
-                { transaction: t }
-            );
+            const reserva = await this.daoReserva.getOne(reservaId);
+            this.podeGerarCredito(reserva);
+            await this.daoReserva.atualizaSituacao(reservaId, SituacaoReserva.CANCELADO_COM_CREDITO, options);
+            await this.daoReserva.registrarMotivoCancelamento(reservaId, MotivoCancelamento.CLIENTE, options);
+            const reservaAtualizada = await this.daoReserva.getOne(reservaId);
+            return reservaAtualizada;
             
-            await this.daoReserva.registrarMotivoCancelamento(
-                reservaId, 
-                MotivoCancelamento.CLIENTE,
-                { transaction: t }
-            );
-
-            await t.commit();
-            
-            const reservaAtualizada = await DAOReserva.getOne(
-                reservaId
-            );
-            
-            return { 
-                credito: novoCredito, 
-                reserva: reservaAtualizada 
-            };
         } catch (error) {
-            await t.rollback();
+            console.error(error.message);
             throw new Error('Serviço de reserva não pode gerar crédito.\n' + error.message);
         }
     }

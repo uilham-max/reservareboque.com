@@ -149,6 +149,7 @@ http://localhost:3000
 
 # 8. Usando o Ngrok para desenvolvimento
 
+* Expor o endpoint é fundamental para não travar o Webhook do Asaas.
 A principal função do Ngrok aqui é publicar a aplicação na Web para modo de desenvolvimento. 
 * Siga as instruções do site do ``Ngrok`` para configurar um ``token``.
 * Esse comando vai criar uma URL para ser acessada por clientes na internet.
@@ -200,6 +201,12 @@ https://4906-187-62-98-219.ngrok-free.app/pagamento/webhook/pix
 * Quando o cliente clica no botão `Criar Reserva`O arquivo `API_verificaPagamento.js` ficará disparando requisições em busca do ``status`` do ``pagamento``. Quando o status for igual `APROVADO`, o cliente revebera uma tela de `Sucesso`.
 
 * Para isso será necessar definir a URL criada pelo ngrok na variavel "resposta" do arquivo `API_verificaPagamento.js`.
+
+### <Fluxo:>
+* client -> geraQrCode -> server -> dao -> verificaPagamento
+* client <- telaSucesso <- server <- dao <- verificaPagamento
+
+
 
 DSV
 ```

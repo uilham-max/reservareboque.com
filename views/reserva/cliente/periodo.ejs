@@ -17,10 +17,18 @@
         <% } else {%>
         <form class="needs-validation" novalidate action="/reserva/cliente/confirmar" method="POST">
         <% } %>
+
+        <% if (mensagem) { %>
+            <div class="alert alert-danger" role="alert">
+                <%= mensagem %>
+            </div>
+        <% } %>
         
             <div class="lista-reboques">
                 <!-- Datas em que este reboque está indisponível -->
                 <input type="hidden" id="reservas" value="<%= JSON.stringify(reservas) %>">
+
+                
 
                 <!-- testando o flatpickr -->
                 <div class="card card-reserva">

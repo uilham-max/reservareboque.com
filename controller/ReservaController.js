@@ -85,6 +85,7 @@ class ReservaController {
                 } else {
                     
                     DAOReserva.getAtivasDesteReboque(reboquePlaca).then(reservas => {
+                        console.error("Falha ao buscar o período. Reboque indisponível.");
                         return res.render('reserva/cliente/periodo', {user: clienteNome(req, res), reboque: reboque, reservas: reservas, mensagem: "Indisponível para esta data."})
                     })
                     
@@ -123,6 +124,8 @@ class ReservaController {
         if(resposta.length > 0){
             let reboque = await DAOReboque.getOne(reboquePlaca)
             let reservas = await DAOReserva.getAtivasDesteReboque(reboquePlaca)
+            // Falta uma excessão personalizada para isso
+            console.error("Falha ao buscar o período. Reboque indisponível.");
             return res.render('reserva/cliente/periodo', {user: clienteNome(req, res), reboque: reboque, reservas: reservas, mensagem: "Indisponível para esta data."})
         }
     

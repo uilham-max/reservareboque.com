@@ -276,28 +276,34 @@ class DAOReserva {
         try {
             let reservas = await Reserva.findAll({
                 where: {
-                    [Op.and]: [
-                        sequelize.literal(`("dataSaida", "dataChegada") OVERLAPS (:inicioDoPeriodo, :fimDoPeriodo)`),
-                        {reboquePlaca: reboquePlaca},
-                        { 
-                            situacaoReserva: { 
-                                [Op.notIn]: [
-                                    SituacaoReserva.CANCELADO,
-                                    SituacaoReserva.CANCELADO_COM_CREDITO,
-                                ] 
-                            } 
-                        } // Modificado para mostrar as reservas canceladas na tela de periodo da reserva
-                    ],
-                },
-                replacements: {inicioDoPeriodo, fimDoPeriodo},
-                type: QueryTypes.SELECT,
-            })
+                    reboquePlaca: reboquePlaca,
 
-            // console.log('Reservas encontradas:', reservas.map(reserva => reserva.toJSON()));
-            return reservas
+                    situacaoReserva: {
+                        [Op.notIn]: [
+                            SituacaoReserva.CANCELADO,
+                            SituacaoReserva.CANCELADO_COM_CREDITO
+                        ]
+                    },
+
+                    [Op.and]: [
+                        {
+                            dataSaida: {
+                                [Op.lte]: fimDoPeriodo
+                            }
+                        },
+                        {
+                            dataChegada: {
+                                [Op.gte]: inicioDoPeriodo
+                            }
+                        }
+                    ]
+                }
+            });
+
+            return reservas;
         } catch (error) {
             console.error('Erro ao verificar disponibilidade:', error);
-            return undefined
+            return undefined;
         }
     }
     static async getTodasDesteReboque(reboquePlaca){

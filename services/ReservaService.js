@@ -1,10 +1,9 @@
-const DAOReserva = require('../database/DAOReserva');
 const { SituacaoReserva, MotivoCancelamento } = require('../enums');
 
 class ReservaService {
 
-    constructor() {
-        this.daoReserva = new DAOReserva();
+    constructor(daoReserva) {
+        this.daoReserva = daoReserva;
     }
 
     async cancelarComCredito(reservaId, options = {}) {
@@ -16,7 +15,7 @@ class ReservaService {
             await this.daoReserva.registrarMotivoCancelamento(reservaId, MotivoCancelamento.CLIENTE, options);
             const reservaAtualizada = await this.daoReserva.getOne(reservaId);
             return reservaAtualizada;
-            
+
         } catch (error) {
             console.error(error.message);
             throw new Error('Serviço de reserva não pode gerar crédito.\n' + error.message);

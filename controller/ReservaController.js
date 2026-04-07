@@ -13,18 +13,13 @@ const Caledario = require('../bill_modules/Calendario')
 const Logger = require('nodemon/lib/utils/log')
 const { FormaPagamento, SituacaoReserva } = require('../enums')
 const ReservaService = require('../services/ReservaService')
-const CreditosReservaService = require('../services/CreditosReservaService')
 
 
 class ReservaController {
 
     constructor() {
         const daoReserva = new DAOReserva();
-        const creditosReservaService = new CreditosReservaService();
-        this.reservaService = new ReservaService(
-            daoReserva, 
-            creditosReservaService
-        );
+        this.reservaService = new ReservaService(daoReserva);
     }
 
 

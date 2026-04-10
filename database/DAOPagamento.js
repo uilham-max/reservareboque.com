@@ -60,8 +60,8 @@ class DAOPagamento {
             })
             return lista
         } catch(erro) {
-            console.error(erro.toString());
-            return undefined
+            console.error("Erro ao listar pagamentos com prazo expirado:", erro.toString());
+            return false
         }
     }
     static async verificaPagamento(codigoPagamento){

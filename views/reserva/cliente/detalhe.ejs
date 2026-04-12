@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <%- include('../../partials/header.ejs') %>
+    <link rel="stylesheet" href="/css/detalhe-reserva.css">
 </head>
 <body>
     <%- include('../../partials/navbar.ejs') %>
@@ -73,12 +74,12 @@
                             </div>
 
                             <div class="d-md-flex justify-content-center" style="margin: 0.5rem;">
-                                    <button 
-                                        style="margin: 0.3rem;" 
-                                        class="btn btn-secondary" 
-                                        type="button" 
-                                        onclick="history.back()">Voltar
-                                    </button>
+                                <button 
+                                    style="margin: 0.3rem;" 
+                                    class="btn btn-secondary" 
+                                    type="button" 
+                                    onclick="history.back()">Voltar
+                                </button>
                                 <% if(reserva.situacaoReserva == 'APROVADO' || reserva.situacaoReserva == 'CANCELADO_COM_CREDITO') {%>
                                     <a 
                                         style="margin: 0.3rem;" 
@@ -92,19 +93,22 @@
                                         href="#">Reduzir
                                     </a>
                                     <% if(!(reserva.situacaoReserva == 'CANCELADO_COM_CREDITO')) { %>
-                                    <a
+                                    <button
+                                        id="btn-credito"
                                         style="margin: 0.3rem;"
                                         class="btn btn-info"
-                                        href="/creditos-reserva/<%= reserva.id %>/criar">Crédito
-                                    </a>
+                                        type="button"
+                                        onclick="ActionHandler.execute('/creditos-reserva/<%= reserva.id %>/criar', 'Crédito gerado com sucesso!', this)">Crédito
+                                    </button>
                                     <% } else { %>
-                                    <a
+                                    <button
+                                        id="btn-ativar"
                                         style="margin: 0.3rem;"
                                         class="btn btn-success"
-                                        href="/creditos-reserva/<%= reserva.id %>/aplicar">Ativar
-                                    </a>
+                                        type="button"
+                                        onclick="ActionHandler.execute('/creditos-reserva/<%= reserva.id %>/usar', 'Crédito aplicado com sucesso!', this)">Ativar
+                                    </button>
                                     <% } %>
-
                                 <% } %>
                             </div>
 
@@ -115,6 +119,25 @@
                 </div>
         </div>
     </div>
+
+    <div id="successModal" class="custom-modal">
+        <div class="modal-box">
+            <h5 class="modal-title">Sucesso</h5>
+            <p id="successModalMessage" class="modal-message"></p>
+            <button type="button" class="btn btn-primary" onclick="ModalHandler.closeSuccess(() => window.location.reload())">Entendi</button>
+        </div>
+    </div>
+
+    <div id="errorModal" class="custom-modal">
+        <div class="modal-box">
+            <h5 class="modal-title text-danger">Erro</h5>
+            <p id="errorModalMessage" class="modal-message"></p>
+            <button type="button" class="btn btn-secondary" onclick="ModalHandler.closeError()">Entendi</button>
+        </div>
+    </div>
+
+    <script src="/js/modal-handler.js"></script>
+    <script src="/js/action-handler.js"></script>
 
     <%- include('../../partials/footer.ejs') %>
 </body>

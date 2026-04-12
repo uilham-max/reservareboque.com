@@ -27,14 +27,14 @@ class DAOReserva {
             return false;
         }
     }
-    static async atualizaSituacao(idReserva, status){
-        // situacaoReserva: APROVADO, CONCLUIDO, CANCELADO, ANDAMENTO, AGUARDANDO_PAGAMENTO, ADIADO, AGUARDANDO_ACEITACAO, CANCELADO_COM_CREDITO
+    static async atualizaSituacao(idReserva, status, options = {}) {
+        // situacaoReserva: APROVADO, CONCLUIDO, CANCELADO, ANDAMENTO, AGUARDANDO_PAGAMENTO, AGUARDANDO_ACEITACAO, CANCELADO_COM_CREDITO
         let atualizado_em = moment.tz(new Date(), 'America/Sao_Paulo').format()
         console.log('Atualizando situação da reserva para ', status);
         try{
             await Reserva.update(
                 {situacaoReserva: status, atualizado_em: atualizado_em},
-                {where: {id: idReserva}},
+                {where: {id: idReserva}, ...options},
             )
             console.log('Situação atualizada para ', status, ' com sucesso!');
             return true

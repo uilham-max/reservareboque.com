@@ -6,5 +6,6 @@ const CreditosReservaController = require('../controller/CreditosReservaControll
 const creditosReservacontroller = new CreditosReservaController();
 
 router.get('/:idReserva/criar', clienteAutorizacao, creditosReservacontroller.getCriarCreditoReserva.bind(creditosReservacontroller));
+router.get('/:idReserva/usar', clienteAutorizacao, creditosReservacontroller.getUsarCreditoReserva.bind(creditosReservacontroller)); 
 
 module.exports = router;

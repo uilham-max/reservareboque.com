@@ -1,0 +1,66 @@
+/* ===== ESTILOS DE FORMULÁRIOS ===== */
+
+/* Grupos de formulário */
+.form-group {
+    margin-top: var(--spacing-sm);
+    text-align: left;
+}
+
+/* Alinhamento à direita */
+.direita {
+    float: right;
+}
+
+/* Calendário */
+.calendario {
+    height: 60px;
+}
+
+.flatpickr-calendar {
+    width: 100%;
+    max-width: 100%;
+}
+
+.table td {
+    padding: var(--spacing-sm);
+    text-align: left;
+    vertical-align: middle;
+    border: 1px solid #ddd;
+}
+
+/* Data desabilitada */
+.disabled-day {
+    color: var(--danger) !important;
+    font-weight: bold;
+    position: relative;
+}
+
+/* X sobre data desabilitada */
+.x-mark {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 48px;
+    font-weight: lighter;
+    color: var(--danger);
+    pointer-events: none;
+}
+
+/* Eventos no calendário */
+.event.busy {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background-color: var(--danger);
+    border-radius: 50%;
+    margin-left: 5px;
+}
+
+/* Font do Google */
+@import url('https://fonts.googleapis.com/css?family=Rubik&display=swap');
+
+/* Ícones sociais */
+.social {
+    font-size: 21px !important;
+}

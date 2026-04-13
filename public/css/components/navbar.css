@@ -1,0 +1,26 @@
+/* ===== ESTILOS DE NAVEGAÇÃO ===== */
+
+/* Navbar base */
+.navbar {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1030;
+}
+
+/* Links da navbar */
+.navbar a {
+    color: white;
+    text-decoration: none;
+    padding: 0px 18px;
+}
+
+/* Hover na navbar */
+.navbar a:hover {
+    color: var(--primary);
+}
+
+/* Navbar admin */
+.navbaradmin {
+    background-color: brown;
+}

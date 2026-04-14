@@ -149,8 +149,16 @@ http://localhost:3000
 
 # 8. Usando o Ngrok para desenvolvimento
 
-* Expor o endpoint é fundamental para não travar o Webhook do Asaas.
-A principal função do Ngrok aqui é publicar a aplicação na Web para modo de desenvolvimento. 
+### Ngrok em desenvolvimento:
+
+* O Ngrok é fundamental em desenvolvimento para para atualizar o status do pagamento para APROVADO.
+* O Webhook TEST_PAYMENT_RECEIVED deve ter configurado o campo URL do Webhook com o link esterno gerado pelo Ngrok.
+### Como funciona:
+* O endpoint postWebHookPixRecebido da classe PagamentoController foi criado para receber uma requisição do Webhook do Asass e aprovar o status do pagamento para APROVADO sempre que um pagamento for realizado.
+* Se a URL não for configurada no Asass a fila de processamento dos pagamentos será interrompida e nunhum pagamentos mais será processado.
+
+### Como ativar o Ngrok:
+
 * Siga as instruções do site do ``Ngrok`` para configurar um ``token``.
 * Esse comando vai criar uma URL para ser acessada por clientes na internet.
 
@@ -165,11 +173,11 @@ A URL será parecida com:
  https://4906-187-62-98-219.ngrok-free.app
 ```
 
-## 🎯 Observações
+### Observações
 
 * Sempre que o server do Ngrok for reiniciado será necessario:
 1. Configurar a nova URL no Webhook do Asaas.
-2. Configurar a nova URL no frontend para resposta de sucesso para o cliente em ``public/js/API_verificaPagamento.js``
+2. Se quiser que uma tela de sucesso apareça após finalizar um pagamento por PIX deve ser configurada a nova URL no frontend em ``public/js/API_verificaPagamento.js``
 
 
 # 9. Configurar webhook de pagamento Asaas para DSV ou PRD

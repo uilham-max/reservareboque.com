@@ -1,0 +1,151 @@
+/* ===== ESTILOS DE CARDS ===== */
+
+/* Cards base */
+.card {
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1) !important;
+}
+
+.card-header {
+    position: relative;
+}
+
+.card-footer {
+    background: #fff !important;
+}
+
+/* Avatar */
+.avatar-circle {
+    font-size: 1.2rem;
+}
+
+/* Avatar */
+.avatar-circle {
+    font-size: 1.2rem;
+}
+
+/* Cards de reserva */
+.card-reserva {
+    width: 25rem;
+    margin: var(--spacing-sm);
+    transition: transform 0.4s;
+    box-shadow: var(--shadow);
+}
+
+.card-reserva:hover {
+    transform: scale(1.05);
+    box-shadow: var(--shadow-lg);
+}
+
+/* Cards da página inicial */
+.card-index {
+    width: 25rem;
+    margin: var(--spacing-sm);
+    transition: transform 0.4s;
+    box-shadow: var(--shadow);
+}
+
+.card-index:hover {
+    transform: scale(1.05);
+    box-shadow: var(--shadow-lg);
+}
+
+.card-index h5 {
+    margin-top: 10px;
+    font-size: 1.2rem;
+    color: var(--dark);
+}
+
+/* Cards de estatísticas (dashboard) */
+.stat-card {
+    min-width: 100px;
+    text-align: center;
+    transition: transform 0.3s ease;
+    flex: 1 1 auto;
+}
+
+.stat-card:hover {
+    transform: scale(1.05);
+}
+
+/* Headers responsivos */
+.header-reservas {
+    gap: 1rem;
+}
+
+.header-reservas h2 {
+    font-size: 1.5rem;
+}
+
+/* Headers de status com gradientes */
+.header-aprovado {
+    background: linear-gradient(135deg, #28a745, #20c997) !important;
+}
+
+.header-info {
+    background: linear-gradient(135deg, #007bff, #6610f2) !important;
+}
+
+.header-andamento {
+    background: linear-gradient(135deg, #ffc107, #ff8c00) !important;
+}
+
+.header-concluido {
+    background: linear-gradient(135deg, #17a2b8, #6f42c1) !important;
+}
+
+.header-default {
+    background: linear-gradient(135deg, #6c757d, #495057) !important;
+}
+
+.header-success {
+    background: linear-gradient(135deg, #28a745, #20c997) !important;
+}
+
+/* Responsividade para headers */
+@media (max-width: 768px) {
+    .header-reservas {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .header-reservas h2 {
+        font-size: 1.5rem;
+        width: 100%;
+    }
+
+    .stat-card {
+        min-width: 80px;
+        padding: 0.75rem !important;
+        font-size: 0.85rem;
+    }
+
+    .stat-card i.fa-2x {
+        font-size: 1.5rem !important;
+    }
+}
+
+@media (max-width: 576px) {
+    .header-reservas h2 {
+        font-size: 1.25rem;
+    }
+
+    .stat-card {
+        min-width: 70px;
+        padding: 0.5rem !important;
+        font-size: 0.75rem;
+    }
+
+    .stat-card i.fa-2x {
+        font-size: 1.2rem !important;
+    }
+
+    .stat-card small {
+        font-size: 0.6rem;
+    }
+}

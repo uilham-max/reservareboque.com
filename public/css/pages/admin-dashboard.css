@@ -1,0 +1,66 @@
+/* ===== DASHBOARD ADMIN ===== */
+
+/* Container responsivo do dashboard */
+.container-responsive {
+    width: 100%;
+    padding: 0 var(--spacing-md);
+}
+
+/* Cards de estatísticas no dashboard */
+.stat-card {
+    background: white;
+    border-radius: var(--border-radius);
+    padding: var(--spacing-lg);
+    margin: var(--spacing-sm);
+    box-shadow: var(--shadow);
+    transition: transform 0.3s ease;
+}
+
+.stat-card:hover {
+    transform: scale(1.05);
+    box-shadow: var(--shadow-lg);
+}
+
+.stat-card .h5 {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: var(--spacing-xs);
+}
+
+.stat-card small {
+    font-size: 0.9rem;
+    opacity: 0.8;
+}
+
+/* Layout do dashboard */
+.dashboard-header {
+    margin-bottom: var(--spacing-xl);
+}
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: var(--spacing-md);
+}
+
+/* Responsividade do dashboard */
+@media (max-width: 768px) {
+    .dashboard-grid {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    }
+
+    .stat-card {
+        padding: var(--spacing-md);
+    }
+}
+
+@media (max-width: 576px) {
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .stat-card {
+        margin: var(--spacing-xs);
+        padding: var(--spacing-sm);
+    }
+}

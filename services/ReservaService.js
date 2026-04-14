@@ -1,61 +1,84 @@
-
-const sequelize = require('../database/conexao');
-const DAOReserva = require('../database/DAOReserva');
-const { SituacaoReserva, MotivoCancelamento } = require('../helpers/enums');
+const { SituacaoReserva, MotivoCancelamento } = require('../enums');
 
 class ReservaService {
 
-    constructor(daoReserva, creditosReservaService) {
-        this.creditosReservaService = creditosReservaService;
+    constructor(daoReserva) {
         this.daoReserva = daoReserva;
     }
 
-    async novoCreditoReserva(reservaId) {
-        const t = await sequelize.transaction();
+    async cancelarComCredito(reservaId, options = {}) {
         try {
-            
-            const reserva = await DAOReserva.getOne(
-                reservaId
-            );
-            
-            this.podeGerarCredito(
-                reserva
-            )
 
-            const novoCredito = await this.creditosReservaService.criarCreditoReserva(
-                reservaId, 
-                reserva.clienteCpf, 
-                reserva.diarias,
-                { transaction: t }
-            );
+            const reserva = await this.daoReserva.getOne(reservaId);
+            this.podeGerarCredito(reserva);
+            await this.daoReserva.atualizaSituacao(reservaId, SituacaoReserva.CANCELADO_COM_CREDITO, options);
+            await this.daoReserva.registrarMotivoCancelamento(reservaId, MotivoCancelamento.CLIENTE, options);
+            const reservaAtualizada = await this.daoReserva.getOne(reservaId);
+            console.log("Reserva atualizada com sucesso.");
+            return reservaAtualizada;
 
-            await DAOReserva.atualizaSituacao(
-                reservaId, 
-                SituacaoReserva.CANCELADO_COM_CREDITO,
-                { transaction: t }
-            );
-            
-            await this.daoReserva.registrarMotivoCancelamento(
-                reservaId, 
-                MotivoCancelamento.CLIENTE,
-                { transaction: t }
-            );
-
-            await t.commit();
-            
-            const reservaAtualizada = await DAOReserva.getOne(
-                reservaId
-            );
-            
-            return { 
-                credito: novoCredito, 
-                reserva: reservaAtualizada 
-            };
         } catch (error) {
-            await t.rollback();
-            throw new Error('Serviço de reserva não pode gerar crédito.\n' + error.message);
+            console.error(error);
+            throw new Error('Serviço de reserva não pode gerar crédito.');
         }
     }
+
+    async aplicarCredito(reservaId, options = {}) {
+        try {
+            await this.daoReserva.atualizaSituacao(reservaId, SituacaoReserva.APROVADO, options);
+            const reservaAtualizada = await this.daoReserva.getOne(reservaId);
+            return reservaAtualizada;
+        } catch (error) {
+            console.error(error);
+            throw new Error('Serviço de reserva não pode aplicar crédito.');
+        }
+    }
+
+    async atualizaSituacao(reservaId, novaSituacao, options = {}) {
+        console.log("Atualizando situação da reserva para", novaSituacao);
+        try {
+            await this.daoReserva.atualizaSituacao(reservaId, novaSituacao, options);   
+            const reservaAtualizada = await this.daoReserva.getOne(reservaId);
+            console.log(`Reserva ${reservaId} atualizada para ${novaSituacao} com sucesso.`);
+            return reservaAtualizada;
+        } catch (error) {
+            console.error('Serviço de reserva não pode atualizar situação.', error);
+            throw new Error('Serviço de reserva não pode atualizar situação.');
+        }
+    }
+
+    async getOne(reservaId) {
+        try {
+            const reserva = await this.daoReserva.getOne(reservaId);    
+            return reserva;
+        } catch (error) {
+            console.error('Serviço de reserva não pode buscar reserva por id.', error);
+            throw new Error('Serviço de reserva não pode buscar reserva por id.');
+        }  
+    }
+
+    async registrarMotivoCancelamento(reservaId, motivo, options = {}) {
+        try {
+            await this.daoReserva.registrarMotivoCancelamento(reservaId, motivo, options);
+        } catch (error) {
+            console.error('Serviço de reserva não pode registrar motivo de cancelamento.', error);
+            throw new Error('Serviço de reserva não pode registrar motivo de cancelamento.');
+        }
+    }
+
+    async cancelaComCreditoReservaExistente(reservaId, options = {}) {
+        try {
+            await this.daoReserva.atualizaSituacao(reservaId, SituacaoReserva.CANCELADO_COM_CREDITO, options);  
+            await this.daoReserva.registrarMotivoCancelamento(reservaId, MotivoCancelamento.CLIENTE, options);
+            const reservaAtualizada = await this.daoReserva.getOne(reservaId);
+            console.log("Reserva atualizada para CANCELADO_COM_CREDITO com sucesso.");
+            return reservaAtualizada;
+        } catch (error) {
+            console.error('Serviço de reserva não pode ativar crédito existente.', error);
+            throw new Error('Serviço de reserva não pode ativar crédito existente.');
+        }
+    }
+
 
     podeGerarCredito(reserva) {
 

@@ -6,8 +6,6 @@ const clienteAutorizacao = require('../autorizacao/clienteAutorizacao')
 const ReservaController = require('../controller/ReservaController')
 const reservaController = new ReservaController();
 
-router.get('/:id/gerar-credito', clienteAutorizacao, reservaController.getGerarCreditoReserva.bind(reservaController)); // '/reserva/:id/gerar-credito'
-
 router.get('/cliente/periodo/:reboquePlaca?', ReservaController.getClienteInformaPeriodo)
 router.post('/cliente/formulario', ReservaController.postClienteFormularioReserva)
 router.post('/cliente/confirmar', ReservaController.postClienteConfirmaDadosFormularioReserva)

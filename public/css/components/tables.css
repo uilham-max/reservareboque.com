@@ -1,0 +1,66 @@
+/* ===== ESTILOS DE TABELAS ===== */
+
+/* Tabelas base */
+.table {
+    width: 100%;
+    margin-bottom: var(--spacing-md);
+    color: var(--dark);
+}
+
+.table th,
+.table td {
+    padding: var(--spacing-sm);
+    text-align: left;
+    vertical-align: middle;
+    border: 1px solid #ddd;
+}
+
+.table thead th {
+    vertical-align: bottom;
+    border-bottom: 2px solid #dee2e6;
+}
+
+.table tbody + tbody {
+    border-top: 2px solid #dee2e6;
+}
+
+/* Tabela responsiva */
+.table-responsive {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Tabela striped */
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+/* Hover nas linhas */
+.table-hover tbody tr:hover {
+    color: var(--dark);
+    background-color: rgba(0, 0, 0, 0.075);
+}
+
+/* Lista de reboques */
+.lista-reboques {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 2rem;
+}
+
+/* Ano */
+.ano {
+    font-size: 12px;
+    margin-bottom: 5px;
+    color: #516067;
+    font-weight: 400;
+}
+
+/* Lista */
+li {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}

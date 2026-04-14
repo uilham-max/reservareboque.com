@@ -1,0 +1,97 @@
+/* ===== RELATÓRIOS DE RECEITA ===== */
+
+/* Container de relatórios */
+.relatorio-container {
+    padding: var(--spacing-lg);
+}
+
+.relatorio-header {
+    margin-bottom: var(--spacing-xl);
+    text-align: center;
+}
+
+.relatorio-content {
+    background: white;
+    border-radius: var(--border-radius);
+    padding: var(--spacing-xl);
+    box-shadow: var(--shadow);
+}
+
+/* Filtros de relatório */
+.relatorio-filtros {
+    display: flex;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+    flex-wrap: wrap;
+}
+
+.filtro-item {
+    flex: 1;
+    min-width: 200px;
+}
+
+/* Tabela de relatório */
+.relatorio-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: var(--spacing-lg);
+}
+
+.relatorio-table th,
+.relatorio-table td {
+    padding: var(--spacing-md);
+    text-align: left;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.relatorio-table th {
+    background: var(--light);
+    font-weight: 600;
+    color: var(--dark);
+}
+
+.relatorio-table tbody tr:hover {
+    background: rgba(0, 123, 255, 0.1);
+}
+
+/* Totais */
+.relatorio-totais {
+    margin-top: var(--spacing-xl);
+    padding: var(--spacing-lg);
+    background: var(--success);
+    color: white;
+    border-radius: var(--border-radius);
+    text-align: center;
+}
+
+.total-valor {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-top: var(--spacing-sm);
+}
+
+/* Gráficos */
+.grafico-container {
+    margin-top: var(--spacing-xl);
+    height: 400px;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .relatorio-filtros {
+        flex-direction: column;
+    }
+
+    .filtro-item {
+        min-width: auto;
+    }
+
+    .relatorio-table {
+        font-size: var(--font-size-sm);
+    }
+
+    .relatorio-table th,
+    .relatorio-table td {
+        padding: var(--spacing-sm);
+    }
+}

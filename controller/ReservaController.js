@@ -11,38 +11,15 @@ const moment = require('moment-timezone')
 const { deleteCobranca } = require('../helpers/API_Pagamentos');
 const Caledario = require('../bill_modules/Calendario')
 const Logger = require('nodemon/lib/utils/log')
-const { FormaPagamento, SituacaoReserva } = require('../helpers/enums')
+const { FormaPagamento, SituacaoReserva } = require('../enums')
 const ReservaService = require('../services/ReservaService')
-const CreditosReservaService = require('../services/CreditosReservaService')
 
 
 class ReservaController {
 
     constructor() {
         const daoReserva = new DAOReserva();
-        const creditosReservaService = new CreditosReservaService();
-        this.reservaService = new ReservaService(
-            daoReserva, 
-            creditosReservaService
-        );
-    }
-
-    async getGerarCreditoReserva(req, res) {
-        const reservaId = req.params.id;
-        try {
-            const { credito, reserva } = await this.reservaService.novoCreditoReserva(reservaId);
-            return res.render('reserva/cliente/detalhe', {
-                user: clienteNome(req, res), 
-                mensagem: 'Crédito de reserva gerado com sucesso.', 
-                reserva: reserva, 
-                credito: credito,
-            });
-        } catch (error) {
-            return res.render('erro', { 
-                mensagem: 'Erro ao gerar crédito para a reserva: ' 
-                + error.message 
-            });
-        }
+        this.reservaService = new ReservaService(daoReserva);
     }
 
 
@@ -103,6 +80,7 @@ class ReservaController {
                 } else {
                     
                     DAOReserva.getAtivasDesteReboque(reboquePlaca).then(reservas => {
+                        console.error("Falha ao buscar o período. Reboque indisponível.");
                         return res.render('reserva/cliente/periodo', {user: clienteNome(req, res), reboque: reboque, reservas: reservas, mensagem: "Indisponível para esta data."})
                     })
                     
@@ -141,6 +119,8 @@ class ReservaController {
         if(resposta.length > 0){
             let reboque = await DAOReboque.getOne(reboquePlaca)
             let reservas = await DAOReserva.getAtivasDesteReboque(reboquePlaca)
+            // Falta uma excessão personalizada para isso
+            console.error("Falha ao buscar o período. Reboque indisponível.");
             return res.render('reserva/cliente/periodo', {user: clienteNome(req, res), reboque: reboque, reservas: reservas, mensagem: "Indisponível para esta data."})
         }
     

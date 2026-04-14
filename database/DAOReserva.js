@@ -7,18 +7,18 @@ const sequelize = require('sequelize')
 const Pagamento = require('../model/Pagamento.js')
 const moment = require('moment-timezone')
 const { startOfMonth, endOfMonth } = require('date-fns')
-const { SituacaoReserva, motivoCancelamento } = require('../helpers/enums')
+const { SituacaoReserva, MotivoCancelamento, StatusPagamento } = require('../enums')
 
 
 class DAOReserva {
 
-    async registrarMotivoCancelamento(idReserva, motivo) {
+    async registrarMotivoCancelamento(idReserva, motivo, options = {}) {
         // motivo: CLIENTE, ADMIN, NAO_PAGO, CREDITO
         let atualizado_em = moment.tz(new Date(), 'America/Sao_Paulo').format()
         try {
             await Reserva.update(
                 { motivoCancelamento: motivo, atualizado_em: atualizado_em },
-                { where: { id: idReserva } }
+                { where: { id: idReserva }, ...options }
             );
             console.log(`Motivo de cancelamento registrado para a reserva ${idReserva}: ${motivo}`);
             return true;
@@ -27,14 +27,30 @@ class DAOReserva {
             return false;
         }
     }
-    static async atualizaSituacao(idReserva, status){
+    static async atualizaSituacao(idReserva, status, options = {}) {
+        // situacaoReserva: APROVADO, CONCLUIDO, CANCELADO, ANDAMENTO, AGUARDANDO_PAGAMENTO, AGUARDANDO_ACEITACAO, CANCELADO_COM_CREDITO
+        let atualizado_em = moment.tz(new Date(), 'America/Sao_Paulo').format()
+        console.log('Atualizando situação da reserva para ', status);
+        try{
+            await Reserva.update(
+                {situacaoReserva: status, atualizado_em: atualizado_em},
+                {where: {id: idReserva}, ...options},
+            )
+            console.log('Situação atualizada para ', status, ' com sucesso!');
+            return true
+        } catch(erro) {
+            console.error(`Erro ao atualizar situação da reserva para ${status} \n ${erro}`);
+            return false
+        }
+    }
+    async atualizaSituacao(idReserva, status, options = {}){
         // situacaoReserva: APROVADO, CONCLUIDO, CANCELADO, ANDAMENTO, AGUARDANDO_PAGAMENTO, ADIADO, AGUARDANDO_ACEITACAO, CANCELADO_COM_CREDITO
         let atualizado_em = moment.tz(new Date(), 'America/Sao_Paulo').format()
         console.log('Atualizando situação da reserva para ', status);
         try{
             await Reserva.update(
                 {situacaoReserva: status, atualizado_em: atualizado_em},
-                {where: {id: idReserva}},
+                {where: {id: idReserva}, ...options},
             )
             console.log('Situação atualizada para ', status, ' com sucesso!');
             return true
@@ -79,6 +95,17 @@ class DAOReserva {
         }
     }
     static async getOne(id) {
+        try {
+            // console.log('ID -->', id);
+            let reserva = await Reserva.findByPk(id, {include: [{model: Cliente}, {model: Reboque}, {model: Pagamento}]})
+            return reserva
+        }
+        catch (error) {
+            console.log(error.toString())
+            return undefined
+        }
+    }
+    async getOne(id) {
         try {
             // console.log('ID -->', id);
             let reserva = await Reserva.findByPk(id, {include: [{model: Cliente}, {model: Reboque}, {model: Pagamento}]})
@@ -159,7 +186,9 @@ class DAOReserva {
                     [Op.or]: [
                         {situacaoReserva: SituacaoReserva.APROVADO},
                         {situacaoReserva: SituacaoReserva.ANDAMENTO},
-                        {situacaoReserva: SituacaoReserva.CANCELADO_COM_CREDITO}
+                        {situacaoReserva: SituacaoReserva.CANCELADO_COM_CREDITO},
+                        {situacaoReserva: SituacaoReserva.AGUARDANDO_ACEITACAO},
+                        {situacaoReserva: SituacaoReserva.AGUARDANDO_PAGAMENTO},
                     ]
                     
                 },
@@ -226,7 +255,7 @@ class DAOReserva {
                         model: Pagamento,
                         attributes: [],
                         where: {
-                            situacao: 'APROVADO'
+                            situacao: StatusPagamento.APROVADO
                         }
                     }
                 ],
@@ -247,21 +276,34 @@ class DAOReserva {
         try {
             let reservas = await Reserva.findAll({
                 where: {
-                    [Op.and]: [
-                        sequelize.literal(`("dataSaida", "dataChegada") OVERLAPS (:inicioDoPeriodo, :fimDoPeriodo)`),
-                        {reboquePlaca: reboquePlaca},
-                        { situacaoReserva: { [Op.ne]: SituacaoReserva.CANCELADO } } // Modificado para mostrar as reservas canceladas na tela de periodo da reserva
-                    ],
-                },
-                replacements: {inicioDoPeriodo, fimDoPeriodo},
-                type: QueryTypes.SELECT,
-            })
+                    reboquePlaca: reboquePlaca,
 
-            // console.log('Reservas encontradas:', reservas.map(reserva => reserva.toJSON()));
-            return reservas
+                    situacaoReserva: {
+                        [Op.notIn]: [
+                            SituacaoReserva.CANCELADO,
+                            SituacaoReserva.CANCELADO_COM_CREDITO
+                        ]
+                    },
+
+                    [Op.and]: [
+                        {
+                            dataSaida: {
+                                [Op.lte]: fimDoPeriodo
+                            }
+                        },
+                        {
+                            dataChegada: {
+                                [Op.gte]: inicioDoPeriodo
+                            }
+                        }
+                    ]
+                }
+            });
+
+            return reservas;
         } catch (error) {
             console.error('Erro ao verificar disponibilidade:', error);
-            return undefined
+            return undefined;
         }
     }
     static async getTodasDesteReboque(reboquePlaca){

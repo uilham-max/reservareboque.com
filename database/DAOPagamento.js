@@ -1,5 +1,6 @@
 const { Sequelize } = require('sequelize');
 const Pagamento = require('../model/Pagamento')
+const { StatusPagamento } = require('../enums')
 const moment = require('moment-timezone')
 
 
@@ -21,7 +22,7 @@ class DAOPagamento {
         let atualizado_em = moment.tz(new Date(), 'America/Sao_Paulo').format()
         try {
             let cancelado = await Pagamento.update(
-                {situacao: "CANCELADO", atualizado_em: atualizado_em},
+                {situacao: StatusPagamento.CANCELADO, atualizado_em: atualizado_em},
                 {where: {codigoPagamento: codigoPagamento}}
             )
             if(cancelado){
@@ -51,7 +52,7 @@ class DAOPagamento {
             let lista = await Pagamento.findAll({
                 where: {
                     aprovado: false,
-                    situacao: "AGUARDANDO_PAGAMENTO",
+                    situacao: StatusPagamento.AGUARDANDO_PAGAMENTO,
                     dataExpiracao: {
                         [Sequelize.Op.lt]: horas
                     }
@@ -59,8 +60,8 @@ class DAOPagamento {
             })
             return lista
         } catch(erro) {
-            console.error(erro.toString());
-            return undefined
+            console.error("Erro ao listar pagamentos com prazo expirado:", erro.toString());
+            return false
         }
     }
     static async verificaPagamento(codigoPagamento){
@@ -76,7 +77,7 @@ class DAOPagamento {
         let atualizado_em = moment.tz(new Date(), 'America/Sao_Paulo').format()
         try{
             const [numLinhasAtualizadas] = await Pagamento.update(
-                {aprovado: true, situacao: "APROVADO", atualizado_em: atualizado_em},
+                {aprovado: true, situacao: StatusPagamento.APROVADO, atualizado_em: atualizado_em},
                 {where: {codigoPagamento: codigoPagamento}}
             );
             // console.log('Atualizando status do pagamento para aprovado...');
@@ -105,7 +106,7 @@ class DAOPagamento {
                     forma: billingType, 
                     aprovado: false, 
                     dataExpiracao: dataExpiracao, 
-                    situacao: "AGUARDANDO_PAGAMENTO",
+                    situacao: StatusPagamento.AGUARDANDO_PAGAMENTO,
                     criado_em: criado_em,
                     atualizado_em: atualizado_em
                 }

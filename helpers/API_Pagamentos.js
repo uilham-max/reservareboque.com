@@ -1,6 +1,6 @@
 const axios = require('axios');
 const { getAccessToken, getUrlBase } = require('./Env');
-const { FormaPagamento } = require('./enums');
+const { FormaPagamento } = require('../enums');
 
 
 const ACCESS_TOKEN = getAccessToken()

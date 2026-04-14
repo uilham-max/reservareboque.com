@@ -11,15 +11,95 @@
             <div class="conteudo">
                 <div class="container">
                     <div class="lista-reboques">
-                        <div class="card card-reserva" style="width: 40rem;">
+                        <div class="card card-reserva">
                             <div class="card-body">
-                                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                                    <a class="btn btn-primary me-md-2" href="/">Voltar</a>
+                                <div class="d-grid gap-2 d-md-flex justify-content-md-end mb-3">
+                                    <a class="btn btn-primary" href="/">Voltar</a>
                                 </div>
                                 <h3 class="display-4">Lista de Reservas</h3>
                                 <br>
+
+                                <!-- Dashboard de Estatísticas -->
+                                <%
+                                let stats = {
+                                    aprovadas: 0,
+                                    finalizadas: 0,
+                                    canceladas: 0,
+                                    canceladasCredito: 0,
+                                    pendenteAprovacao: 0,
+                                    pendentePagamento: 0
+                                };
                                 
-                                <div class="table-responsive">
+                                reservas.forEach(function(reserva) {
+                                    if (reserva.situacaoReserva === SituacaoReserva.APROVADO) {
+                                        stats.aprovadas++;
+                                    } else if (reserva.situacaoReserva === SituacaoReserva.CONCLUIDO) {
+                                        stats.finalizadas++;
+                                    } else if (reserva.situacaoReserva === SituacaoReserva.CANCELADO) {
+                                        stats.canceladas++;
+                                    } else if (reserva.situacaoReserva === SituacaoReserva.CANCELADO_COM_CREDITO) {
+                                        stats.canceladasCredito++;
+                                    } else if (reserva.situacaoReserva === SituacaoReserva.AGUARDANDO_ACEITACAO) {
+                                        stats.pendenteAprovacao++;
+                                    } else if (reserva.situacaoReserva === SituacaoReserva.AGUARDANDO_PAGAMENTO) {
+                                        stats.pendentePagamento++;
+                                    }
+                                });
+                                %>
+
+                                <div class="row mb-4">
+                                    <div class="col-12">
+                                        <div class="d-flex flex-wrap justify-content-between align-items-center mb-3">
+                                            <h4 class="fw-bold text-dark mb-3 mb-md-0"><i class="fas fa-chart-bar me-2"></i> Minhas Reservas</h4>
+                                            <div class="d-flex flex-wrap gap-2 gap-md-3 justify-content-center justify-content-md-end">
+                                                <div class="stat-card bg-success text-white p-3 rounded shadow">
+                                                    <i class="fas fa-check-circle fa-2x"></i>
+                                                    <div class="mt-2">
+                                                        <div class="h5 mb-0"><%= stats.aprovadas %></div>
+                                                        <small>Aprovadas</small>
+                                                    </div>
+                                                </div>
+                                                <div class="stat-card bg-danger text-white p-3 rounded shadow">
+                                                    <i class="fas fa-exclamation-triangle fa-2x"></i>
+                                                    <div class="mt-2">
+                                                        <div class="h5 mb-0"><%= stats.pendentePagamento %></div>
+                                                        <small>Pendente Pagamento</small>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="stat-card bg-secondary text-white p-3 rounded shadow">
+                                                    <i class="fas fa-times-circle fa-2x"></i>
+                                                    <div class="mt-2">
+                                                        <div class="h5 mb-0"><%= stats.canceladas %></div>
+                                                        <small>Canceladas</small>
+                                                    </div>
+                                                </div>
+                                                <div class="stat-card bg-info text-white p-3 rounded shadow">
+                                                    <i class="fas fa-coins fa-2x"></i>
+                                                    <div class="mt-2">
+                                                        <div class="h5 mb-0"><%= stats.canceladasCredito %></div>
+                                                        <small>Em Espera</small>
+                                                    </div>
+                                                </div>
+                                                <div class="stat-card bg-warning text-dark p-3 rounded shadow">
+                                                    <i class="fas fa-clock fa-2x"></i>
+                                                    <div class="mt-2">
+                                                        <div class="h5 mb-0"><%= stats.pendenteAprovacao %></div>
+                                                        <small>Pendente Aprovação</small>
+                                                    </div>
+                                                </div>
+                                                <div class="stat-card bg-primary text-white p-3 rounded shadow">
+                                                    <i class="fas fa-check-double fa-2x"></i>
+                                                    <div class="mt-2">
+                                                        <div class="h5 mb-0"><%= stats.finalizadas %></div>
+                                                        <small>Finalizadas</small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="table-responsive d-none d-md-block">
                                     <table class="table table-striped">
                                         <thead>
                                             <tr>
@@ -27,26 +107,119 @@
                                                 <th>Início/Hora</th>
                                                 <th>Fim/Hora</th>
                                                 <th>Status</th>
+                                                <th>Ações</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <% reservas.forEach(function(reserva) { %>
                                                 <tr>
                                                     <td><%= reserva.reboque.placa %></td>
-                                                    <td><span id="dataSaida"><%= new Date(reserva.dataSaida).toLocaleDateString('pt-BR').slice(0, 5) %> -
-                                                        <%= new Date(reserva.dataSaida).toString().slice(16,18)+'h' %></span></td>
-                                                    <td><span id="dataChegada"><%= new Date(reserva.dataChegada).toLocaleDateString('pt-BR').slice(0, 5) %> -
-                                                        <%= new Date(reserva.dataChegada).toString().slice(16,18)+'h' %></span></td>
+                                                    <td><span id="dataSaida"><%= new Date(reserva.dataSaida).toLocaleDateString('pt-BR') %> - <%= new Date(reserva.dataSaida).toString().slice(16,21) %></span></td>
+                                                    <td><span id="dataChegada"><%= new Date(reserva.dataChegada).toLocaleDateString('pt-BR') %> - <%= new Date(reserva.dataChegada).toString().slice(16,21) %></span></td>
                                                     <% if (reserva.situacaoReserva === SituacaoReserva.APROVADO) { %>
                                                         <td><span class="badge bg-success">Reservado</span></td>
                                                     <% } else if (reserva.situacaoReserva === SituacaoReserva.CANCELADO_COM_CREDITO) { %>
-                                                        <td><span class="badge bg-warning">Crédito</span></td>
+                                                        <td><span class="badge bg-info">Crédito</span></td>
+                                                    <% } else if (reserva.situacaoReserva === SituacaoReserva.AGUARDANDO_ACEITACAO) { %>
+                                                        <td><span class="badge bg-warning">Pendente Aprovação</span></td>
+                                                    <% } else if (reserva.situacaoReserva === SituacaoReserva.AGUARDANDO_PAGAMENTO) { %>
+                                                        <td><span class="badge bg-danger">Pendente Pagamento</span></td>
                                                     <% } %>
-                                                    <td><a href="/reserva/cliente/detalhe/<%= reserva.id %>" class="btn btn-primary">Detalhes</a></td>
+                                                    <td><a href="/reserva/cliente/detalhe/<%= reserva.id %>" class="btn btn-primary btn-sm">Detalhes</a></td>
                                                 </tr>
                                             <% }) %>
                                         </tbody>
                                     </table>
+                                </div>
+                                
+
+                                <!-- Versão Mobile: Cards -->
+                                <div class="d-block d-md-none">
+                                    <% reservas.forEach(function(reserva) { %>
+                                        <div class="card mb-4 shadow border-2" style="border-left: 4px solid #0d6efd;">
+                                            <div class="card-header bg-light border-0 pb-2">
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <div>
+                                                        <h6 class="mb-0 fw-bold">
+                                                            <i class="fas fa-truck text-primary me-2"></i>
+                                                            <%= reserva.reboque.placa %>
+                                                        </h6>
+                                                        <small class="text-muted"><%= reserva.reboque.modelo %></small>
+                                                    </div>
+                                                    <div>
+                                                        <% if (reserva.situacaoReserva === SituacaoReserva.APROVADO) { %>
+                                                            <span class="badge bg-success rounded-pill px-2 py-1">
+                                                                <i class="fas fa-check me-1"></i>Aprovada
+                                                            </span>
+                                                        <% } else if (reserva.situacaoReserva === SituacaoReserva.CONCLUIDO) { %>
+                                                            <span class="badge bg-primary rounded-pill px-2 py-1">
+                                                                <i class="fas fa-check-double me-1"></i>Finalizada
+                                                            </span>
+                                                        <% } else if (reserva.situacaoReserva === SituacaoReserva.CANCELADO) { %>
+                                                            <span class="badge bg-secondary rounded-pill px-2 py-1">
+                                                                <i class="fas fa-times me-1"></i>Cancelada
+                                                            </span>
+                                                        <% } else if (reserva.situacaoReserva === SituacaoReserva.CANCELADO_COM_CREDITO) { %>
+                                                            <span class="badge bg-info rounded-pill px-2 py-1">
+                                                                <i class="fas fa-coins me-1"></i>Em Espera
+                                                            </span>
+                                                        <% } else if (reserva.situacaoReserva === SituacaoReserva.AGUARDANDO_ACEITACAO) { %>
+                                                            <span class="badge bg-warning text-dark rounded-pill px-2 py-1">
+                                                                <i class="fas fa-clock me-1"></i>Pendente Aprovação
+                                                            </span>
+                                                        <% } else if (reserva.situacaoReserva === SituacaoReserva.AGUARDANDO_PAGAMENTO) { %>
+                                                            <span class="badge bg-danger rounded-pill px-2 py-1">
+                                                                <i class="fas fa-exclamation-triangle me-1"></i>Pagamento Pendente
+                                                            </span>
+                                                        <% } %>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="card-body pt-3 bg-white">
+                                                <div class="row g-2 mb-3">
+                                                    <div class="col-6">
+                                                        <div class="text-center p-2 shadow border-0 rounded">
+                                                            <i class="fas fa-play text-success mb-1"></i>
+                                                            <div class="small fw-bold text-success">INÍCIO</div>
+                                                            <div class="small">
+                                                                <%= new Date(reserva.dataSaida).toLocaleDateString('pt-BR') %>
+                                                            </div>
+                                                            <div class="small text-muted">
+                                                                <%= new Date(reserva.dataSaida).toString().slice(16,21) %>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <div class="text-center p-2 shadow border-0 rounded">
+                                                            <i class="fas fa-stop text-danger mb-1"></i>
+                                                            <div class="small fw-bold text-danger">FIM</div>
+                                                            <div class="small">
+                                                                <%= new Date(reserva.dataChegada).toLocaleDateString('pt-BR') %>
+                                                            </div>
+                                                            <div class="small text-muted">
+                                                                <%= new Date(reserva.dataChegada).toString().slice(16,21) %>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                                
+                                                <div class="d-flex flex-column">
+                                                    <div class="small text-muted mb-2  shadow border-0 rounded">
+                                                        <i class="fas fa-calendar-alt me-1"></i>
+                                                        <%= reserva.diarias %> dias • R$ <%= ((reserva.valorDiaria * reserva.diarias).toFixed(2)).replace('.', ',') %>
+                                                    </div>
+
+                                                    <a href="/reserva/cliente/detalhe/<%= reserva.id %>" 
+                                                    class="btn btn-primary btn-sm rounded-pill px-3 py-2 shadow-sm align-self-center">
+                                                        <i class="fas fa-eye me-1"></i>
+                                                        <strong>Ver Detalhes</strong>
+                                                    </a>
+                                                </div>
+                                                
+                                            </div>
+                                        </div>
+                                    <% }) %>
                                 </div>
 
                                 

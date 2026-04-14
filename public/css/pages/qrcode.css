@@ -1,0 +1,63 @@
+/* ===== PÁGINA QR CODE ===== */
+
+/* Container do QR code */
+.qrcode-container {
+    text-align: center;
+    padding: var(--spacing-xl);
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.qrcode-header {
+    margin-bottom: var(--spacing-xl);
+}
+
+.qrcode-content {
+    background: white;
+    border-radius: var(--border-radius);
+    padding: var(--spacing-xl);
+    box-shadow: var(--shadow);
+}
+
+/* QR code image */
+.qrcode-image {
+    max-width: 100%;
+    height: auto;
+    margin: var(--spacing-lg) 0;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+}
+
+/* Instruções */
+.qrcode-instructions {
+    margin-top: var(--spacing-lg);
+    color: var(--secondary);
+    font-size: var(--font-size-sm);
+}
+
+/* Botões da página QR */
+.qrcode-actions {
+    margin-top: var(--spacing-lg);
+    display: flex;
+    gap: var(--spacing-md);
+    justify-content: center;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .qrcode-container {
+        padding: var(--spacing-lg);
+    }
+
+    .qrcode-content {
+        padding: var(--spacing-lg);
+    }
+
+    .qrcode-actions {
+        flex-direction: column;
+    }
+
+    .qrcode-actions .btn {
+        width: 100%;
+    }
+}

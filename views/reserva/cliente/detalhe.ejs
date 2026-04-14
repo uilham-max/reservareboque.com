@@ -7,115 +7,175 @@
     <%- include('../../partials/navbar.ejs') %>
 
     <div class="conteudo">
-
-        <div class="jumbotron jumbotron-fluid">
-            <h1 class="display-4">Detalhes da Reserva</h1>
-        </div>
-
-        <% if (mensagem) { %>
-        <div class="alert alert-success" role="alert">
-            <%= mensagem %>
-        </div>
-        <% } %>
-
-        <div class="container">
-                <div class="lista-reboques">
-
-                    <div class="card card-reserva">
-                        <img src="../../../<%= reserva.reboque.foto %>" class="card-img-top" alt="...">
-                        <div class="card-body">
-                            <hr>
-                            <h5 class="card-text"><%= reserva.reboque.descricao %></h5>
+        <div class="container-fluid py-4">
+            <div class="row justify-content-center">
+                <div class="col-12 col-lg-10">
+                    <!-- Header -->
+                    <div class="card shadow-sm mb-4">
+                        <div class="card-body text-center py-4">
+                            <h1 class="display-5 mb-0">Detalhes da Reserva</h1>
+                            <p class="text-muted mt-2">Gerencie sua reserva de reboque</p>
                         </div>
                     </div>
 
+                    <% if (mensagem) { %>
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <i class="fas fa-check-circle me-2"></i>
+                        <%= mensagem %>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                    <% } %>
 
-                    <div class="card card-reserva">
-                        <div class="card-body">
-
-                            <h5 class="card-title"> <b>Informações</b></h5>
-                            <hr>
-
-                            <div class="input-group mb-3">
-                                <span class="input-group-text" >Modelo</span>
-                                <input class="form-control" id="inputModelo" type="text" name="inputModelo" value="<%=reserva.reboque.modelo%>" disabled>
-                            </div>
-
-                            <div class="input-group mb-3">
-                                <span class="input-group-text" >Valor pago na diária</span>
-                                <input class="form-control" id="inputValorPagoDiaria" type="text" name="inputValorPagoDiaria" value="R$ <%= ((reserva.valorDiaria).toFixed(2)).replace('.', ',') %>" disabled>
-                            </div>
-
-                            <div class="input-group mb-3">
-                                <span class="input-group-text" >Início</span>
-                                <input class="form-control" id="inputDataInicio" type="text" name="inputDataInicio" value="<%= new Date(reserva.dataSaida).toLocaleDateString('pt-BR') %>" disabled>
-                                <span class="input-group-text" >Hora</span>
-                                <input class="form-control" id="inputHoraInicio" type="text" name="inputHoraInicio" value="<%= new Date(reserva.dataSaida).toString().slice(16,21) %>" disabled>
-                            
-                            </div>
-
-                            <div class="input-group mb-3">
-                                <span class="input-group-text" >Fim</span>
-                                <input class="form-control" id="inputDataFim" type="text" name="inputDataFim" value="<%= new Date(reserva.dataChegada).toLocaleDateString('pt-BR') %>" disabled>
-                                <span class="input-group-text" >Hora</span>
-                                <input class="form-control" id="inputHoraInicio" type="text" name="inputHoraInicio" value="<%= new Date(reserva.dataChegada).toString().slice(16,21) %>" disabled>
-                            
-                            </div>
-
-                            <div class="input-group mb-3">
-                                <span class="input-group-text" >Período</span>
-                                <input class="form-control" id="inputQuantidadeDias" type="text" name="inputQuantidadeDias" value="<%= reserva.diarias %> dias" disabled>
-                            </div>
-
-                            <div class="input-group mb-3">
-                                <span class="input-group-text" >Valor total da reserva</span>
-                                <input class="form-control" id="inputQuantidadeDias" type="text" name="inputQuantidadeDias" value="R$ <%= ((reserva.valorDiaria * reserva.diarias).toFixed(2)).replace('.', ',') %>" disabled>
-                            </div>
-
-                            <div class="d-md-flex justify-content-center" style="margin: 0.5rem;">
-                                <button 
-                                    style="margin: 0.3rem;" 
-                                    class="btn btn-secondary" 
-                                    type="button" 
-                                    onclick="history.back()">Voltar
-                                </button>
-                                <% if(reserva.situacaoReserva == 'APROVADO' || reserva.situacaoReserva == 'CANCELADO_COM_CREDITO') {%>
-                                    <a 
-                                        style="margin: 0.3rem;" 
-                                        class="btn btn-primary" 
-                                        href="/reserva/cliente/editar/<%= reserva.id %>">Alterar
-                                    </a>
-                                    <a 
-                                        style="margin: 0.3rem;" 
-                                        class="btn btn-warning" 
-                                        onclick="return confirm('Este recurso está indisponível no momento')" 
-                                        href="#">Reduzir
-                                    </a>
-                                    <% if(!(reserva.situacaoReserva == 'CANCELADO_COM_CREDITO')) { %>
-                                    <button
-                                        id="btn-credito"
-                                        style="margin: 0.3rem;"
-                                        class="btn btn-info"
-                                        type="button"
-                                        onclick="ActionHandler.execute('/creditos-reserva/<%= reserva.id %>/criar', 'Crédito gerado com sucesso!', this)">Crédito
-                                    </button>
+                    <div class="row">
+                        <!-- Informações do Reboque -->
+                        <div class="col-12 col-md-6 mb-4">
+                            <div class="card h-100 shadow-sm">
+                                <div class="card-header bg-primary text-white">
+                                    <h5 class="card-title mb-0">
+                                        <i class="fas fa-truck me-2"></i>
+                                        Reboque
+                                    </h5>
+                                </div>
+                                <div class="card-body text-center">
+                                    <% if (reserva.reboque.foto) { %>
+                                    <img src="../../../<%= reserva.reboque.foto %>" class="img-fluid rounded mb-3" alt="Foto do reboque" style="max-height: 200px;">
                                     <% } else { %>
-                                    <button
-                                        id="btn-ativar"
-                                        style="margin: 0.3rem;"
-                                        class="btn btn-success"
-                                        type="button"
-                                        onclick="ActionHandler.execute('/creditos-reserva/<%= reserva.id %>/usar', 'Crédito aplicado com sucesso!', this)">Ativar
-                                    </button>
+                                    <div class="bg-light rounded p-4 mb-3">
+                                        <i class="fas fa-image fa-3x text-muted"></i>
+                                    </div>
                                     <% } %>
-                                <% } %>
+                                    <h6 class="text-primary mb-2"><%= reserva.reboque.modelo %></h6>
+                                    <p class="text-muted mb-0"><%= reserva.reboque.descricao %></p>
+                                </div>
                             </div>
+                        </div>
 
+                        <!-- Detalhes da Reserva -->
+                        <div class="col-12 col-md-6 mb-4">
+                            <div class="card h-100 shadow-sm">
+                                <div class="card-header bg-info text-white">
+                                    <h5 class="card-title mb-0">
+                                        <i class="fas fa-calendar-alt me-2"></i>
+                                        Detalhes da Reserva
+                                    </h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row g-3">
+                                        <div class="col-12">
+                                            <div class="border-start border-primary border-4 ps-3">
+                                                <small class="text-muted">PERÍODO</small>
+                                                <div class="fw-bold">
+                                                    <i class="fas fa-play text-success me-1"></i>
+                                                    <%= new Date(reserva.dataSaida).toLocaleDateString('pt-BR') %> às <%= new Date(reserva.dataSaida).toString().slice(16,21) %>
+                                                </div>
+                                                <div class="fw-bold">
+                                                    <i class="fas fa-stop text-danger me-1"></i>
+                                                    <%= new Date(reserva.dataChegada).toLocaleDateString('pt-BR') %> às <%= new Date(reserva.dataChegada).toString().slice(16,21) %>
+                                                </div>
+                                                <small class="text-muted mt-1 d-block">
+                                                    <i class="fas fa-clock me-1"></i>
+                                                    <%= reserva.diarias %> dias
+                                                </small>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-12">
+                                            <div class="border-start border-success border-4 ps-3">
+                                                <small class="text-muted">VALORES</small>
+                                                <div class="fw-bold fs-5 text-success">
+                                                    <i class="fas fa-dollar-sign me-1"></i>
+                                                    R$ <%= ((reserva.valorDiaria * reserva.diarias).toFixed(2)).replace('.', ',') %>
+                                                </div>
+                                                <small class="text-muted">
+                                                    R$ <%= ((reserva.valorDiaria).toFixed(2)).replace('.', ',') %> por diária
+                                                </small>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-12">
+                                            <div class="border-start border-warning border-4 ps-3">
+                                                <small class="text-muted">STATUS</small>
+                                                <div class="mt-1">
+                                                    <% if (reserva.situacaoReserva === 'APROVADO') { %>
+                                                        <span class="badge bg-success fs-6 px-3 py-2">
+                                                            <i class="fas fa-check-circle me-1"></i>
+                                                            Reservado
+                                                        </span>
+                                                    <% } else if (reserva.situacaoReserva === 'CANCELADO_COM_CREDITO') { %>
+                                                        <span class="badge bg-info fs-6 px-3 py-2">
+                                                            <i class="fas fa-coins me-1"></i>
+                                                            Crédito Disponível
+                                                        </span>
+                                                    <% } else if (reserva.situacaoReserva === 'AGUARDANDO_ACEITACAO') { %>
+                                                        <span class="badge bg-warning fs-6 px-3 py-2">
+                                                            <i class="fas fa-clock me-1"></i>
+                                                            Pendente Aprovação
+                                                        </span>
+                                                    <% } else if (reserva.situacaoReserva === 'AGUARDANDO_PAGAMENTO') { %>
+                                                        <span class="badge bg-danger fs-6 px-3 py-2">
+                                                            <i class="fas fa-exclamation-triangle me-1"></i>
+                                                            Pendente Pagamento
+                                                        </span>
+                                                    <% } %>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
-                    
+                    <!-- Ações Disponíveis -->
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-light">
+                            <h5 class="card-title mb-0">
+                                <i class="fas fa-tools me-2"></i>
+                                Ações Disponíveis
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row g-3">
+                                <% if(reserva.situacaoReserva == 'APROVADO' || reserva.situacaoReserva == 'CANCELADO_COM_CREDITO') {%>
+                                <div class="col-12 col-sm-6 col-md-3">
+                                    <a class="btn btn-outline-primary w-100" href="/reserva/cliente/editar/<%= reserva.id %>">
+                                        <i class="fas fa-edit me-2"></i>
+                                        <span class="d-block">Alterar Período</span>
+                                    </a>
+                                </div>
+                                <div class="col-12 col-sm-6 col-md-3">
+                                    <button class="btn btn-outline-warning w-100" type="button" onclick="alert('Este recurso está indisponível no momento')">
+                                        <i class="fas fa-minus me-2"></i>
+                                        <span class="d-block">Reduzir Diárias</span>
+                                    </button>
+                                </div>
+                                <% if(!(reserva.situacaoReserva == 'CANCELADO_COM_CREDITO')) { %>
+                                <div class="col-12 col-sm-6 col-md-3">
+                                    <button id="btn-credito" class="btn btn-outline-info w-100" type="button" onclick="ActionHandler.execute('/creditos-reserva/<%= reserva.id %>/criar', 'Crédito gerado com sucesso!', this)">
+                                        <i class="fas fa-coins me-2"></i>
+                                        <span class="d-block">Colocar Em Espera</span>
+                                    </button>
+                                </div>
+                                <% } else { %>
+                                <div class="col-12 col-sm-6 col-md-3">
+                                    <button id="btn-ativar" class="btn btn-outline-success w-100" type="button" onclick="ActionHandler.execute('/creditos-reserva/<%= reserva.id %>/usar', 'Crédito aplicado com sucesso!', this)">
+                                        <i class="fas fa-check me-2"></i>
+                                        <span class="d-block">Remover da Espera</span>
+                                    </button>
+                                </div>
+                                <% } %>
+                                <% } %>
+                                <div class="col-12 col-sm-6 col-md-3">
+                                    <button class="btn btn-outline-secondary w-100" type="button" onclick="history.back()">
+                                        <i class="fas fa-arrow-left me-2"></i>
+                                        <span class="d-block">Voltar</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+            </div>
         </div>
     </div>
 

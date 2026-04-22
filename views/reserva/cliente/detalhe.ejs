@@ -144,7 +144,7 @@
                                     </a>
                                 </div>
                                 <div class="col-12 col-sm-6 col-md-3">
-                                    <button class="btn btn-outline-warning w-100" type="button" onclick="alert('Este recurso está indisponível no momento')">
+                                    <button class="btn btn-outline-warning w-100" type="button" onclick="ActionHandler.info('Este recurso está indisponível no momento')">
                                         <i class="fas fa-minus me-2"></i>
                                         <span class="d-block">Reduzir Diárias</span>
                                     </button>
@@ -194,6 +194,16 @@
             <button type="button" class="btn btn-secondary" onclick="ModalHandler.closeError()">Entendi</button>
         </div>
     </div>
+
+    <div id="infoModal" class="custom-modal">
+        <div class="modal-box">
+            <h5 class="modal-title">Informação</h5>
+            <p id="infoModalMessage" class="modal-message"></p>
+            <button type="button" class="btn btn-primary" onclick="ModalHandler.closeInfo()">Entendi</button>
+        </div>
+    </div>
+
+    
 
     <script src="/js/modal-handler.js"></script>
     <script src="/js/action-handler.js"></script>

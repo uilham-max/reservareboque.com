@@ -26,4 +26,18 @@ class ModalHandler {
         modal.classList.remove('visible');
         document.body.style.overflow = '';
     }
+
+    static showInfo(message) {
+        document.getElementById('infoModalMessage').textContent = message;
+        document.getElementById('infoModal').classList.add('visible');
+        document.body.style.overflow = 'hidden';
+    }
+
+    static closeInfo() {
+        const modal = document.getElementById('infoModal');
+        modal.classList.remove('visible');
+        document.body.style.overflow = '';
+    }
+
+
 }

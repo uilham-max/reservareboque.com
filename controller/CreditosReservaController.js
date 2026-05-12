@@ -12,7 +12,7 @@ class CreditosReservaController {
         const idReserva = req.params.idReserva;
         try {
             const { credito, reserva } = await this.creditosReservaService.criarCreditoReserva(idReserva);
-            return res.render('reserva/cliente/detalhe', { user: clienteNome(req, res), mensagem: 'Crédito de reserva gerado com sucesso.', reserva: reserva, credito: credito});
+            return res.redirect(`/reserva/cliente/detalhe/${idReserva}?mensagem=${encodeURIComponent('Reserva com estado EM ESPERA.')}`);
         } catch (error) {
             console.error(error);
             return res.render('erro', { mensagem: 'Erro ao gerar crédito para a reserva.' });
@@ -22,8 +22,8 @@ class CreditosReservaController {
     async getUsarCreditoReserva(req, res) {
         const idReserva = req.params.idReserva;
         try {
-            const { credito, reserva } = await this.creditosReservaService.usarCreditoReserva(idReserva);
-            return res.render('reserva/cliente/detalhe', { user: clienteNome(req, res), mensagem: 'Crédito de reserva aplicado com sucesso.', reserva: reserva, credito: credito});
+            const { credito, reserva, mensagem } = await this.creditosReservaService.usarCreditoReserva(idReserva);
+            return res.redirect(`/reserva/cliente/detalhe/${idReserva}?mensagem=${encodeURIComponent(mensagem)}`);
         } catch (error) {
             console.error(error);
             return res.render('erro', { mensagem: 'Erro ao aplicar crédito para a reserva'});

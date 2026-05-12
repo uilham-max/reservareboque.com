@@ -1,6 +1,7 @@
 /* ===== ESTILOS DE MODAIS ===== */
 
 /* Modais customizados */
+#infoModal,
 #successModal,
 #errorModal {
     position: fixed;
@@ -15,11 +16,13 @@
     z-index: 1050;
 }
 
+#infoModal.visible,
 #successModal.visible,
 #errorModal.visible {
     display: flex;
 }
 
+#infoModal .modal-box,
 #successModal .modal-box,
 #errorModal .modal-box {
     background: #fff;
@@ -31,11 +34,13 @@
     text-align: center;
 }
 
+#infoModal .modal-title,
 #successModal .modal-title,
 #errorModal .modal-title {
     margin-bottom: var(--spacing-md);
 }
 
+#infoModal .modal-message,
 #successModal .modal-message,
 #errorModal .modal-message {
     margin-bottom: var(--spacing-lg);

@@ -19,9 +19,9 @@ router.get('/admin/situacao/:idReserva?/:situacao?', autorizacao, ReservaControl
 
 
 router.get('/cliente/lista', clienteAutorizacao, ReservaController.getClienteListarReservas)
-router.get('/cliente/detalhe/:reservaId?', clienteAutorizacao, ReservaController.getClienteDetalharReserva)
+router.get('/cliente/detalhe/:reservaId?/:mensagem?', clienteAutorizacao, ReservaController.getClienteDetalharReserva)
 router.get('/cliente/editar/:idReserva', clienteAutorizacao, ReservaController.getClienteEditarReserva)
-router.post('/cliente/editar', clienteAutorizacao, ReservaController.postClienteEditarReserva);
+router.post('/cliente/editar', clienteAutorizacao, reservaController.postClienteEditarReserva.bind(reservaController));
 router.get('/cliente/concluido', clienteAutorizacao, ReservaController.getClienteListarReservasConcluidas)
 
 

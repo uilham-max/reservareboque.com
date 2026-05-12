@@ -13,13 +13,14 @@ const Caledario = require('../bill_modules/Calendario')
 const Logger = require('nodemon/lib/utils/log')
 const { FormaPagamento, SituacaoReserva } = require('../enums')
 const ReservaService = require('../services/ReservaService')
-
+const DAOCreditosReserva = require('../database/DAOCreditosReserva')
 
 class ReservaController {
 
     constructor() {
         const daoReserva = new DAOReserva();
         this.reservaService = new ReservaService(daoReserva);
+        this.daoCreditosReserva = new DAOCreditosReserva();
     }
 
 
@@ -335,8 +336,9 @@ class ReservaController {
         return res.render('reserva/cliente/lista', {user: clienteNome(req, res), reservas: reservas, SituacaoReserva: SituacaoReserva, mensagem: ''})
     }
     static async getClienteDetalharReserva(req, res){
-        let reserva = await DAOReserva.getOne(req.params.reservaId)
-        return res.render('reserva/cliente/detalhe', {user: clienteNome(req, res), mensagem: '', reserva: reserva})
+        const reserva = await DAOReserva.getOne(req.params.reservaId)
+        const mensagem = req.query.mensagem || '';
+        return res.render('reserva/cliente/detalhe', {user: clienteNome(req, res), mensagem: mensagem, reserva: reserva})
     }
     static async getClienteEditarReserva(req, res){
         let idReserva = req.params.idReserva
@@ -398,11 +400,106 @@ class ReservaController {
                 millisecond: 0
             });
     
-            
             // O MOMENTO DO PEDIDO DEVE SER MAIOR QUE 48 HORAS PARA FAZER A ALTERAÇÃO DA DATA DA RESERVA
             if (dataInicioAntiga.diff(moment.tz(new Date(), 'America/Sao_Paulo'), 'hours') < 0) {
-                console.log("Tentativa de alteração de data da reserva negada. Menos de 48h.");
-                return res.render('erro', { mensagem: 'Erro. Faltam menos de 48h para a retirada' });
+                const creditosReserva = await this.daoCreditosReserva.getByReservaId(idReserva);
+                if (!creditosReserva) {
+                    console.log("Tentativa de alteração de data da reserva negada. Menos de 48h.");
+                    return res.render('erro', { mensagem: 'Erro. Faltam menos de 48h para a retirada' });
+                }
+                if (creditosReserva.utilizado) {
+                    console.log("Tentativa de alteração de data da reserva negada. Crédito de reserva já utilizado.");
+                    return res.render('erro', { mensagem: 'Erro. Crédito de reserva já utilizado' });
+                }
+                console.log("Alteração de data da reserva autorizada com crédito de reserva. Menos de 48h para a retirada.");
+                
+            }
+    
+            // O PERÍODO NOVO NÃO PODE SER MAIOR QUE O ANTIGO
+            if ((diarias * 24) !== dataFimNova.diff(dataInicioNova, 'hours')) {
+                console.log("Tentativa de alteração de data da reserva negada. Período diferente.");
+                return res.render('erro', { mensagem: 'Erro. O período deve ser o mesmo' });
+            }
+    
+            // FORMATA AS DATAS PARA STRING PARA INSERIR NO BD
+            dataInicioNova = dataInicioNova.format();
+            dataFimNova = dataFimNova.format();
+            
+            // VERIFICA DISPONIBILIDADE
+            let reservas = await DAOReserva.getVerificaDisponibilidade(reboquePlaca, dataInicioNova, dataFimNova); 
+    
+            // ENCONTROU UMA OU DUAS RESERVAS DENTRO DO PERÍODO ESCOLHIDO PELO CLIENTE
+            if (reservas.length !== 0) {
+                let autorizado = false;
+    
+                reservas.forEach(reserva => {
+                    if (idReserva === reserva.dataValues.id) {
+                        console.log("Alteração autorizada para nova data.");
+                        autorizado = true;
+                    }
+                });
+    
+                if (!autorizado) {
+                    console.log("Alteração não autorizada.");
+                    return res.render('erro', { mensagem: 'Não foi possível alterar a data. Erro ao verificar disponibilidade' }); 
+                }
+            }
+    
+            // ACESSA O BANCO DE DADOS PARA REALIZAR A ALTERAÇÃO DAS DATAS
+            let resposta = await DAOReserva.alterarPeriodo(idReserva, dataInicioNova, dataFimNova); 
+            if (!resposta) {
+                return res.render('erro', { mensagem: 'Erro ao alterar a data da reserva' });
+            }
+            console.log("Data da reserva alterada com sucesso.");
+    
+            // RETORNA A RESERVA ALTERADA AO CLIENTE
+            let reserva = await DAOReserva.getOne(idReserva); 
+            res.render('reserva/cliente/detalhe', { user: clienteNome(req, res), mensagem: '', reserva: reserva });
+        } catch (error) {
+            console.error("Erro ao alterar a data da reserva:", error);
+            res.render('erro', { mensagem: 'Erro interno. Por favor, tente novamente mais tarde' });
+        }
+    }
+    async postClienteEditarReserva(req, res){
+        try {
+            let { idReserva, reboquePlaca, dataInicioAntiga, dataFimAntiga, dataInicioNova, dataFimNova, diarias, horaInicio, horaFim } = req.body;
+    
+    
+            // PARSE PARA OBJETO MOMENT.TZ E CONVERTE PARA UTC
+            dataInicioAntiga = moment.tz(new Date(dataInicioAntiga), 'America/Sao_Paulo');
+            dataFimAntiga = moment.tz( new Date(dataFimAntiga), 'America/Sao_Paulo');
+            dataInicioNova = moment.tz(dataInicioNova, 'America/Sao_Paulo');
+            dataFimNova = moment.tz(dataFimNova, 'America/Sao_Paulo');
+    
+            // Injeta a hora na data de inicio
+            dataInicioNova = moment.tz(dataInicioNova, 'America/Sao_Paulo').set({
+                hour: horaInicio,
+                minute: 0,
+                second: 0,
+                millisecond: 0
+            });
+    
+            // Injeta a hora na data de fim
+            dataFimNova = moment.tz(dataFimNova, 'America/Sao_Paulo').set({
+                hour: horaFim,
+                minute: 0,
+                second: 0,
+                millisecond: 0
+            });
+    
+            // O MOMENTO DO PEDIDO DEVE SER MAIOR QUE 48 HORAS PARA FAZER A ALTERAÇÃO DA DATA DA RESERVA
+            if (dataInicioAntiga.diff(moment.tz(new Date(), 'America/Sao_Paulo'), 'hours') < 0) {
+                const creditosReserva = await this.daoCreditosReserva.getByReservaId(idReserva);
+                if (!creditosReserva) {
+                    console.log("Tentativa de alteração de data da reserva negada. Menos de 48h.");
+                    return res.render('erro', { mensagem: 'Erro. Faltam menos de 48h para a retirada' });
+                }
+                if (creditosReserva.utilizado) {
+                    console.log("Tentativa de alteração de data da reserva negada. Crédito de reserva já utilizado.");
+                    return res.render('erro', { mensagem: 'Erro. Crédito de reserva já utilizado' });
+                }
+                console.log("Alteração de data da reserva autorizada com crédito de reserva. Menos de 48h para a retirada.");
+                
             }
     
             // O PERÍODO NOVO NÃO PODE SER MAIOR QUE O ANTIGO

@@ -24,7 +24,7 @@ class DAOReserva {
             return true;
         } catch (error) {
             console.error(`Erro ao registrar motivo de cancelamento para a reserva ${idReserva}:`, error);
-            return false;
+            throw error;
         }
     }
     static async atualizaSituacao(idReserva, status, options = {}) {
@@ -40,7 +40,7 @@ class DAOReserva {
             return true
         } catch(erro) {
             console.error(`Erro ao atualizar situação da reserva para ${status} \n ${erro}`);
-            return false
+            throw erro;
         }
     }
     async atualizaSituacao(idReserva, status, options = {}){
@@ -56,7 +56,7 @@ class DAOReserva {
             return true
         } catch(erro) {
             console.error(`Erro ao atualizar situação da reserva para ${status} \n ${erro}`);
-            return false
+            throw erro;
         }
     }
     static async adminAtualizaPeriodo(idReserva, dataInicio, dataFim, reboquePlaca, diarias){
@@ -230,7 +230,6 @@ class DAOReserva {
             return undefined
         }
     }
-
     static async getSomaReservasPorReboqueMesAtual(competencia) {
         try {
             const dataCompetencia = moment.tz( competencia, 'YYYY-MM', 'America/Sao_Paulo' );
@@ -271,17 +270,18 @@ class DAOReserva {
     }
 
 
-
-    static async getVerificaDisponibilidade(reboquePlaca, inicioDoPeriodo, fimDoPeriodo) {
+    async getVerificaDisponibilidade(reboquePlaca, inicioDoPeriodo, fimDoPeriodo, options = {}) {
         try {
             let reservas = await Reserva.findAll({
                 where: {
                     reboquePlaca: reboquePlaca,
-
+                    
+                    // situações em que a reserva deve ser considerada disponível para o cliente, ou seja, que não bloqueiam o período para novas reservas
                     situacaoReserva: {
                         [Op.notIn]: [
                             SituacaoReserva.CANCELADO,
-                            SituacaoReserva.CANCELADO_COM_CREDITO
+                            SituacaoReserva.CANCELADO_COM_CREDITO,
+                            SituacaoReserva.CONCLUIDO
                         ]
                     },
 
@@ -296,14 +296,51 @@ class DAOReserva {
                                 [Op.gte]: inicioDoPeriodo
                             }
                         }
-                    ]
-                }
+                    ],
+                },
+                ...options
             });
 
             return reservas;
         } catch (error) {
             console.error('Erro ao verificar disponibilidade:', error);
-            return undefined;
+            throw error;
+        }
+    }
+    static async getVerificaDisponibilidade(reboquePlaca, inicioDoPeriodo, fimDoPeriodo, options = {}) {
+        try {
+            let reservas = await Reserva.findAll({
+                where: {
+                    reboquePlaca: reboquePlaca,
+                
+                    situacaoReserva: {
+                        [Op.notIn]: [
+                            SituacaoReserva.CANCELADO,
+                            SituacaoReserva.CANCELADO_COM_CREDITO,
+                            SituacaoReserva.CONCLUIDO
+                        ]
+                    },
+
+                    [Op.and]: [
+                        {
+                            dataSaida: {
+                                [Op.lte]: fimDoPeriodo
+                            }
+                        },
+                        {
+                            dataChegada: {
+                                [Op.gte]: inicioDoPeriodo
+                            }
+                        }
+                    ],
+                },
+                ...options
+            });
+
+            return reservas;
+        } catch (error) {
+            console.error('Erro ao verificar disponibilidade:', error);
+            throw error;
         }
     }
     static async getTodasDesteReboque(reboquePlaca){

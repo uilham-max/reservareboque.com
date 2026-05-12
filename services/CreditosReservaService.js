@@ -1,16 +1,13 @@
 const DAOCreditosReserva = require('../database/DAOCreditosReserva');
 const ReservaService = require('./ReservaService');
 const sequelize = require('../database/conexao');
-const DAOReserva = require('../database/DAOReserva');
 const { SituacaoReserva } = require('../enums');
-const { logger } = require('sequelize/lib/utils/logger');
 
 class CreditosReservaService {
 
     constructor() {
-        const daoReserva = new DAOReserva();
         this.daoCreditosReserva = new DAOCreditosReserva();
-        this.reservaService = new ReservaService(daoReserva);
+        this.reservaService = new ReservaService();
     }
 
     async criarCreditoReserva(idReserva) {
@@ -24,7 +21,7 @@ class CreditosReservaService {
                 console.log("Tentando ativar crédito existente.");
                 credito = await this.daoCreditosReserva.alternarUtilizacaoParaFalso(idReserva, { transaction: t });
                 reservaAtualizada = await this.reservaService.cancelaComCreditoReservaExistente(idReserva, { transaction: t });
-                console.log("Reserva com crédito existente atualizada para APROVADO com sucesso.");
+                console.log("Ativando reserva com crédito existente para APROVADO.");
             } else {
                 // cria novo crédito
                 console.log("Tentando criar novo crédito para reserva.");
@@ -33,6 +30,7 @@ class CreditosReservaService {
             }
             
             await t.commit();
+            console.log("Reserva atualizada com sucesso.");
             return { credito, reserva: reservaAtualizada };
         } catch (error) {
             await t.rollback();
@@ -45,11 +43,16 @@ class CreditosReservaService {
         const t = await sequelize.transaction();
         try {
             const credito = await this.daoCreditosReserva.usar(reservaId, { transaction: t });
-            const reservaAtualizada = await this.reservaService.aplicarCredito(reservaId, { transaction: t });
+            const {reservaAtualizada, mensagem} = await this.reservaService.aplicarCredito(reservaId, { transaction: t });
+            if (mensagem !== '') {
+                await t.rollback();
+                return { credito: credito, reserva: reservaAtualizada, mensagem };
+            }
             await this.reservaService.registrarMotivoCancelamento(reservaId, null, { transaction: t });
-
+            
             await t.commit();
-            return { credito, reserva: reservaAtualizada };
+            mensagem = 'Crédito de reserva aplicado com sucesso.';
+            return { credito, reserva: reservaAtualizada, mensagem };
         } catch (error) {
             await t.rollback();
             console.error('O serviço não pode usar crédito.', error);

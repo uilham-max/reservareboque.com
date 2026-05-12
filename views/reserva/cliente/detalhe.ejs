@@ -151,17 +151,17 @@
                                 </div>
                                 <% if(!(reserva.situacaoReserva == 'CANCELADO_COM_CREDITO')) { %>
                                 <div class="col-12 col-sm-6 col-md-3">
-                                    <button id="btn-credito" class="btn btn-outline-info w-100" type="button" onclick="ActionHandler.execute('/creditos-reserva/<%= reserva.id %>/criar', 'Crédito gerado com sucesso!', this)">
+                                    <a id="btn-credito" class="btn btn-outline-info w-100" href="/creditos-reserva/<%= reserva.id %>/criar">
                                         <i class="fas fa-coins me-2"></i>
-                                        <span class="d-block">Colocar Em Espera</span>
-                                    </button>
+                                        <span class="d-block">Ativar Espera</span>
+                                    </a>
                                 </div>
                                 <% } else { %>
                                 <div class="col-12 col-sm-6 col-md-3">
-                                    <button id="btn-ativar" class="btn btn-outline-success w-100" type="button" onclick="ActionHandler.execute('/creditos-reserva/<%= reserva.id %>/usar', 'Crédito aplicado com sucesso!', this)">
+                                    <a id="btn-ativar" class="btn btn-outline-success w-100" href="/creditos-reserva/<%= reserva.id %>/usar">
                                         <i class="fas fa-check me-2"></i>
-                                        <span class="d-block">Remover da Espera</span>
-                                    </button>
+                                        <span class="d-block">Desativar Espera</span>
+                                    </a>
                                 </div>
                                 <% } %>
                                 <% } %>
